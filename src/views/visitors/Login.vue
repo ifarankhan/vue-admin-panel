@@ -1,118 +1,73 @@
 <template>
-<form @submit.prevent="submitMethod">
-<div class="box">
-<h1>Login</h1>
+  <full-screen-section bg="login" v-slot="{ cardClass, cardRounded }">
+    <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="submit" form>
 
-<input type="email" name="email" v-model="userData.email" class="email" />
-<input type="password" name="email" v-model="userData.password" class="email" />
-<button class="btn">Sign In</button>
-</div> 
-</form>
-  
+      <field label="Login" help="Please enter your login">
+        <control v-model="form.login" :icon="mdiAccount" name="login" autocomplete="username"/>
+      </field>
+
+      <field label="Password" help="Please enter your password">
+        <control v-model="form.pass" :icon="mdiAsterisk" type="password" name="password" autocomplete="current-password"/>
+      </field>
+
+      <check-radio-picker name="remember" v-model="form.remember" :options="{ remember: 'Remember' }" />
+
+      <divider />
+
+      <jb-buttons>
+        <jb-button type="submit" color="info" label="Login" />
+        <jb-button to="/" color="info" outline label="Back" />
+      </jb-buttons>
+    </card-component>
+  </full-screen-section>
 </template>
 <script>
-import { ref, reactive } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
+import { mdiAccount, mdiAsterisk } from "@mdi/js";
+import FullScreenSection from "@/components/FullScreenSection";
+import CardComponent from "@/components/CardComponent";
+import CheckRadioPicker from "@/components/CheckRadioPicker";
+import Field from "@/components/Field";
+import Control from "@/components/Control";
+import Divider from "@/components/Divider.vue";
+import JbButton from "@/components/JbButton";
+import JbButtons from "@/components/JbButtons";
 
 export default {
-    setup() {
-         const store = useStore()
-        const userData = reactive({
-            email:"",
-            password:""
-        })
-        const submitMethod = ()=>{
-             console.log(store)
-            store.dispatch('auth/loginAction', userData)
-        }
-        return {
-            userData,
-            submitMethod
-        }
-    },
-}
+  name: "Login",
+  components: {
+    FullScreenSection,
+    CardComponent,
+    CheckRadioPicker,
+    Field,
+    Control,
+    Divider,
+    JbButton,
+    JbButtons,
+  },
+  setup() {
+    const form = reactive({
+      login: '',
+      pass: '',
+      remember: ['remember']
+    })
+
+    const store = useStore();
+    const userData = reactive({
+      email: "",
+      password: "",
+    });
+    const submitMethod = () => {
+      console.log(store);
+      store.dispatch("auth/loginAction", userData);
+    };
+    return {
+      form,
+      userData,
+      submitMethod,
+    };
+  },
+};
 </script>
-<style scoped>
-
-p{
-  font-size:12px;
-  text-decoration: none;
-  color:#ffffff;
-}
-
-h1{
-  font-size:1.5em;
-  color:#525252;
-}
-
-.box{
-  background:white;
-  width:300px;
-  border-radius:6px;
-  margin: 0 auto 0 auto;
-  padding:0px 0px 70px 0px;
-  border: #2980b9 4px solid; 
-}
-
-.email{
-  background:#ecf0f1;
-  border: #ccc 1px solid;
-  border-bottom: #ccc 2px solid;
-  padding: 8px;
-  width:250px;
-  color:#AAAAAA;
-  margin-top:10px;
-  font-size:1em;
-  border-radius:4px;
-}
-
-.password{
-  border-radius:4px;
-  background:#ecf0f1;
-  border: #ccc 1px solid;
-  padding: 8px;
-  width:250px;
-  font-size:1em;
-}
-
-.btn{
-  background:#2ecc71;
-  width:90%;
-  padding-top:5px;
-  padding-bottom:5px;
-  color:white;
-  border-radius:4px;
-  border: #27ae60 1px solid;
-  
-  margin-top:20px;
-  margin-bottom:20px;
-  float:left;
-  margin-left:16px;
-  font-weight:800;
-  font-size:0.8em;
-}
-
-.btn:hover{
-  background:#2CC06B; 
-}
-
-#btn2{
-  float:left;
-  background:#3498db;
-  width:125px;  padding-top:5px;
-  padding-bottom:5px;
-  color:white;
-  border-radius:4px;
-  border: #2980b9 1px solid;
-  
-  margin-top:20px;
-  margin-bottom:20px;
-  margin-left:10px;
-  font-weight:800;
-  font-size:0.8em;
-}
-
-#btn2:hover{ 
-background:#3594D2; 
-}
-</style>

@@ -8,7 +8,7 @@ const routes = [
     meta:{
       layout: 'visitorLayout'
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/visitors/Login.vue')
+    component: () => import( '../views/visitors/Login.vue')
   }
 ]
 
