@@ -6,7 +6,9 @@ const routes = [
     name: 'Login',
     props: true,
     meta:{
-      layout: 'visitorLayout'
+      layout: 'visitorLayout',
+      title: 'Login',
+      fullScreen: true
     },
     component: () => import( '../views/visitors/Login.vue')
   }

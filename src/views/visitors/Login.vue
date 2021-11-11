@@ -67,6 +67,8 @@ export default {
       form,
       userData,
       submitMethod,
+      mdiAsterisk,
+      mdiAccount
     };
   },
 };
