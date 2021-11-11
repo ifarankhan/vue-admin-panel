@@ -1,13 +1,13 @@
 <template>
   <full-screen-section bg="login" v-slot="{ cardClass, cardRounded }">
-    <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="submit" form>
+    <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="submitMethod" form>
 
       <field label="Login" help="Please enter your login">
-        <control v-model="form.login" :icon="mdiAccount" name="login" autocomplete="username"/>
+        <control v-model="form.username" :icon="mdiAccount" name="login" autocomplete="username"/>
       </field>
 
       <field label="Password" help="Please enter your password">
-        <control v-model="form.pass" :icon="mdiAsterisk" type="password" name="password" autocomplete="current-password"/>
+        <control v-model="form.password" :icon="mdiAsterisk" type="password" name="password" autocomplete="current-password"/>
       </field>
 
       <check-radio-picker name="remember" v-model="form.remember" :options="{ remember: 'Remember' }" />
@@ -48,24 +48,26 @@ export default {
     JbButtons,
   },
   setup() {
-    const form = reactive({
-      login: '',
-      pass: '',
-      remember: ['remember']
-    })
-
     const store = useStore();
-    const userData = reactive({
-      email: "",
+    const router = useRouter();
+    const form = reactive({
+      username: "",
       password: "",
+      remember: ['remember']
     });
-    const submitMethod = () => {
-      console.log(store);
-      store.dispatch("auth/loginAction", userData);
-    };
+    const submitMethod = async ()=>{
+        try {
+          const res = await store.dispatch('auth/loginAction', form);
+            await localStorage.setItem('authToken', res.data.token);
+            router.push({
+                name: 'dashboard'
+            }) 
+        } catch (error) {
+              console.log(error)
+        }
+    }
     return {
       form,
-      userData,
       submitMethod,
       mdiAsterisk,
       mdiAccount

@@ -1,25 +1,23 @@
 import axios from "../../axios";
 const namespaced = true;
-const state = {};
+const state = {
 
-const mutations = {};
+}
+
+const mutations = {
+
+}
 
 const actions = {
-  loginAction({}, payload) {
-    axios
-      .post("/v2/authorize", payload)
-      .then((res) => {
-        console.log("auth response is...", res);
-      })
-      .catch((error) => {
-        console.log("auth error...", error);
-      });
-  },
-};
+    loginAction({},payload){
+      delete payload.remember;  // REMOVE EXTRA FIELDS
+       return axios.post('/v2/authorize', payload)
+    } 
+}
 
 export default {
-  namespaced,
-  state,
-  mutations,
-  actions,
-};
+    namespaced,
+    state,
+    mutations,
+    actions
+}
