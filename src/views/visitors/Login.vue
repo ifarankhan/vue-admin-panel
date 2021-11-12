@@ -1,7 +1,10 @@
 <template>
   <full-screen-section bg="login" v-slot="{ cardClass, cardRounded }">
     <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="submitMethod" form>
-
+      <error-alert 
+      v-if="form.error"
+      :error="form.error"
+      @dismissError="form.error = ''" /> 
       <field label="Login" help="Please enter your login">
         <control v-model="form.username" :icon="mdiAccount" name="login" autocomplete="username"/>
       </field>
@@ -34,6 +37,8 @@ import Control from "@/components/Control";
 import Divider from "@/components/Divider.vue";
 import JbButton from "@/components/JbButton";
 import JbButtons from "@/components/JbButtons";
+import ErrorAlert from '@/components/ErrorAlert.vue';
+import utility from '../../components/composition/utility';
 
 export default {
   name: "Login",
@@ -46,25 +51,30 @@ export default {
     Divider,
     JbButton,
     JbButtons,
+    ErrorAlert
   },
   setup() {
     const store = useStore();
-    const router = useRouter();
     const form = reactive({
       username: "",
       password: "",
+      error: "",
       remember: ['remember']
     });
     const submitMethod = async ()=>{
-        try {
-          const res = await store.dispatch('auth/loginAction', form);
-            await localStorage.setItem('authToken', res.data.token);
-            router.push({
-                name: 'dashboard'
-            }) 
-        } catch (error) {
-              console.log(error)
+      store.dispatch('auth/loginAction', {username: form.username, password: form.password})
+      .then(async res=>{
+        if (res?.data?.token) {
+          await localStorage.setItem('authToken', res.data.token);
+          const { navigateTo } = utility('dashboard')
+          navigateTo()
+        } else {
+          throw new Error("Something went wrong. Please try again.!") 
         }
+      })
+      .catch(error=>{
+         form.error = error?.response?.data??error.message
+      })
     }
     return {
       form,

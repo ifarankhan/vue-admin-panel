@@ -3,8 +3,7 @@ const BASE_URL = "https://api-v2-genesys2020-staging.genesysonline.net/api/"
 
 
 const instance = axios.create({
-    baseURL: BASE_URL,
-    timeout: 5000,
+    baseURL: BASE_URL
   });
 
   instance.defaults.headers.common["Content-Type"] = 'application/json';
@@ -13,7 +12,7 @@ const instance = axios.create({
   instance.interceptors.response.use(response => {
     return response;
    }, error => {
-    console.log(error.response.data)
+     console.log(error.response)
     return Promise.reject(error)
    });
 
