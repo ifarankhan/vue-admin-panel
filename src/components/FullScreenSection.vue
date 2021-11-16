@@ -25,7 +25,7 @@ export default {
     const componentClass = computed(() => {
       const bgs = {
         login: 'bg-gradient-to-tr from-purple-400 via-pink-500 to-red-500',
-        loginDark: 'bg-gradient-to-tr from-purple-900 via-pink-900 to-red-900',
+        loginDark: 'bg-gradient-to-tr from-purple-400 via-indigo-500 to-blue-900',
         error: 'bg-gradient-to-tr from-pink-400 via-red-500 to-yellow-500',
         errorDark: 'bg-gradient-to-tr from-pink-900 via-red-900 to-yellow-900'
       }
