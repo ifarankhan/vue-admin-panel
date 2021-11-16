@@ -18,7 +18,7 @@ const routes = [
     name: 'dashboard',
     props: true,
     meta:{
-      layout: 'visitorLayout',
+      layout: 'mainLayout',
       requiresAuth: true,
       title: 'Dashboard',
       fullScreen: true
