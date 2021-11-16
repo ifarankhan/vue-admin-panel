@@ -5,6 +5,7 @@ import store from './store'
 import visitorLayout from './views/layouts/VisitorLayout'
 
 import './css/main.css'
+import i18n from './i18n'
 
 /* Default title tag */
 const defaultDocumentTitle = 'Psytech Distributor panel'
@@ -24,7 +25,7 @@ router.afterEach(to => {
     // store.dispatch('darkMode')
   })
 
-const app = createApp(App)
+const app = createApp(App).use(i18n)
 app.component('visitorLayout', visitorLayout)
 app.use(store)
 app.use(router)

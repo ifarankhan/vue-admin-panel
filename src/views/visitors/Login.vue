@@ -17,17 +17,19 @@
 
       <divider />
 
-      <jb-buttons>
-        <jb-button type="submit" color="info" label="Login" />
+      <jb-buttons> 
+        <jb-button type="submit" color="info" :label="$t('login')" />
         <jb-button to="/" color="info" outline label="Back" />
       </jb-buttons>
+      <template v-for="lng in $i18n.availableLocales" :key="lng">
+        <a href="#" @click.prevent="setLocale(lng)" class="no-underline hover:underline p-3">{{ lng }}</a>
+      </template>
     </card-component>
   </full-screen-section>
 </template>
 <script>
 import { useStore } from "vuex";
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
 import { mdiAccount, mdiAsterisk } from "@mdi/js";
 import FullScreenSection from "@/components/FullScreenSection";
 import CardComponent from "@/components/CardComponent";
@@ -37,6 +39,7 @@ import Control from "@/components/Control";
 import Divider from "@/components/Divider.vue";
 import JbButton from "@/components/JbButton";
 import JbButtons from "@/components/JbButtons";
+import { useI18n } from 'vue-i18n'
 import ErrorAlert from '@/components/ErrorAlert.vue';
 import utility from '../../components/composition/utility';
 
@@ -76,9 +79,17 @@ export default {
          form.error = error?.response?.data??error.message
       })
     }
+
+    const i18n = useI18n();
+    const  setLocale = locale => {
+      i18n.locale.value = locale
+
+     } 
+
     return {
       form,
       submitMethod,
+      setLocale,
       mdiAsterisk,
       mdiAccount
     };
