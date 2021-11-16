@@ -1,3 +1,6 @@
 {
-  "login": "hello i18n !!"
+  "login": "Login",
+  "Either user deleted or is not activated" : "Either user deleted or is not activate",
+  "Invalid credentials":"Invalid credentials"
 }
+  
