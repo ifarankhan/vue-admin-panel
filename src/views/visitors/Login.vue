@@ -1,6 +1,10 @@
 <template>
-  <full-screen-section bg="login" v-slot="{ cardClass, cardRounded }">
+  <full-screen-section v-slot="{ cardClass, cardRounded }">
     <card-component  :class="cardClass" :rounded="cardRounded" @submit.prevent="submitMethod" form>
+      <div class="flex items-center justify-center">
+        <span>Psytech</span>
+        <span>GeneSys</span>
+      </div>
       <error-alert 
       v-if="form.error"
       :error="form.error"
@@ -19,11 +23,8 @@
 
       <jb-buttons> 
         <jb-button type="submit" color="info" :label="$t('login')" />
-        <jb-button to="/" color="info" outline label="Back" />
       </jb-buttons>
-      <template v-for="lng in $i18n.availableLocales" :key="lng">
-        <a href="#" @click.prevent="setLocale(lng)" class="no-underline hover:underline p-3">{{ lng }}</a>
-      </template>
+
     </card-component>
   </full-screen-section>
 </template>
@@ -39,7 +40,6 @@ import Control from "@/components/Control";
 import Divider from "@/components/Divider.vue";
 import JbButton from "@/components/JbButton";
 import JbButtons from "@/components/JbButtons";
-import { useI18n } from 'vue-i18n'
 import ErrorAlert from '@/components/ErrorAlert.vue';
 import utility from '../../components/composition/utility';
 
@@ -67,8 +67,10 @@ export default {
     const submitMethod = async ()=>{
       store.dispatch('auth/loginAction', {username: form.username, password: form.password})
       .then(async res=>{
-        if (res?.data?.token) {
-          await localStorage.setItem('authToken', res.data.token);
+        if (res?.data?.data?.token) {
+          await localStorage.setItem('authToken', res?.data?.data?.token);
+          await localStorage.setItem('userName', res?.data?.data?.userName);
+          await localStorage.setItem('distributorUserName', res?.data?.data?.distributorUserName);
           const { navigateTo } = utility('dashboard')
           navigateTo()
         } else {
@@ -76,20 +78,13 @@ export default {
         }
       })
       .catch(error=>{
-         form.error = error?.response?.data??error.message
+         form.error = error?.response?.data?.data?.message??error.message
       })
-    }
-
-    const i18n = useI18n();
-    const  setLocale = locale => {
-      i18n.locale.value = locale
-
-     } 
+    } 
 
     return {
       form,
       submitMethod,
-      setLocale,
       mdiAsterisk,
       mdiAccount
     };

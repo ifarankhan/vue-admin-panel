@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = "https://api-v2-genesys2020-staging.genesysonline.net/api/"
+const BASE_URL = "https://api-v2-genesys2020-staging.genesysonline.net/api/v2/"
 
 
 const instance = axios.create({
@@ -12,7 +12,6 @@ const instance = axios.create({
   instance.interceptors.response.use(response => {
     return response;
    }, error => {
-     console.log(error.response)
     return Promise.reject(error)
    });
 

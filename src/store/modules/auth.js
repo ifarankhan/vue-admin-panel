@@ -10,8 +10,8 @@ const mutations = {
 
 const actions = {
     loginAction({},payload){
-       return axios.post('/v2/partner/authorize', payload)
-    } 
+       return axios.post('partner/authorize', payload)
+    },
 }
 
 export default {
