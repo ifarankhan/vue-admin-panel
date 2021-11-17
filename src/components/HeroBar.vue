@@ -4,12 +4,12 @@
       <h1 class="text-3xl font-semibold leading-tight">
         <slot />
       </h1>
-      <jb-button
+      <!-- <jb-button
         :label="darkMode ? 'Light Mode' : 'Dark Mode'"
         :icon="mdiThemeLightDark"
         :outline="darkMode"
         @click="darkModeToggle"
-      />
+      /> -->
     </level>
   </section>
 </template>

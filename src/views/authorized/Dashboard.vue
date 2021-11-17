@@ -1,6 +1,5 @@
 <template>
-  <title-bar :title-stack="titleStack" />
-  <hero-bar>Dashboard</hero-bar>
+  <hero-bar>{{$t("Dashboard")}}</hero-bar>
   <main-section>
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
       <card-widget
