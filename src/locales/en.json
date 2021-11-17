@@ -1,3 +1,8 @@
 {
-  "login": "hello i18n !!"
+  "login": "Login",
+  "Either user deleted or is not activated" : "Either user deleted or is not activate",
+  "Something went wrong. Please try again.!":"Something went wrong. Please try again.!",
+  "Invalid credentials":"Invalid credentials",
+  "Error!": "Error!"
 }
+  

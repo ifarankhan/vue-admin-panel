@@ -44,15 +44,21 @@ const router = createRouter({
 // Meta Handling
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem('authToken') == null) {
+    if (!localStorage.getItem('authToken')) {
       next({
         path: '/login',
       })
     } else {
       next()
     }
-  } else{
-    next()
+  } else {
+    if (localStorage.getItem('authToken')) {
+      next({
+        path: '/dashboard',
+      })
+    } else {
+      next()
+    }
   }
 })
 

@@ -25,7 +25,7 @@
     <div v-if="empty" class="text-center py-24 text-gray-500 dark:text-gray-400">
       <p>Nothing's here…</p>
     </div>
-    <div v-else :class="{'p-6':!hasTable}">
+    <div v-else :class="{'p-8':!hasTable}">
       <slot />
     </div>
   </component>
