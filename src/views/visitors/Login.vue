@@ -59,7 +59,7 @@ export default {
   setup() {
     const store = useStore();
     const form = reactive({
-      username: "",
+      userName: "",
       password: "",
       error: "",
       remember: ['remember']

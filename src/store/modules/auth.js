@@ -10,7 +10,7 @@ const mutations = {
 
 const actions = {
     loginAction({},payload){
-       return axios.post('/v2/authorize', payload)
+       return axios.post('/v2/partner/authorize', payload)
     } 
 }
 

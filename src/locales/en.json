@@ -1,6 +1,8 @@
 {
   "login": "Login",
   "Either user deleted or is not activated" : "Either user deleted or is not activate",
-  "Invalid credentials":"Invalid credentials"
+  "Something went wrong. Please try again.!":"Something went wrong. Please try again.!",
+  "Invalid credentials":"Invalid credentials",
+  "Error!": "Error!"
 }
   
