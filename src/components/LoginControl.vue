@@ -36,10 +36,12 @@
     />
   </div>
 </template>
+
 <script>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import ControlIcon from '@/components/ControlIcon'
+
 export default {
   name: 'Control',
   components: {
@@ -73,23 +75,31 @@ export default {
         emit('update:modelValue', value)
       }
     })
+
     const inputElClass = computed(() => {
       const base = [
         'px-3 py-2 max-w-full focus:ring focus:outline-none border-gray-700 rounded w-full',
-        'dark:placeholder-gray-400',
+        'dark:placeholder-gray-400 rounded-full',
         computedType.value === 'textarea' ? 'h-24' : 'h-12',
         props.borderless ? 'border-0' : 'border',
         props.transparent ? 'bg-transparent' : 'bg-white dark:bg-gray-800'
       ]
+
       if (props.icon) {
         base.push('pl-10')
       }
+
       return base
     })
+
     const computedType = computed(() => props.options ? 'select' : props.type)
+
     const controlIconH = computed(() => props.type === 'textarea' ? 'h-full' : 'h-12')
+
     const store = useStore()
+
     const inputEl = ref(null)
+
     if (props.ctrlKFocus) {
       const fieldFocusHook = e => {
         if (e.ctrlKey && e.key === 'k') {
@@ -99,9 +109,11 @@ export default {
           inputEl.value.blur()
         }
       }
+
       onMounted(() => {
         if (!store.state.isFieldFocusRegistered) {
           window.addEventListener('keydown', fieldFocusHook)
+
           store.commit('basic', {
             key: 'isFieldFocusRegistered',
             value: true
@@ -110,14 +122,17 @@ export default {
           console.error('Duplicate field focus event')
         }
       })
+
       onBeforeUnmount(() => {
         window.removeEventListener('keydown', fieldFocusHook)
+
         store.commit('basic', {
           key: 'isFieldFocusRegistered',
           value: false
         })
       })
     }
+
     return {
       computedValue,
       inputElClass,
