@@ -7,7 +7,7 @@
       form
     >
         <div class="flex items-center justify-center mb-5">
-          <img src="/img/login-logo.5225f2a8..svg" />
+          <logo-blue />
         </div>
         <error-alert
         v-if="form.error"
@@ -119,6 +119,7 @@ import Divider from "@/components/Divider.vue";
 import JbButton from "@/components/JbButton";
 import JbButtons from "@/components/JbButtons";
 import ErrorAlert from "@/components/ErrorAlert.vue";
+import LogoBlue from "@/components/LogoBlue.vue";
 import utility from "../../components/composition/utility";
 
 export default {
@@ -133,6 +134,7 @@ export default {
     JbButton,
     JbButtons,
     ErrorAlert,
+    LogoBlue
   },
   setup() {
     const store = useStore();
