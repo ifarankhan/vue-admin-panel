@@ -1,3 +1,8 @@
 {
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "Either user deleted or is not activated" : "إما حذف المستخدم أو لم يتم تنشيطه",
+    "Something went wrong. Please try again.!": "هناك خطأ ما. حاول مرة اخرى.!",
+    "Invalid credentials":"بيانات الاعتماد غير صالحة",
+    "Error!": "خطأ!"
   }
+  
