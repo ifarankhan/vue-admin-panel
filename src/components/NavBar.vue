@@ -27,7 +27,7 @@
         class="max-h-screen-menu overflow-y-auto lg:overflow-visible lg:flex lg:items-stretch lg:justify-end lg:ml-auto"
       >
         <nav-bar-menu has-divider>
-        
+           <user-avatar class="w-6 h-6 mr-3 inline-flex" />
           <div>
             <span>{{ userName }}</span>
           </div>
@@ -72,13 +72,13 @@ import {
   mdiEmail,
   mdiLogout,
   mdiGithub,
-  mdiThemeLightDark
+  mdiThemeLightDark,
 } from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem'
 import NavBarItemLabel from '@/components/NavBarItemLabel'
 import NavBarMenu from '@/components/NavBarMenu'
 import NavBarMenuDivider from '@/components/NavBarMenuDivider'
-//import UserAvatar from '@/components/UserAvatar'
+import UserAvatar from '@/components/UserAvatar'
 import Icon from '@/components/Icon'
 import utility from "@/components/composition/utility";
 
@@ -86,12 +86,13 @@ import utility from "@/components/composition/utility";
 export default {
   name: 'NavBar',
   components: {
-   // UserAvatar,
+   UserAvatar,
     NavBarMenu,
     NavBarItem,
     NavBarItemLabel,
     NavBarMenuDivider,
-    Icon
+    Icon,
+    
   },
   setup () {
     const store = useStore()

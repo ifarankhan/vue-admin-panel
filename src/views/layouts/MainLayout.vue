@@ -29,6 +29,7 @@ export default {
 
     const isAsideLgActive = computed(() => store.state.isAsideLgActive)
     store.dispatch('fullScreenToggle', false)
+
     const overlayClick = () => {
       store.dispatch('asideLgToggle', true)
     }

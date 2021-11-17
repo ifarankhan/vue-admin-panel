@@ -2,7 +2,7 @@
   <footer v-show="isFooterBarVisible" class="bg-white py-2 px-6 dark:bg-gray-900">
     <level>
       <div>
-        <b>&copy; {{ year }}, <a href="https://psytech.com/" target="_blank">Psytech International</a>.</b>
+        Copyright <b>&copy; {{ year }}, <a href="https://psytech.com/" target="_blank">Psytech International. All rights reserved</a>.</b>
         
       </div>
       <div class="md:py-2">

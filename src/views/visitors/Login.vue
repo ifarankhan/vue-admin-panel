@@ -80,6 +80,8 @@ export default {
       })
     }
 
+    store.dispatch('fullScreenToggle', true)
+
     const i18n = useI18n();
     const  setLocale = locale => {
       i18n.locale.value = locale
