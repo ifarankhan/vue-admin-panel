@@ -11,7 +11,9 @@
         <icon :path="mdiMenu" class="cursor-pointer" size="24" />
       </nav-bar-item>
       <div class="flex-1 px-5">
-        <span><img src="../assets/psytech-logo.png" alt="Psytech International" /></span>
+        <span>
+          <logo-white />
+        </span>
       </div>
     </div>
     <div>
@@ -37,10 +39,11 @@ import { mdiMenu } from '@mdi/js'
 import AsideMenuList from '@/components/AsideMenuList'
 import NavBarItem from '@/components/NavBarItem'
 import Icon from '@/components/Icon'
+import LogoWhite from '@/components/LogoWhite'
 
 export default {
   name: 'AsideMenu',
-  components: { AsideMenuList, NavBarItem, Icon },
+  components: { AsideMenuList, NavBarItem, Icon,LogoWhite },
   props: {
     menu: {
       type: Array,
