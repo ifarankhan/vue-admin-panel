@@ -1,8 +1,14 @@
 <template>
   <nav-bar/>
   <aside-menu :menu="menu"/>
-  <router-view/>
-  <footer-bar/>
+  <div class="relative" style="min-height: calc(100vh - 60px);padding-bottom: 40px;">
+    <router-view/>
+    <div class="inset-x-0 bottom-0" style="bottom: 0px;position: absolute">
+      <footer-bar/>
+    </div>
+  </div>
+
+
   <overlay v-show="isAsideLgActive" z-index="z-30" @overlay-click="overlayClick" />
 </template>
 
