@@ -43,8 +43,9 @@ const router = createRouter({
 
 // Meta Handling
 router.beforeEach((to, from, next) => {
+  const USER_DATA = JSON.parse(localStorage.getItem('userData'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!localStorage.getItem('authToken')) {
+    if (!USER_DATA.authToken) {
       next({
         path: '/login',
       })
@@ -52,7 +53,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
   } else {
-    if (localStorage.getItem('authToken')) {
+    if (USER_DATA?.authToken) {
       next({
         path: '/dashboard',
       })

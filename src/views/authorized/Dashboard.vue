@@ -1,32 +1,41 @@
 <template>
   <hero-bar>{{$t("Dashboard")}}</hero-bar>
   <main-section>
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-4 mb-6">
       <card-widget
         trend="12%"
         trend-type="up"
         color="text-green-500"
         :icon="mdiAccountMultiple"
-        :number="512"
-        label="Clients"
+        :number="67876"
+        label="Credit Update"
       />
       <card-widget
         trend="12%"
         trend-type="down"
         color="text-blue-500"
         :icon="mdiCartOutline"
-        :number="7770"
-        prefix="$"
-        label="Sales"
+        :number="200"
+        prefix=""
+        label="No of tests"
       />
       <card-widget
         trend="Overflow"
         trend-type="alert"
         color="text-red-500"
         :icon="mdiChartTimelineVariant"
-        :number="256"
-        suffix="%"
-        label="Performance"
+        :number="125"
+        suffix=""
+        label="Reports Generated"
+      />
+      <card-widget
+          trend="up"
+          trend-type="alert"
+          color="text-red-500"
+          :icon="mdiChartTimelineVariant"
+          :number="256"
+          suffix="%"
+          label="Active Users"
       />
     </div>
   </main-section>
@@ -65,9 +74,7 @@ export default {
   },
   setup() {
     const logoutHanlder = async () => {
-      await localStorage.removeItem("authToken");
-      const { navigateTo } = utility("login");
-      navigateTo();
+       store.dispatch("auth/logoutAction", 'login')
     };
 
     const titleStack = ref(["Admin", "Dashboard"]);
