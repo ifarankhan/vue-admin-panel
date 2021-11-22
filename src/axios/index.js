@@ -1,7 +1,7 @@
 import axios from 'axios';
-const BASE_URL = process.env.VUE_APP_I18N_FALLBACK_LOCALE
+const BASE_URL = process.env.VUE_APP_API_URL
 
-
+console.log(BASE_URL)
 const instance = axios.create({
     baseURL: BASE_URL
   });
