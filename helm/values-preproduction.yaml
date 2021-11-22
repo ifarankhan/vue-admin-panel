@@ -16,7 +16,7 @@ image:
   pullPolicy: IfNotPresent
   
 ingress:
-  host: "partners-preproduction.genesysonline.net"
+  host: "partners-preprod.genesysonline.net"
   tls:
     secretName: "tls-genesysonline-net-2021"
     
