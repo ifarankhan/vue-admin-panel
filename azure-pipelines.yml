@@ -16,7 +16,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '4e9084ce-b332-4bad-ba4c-cbbfd7eb7526'
-  imageRepository: 'genesys-partnersPanel-fe'
+  imageRepository: 'genesys-partnerspanel-fe'
   containerRegistry: 'psytechcr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.SourceVersion)'

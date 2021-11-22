@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: partnerspanel-fe-config-map
+data:
+  VUE_APP_BASE_URL: "{{ .Values.env.VUE_APP_BASE_URL }}"
+  VUE_APP_PSEUDO_NODE_ENV: "{{ .Values.env.VUE_APP_PSEUDO_NODE_ENV }}"
