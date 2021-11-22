@@ -1,5 +1,5 @@
 apiVersion: v2
-name: genesys-partnersPanel-fe
+name: genesys-partnerspanel-fe
 description: A Helm chart of the Pystech Partner Panel Front End Application
 
 # A chart can be either an 'application' or a 'library' chart.

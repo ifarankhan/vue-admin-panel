@@ -12,7 +12,7 @@ env:
 replicaCount: 1
 
 image:
-  repository: psytechcr.azurecr.io/genesys-partnersPanel-fe
+  repository: psytechcr.azurecr.io/genesys-partnerspanel-fe
   tag: #{Build.SourceVersion}#
   pullPolicy: IfNotPresent
   

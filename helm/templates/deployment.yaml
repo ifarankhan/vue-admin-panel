@@ -24,6 +24,6 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
           - configMapRef:
-              name: partnersPanel-fe-config-map
+              name: partnerspanel-fe-config-map
           ports:
             - containerPort: 80         
