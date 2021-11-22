@@ -1,5 +1,5 @@
 import axios from 'axios';
-const BASE_URL = "https://api-v2-genesys2020-staging.genesysonline.net/api/v2/"
+const BASE_URL = process.env.VUE_APP_I18N_FALLBACK_LOCALE
 
 
 const instance = axios.create({
@@ -7,14 +7,13 @@ const instance = axios.create({
   });
 
   instance.defaults.headers.common["Content-Type"] = 'application/json';
-  // instance.defaults.headers.common["Access-Control-Allow-Origin"] = '*'; 
-  
+  // instance.defaults.headers.common["Access-Control-Allow-Origin"] = '*';
+
   instance.interceptors.response.use(response => {
     return response;
    }, error => {
-     
+
     return Promise.reject(error)
    });
 
    export default instance;
-  
