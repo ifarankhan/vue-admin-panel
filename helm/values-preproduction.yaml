@@ -5,7 +5,7 @@
 env: 
   ENV: preproduction
   #Use cluster service name (with namespace) for api
-  VUE_APP_BASE_URL: https://api-v2-genesys2020-preprod.genesysonline.net
+  VUE_APP_BASE_URL: https://api-v2-genesys2020-preprod.genesysonline.net/api/v2/partner
   VUE_APP_PSEUDO_NODE_ENV: production
   
 replicaCount: 1
