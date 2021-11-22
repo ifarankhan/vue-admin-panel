@@ -1,7 +1,7 @@
 <template>
   <nav
     v-show="isNavBarVisible"
-    class="top-0 left-0 right-0 fixed flex bg-white h-14 border-b border-gray-100 z-30 w-screen
+    class="top-0 left-0 right-0 fixed flex bg-white h-20 border-b border-gray-100 z-30 w-screen
     transition-position xl:pl-60 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-900"
     :class="{'ml-60':isAsideMobileExpanded}"
   >
@@ -12,6 +12,11 @@
       <nav-bar-item type="hidden lg:flex xl:hidden" @click.prevent="menuOpenLg">
         <icon :path="mdiMenu" size="24" />
       </nav-bar-item>
+    </div>
+    <div class="flex">
+      <div class="place-self-center font-semibold">
+        {{$t('GeneSys Online Partner Control')}}
+      </div>
     </div>
     <div class="flex-none items-stretch flex h-14 lg:hidden">
       <nav-bar-item class="items-center flex" @click.prevent="menuNavBarToggle">
@@ -26,6 +31,9 @@
       <div
         class="max-h-screen-menu overflow-y-auto lg:overflow-visible lg:flex lg:items-stretch lg:justify-end lg:ml-auto"
       >
+        <nav-bar-item is-desktop-icon-only  has-divider>
+          <nav-bar-item-label :icon="mdiBell" label="Log out" is-desktop-icon-only  />
+        </nav-bar-item>
         <nav-bar-menu has-divider>
            <user-avatar class="w-6 h-6 mr-3 inline-flex" />
           <div>
@@ -73,6 +81,7 @@ import {
   mdiLogout,
   mdiGithub,
   mdiThemeLightDark,
+  mdiBell
 } from '@mdi/js'
 import NavBarItem from '@/components/NavBarItem'
 import NavBarItemLabel from '@/components/NavBarItemLabel'
@@ -92,7 +101,7 @@ export default {
     NavBarItemLabel,
     NavBarMenuDivider,
     Icon,
-    
+
   },
   setup () {
     const store = useStore()
@@ -148,6 +157,7 @@ export default {
       mdiLogout,
       mdiGithub,
       mdiThemeLightDark,
+      mdiBell,
       logoutHanlder
     }
   }

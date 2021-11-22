@@ -1,33 +1,35 @@
 <template>
-  <li>
+  <li class="p-2">
     <component
       :is="componentIs"
       :to="itemTo"
       :href="itemHref"
       :target="itemTarget"
       v-slot="vSlot"
-      class="flex cursor-pointer hover:bg-gray-600 dark:hover:bg-gray-700"
+      class=" "
       :class="[isSubmenuList ? 'p-3 text-sm' : 'py-2']"
       @click="menuClick"
     >
-      <icon
-        v-if="item.icon"
-        :path="item.icon"
-        class="flex-none"
-        :class="[vSlot && vSlot.isExactActive ? styleActive : styleInactive]"
-        w="w-12"
-      />
-      <span
-        class="flex-grow"
-        :class="[vSlot && vSlot.isExactActive ? styleActive : styleInactive]"
-      >{{ item.label }}</span>
-      <icon
-        v-if="hasDropdown"
-        :path="dropdownIcon"
-        class="flex-none"
-        :class="[vSlot && vSlot.isExactActive ? styleActive : styleInactive]"
-        w="w-12"
-      />
+      <div class="flex cursor-pointer hover:bg-psytechBlueHover dark:hover:bg-psytechBlueHover rounded-md py-2" :class="[vSlot && vSlot.isExactActive ? 'bg-psytechBlueActive':'']">
+        <icon
+            v-if="item.icon"
+            :path="item.icon"
+            class="flex-none"
+            :class="[vSlot && vSlot.isExactActive ? styleActive : styleInactive]"
+            w="w-12"
+        />
+        <span
+            class="flex-grow"
+            :class="[vSlot && vSlot.isExactActive ? styleActive : styleInactive]"
+        >{{ item.label }}</span>
+        <icon
+            v-if="hasDropdown"
+            :path="dropdownIcon"
+            class="flex-none"
+            :class="[vSlot && vSlot.isExactActive ? styleActive : styleInactive]"
+            w="w-12"
+        />
+      </div>
     </component>
     <aside-menu-list
       v-if="hasDropdown"
@@ -79,7 +81,7 @@ export default {
 
     const styleActive = 'font-bold text-white'
 
-    const styleInactive = 'text-gray-300'
+    const styleInactive = 'text-white'
 
     return {
       isDropdownActive,
