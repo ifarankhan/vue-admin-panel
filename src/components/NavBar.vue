@@ -124,9 +124,7 @@ export default {
     }
 
     const logoutHanlder = async () => {
-      await localStorage.removeItem("authToken");
-      const { navigateTo } = utility("login");
-      navigateTo();
+     store.dispatch("auth/logoutAction", 'login')
     };
 
     return {

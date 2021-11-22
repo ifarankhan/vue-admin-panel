@@ -4,19 +4,20 @@
       :class="cardClass"
       :rounded="cardRounded"
       @submit.prevent="submitMethod"
+      custom
       form
     >
       <div class="flex items-center justify-center mb-5">
         <logo-blue />
       </div>
-      <error-alert
+      <!-- <error-alert
         v-if="form.error"
         :error="form.error"
         @dismissError="form.error = ''"
-      />
-      <div class="mb-2 last:mb-0 hover">
+      /> -->
+      <div :class="{'error-class': v$.userName.$error}" class="mb-2 last:mb-0 hover">
         <label class="block mb-2 ml-5 text-xs">{{ $t("emailLabel") }}</label>
-        <div class="">
+        <div>
           <div class="relative">
             <input
               name="login"
@@ -36,13 +37,14 @@
                 h-12
                 bg-white
                 dark:bg-gray-800
+                bg-opacity-50
               "
             />
           </div>
         </div>
       </div>
 
-      <div class="mb-0 last:mb-0 hover">
+      <div class="mb-0 last:mb-0 hover mb-12">
         <label class="block mb-2 ml-5 text-xs">{{ $t("passwordLabel") }}</label>
         <div class="relative">
           <input
@@ -63,32 +65,38 @@
               h-12
               bg-white
               dark:bg-gray-800
+              bg-opacity-50
             "
           />
         </div>
       </div>
-      <div class="flex justify-between flex-wrap mt-0 mb-3 ml-5">
+      <!-- <div class="flex justify-between flex-wrap mt-0 mb-3 ml-5">
         <label class="inline-flex items-center mt-3">
           <input
             type="checkbox"
             class="form-checkbox h-4 w-4 text-gray-600"
-            checked
+            v-model="form.rememberMe"
           /><span class="ml-2 text-gray-700 text-xs font-semibold">{{ $t('rememberMe') }}</span>
         </label>
-        <a href="#" class="no-underline text-xs mt-3 mr-5 font-semibold text-gray-700">{{$t('forgotPassword')}}</a>
-      </div>
+        <a href="#" class="no-underline text-xs mt-3 mr-5 font-semibold text-gray-700">{{$t('forgotPassword')}}?</a>
+      </div> -->
+      
 
-      <div class="flex items-center justify-start flex-col">
-          <span v-if="v$.userName.$error" class="text-xs font-semibold text-red-700">
+      <div class="flex items-center justify-start flex-col pb-3 -mt-2">
+          <span v-if="v$.userName.$error && !form.error" class="text-xs font-semibold text-red-700">
             {{ $t(v$.userName.$errors[0].$message) }}
           </span>
 
-          <span v-if="v$.password.$error" class="text-xs font-semibold text-red-700">
+          <span v-if="v$.password.$error && !v$.userName.$error && !form.error" class="text-xs font-semibold text-red-700">
             {{ $t(v$.password.$errors[0].$message) }}
+          </span> 
+
+          <span class="text-xs font-semibold text-red-700">
+            {{ form.error }}
           </span>
       </div>
       
-      <div class="flex items-center justify-start flex-wrap mt-4">
+      <div class="flex items-center justify-start flex-wrap">
         <button
           class="
             inline-flex
@@ -111,7 +119,7 @@
             border-blue-600
             mr-3
             last:mr-0
-            mb-3
+            mb-4
             btn-login
           "
           type="submit"
@@ -167,7 +175,7 @@ export default {
       userName: "",
       password: "",
       error: "",
-      remember: ["remember"],
+      rememberMe: false,
     });
 
     const rules = computed(()=> {
@@ -196,12 +204,14 @@ export default {
         })
         .then(async (res) => {
           if (res?.data?.data?.token) {
-            await localStorage.setItem("authToken", res?.data?.data?.token);
-            await localStorage.setItem("userName", res?.data?.data?.userName);
-            await localStorage.setItem(
-              "distributorUserName",
-              res?.data?.data?.distributorUserName
-            );
+            const USER_DATA = {
+              authToken: res?.data?.data?.token,
+              refreshToken: res?.data?.data?.refreshToken,
+              userName: res?.data?.data?.userName,
+              distributorUserName:  res?.data?.data?.distributorUserName,
+              rememberMe: form.rememberMe
+            }
+            await localStorage.setItem("userData",JSON.stringify(USER_DATA));
             const { navigateTo } = utility("dashboard");
             navigateTo();
           } else {
@@ -209,6 +219,7 @@ export default {
           }
         })
         .catch((error) => {
+          console.log(error)
           form.error = error?.response?.data?.data?.message ?? error.message;
         });
     };
@@ -240,6 +251,10 @@ export default {
   padding: 16px;
   font-size: 16px;
   border: none;
+}
+.error-class, .error-class input{
+  color: #ff0202cf;
+  border-color: #ff0202cf;
 }
 .hover,
 .hover input {

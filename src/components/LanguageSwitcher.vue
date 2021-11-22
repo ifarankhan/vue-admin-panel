@@ -4,7 +4,7 @@
               class="text-gray-700 font-semibold py-1 inline-flex items-center"
             >
               <span class="text-xs font-thin"> {{ $t('LanguageText') }}: </span>
-              <span class="ml-1 text-sm font-medium" @click.prevent="toggleLngMenu">{{ $t(selectedLanguage) }}</span>
+              <span class="ml-1 text-xs font-bold" @click.prevent="toggleLngMenu">{{ $t(selectedLanguage) }}</span>
               <svg
                 @click.prevent="toggleLngMenu"
                 class="fill-current h-4 w-4"
@@ -67,6 +67,8 @@ export default {
     const  setLocale = locale => {
       selectedLanguage.value = languages.find(item=> item.value == locale).text
       i18n.locale.value = locale
+
+      languageMenu.value = false;
      }
 
     return {

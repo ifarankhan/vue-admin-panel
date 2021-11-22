@@ -65,9 +65,7 @@ export default {
   },
   setup() {
     const logoutHanlder = async () => {
-      await localStorage.removeItem("authToken");
-      const { navigateTo } = utility("login");
-      navigateTo();
+       store.dispatch("auth/logoutAction", 'login')
     };
 
     const titleStack = ref(["Admin", "Dashboard"]);
