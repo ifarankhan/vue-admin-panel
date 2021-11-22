@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 env: 
-  ENV: staging
+  ENV: development
   #Use cluster service name (with namespace) for api
   VUE_APP_BASE_URL: https://api-v2-genesys2020-staging.genesysonline.net
   VUE_APP_PSEUDO_NODE_ENV: development
