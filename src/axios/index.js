@@ -1,6 +1,7 @@
 import axios from 'axios';
-const BASE_URL = "https://api-v2-genesys2020-staging.genesysonline.net/api/v2/"
+const BASE_URL = `${window._env_.VUE_APP_BASE_URL}`;
 
+//https://api-v2-genesys2020-staging.genesysonline.net/api/v2/
 
 const instance = axios.create({
     baseURL: BASE_URL
