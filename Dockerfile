@@ -12,7 +12,7 @@ FROM nginx:1.19.5-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 # Remove default nginx index page
 RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY .env /
 COPY create-env-config.sh /
 RUN chmod +x create-env-config.sh && chmod 777 create-env-config.sh
