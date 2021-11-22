@@ -1,7 +1,7 @@
 <template>
   <component
     :is="form ? 'form' : 'div'"
-    class="bg-white border border-gray-100 dark:bg-gray-900 dark:border-gray-900"
+    class="bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900"
     :class="[rounded]"
     @submit="submit"
   >
@@ -25,7 +25,7 @@
     <div v-if="empty" class="text-center py-24 text-gray-500 dark:text-gray-400">
       <p>Nothing's here…</p>
     </div>
-    <div v-else :class="{'p-8':!hasTable}">
+    <div v-else :class="{'p-6':!hasTable && !custom, 'box-padding': custom}">
       <slot />
     </div>
   </component>
@@ -46,6 +46,7 @@ export default {
     hasTable: Boolean,
     empty: Boolean,
     form: Boolean,
+    custom: Boolean,
     rounded: {
       type: String,
       default: 'md:rounded'
@@ -77,3 +78,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+@media (min-width: 1280px){
+  form{
+    width: 30%;
+  }
+  .box-padding{
+    padding: 30px 60px;
+  }
+}
+</style>

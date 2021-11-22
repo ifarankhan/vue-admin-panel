@@ -4,19 +4,20 @@
       :class="cardClass"
       :rounded="cardRounded"
       @submit.prevent="submitMethod"
+      custom
       form
     >
       <div class="flex items-center justify-center mb-5">
         <logo-blue />
       </div>
-      <error-alert
+      <!-- <error-alert
         v-if="form.error"
         :error="form.error"
         @dismissError="form.error = ''"
-      />
-      <div class="mb-2 last:mb-0 hover">
-        <label class="block mb-2 ml-3 text-xs">Email</label>
-        <div class="">
+      /> -->
+      <div :class="{'error-class': v$.userName.$error}" class="mb-2 last:mb-0 hover">
+        <label class="block mb-2 ml-5 text-xs">{{ $t("emailLabel") }}</label>
+        <div>
           <div class="relative">
             <input
               name="login"
@@ -27,6 +28,7 @@
                 px-3
                 py-2
                 max-w-full
+                ml-3
                 focus:ring-transparent
                 border-gray-700
                 rounded-full
@@ -35,46 +37,66 @@
                 h-12
                 bg-white
                 dark:bg-gray-800
+                bg-opacity-50
               "
             />
           </div>
         </div>
       </div>
-      <div class="mb-2 last:mb-0 hover">
-        <label class="block mb-2 ml-3 text-xs">Password</label>
-        <div class="">
-          <div class="relative">
-            <input
-              name="password"
-              autocomplete="current-password"
-              type="password"
-               v-model="form.password"
-              class="
-                px-3
-                py-2
-                max-w-full
-                focus:ring-transparent
-                border-gray-700
-                rounded-full
-                w-11/12
-                dark:placeholder-gray-400
-                h-12
-                bg-white
-                dark:bg-gray-800
-              "
-            />
-          </div>
+
+      <div class="mb-0 last:mb-0 hover mb-12">
+        <label class="block mb-2 ml-5 text-xs">{{ $t("passwordLabel") }}</label>
+        <div class="relative">
+          <input
+            name="password"
+            autocomplete="current-password"
+            type="password"
+            v-model="form.password"
+            class="
+              px-3
+              py-2
+              ml-3
+              max-w-full
+              focus:ring-transparent
+              border-gray-700
+              rounded-full
+              w-11/12
+              dark:placeholder-gray-400
+              h-12
+              bg-white
+              dark:bg-gray-800
+              bg-opacity-50
+            "
+          />
         </div>
       </div>
-      <!-- <div class="flex justify-start flex-wrap my-3 ml-3">
-          <label class="checkbox mr-6 mb-3 last:mr-0"
-            ><input type="checkbox" name="remember" value="remember" /><span
-              class="check"
-            ></span
-            ><span class="control-label">Remember</span></label
-          >
-        </div> -->
-      <div class="flex items-center justify-start flex-wrap mt-12">
+      <!-- <div class="flex justify-between flex-wrap mt-0 mb-3 ml-5">
+        <label class="inline-flex items-center mt-3">
+          <input
+            type="checkbox"
+            class="form-checkbox h-4 w-4 text-gray-600"
+            v-model="form.rememberMe"
+          /><span class="ml-2 text-gray-700 text-xs font-semibold">{{ $t('rememberMe') }}</span>
+        </label>
+        <a href="#" class="no-underline text-xs mt-3 mr-5 font-semibold text-gray-700">{{$t('forgotPassword')}}?</a>
+      </div> -->
+      
+
+      <div class="flex items-center justify-start flex-col pb-3 -mt-2">
+          <span v-if="v$.userName.$error && !form.error" class="text-xs font-semibold text-red-700">
+            {{ $t(v$.userName.$errors[0].$message) }}
+          </span>
+
+          <span v-if="v$.password.$error && !v$.userName.$error && !form.error" class="text-xs font-semibold text-red-700">
+            {{ $t(v$.password.$errors[0].$message) }}
+          </span> 
+
+          <span class="text-xs font-semibold text-red-700">
+            {{ form.error }}
+          </span>
+      </div>
+      
+      <div class="flex items-center justify-start flex-wrap">
         <button
           class="
             inline-flex
@@ -82,6 +104,7 @@
             cursor-pointer
             justify-center
             text-base
+            ml-3
             items-center
             whitespace-nowrap
             focus:outline-none focus:ring
@@ -96,108 +119,18 @@
             border-blue-600
             mr-3
             last:mr-0
-            mb-3
+            mb-4
             btn-login
           "
           type="submit"
         >
-          <span class="px-2">Submit</span>
+          <span class="px-2">{{ $t("submitButton") }}</span>
         </button>
       </div>
+
       <div class="flex items-center justify-center">
         <div>
-          <div class="dropdown inline-block relative">
-            <button
-              class="text-gray-700 font-semibold py-1 inline-flex items-center"
-            >
-              <span class="text-xs font-thin"> Language: </span>
-              <span class="ml-1 text-sm font-medium">English</span>
-              <svg
-                class="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg>
-            </button>
-            <ul
-              class="dropdown-menu absolute menu-position"
-              id="style-2"
-            >
-              <li class="">
-                <a
-                  class="
-                    bg-gray-200
-                    hover:bg-gray-400
-                    py-2
-                    px-4
-                    block
-                    whitespace-no-wrap
-                  "
-                  href="#"
-                  >One</a
-                >
-              </li>
-              <li class="">
-                <a
-                  class="
-                    bg-gray-200
-                    hover:bg-gray-400
-                    py-2
-                    px-4
-                    block
-                    whitespace-no-wrap
-                  "
-                  href="#"
-                  >Two</a
-                >
-              </li>
-              <li class="">
-                <a
-                  class="
-                    bg-gray-200
-                    hover:bg-gray-400
-                    py-2
-                    px-4
-                    block
-                    whitespace-no-wrap
-                  "
-                  href="#"
-                  >Two</a
-                >
-              </li>
-              <li class="">
-                <a
-                  class="
-                    bg-gray-200
-                    hover:bg-gray-400
-                    py-2
-                    px-4
-                    block
-                    whitespace-no-wrap
-                  "
-                  href="#"
-                  >Two</a
-                >
-              </li>
-              <li class="">
-                <a
-                  class="
-                    bg-gray-200
-                    hover:bg-gray-400
-                    py-2
-                    px-4
-                    block
-                    whitespace-no-wrap
-                  "
-                  href="#"
-                  >Three</a
-                >
-              </li>
-            </ul>
-          </div>
+          <language-switcher />
         </div>
       </div>
     </card-component>
@@ -205,7 +138,7 @@
 </template>
 <script>
 import { useStore } from "vuex";
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import FullScreenSection from "@/components/FullScreenSection";
 import CardComponent from "@/components/CardComponent";
 import CheckRadioPicker from "@/components/CheckRadioPicker";
@@ -216,7 +149,10 @@ import JbButton from "@/components/JbButton";
 import JbButtons from "@/components/JbButtons";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import LogoBlue from "@/components/LogoBlue.vue";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import utility from "../../components/composition/utility";
+import useVuelidate from '@vuelidate/core'
+import { required, email, helpers } from '@vuelidate/validators'
 
 export default {
   name: "Login",
@@ -231,6 +167,7 @@ export default {
     JbButtons,
     ErrorAlert,
     LogoBlue,
+    LanguageSwitcher,
   },
   setup() {
     const store = useStore();
@@ -238,9 +175,28 @@ export default {
       userName: "",
       password: "",
       error: "",
-      remember: ["remember"],
+      rememberMe: false,
     });
+
+    const rules = computed(()=> {
+      return {
+        userName: { 
+         required: helpers.withMessage('Email is required', required), 
+         email: helpers.withMessage('Email is invalid', email)
+        },  
+        password: { 
+          required: helpers.withMessage('Password is required', required),
+         }, 
+      }
+    })
+
+    const v$ = useVuelidate(rules, form)
     const submitMethod = async () => {
+
+      // CHECH FORM IS VALID
+      if(v$.value.$validate() && v$.value.$error){
+        return true
+      }
       store
         .dispatch("auth/loginAction", {
           username: form.userName,
@@ -248,12 +204,14 @@ export default {
         })
         .then(async (res) => {
           if (res?.data?.data?.token) {
-            await localStorage.setItem("authToken", res?.data?.data?.token);
-            await localStorage.setItem("userName", res?.data?.data?.userName);
-            await localStorage.setItem(
-              "distributorUserName",
-              res?.data?.data?.distributorUserName
-            );
+            const USER_DATA = {
+              authToken: res?.data?.data?.token,
+              refreshToken: res?.data?.data?.refreshToken,
+              userName: res?.data?.data?.userName,
+              distributorUserName:  res?.data?.data?.distributorUserName,
+              rememberMe: form.rememberMe
+            }
+            await localStorage.setItem("userData",JSON.stringify(USER_DATA));
             const { navigateTo } = utility("dashboard");
             navigateTo();
           } else {
@@ -261,12 +219,14 @@ export default {
           }
         })
         .catch((error) => {
+          console.log(error)
           form.error = error?.response?.data?.data?.message ?? error.message;
         });
     };
     store.dispatch("fullScreenToggle", true);
     return {
       form,
+      v$,
       submitMethod,
     };
   },
@@ -292,6 +252,10 @@ export default {
   font-size: 16px;
   border: none;
 }
+.error-class, .error-class input{
+  color: #ff0202cf;
+  border-color: #ff0202cf;
+}
 .hover,
 .hover input {
   color: rgb(162, 171, 171);
@@ -302,37 +266,5 @@ export default {
 }
 .hover:hover input {
   border-color: #17a9e1;
-}
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-.menu-position {
-  top: -83px;
-  left: 129px;
-  max-height: 100px;
-  overflow: auto;
-}
-
-#style-2 {
-  width: 228px;
-  background-color: rgb(255, 255, 255);
-  box-shadow: 0px 3px 6px #00000029;
-}
-
-#style-2::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  background-color: #f8f8f8;
-}
-
-#style-2::-webkit-scrollbar {
-  width: 6px;
-  background-color: rgb(255, 255, 255);
-}
-
-#style-2::-webkit-scrollbar-thumb {
-  border-radius: 10px;
- -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
- background-color: rgb(255, 255, 255);
 }
 </style>
