@@ -9,6 +9,11 @@ export default [
       to: '/dashboard',
       icon: mdiDesktopMac,
       label: 'Dashboard'
+    },
+    {
+      to: '/users',
+      icon: mdiDesktopMac,
+      label: 'Users'
     }
   ],
 ]

@@ -33,8 +33,14 @@ module.exports = {
       animation: {
         fadeOut: 'fadeOut 250ms ease-in-out',
         fadeIn: 'fadeIn 250ms ease-in-out'
+      },
+      colors: {
+        psytechBlue: '#1baae1',
+        psytechBlueActive: '#008ac0',
+        psytechBlueHover: '#3db7e6',
       }
-    }
+    },
+
   },
   variants: {
     extend: {
