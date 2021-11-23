@@ -1,7 +1,7 @@
 <template>
   <component
     :is="form ? 'form' : 'div'"
-    class="bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900"
+    class="bg-white border border-blue-100 dark:bg-gray-900 dark:border-blue-900 truncate"
     :class="[rounded]"
     @submit="submit"
   >

@@ -1,5 +1,8 @@
 <template>
-  <hero-bar>{{$t("Dashboard")}}</hero-bar>
+  <section class="bg-white pt-8 border-gray-100 p-6 dark:bg-gray-900 dark:border-gray-900 dark:text-white">
+    <h1 class="text-2xl font-semibold leading-tight">{{$t("Dashboard")}}</h1>
+
+  </section>
   <main-section>
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-4 mb-6">
       <card-widget
@@ -34,9 +37,39 @@
           color="text-red-500"
           :icon="mdiChartTimelineVariant"
           :number="256"
-          suffix="%"
+          suffix=""
           label="Active Users"
       />
+      <card-widget
+          trend="up"
+          trend-type="alert"
+          color="text-red-500"
+          :icon="mdiChartTimelineVariant"
+          :number="80000"
+          suffix=""
+          label="Total Credit Sold"
+      />
+      <card-widget
+          trend="up"
+          trend-type="alert"
+          color="text-red-500"
+          :icon="mdiChartTimelineVariant"
+          :number="5200"
+          suffix=""
+          label="Avialable transferable credits"
+      />
+
+      <card-widget
+          trend="up"
+          trend-type="alert"
+          color="text-red-500"
+          :icon="mdiChartTimelineVariant"
+          :number="21"
+          suffix=""
+          label="Dormant accounts"
+      />
+
+
     </div>
   </main-section>
 </template>
@@ -45,7 +78,6 @@ import { computed, ref, onMounted } from 'vue'
 import utility from "../../components/composition/utility";
 import MainSection from "@/components/MainSection";
 import TitleBar from "@/components/TitleBar";
-import HeroBar from "@/components/HeroBar";
 import CardWidget from "@/components/CardWidget";
 import CardComponent from "@/components/CardComponent";
 import TitleSubBar from "@/components/TitleSubBar";
@@ -67,7 +99,6 @@ export default {
     TitleSubBar,
     MainSection,
     CardWidget,
-    HeroBar,
     TitleBar,
     Notification,
     JbButton,
