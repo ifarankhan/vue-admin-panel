@@ -42,12 +42,12 @@
 </template>
 <script>
 import { useI18n } from 'vue-i18n';
-import { reactive, ref } from "vue";
+import { reactive, ref, computed } from "vue";
 export default {
     setup() {
 
     const languageMenu = ref(false)
-    const selectedLanguage = ref('English')
+    let selectedLanguage = ref('')
     const toggleLngMenu = ()=>{
       languageMenu.value = !languageMenu.value
     }
@@ -63,12 +63,18 @@ export default {
       },
     ]) 
 
+    selectedLanguage = computed(()=> {
+      // console.log(languages.find(item=> item.value == localStorage.getItem('language')))
+      return languages.find(item=> item.value == i18n.locale.value).text
+    })
+
     const i18n = useI18n();
     const  setLocale = locale => {
-      selectedLanguage.value = languages.find(item=> item.value == locale).text
       i18n.locale.value = locale
 
       languageMenu.value = false;
+      console.log("localelocale",locale)
+      localStorage.setItem('language', locale)
      }
 
     return {
