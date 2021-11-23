@@ -1,5 +1,6 @@
 import axios from 'axios';
-const BASE_URL = process.env.VUE_APP_BASE_URL;
+import AppConfig from "@/config/AppConfig";
+const BASE_URL = AppConfig.BASE_URL;
 
 console.log(BASE_URL)
 const instance = axios.create({
