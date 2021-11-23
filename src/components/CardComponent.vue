@@ -1,8 +1,8 @@
 <template>
   <component
     :is="form ? 'form' : 'div'"
-    class="bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 relative"
-    :class="[rounded]"
+    class="bg-white border-blue-100 dark:bg-gray-900 dark:border-blue-900 truncate"
+    :class="[rounded, hasBorder ? 'border' : '']"
     @submit="submit"
   >
     <header
@@ -47,6 +47,10 @@ export default {
     empty: Boolean,
     form: Boolean,
     custom: Boolean,
+    hasBorder:{
+      type: Boolean,
+      default: true
+    },
     rounded: {
       type: String,
       default: 'md:rounded'

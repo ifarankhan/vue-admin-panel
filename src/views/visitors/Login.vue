@@ -6,6 +6,7 @@
       @submit.prevent="submitMethod"
       custom
       form
+      :hasBorder='false'
     >
       <div class="flex items-center justify-center mb-5">
         <logo-blue />
@@ -201,7 +202,7 @@ export default {
          }, 
       }
     })
-    
+
     const v$ = useVuelidate(rules, form)
     const submitMethod = async () => {
 
