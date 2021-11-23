@@ -20,3 +20,6 @@ export default {
   },
 }
 </script>
+<style scoped>
+/* font-family: "Merienda", ::-webkit-search-results-button */
+</style>

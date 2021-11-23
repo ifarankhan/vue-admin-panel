@@ -6,16 +6,15 @@
       @submit.prevent="submitMethod"
       custom
       form
+      :hasBorder='false'
     >
       <div class="flex items-center justify-center mb-5">
         <logo-blue />
       </div>
-      <!-- <error-alert
-        v-if="form.error"
-        :error="form.error"
-        @dismissError="form.error = ''"
-      /> -->
-      <div :class="{'error-class': v$.userName.$error}" class="mb-2 last:mb-0 hover">
+
+       <Loader v-if="form.loader" />
+
+      <div class="mb-2 last:mb-0 hover">
         <label class="block mb-2 ml-5 text-xs">{{ $t("emailLabel") }}</label>
         <div>
           <div class="relative">
@@ -23,21 +22,23 @@
               name="login"
               autocomplete="username"
               type="text"
-              v-model="form.userName"
+              v-model="form.userName" 
               class="
                 px-3
                 py-2
-                max-w-full
                 ml-3
-                focus:ring-transparent
-                border-gray-700
-                rounded-full
-                w-11/12
-                dark:placeholder-gray-400
-                h-12
-                bg-white
-                dark:bg-gray-800
-                bg-opacity-50
+               max-w-full
+              focus:ring-transparent
+              border-gray-700
+              rounded-full
+              w-11/12
+              dark:placeholder-gray-400
+              h-12
+              bg-white
+              opacity-50
+              dark:bg-gray-800
+              bg-opacity-50
+              hover:border-psytechBlue
               "
             />
           </div>
@@ -64,8 +65,10 @@
               dark:placeholder-gray-400
               h-12
               bg-white
+              opacity-50
               dark:bg-gray-800
               bg-opacity-50
+              hover:border-psytechBlue
             "
           />
         </div>
@@ -91,35 +94,42 @@
             {{ $t(v$.password.$errors[0].$message) }}
           </span> 
 
-          <span class="text-xs font-semibold text-red-700">
-            {{ form.error }}
+          <span class="text-xs font-base text-red-700">
+            {{ $t(form.error) }}
           </span>
       </div>
-      
+
       <div class="flex items-center justify-start flex-wrap">
         <button
           class="
             inline-flex
             w-11/12
             cursor-pointer
+            focus:outline-none
             justify-center
             text-base
             ml-3
             items-center
             whitespace-nowrap
-            focus:outline-none focus:ring
+            focus:outline-none 
+            focus:ring
             duration-150
             border
             rounded-full
             ring-blue-700
             p-2
             hover:bg-blue-600
-            bg-blue-500
+            bg-psytechBlue
             text-white
             border-blue-600
             mr-3
             last:mr-0
             mb-4
+            border-none
+            transition duration-200
+            font-semibold
+            hover:bg-psytechWhite
+            hover:text-psytechBlue
             btn-login
           "
           type="submit"
@@ -138,7 +148,7 @@
 </template>
 <script>
 import { useStore } from "vuex";
-import { reactive, computed } from "vue";
+import { reactive, computed, watch, ref } from "vue";
 import FullScreenSection from "@/components/FullScreenSection";
 import CardComponent from "@/components/CardComponent";
 import CheckRadioPicker from "@/components/CheckRadioPicker";
@@ -150,8 +160,9 @@ import JbButtons from "@/components/JbButtons";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import LogoBlue from "@/components/LogoBlue.vue";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import utility from "../../components/composition/utility";
-import useVuelidate from '@vuelidate/core'
+import utility from "@/components/composition/utility";
+import useVuelidate from '@vuelidate/core';
+import Loader from '@/components/Loader.vue';
 import { required, email, helpers } from '@vuelidate/validators'
 
 export default {
@@ -167,6 +178,7 @@ export default {
     JbButtons,
     ErrorAlert,
     LogoBlue,
+    Loader,
     LanguageSwitcher,
   },
   setup() {
@@ -175,6 +187,7 @@ export default {
       userName: "",
       password: "",
       error: "",
+      loader:false,
       rememberMe: false,
     });
 
@@ -197,6 +210,7 @@ export default {
       if(v$.value.$validate() && v$.value.$error){
         return true
       }
+      form.loader = true;
       store
         .dispatch("auth/loginAction", {
           username: form.userName,
@@ -221,49 +235,40 @@ export default {
         .catch((error) => {
           console.log(error)
           form.error = error?.response?.data?.data?.message ?? error.message;
+        }).finally(()=>{
+          form.loader = false;
         });
     };
     store.dispatch("fullScreenToggle", true);
     return {
       form,
       v$,
-      submitMethod,
+      submitMethod
     };
   },
 };
 </script>
 <style scoped>
-.btn-login {
-  background-color: #17a9e1;
-  border: none;
-  transition: all 0.2s;
-  font-weight: 600;
-}
 .btn-login:hover {
-  cursor: pointer;
-  color: #17a9e1;
-  background-color: rgb(255, 255, 255);
   box-shadow: rgb(0 0 0 / 8%) 0px 0px 21px;
 }
-.dropbtn {
-  background-color: #3498db;
-  color: white;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
+.error-class{
+  color: #ff0202cf !important;
+  border-color: #ff0202cf !important;
 }
-.error-class, .error-class input{
-  color: #ff0202cf;
-  border-color: #ff0202cf;
+.error-class input{
+  border-color: #ff0202cf !important;
 }
-.hover,
-.hover input {
-  color: rgb(162, 171, 171);
-  border-color: rgb(162, 171, 171);
+.hover {
+  color: #a2abab;
 }
-.hover:hover {
+.hover input{
+   border:1px solid rgb(162, 171, 171);
+}
+.hover:hover label {
   color: #17a9e1;
 }
+
 .hover:hover input {
   border-color: #17a9e1;
 }
