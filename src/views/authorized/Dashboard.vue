@@ -68,8 +68,9 @@
           suffix=""
           label="Dormant accounts"
       />
-
-
+    </div>
+    <div class="grid grid-cols-2 gap-6 lg:grid-cols-2 mb-6">
+      <table-list />
     </div>
   </main-section>
 </template>
@@ -82,6 +83,8 @@ import CardWidget from "@/components/CardWidget";
 import CardComponent from "@/components/CardComponent";
 import TitleSubBar from "@/components/TitleSubBar";
 import JbButton from "@/components/JbButton";
+import TableList from "@/components/TableList"
+
 import {
   mdiAccountMultiple,
   mdiCartOutline,
@@ -96,6 +99,7 @@ import {
 export default {
   name: "Dashboard",
   components: {
+    TableList,
     TitleSubBar,
     MainSection,
     CardWidget,
