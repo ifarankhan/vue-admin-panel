@@ -13,7 +13,8 @@
     "forgotPassword": "هل نسيت كلمة السر",
     "Email is required": "البريد الالكتروني مطلوب",
     "Email is invalid": "البريد الإلكتروني غير صالح",
-    "Password is required": "كلمة المرور مطلوبة"
+    "Password is required": "كلمة المرور مطلوبة",
+    "Request failed with status code 404": "فشل الطلب مع رمز الحالة 404"
   }
     
   
