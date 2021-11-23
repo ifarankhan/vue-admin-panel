@@ -5,6 +5,19 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
+    // fontWeight: {
+    //   hairline: 100,
+    //   'extra-light': 100,
+    //    thin: 200,
+    //    light: 300,
+    //    normal: 400,
+    //    medium: 500,
+    //    semibold: 600,
+    //    bold: 700,
+    //   extrabold: 800,
+    //   'extra-bold': 800,
+    //    black: 900,
+    //  },
     extend: {
       zIndex: {
         '-1': '-1'
@@ -36,8 +49,10 @@ module.exports = {
       },
       colors: {
         psytechBlue: '#1baae1',
+        psytechGrey: '#a2abab',
         psytechBlueActive: '#008ac0',
         psytechBlueHover: '#3db7e6',
+        psytechWhite: '#fff',
       }
     },
 

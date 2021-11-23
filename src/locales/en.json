@@ -13,6 +13,7 @@
   "forgotPassword": "Forgot Password",
   "Email is required": "Email is required",
   "Email is invalid": "Email is invalid",
-  "Password is required": "Password is required"
+  "Password is required": "Password is required",
+  "Request failed with status code 404": "Request failed with status code 404"
 }
   
