@@ -160,9 +160,9 @@ import JbButtons from "@/components/JbButtons";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import LogoBlue from "@/components/LogoBlue.vue";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import utility from "../../components/composition/utility";
+import utility from "@/components/composition/utility";
 import useVuelidate from '@vuelidate/core';
-import Loader from '../../components/Loader.vue';
+import Loader from '@/components/Loader.vue';
 import { required, email, helpers } from '@vuelidate/validators'
 
 export default {

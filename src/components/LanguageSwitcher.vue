@@ -5,22 +5,9 @@
       <span class="ml-1 text-xs font-bold" @click.prevent="toggleLngMenu">{{
         $t(selectedLanguage)
       }}</span>
-      <img
-        src="../assets/svgs/language-icon.svg"
-         @click.prevent="toggleLngMenu"
-        alt="Language SVG"
-        class="h-2.5 w-2.5 mt-0.5"
-      />
-      <!-- <svg
-                @click.prevent="toggleLngMenu"
-                class="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                />
-              </svg> -->
+      <span class="block ml-0.5 mt-0.5">
+        <LanguageIcon  @click.prevent="toggleLngMenu" />
+      </span>
     </div>
     <ul v-if="languageMenu" class="absolute menu-position" id="style-2">
       <li
@@ -39,7 +26,12 @@
 <script>
 import { useI18n } from "vue-i18n";
 import { reactive, ref, computed } from "vue";
+import LanguageIcon from '@/components/LanguageIcon.vue';
 export default {
+  name:"LanguageSwitcher",
+  components:{
+    LanguageIcon
+  },
   setup() {
     const languageMenu = ref(false);
     let selectedLanguage = ref("");
@@ -99,8 +91,6 @@ export default {
 }
 
 #style-2::-webkit-scrollbar-track {
-  /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
-  /* border-radius: 10px; */
   background-color: #f8f8f8;
 }
 

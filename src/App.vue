@@ -20,8 +20,6 @@ export default {
   },
 }
 </script>
-<style>
-  body{
-    font-family: 'Montserrat', sans-serif;
-  }
+<style scoped>
+/* font-family: "Merienda", ::-webkit-search-results-button */
 </style>
