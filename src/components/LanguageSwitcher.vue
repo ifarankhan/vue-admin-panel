@@ -1,9 +1,9 @@
 <template>
-  <div class="dropdown inline-block relative">
-    <div class="text-gray-700 font-semibold py-1 inline-flex items-center">
-      <span class="text-xs font-thin"> {{ $t("LanguageText") }}: </span>
+  <div class="relative inline-block text-xs dropdown">
+    <div class="inline-flex items-center py-1 font-semibold text-gray-700">
+      <span class="text-xs font-thin"> {{ $t("Language") }}: </span>
       <span class="ml-1 text-xs font-bold" @click.prevent="toggleLngMenu">{{
-        $t(selectedLanguage)
+        $t(Language)
       }}</span>
       <span class="block ml-0.5 mt-0.5">
         <LanguageIcon  @click.prevent="toggleLngMenu" />
@@ -16,7 +16,7 @@
         :key="item.value"
         @click.prevent="setLocale(item.value)"
       >
-        <a class="py-2 px-4 block whitespace-no-wrap hover:bg-gray-200">{{
+        <a class="block px-4 py-2 whitespace-no-wrap hover:bg-gray-200">{{
           item.text
         }}</a>
       </li>
@@ -34,7 +34,7 @@ export default {
   },
   setup() {
     const languageMenu = ref(false);
-    let selectedLanguage = ref("");
+    let Language = ref("");
     const toggleLngMenu = () => {
       languageMenu.value = !languageMenu.value;
     };
@@ -50,7 +50,7 @@ export default {
       },
     ]);
 
-    selectedLanguage = computed(() => {
+    Language = computed(() => {
       // console.log(languages.find(item=> item.value == localStorage.getItem('language')))
       return languages.find((item) => item.value == i18n.locale.value).text;
     });
@@ -60,14 +60,13 @@ export default {
       i18n.locale.value = locale;
 
       languageMenu.value = false;
-      console.log("localelocale", locale);
       localStorage.setItem("language", locale);
     };
 
     return {
       languages,
       languageMenu,
-      selectedLanguage,
+      Language,
       setLocale,
       toggleLngMenu,
     };
@@ -78,10 +77,10 @@ export default {
 .dropdown:hover .dropdown-menu {
   display: block;
 }
-.menu-position {
+.menu-position{
   top: -64px;
   left: 122px;
-  max-height: 100px;
+  max-height: 100;
   overflow: auto;
 }
 #style-2 {
