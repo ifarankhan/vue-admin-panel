@@ -30,12 +30,27 @@
         class="overflow-y-auto max-h-screen-menu lg:overflow-visible lg:flex lg:items-stretch lg:justify-end lg:ml-auto"
       >
         <nav-bar-item is-desktop-icon-only  has-divider>
-          <language-switcher />
         </nav-bar-item>
 
         <nav-bar-item is-desktop-icon-only  has-divider>
           <nav-bar-item-label :icon="mdiBell" label="Log out" is-desktop-icon-only  />
         </nav-bar-item>
+
+        <!-- language switcher -->
+        <nav-bar-menu has-divider>
+           Language
+          <div>
+            <span>{{ userName }}</span> 
+          </div>
+          <template #dropdown>
+            <language-switcher v-slot="{ data, setLocale }">
+               <nav-bar-item to="/profile" v-for="item in data" :key="item.text"  @click.prevent="setLocale(item.value)">
+                  <nav-bar-item-label :label="item.text"/>
+                </nav-bar-item>
+            </language-switcher>
+          </template>
+        </nav-bar-menu>
+        
         
         <nav-bar-menu has-divider>
            <user-avatar class="inline-flex w-6 h-6 mr-3" />
