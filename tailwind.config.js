@@ -5,20 +5,10 @@ module.exports = {
   ],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
-    // fontWeight: {
-    //   hairline: 100,
-    //   'extra-light': 100,
-    //    thin: 200,
-    //    light: 300,
-    //    normal: 400,
-    //    medium: 500,
-    //    semibold: 600,
-    //    bold: 700,
-    //   extrabold: 800,
-    //   'extra-bold': 800,
-    //    black: 900,
-    //  },
     extend: {
+      fontFamily:{
+        'montserrat': "'Montserrat','serif'", 
+      },
       zIndex: {
         '-1': '-1'
       },
@@ -50,6 +40,7 @@ module.exports = {
       colors: {
         psytechBlue: '#1baae1',
         psytechGrey: '#a2abab',
+        psytechBlueDark: "#17a9e1",
         psytechBlueActive: '#008ac0',
         psytechBlueHover: '#3db7e6',
         psytechWhite: '#fff',
