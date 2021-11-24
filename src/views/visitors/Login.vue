@@ -15,7 +15,7 @@
        <Loader v-if="form.loader" />
 
       <div class="mb-2 last:mb-0 hover">
-        <label class="block mb-2 ml-5 text-xs">{{ $t("emailLabel") }}</label>
+        <label class="block mb-2 ml-5 text-xs font-bold font-montserrat">{{ $t("emailLabel") }}</label>
         <div>
           <div class="relative">
             <input
@@ -23,29 +23,13 @@
               autocomplete="username"
               type="text"
               v-model="form.userName" 
-              class="
-                px-3
-                py-2
-                ml-3
-               max-w-full
-              focus:ring-transparent
-              border-gray-700
-              rounded-full
-              w-11/12
-              dark:placeholder-gray-400
-              h-12
-              bg-white
-              opacity-50
-              dark:bg-gray-800
-              bg-opacity-50
-              hover:border-psytechBlue
-              "
+              class="w-11/12 h-12 max-w-full px-3 py-2 ml-3 bg-white bg-opacity-50 border-gray-700 rounded-full opacity-50 focus:ring-transparent dark:placeholder-gray-400 dark:bg-gray-800 hover:border-psytechBlue"
             />
           </div>
         </div>
       </div>
 
-      <div class="mb-0 last:mb-0 hover mb-12">
+      <div class="mb-0 mb-12 last:mb-0 hover">
         <label class="block mb-2 ml-5 text-xs">{{ $t("passwordLabel") }}</label>
         <div class="relative">
           <input
@@ -53,39 +37,23 @@
             autocomplete="current-password"
             type="password"
             v-model="form.password"
-            class="
-              px-3
-              py-2
-              ml-3
-              max-w-full
-              focus:ring-transparent
-              border-gray-700
-              rounded-full
-              w-11/12
-              dark:placeholder-gray-400
-              h-12
-              bg-white
-              opacity-50
-              dark:bg-gray-800
-              bg-opacity-50
-              hover:border-psytechBlue
-            "
+            class="w-11/12 h-12 max-w-full px-3 py-2 ml-3 bg-white bg-opacity-50 border-gray-700 rounded-full opacity-50 focus:ring-transparent dark:placeholder-gray-400 dark:bg-gray-800 hover:border-psytechBlue"
           />
         </div>
       </div>
-      <!-- <div class="flex justify-between flex-wrap mt-0 mb-3 ml-5">
+      <!-- <div class="flex flex-wrap justify-between mt-0 mb-3 ml-5">
         <label class="inline-flex items-center mt-3">
           <input
             type="checkbox"
-            class="form-checkbox h-4 w-4 text-gray-600"
+            class="w-4 h-4 text-gray-600 form-checkbox"
             v-model="form.rememberMe"
-          /><span class="ml-2 text-gray-700 text-xs font-semibold">{{ $t('rememberMe') }}</span>
+          /><span class="ml-2 text-xs font-semibold text-gray-700">{{ $t('rememberMe') }}</span>
         </label>
-        <a href="#" class="no-underline text-xs mt-3 mr-5 font-semibold text-gray-700">{{$t('forgotPassword')}}?</a>
+        <a href="#" class="mt-3 mr-5 text-xs font-semibold text-gray-700 no-underline">{{$t('forgotPassword')}}?</a>
       </div> -->
       
 
-      <div class="flex items-center justify-start flex-col pb-3 -mt-2">
+      <div class="flex flex-col items-center justify-start pb-3 -mt-2">
           <span v-if="v$.userName.$error && !form.error" class="text-xs font-semibold text-red-700">
             {{ $t(v$.userName.$errors[0].$message) }}
           </span>
@@ -94,44 +62,14 @@
             {{ $t(v$.password.$errors[0].$message) }}
           </span> 
 
-          <span class="text-xs font-base text-red-700">
+          <span class="text-xs text-red-700 font-base">
             {{ $t(form.error) }}
           </span>
       </div>
 
-      <div class="flex items-center justify-start flex-wrap">
+      <div class="flex flex-wrap items-center justify-start">
         <button
-          class="
-            inline-flex
-            w-11/12
-            cursor-pointer
-            focus:outline-none
-            justify-center
-            text-base
-            ml-3
-            items-center
-            whitespace-nowrap
-            focus:outline-none 
-            focus:ring
-            duration-150
-            border
-            rounded-full
-            ring-blue-700
-            p-2
-            hover:bg-blue-600
-            bg-psytechBlue
-            text-white
-            border-blue-600
-            mr-3
-            last:mr-0
-            mb-4
-            border-none
-            transition duration-200
-            font-semibold
-            hover:bg-psytechWhite
-            hover:text-psytechBlue
-            btn-login
-          "
+          class="inline-flex items-center justify-center w-11/12 p-2 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlue last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue btn-login"
           type="submit"
         >
           <span class="px-2">{{ $t("submitButton") }}</span>

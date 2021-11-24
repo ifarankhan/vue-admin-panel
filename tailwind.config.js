@@ -19,6 +19,10 @@ module.exports = {
     //    black: 900,
     //  },
     extend: {
+
+      fontFamily:{
+        'montserrat': "'Montserrat', 'serif'", 
+      },
       zIndex: {
         '-1': '-1'
       },
