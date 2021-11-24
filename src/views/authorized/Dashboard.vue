@@ -70,7 +70,9 @@
       />
     </div>
     <div class="grid grid-cols-2 gap-6 lg:grid-cols-2 mb-6">
-      <table-list />
+      <table-list title="Low Credit Clients" />
+      <table-list title="Top 5 Clients" :see-all="false"/>
+      <table-list title="Most Used Tests"  />
     </div>
   </main-section>
 </template>
