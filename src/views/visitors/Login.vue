@@ -14,8 +14,8 @@
 
       <Loader v-if="form.loader" />
 
-      <div class="mb-2 text-xs last:mb-0 hover">
-        <label class="block mb-2 ml-5">{{ $t("Email") }}</label>
+      <div class="mb-3 text-xs last:mb-0 hover">
+        <label class="block mb-1 ml-6">{{ $t("Email") }}</label>
         <div>
           <div class="relative">
             <input
@@ -30,7 +30,7 @@
       </div>
 
       <div class="mb-0 mb-12 text-xs last:mb-0 hover">
-        <label class="block mb-2 ml-5">{{ $t("Password") }}</label>
+        <label class="block mb-1 ml-6">{{ $t("Password") }}</label>
         <div class="relative">
           <input
             name="password"
@@ -80,7 +80,31 @@
 
       <div class="flex items-center justify-center">
         <div>
-          <language-switcher />
+          <language-switcher v-slot="{data, toggleLngMenu, languageMenu, setLocale, Language}">
+            <div class="relative inline-block text-xs dropdown">
+                <div class="inline-flex items-center py-1 font-semibold text-gray-700">
+                  <span class="text-xs font-thin"> {{ $t("Language") }}: </span>
+                  <span class="ml-1 text-xs font-bold" @click.prevent="toggleLngMenu">{{
+                    $t(Language)
+                  }}</span>
+                  <span class="block ml-0.5 mt-0.5">
+                    <LanguageIcon  @click.prevent="toggleLngMenu" />
+                  </span>
+                </div>
+                <ul v-if="languageMenu" :class="Language == 'Arabic' ? 'menu-position-ar':'menu-position'" id="style-2">
+                  <li
+                    class=""
+                    v-for="item in data"
+                    :key="item.value"
+                    @click.prevent="setLocale(item.value)"
+                  >
+                    <a class="block px-4 py-2 whitespace-no-wrap hover:bg-gray-200">{{
+                      item.text
+                    }}</a>
+                  </li>
+                </ul>
+              </div>
+          </language-switcher>
         </div>
       </div>
     </card-component>
@@ -88,7 +112,7 @@
 </template>
 <script>
 import { useStore } from "vuex";
-import { reactive, computed, watch, ref } from "vue";
+import { reactive, computed } from "vue";
 import FullScreenSection from "@/components/FullScreenSection";
 import CardComponent from "@/components/CardComponent";
 import CheckRadioPicker from "@/components/CheckRadioPicker";
@@ -103,6 +127,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import utility from "@/components/composition/utility";
 import useVuelidate from "@vuelidate/core";
 import Loader from "@/components/Loader.vue";
+import LanguageIcon from "@/components/LanguageIcon.vue";
 import { required, email, helpers } from "@vuelidate/validators";
 
 export default {
@@ -119,6 +144,7 @@ export default {
     ErrorAlert,
     LogoBlue,
     Loader,
+    LanguageIcon,
     LanguageSwitcher,
   },
   setup() {
@@ -211,5 +237,45 @@ export default {
 
 .hover:hover input {
   border-color: #17a9e1;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+.menu-position{
+  position: absolute;
+  top: -64px;
+  left: 122px;
+  max-height: 100;
+  overflow: auto;
+}
+
+.menu-position-ar{
+  position: absolute;
+  top: -58px;
+  left: 77px;
+  max-height: 100;
+  overflow: auto;
+}
+
+#style-2 {
+  /* width: 100%; */
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0px 3px 6px #00000029;
+}
+
+#style-2::-webkit-scrollbar-track {
+  background-color: #f8f8f8;
+}
+
+#style-2::-webkit-scrollbar {
+  width: 6px;
+  background-color: rgb(255, 255, 255);
+}
+
+#style-2::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: rgb(255, 255, 255);
 }
 </style>

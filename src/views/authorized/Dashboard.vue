@@ -1,10 +1,10 @@
 <template>
-  <section class="bg-white pt-8 border-gray-100 p-6 dark:bg-gray-900 dark:border-gray-900 dark:text-white">
+  <section class="p-6 pt-8 bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white">
     <h1 class="text-2xl font-semibold leading-tight">{{$t("Dashboard")}}</h1>
 
   </section>
   <main-section>
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-4 mb-6">
+    <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-4">
       <card-widget
         trend="12%"
         trend-type="up"
@@ -69,7 +69,7 @@
           label="Dormant accounts"
       />
     </div>
-    <div class="grid grid-cols-2 gap-6 lg:grid-cols-2 mb-6">
+    <div class="grid grid-cols-2 gap-6 mb-6 lg:grid-cols-2">
       <table-list title="Low Credit Clients" />
       <table-list title="Top 5 Clients" :see-all="false"/>
       <table-list title="Most Used Tests"  />
