@@ -182,12 +182,14 @@ export default {
           password: form.password,
         })
         .then(async (res) => {
-          if (res?.data?.data?.token) {
+          let info = res?.data?.data;
+          
+          if (info.token) {
             const USER_DATA = {
-              authToken: res?.data?.data?.token,
-              refreshToken: res?.data?.data?.refreshToken,
-              userName: res?.data?.data?.userName,
-              distributorUserName: res?.data?.data?.distributorUserName,
+              authToken: info?.token,
+              refreshToken: info?.refreshToken,
+              userName: info?.user?.userName,
+              distributorUserName: info?.user?.distributorUserName,
               rememberMe: form.rememberMe,
             };
             await localStorage.setItem("userData", JSON.stringify(USER_DATA));
@@ -198,7 +200,6 @@ export default {
           }
         })
         .catch((error) => {
-          console.log(error);
           form.error = error?.response?.data?.data?.message ?? error.message;
         })
         .finally(() => {
