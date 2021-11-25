@@ -42,7 +42,6 @@ export default {
 
     const i18n = useI18n();
     const setLocale = (locale) => {
-      console.log("clll")
       i18n.locale.value = locale;
 
       languageMenu.value = false;

@@ -45,7 +45,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const USER_DATA = JSON.parse(localStorage.getItem('userData'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!USER_DATA.authToken) {
+    if (!USER_DATA?.authToken) {
       next({
         path: '/login',
       })

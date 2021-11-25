@@ -91,4 +91,5 @@ export default {
     padding: 30px 60px;
   }
 }
+
 </style>
