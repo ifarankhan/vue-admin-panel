@@ -6,6 +6,9 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
+      fontFamily:{
+        'montserrat': "'Montserrat','serif'", 
+      },
       zIndex: {
         '-1': '-1'
       },
@@ -36,8 +39,11 @@ module.exports = {
       },
       colors: {
         psytechBlue: '#1baae1',
+        psytechGrey: '#a2abab',
+        psytechBlueDark: "#17a9e1",
         psytechBlueActive: '#008ac0',
         psytechBlueHover: '#3db7e6',
+        psytechWhite: '#fff',
       }
     },
 

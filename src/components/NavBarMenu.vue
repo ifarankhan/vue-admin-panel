@@ -8,14 +8,15 @@
     @click="toggle"
     ref="root"
   >
-    <a class="flex items-center py-2 px-3 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent">
+    <a class="flex items-center px-3 py-2 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent">
       <slot />
-      <icon :path="toggleDropdownIcon" class="hidden lg:inline-flex transition-colors" />
+       <span class="block ml-1 mt-0.5" v-if="hasCustomIcon">
+        <LanguageIcon width="9" height="8" />
+      </span>
+      <icon v-if="!hasCustomIcon" :path="toggleDropdownIcon" class="hidden transition-colors lg:inline-flex" />
     </a>
     <div
-      class="text-sm border-gray-100 border-b lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute
-          lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-800
-          dark:border-gray-700"
+      class="text-sm border-b border-gray-100 lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-800 dark:border-gray-700"
       :class="{'lg:hidden':!isDropdownActive}"
     >
       <slot name="dropdown" />
@@ -26,14 +27,19 @@
 <script>
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
-import NavBarItem from '@/components/NavBarItem'
+import NavBarItem from '@/components/NavBarItem';
+import LanguageIcon from "@/components/LanguageIcon.vue";
 import Icon from '@/components/Icon'
 
 export default {
   name: 'NavBarMenu',
-  components: { Icon, NavBarItem },
+  components: { Icon, NavBarItem, LanguageIcon },
   props: {
     hasDivider: {
+      type: Boolean,
+      default: false
+    },
+    hasCustomIcon:{
       type: Boolean,
       default: false
     }
