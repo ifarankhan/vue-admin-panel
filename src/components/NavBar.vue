@@ -81,13 +81,13 @@
             </nav-bar-item>
           </template>
         </nav-bar-menu>
-        <nav-bar-item is-desktop-icon-only @click="logoutHanlder">
+        <!-- <nav-bar-item is-desktop-icon-only @click="logoutHanlder">
           <nav-bar-item-label
             :icon="mdiLogout"
             label="Log out"
             is-desktop-icon-only
           />
-        </nav-bar-item>
+        </nav-bar-item> -->
       </div>
     </div>
   </nav>
