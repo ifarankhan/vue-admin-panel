@@ -81,6 +81,8 @@
             </nav-bar-item>
           </template>
         </nav-bar-menu>
+
+        
         <!-- <nav-bar-item is-desktop-icon-only @click="logoutHanlder">
           <nav-bar-item-label
             :icon="mdiLogout"
