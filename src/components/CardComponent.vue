@@ -1,31 +1,31 @@
 <template>
   <component
     :is="form ? 'form' : 'div'"
-    class="bg-white border-blue-100 dark:bg-gray-900 dark:border-blue-900 truncate"
+    class="truncate bg-white border-blue-100 dark:bg-gray-900 dark:border-blue-900"
     :class="[rounded, hasBorder ? 'border' : '']"
     @submit="submit"
   >
     <header
       v-if="title"
       class="flex items-stretch border-b border-gray-100 dark:border-gray-700">
-      <p class="flex items-center py-3 flex-grow font-bold" :class="[ icon ? 'px-4' : 'px-6' ]">
+      <p class="flex items-center flex-grow py-3 font-bold" :class="[ icon ? 'px-4' : 'px-6' ]">
         <icon v-if="icon" :path="icon" class="mr-3" />
         {{ title }}
       </p>
       <a
         v-if="computedHeaderIcon"
         href="#"
-        class="flex items-center py-3 px-4 justify-center ring-blue-700 focus:ring"
+        class="flex items-center justify-center px-4 py-3 ring-blue-700 focus:ring"
         aria-label="more options"
         @click.prevent="headerIconClick"
       >
         <icon :path="computedHeaderIcon" />
       </a>
     </header>
-    <div v-if="empty" class="text-center py-24 text-gray-500 dark:text-gray-400">
+    <div v-if="empty" class="py-24 text-center text-gray-500 dark:text-gray-400">
       <p>Nothing's here…</p>
     </div>
-    <div v-else :class="{'p-6':!hasTable && !custom, 'box-padding': custom}">
+    <div v-else  :class="{'p-6':!hasTable && !custom, 'box-padding': custom}">
       <slot />
     </div>
   </component>
@@ -91,4 +91,5 @@ export default {
     padding: 30px 60px;
   }
 }
+
 </style>
