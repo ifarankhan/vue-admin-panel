@@ -73,8 +73,6 @@
       <table-list title="Low Credit Clients" />
       <table-list title="Top 5 Clients" :see-all="false"/>
       <table-list title="Most Used Tests"  />
-      <table-demo></table-demo>
-
     </div>
   </main-section>
 </template>
@@ -99,7 +97,6 @@ import {
   mdiGithub,
   mdiChartPie,
 } from "@mdi/js";
-import TableDemo from '../../components/TableDemo.vue';
 
 export default {
   name: "Dashboard",
@@ -110,8 +107,7 @@ export default {
     CardWidget,
     TitleBar,
     Notification,
-    JbButton,
-    TableDemo
+    JbButton
   },
   setup() {
     const logoutHanlder = async () => {
