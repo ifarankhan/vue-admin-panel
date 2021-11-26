@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import visitorLayout from './views/layouts/VisitorLayout'
 import mainLayout from './views/layouts/MainLayout'
+import PrimeVue from 'primevue/config';
+
 
 import './css/main.css'
 import i18n from './i18n'
@@ -34,7 +36,9 @@ router.afterEach(to => {
     // store.dispatch('darkMode')
   })
 
-const app = createApp(App).use(i18n)
+const app = createApp(App)
+app.use(i18n)
+app.use(PrimeVue)
 app.component('visitorLayout', visitorLayout)
 app.component('mainLayout', mainLayout)
 app.use(store)

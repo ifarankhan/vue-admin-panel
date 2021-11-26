@@ -26,6 +26,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/authorized/Dashboard.vue')
   },
   {
+    path: '/table',
+    name: 'table',
+    props: true,
+    meta:{
+      layout: 'visitorLayout',
+      requiresAuth: false,
+      title: 'table',
+      fullScreen: true
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/components/TableDemo.vue')
+  },
+  {
     // path: "*",
     path: "/:catchAll(.*)",
     name: "notFound",
