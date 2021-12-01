@@ -3,109 +3,55 @@
       {
          "id":1000,
          "name":"James Butt 1",
-         "country":{
-            "name":"Algeria",
-            "code":"dz"
-         },
+         "email":"test@gmail.com",
          "company":"Benton, John B Jr",
-         "date":"2015-09-13",
          "status":"unqualified",
-         "verified":true,
-         "activity":17,
-         "representative":{
-            "name":"Ioni Bowcher",
-            "image":"ionibowcher.png"
-         },
+         "users":19,
          "balance":70663
       },
       {
          "id":1000,
          "name":"James Butt",
-         "country":{
-            "name":"apo",
-            "code":"dz"
-         },
+         "email":"abc@gmail.com",
          "company":"Benton, John B Jr",
-         "date":"2015-09-13",
          "status":"qualified",
-         "verified":true,
-         "activity":17,
-         "representative":{
-            "name":"Ioni Bowcher",
-            "image":"ionibowcher.png"
-         },
+         "users":17,
          "balance":70663
       },
       {
          "id":1001,
          "name":"Josephine Darakjy",
-         "country":{
-            "name":"Egypt",
-            "code":"eg"
-         },
+         "email":"jjkjk@gmail.com",
          "company":"Chanay, Jeffrey A Esq",
-         "date":"2019-02-09",
          "status":"proposal",
-         "verified":true,
-         "activity":0,
-         "representative":{
-            "name":"Amy Elsner",
-            "image":"amyelsner.png"
-         },
+         "users":19,
          "balance":82429
       },
       {
          "id":1000,
          "name":"James Butt",
-         "country":{
-            "name":"Algeria",
-            "code":"dz"
-         },
+         "email":"test2222@gmail.com",
          "company":"Benton, John B Jr",
-         "date":"2015-09-13",
          "status":"proposal",
-         "verified":true,
-         "activity":17,
-         "representative":{
-            "name":"Ioni Bowcher",
-            "image":"ionibowcher.png"
-         },
+         "users":17,
          "balance":70663
       },
       {
          "id":1002,
          "name":"Art Venere",
-         "country":{
-            "name":"Panama",
-            "code":"pa"
-         },
+         "email":"pppp2222@gmail.com",
          "company":"Chemel, James L Cpa",
-         "date":"2017-05-13",
          "status":"qualified",
-         "verified":false,
-         "activity":63,
-         "representative":{
-            "name":"Asiya Javayant",
-            "image":"asiyajavayant.png"
-         },
+         "users":63,
          "balance":28334
       },
       {
          "id":1003,
          "name":"Lenna Paprocki",
-         "country":{
-            "name":"Slovenia",
-            "code":"si"
-         },
+         "email":"xyz@gmail.com",
          "company":"Feltz Printing Service",
-         "date":"2020-09-15",
          "status":"new",
-         "verified":false,
-         "activity":37,
-         "representative":{
-            "name":"Xuxue Feng",
-            "image":"xuxuefeng.png"
-         },
+         "users":37,
          "balance":88521
       }
     ]

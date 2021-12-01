@@ -1,44 +1,12 @@
 <template>
 <div>
-   <!-- <field label="Email" labelFor="email">
-        <control v-model="form.name" type="email" id="email" placeholder="Email" />
-   </field>
-
-    <div class="p-2 mb-6 last:mb-0">
-      <div class="relative">
-        <select
-          class="w-full h-12 max-w-full px-3 py-2 text-xs bg-white border-2 border-gray-700 rounded focus:ring-transparent border-psytechBlueDark dark:placeholder-gray-400 dark:bg-gray-800"
-        >
-          <option>No of users</option>
-          <option>Marketing</option>
-          <option>Sales</option>
-        </select>
-      </div>
-    </div> -->
-
-   <form class="w-full">
-    <!-- <div class="relative mb-5 floating-input">
-        <input type="email" id="email" class="w-full h-16 p-3 border border-gray-200 rounded-md focus:outline-none focus:border-gray-500 focus:shadow-sm" placeholder="name@example.com" autocomplete="off" />
-        <label for="email" class="absolute top-0 left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none ">Email address</label>
-    </div> -->
-    <div class="relative mb-5 floating-input">
-        <input type="password" id="password" class="w-full h-16 p-3 border border-gray-200 rounded-md focus:outline-none focus:border-gray-500 focus:shadow-sm" placeholder="password" autocomplete="off" />
-        <label for="password" class="absolute top-0 left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none ">Password</label>
-    </div>
-    <button class="w-full p-3 text-white bg-indigo-600 rounded-md">Submit</button>
-</form>
-
     <Toolbar>
       <template #start>
         <Button label="New" icon="pi pi-plus" class="p-mr-2" />
-
-        <button @click="firstMethod()">Apply Filter</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <button @click="secondMethod()">Reset FIlter</button>
       </template>
 
       <template #end>
-        <div class="p-10">
+        <div class="p-2">
           <div class="relative inline-block dropdown">
             <button
               class="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded rounded-full hover:bg-gray-400"
@@ -60,24 +28,41 @@
               </svg>
               <span>Filter</span>
             </button>
-            jajkkjjk  {{ selectedFilter }}
             <ul
               class="absolute p-4 pt-1 text-gray-700 bg-white rounded-sm shadow top-11 dropdown-menu"
               style="width: 300px"
               v-if="showFilters"
             >
               <li class="flex">
-                 <field label="Email" labelFor="email">
-                    <control v-model="searchCountry" type="email" id="email" placeholder="Email" />
+                 <field label="Name" labelFor="account">
+                    <control v-model="accountName" type="text" id="name"/>
               </field>
-                 <select
-                      class="w-full h-12 max-w-full px-3 py-2 text-xs bg-white border-2 border-gray-700 rounded focus:ring-transparent border-psytechBlueDark dark:placeholder-gray-400 dark:bg-gray-800"
-                      v-model="selectedFilter"
-                    >
-                      <option v-for="item in filterDropdown" :key="item.value" :value="item.value">{{ item.text }}</option>
-                    </select>
+
+              <field label="Filter Type" labelFor="filterType">
+                  <control :options="filterDropdown" v-model="selectedNameFilter" />
+              </field>
               </li>
-              <li>
+
+            <li class="flex">
+                 <field label="Email" labelFor="email">
+                    <control v-model="searchedEmail" type="text" id="email" />
+              </field>
+
+              <field label="Filter Type" labelFor="filterType">
+                  <control :options="filterDropdown" v-model="selectedEmailFilter" />
+              </field>
+            </li>
+            
+            <li class="flex">
+                 <field label="Users" labelFor="users">
+                    <control v-model="searchedUsers" type="text" id="users" />
+              </field>
+
+              <field label="Filter Type" labelFor="filterType">
+                  <control :options="filterDropdown" v-model="selectedUsersFilter" />
+              </field>
+            </li>
+              <!-- <li>
                 <div>
                   <datepicker
                     v-model="pickedDate"
@@ -91,8 +76,8 @@
                     }"
                   />
                 </div>
-              </li>
-              <li>
+              </li> -->
+              <!-- <li>
                 <div class="p-2 mb-6 last:mb-0">
                   <div class="relative">
                     <select
@@ -104,11 +89,12 @@
                     </select>
                   </div>
                 </div>
-              </li>
+              </li> -->
               <li class="flex">
                 <button
                   class="inline-flex items-center justify-center w-11/12 p-2 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlue last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue"
                   type="submit"
+                   @click="clearFilter()"
                 >
                   <span class="inline-flex px-2"> Clear all </span>
                 </button>
@@ -116,6 +102,7 @@
                 <button
                   class="inline-flex items-center justify-center w-11/12 p-2 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlue last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue"
                   type="submit"
+                  @click="applyFilter()"
                 >
                   <span class="px-2"> apply </span>
                 </button>
@@ -123,18 +110,28 @@
             </ul>
           </div>
         </div>
-        <InputText
-          v-model="searchText"
-          placeholder="Keyword Search"
-          @input="filteredData()"
-        />
+    
+       <div class="relative pt-2 mx-auto text-gray-600">
+        <input class="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-lg focus:outline-none"
+          type="search" name="search" placeholder="Search" v-model="searchText"  @input="filteredMainMethod()">
+        <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
+          <svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+            viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
+            width="512px" height="512px">
+            <path
+              d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+          </svg>
+        </button>
+      </div>
       </template>
+      
     </Toolbar>
     <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" v-model:filters="filters" filterDisplay="menu" :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            :globalFilterFields="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+            responsiveLayout="scroll">
             <!-- <template #header>
                  <div class="p-d-flex p-jc-between p-ai-center">
                     <h5 class="p-m-0">Customers</h5>
@@ -151,86 +148,19 @@
                 Loading customers data. Please wait.
             </template>
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="name" header="Name" sortable style="min-width: 14rem">
+            <Column field="name" header="Account Name" sortable style="min-width: 14rem">
                 <template #body="{data}">
                     {{data.name}}
                 </template>
-                <template #filter="{filterModel}">
-                    <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>
-                </template>
             </Column>
-            <Column field="country.name" header="Country" sortable filterMatchMode="contains" style="min-width: 14rem">
+            <Column field="email" header="Email Address" sortable style="min-width: 14rem">
                 <template #body="{data}">
-                    <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" width="30" style="vertical-align: middle" />
-                    <span class="image-text">{{data.country.name}}</span>
-                </template>
-                <template #filter="{filterModel}">
-                    <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by country"/>
+                    <span class="image-text">{{data.email}}</span>
                 </template>
             </Column>
-            <Column header="Agent" sortable filterField="representative" sortField="representative.name" :showFilterMatchModes="false" :filterMenuStyle="{'width':'14rem'}" style="min-width: 14rem">
+            <Column header="No. of Users" sortable sortField="users" style="min-width: 14rem">
                  <template #body="{data}">
-                    <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" width="30" style="vertical-align: middle" />
-                    <span class="image-text">{{data.representative.name}}</span>
-                </template>
-                <template #filter="{filterModel}">
-                    <div class="p-mb-3 p-text-bold">Agent Picker</div>
-                    <MultiSelect v-model="filterModel.value" :options="representatives" optionLabel="name" placeholder="Any" class="p-column-filter">
-                        <template #option="slotProps">
-                            <div class="p-multiselect-representative-option">
-                                <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" width="30" style="vertical-align: middle" />
-                                <span class="image-text">{{slotProps.option.name}}</span>
-                            </div>
-                        </template>
-                    </MultiSelect>
-                </template>
-            </Column>
-            <Column field="date" header="Date" sortable dataType="date" style="min-width: 8rem">
-                <template #body="{data}">
-                    {{formatDate(data.date)}}
-                </template>
-                <template #filter="{filterModel}">
-                    <Calendar v-model="filterModel.value" dateFormat="mm/dd/yy" placeholder="mm/dd/yyyy" />
-                </template>
-            </Column>
-            <Column field="balance" header="Balance" sortable dataType="numeric" style="min-width: 8rem">
-                <template #body="{data}">
-                    {{formatCurrency(data.balance)}}
-                </template>
-                <template #filter="{filterModel}">
-                    <InputNumber v-model="filterModel.value" mode="currency" currency="USD" locale="en-US" />
-                </template>
-            </Column>
-            <Column field="status" header="Status" sortable :filterMenuStyle="{'width':'14rem'}" style="min-width: 10rem">
-                <template #body="{data}">
-                    <span :class="'customer-badge status-' + data.status">{{data.status}}</span>
-                </template>
-                <template #filter="{filterModel}">
-                    <Dropdown v-model="filterModel.value" :options="statuses" placeholder="Any" class="p-column-filter" :showClear="true">
-                        <template #value="slotProps">
-                            <span :class="'customer-badge status-' + slotProps.value">{{slotProps.value}}</span>
-                        </template>
-                        <template #option="slotProps">
-                            <span :class="'customer-badge status-' + slotProps.option">{{slotProps.option}}</span>
-                        </template>
-                    </Dropdown>
-                </template>
-            </Column>
-            <Column field="activity" header="Activity" sortable :showFilterMatchModes="false" style="min-width: 10rem">
-                <template #body="{data}">
-                    <ProgressBar :value="data.activity" :showValue="false" />
-                </template>
-                <template #filter="{filterModel}">
-                    <Slider v-model="filterModel.value" range class="p-m-3"></Slider>
-                    <div class="p-d-flex p-ai-center p-jc-between p-px-2">
-                        <span>{{filterModel.value ? filterModel.value[0] : 0}}</span>
-                        <span>{{filterModel.value ? filterModel.value[1] : 100}}</span>
-                    </div>
-                </template>
-            </Column>
-            <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-                <template #body>
-                    <Button type="button" icon="pi pi-cog"></Button>
+                    <span class="image-text">{{data.users}}</span>
                 </template>
             </Column>
         </DataTable>
@@ -259,16 +189,13 @@ import Toolbar from "primevue/toolbar";
 import Menu from "primevue/menu";
 import Menubar from "primevue/menubar";
 import Datepicker from "vue3-datepicker";
-
 import NavBarItem from "@/components/NavBarItem";
 import NavBarItemLabel from "@/components/NavBarItemLabel";
 import NavBarMenu from "@/components/NavBarMenu";
 import NavBarMenuDivider from "@/components/NavBarMenuDivider";
-
 // import DataTable from 'primevue/datatable';
 // import Column from 'primevue/column';
 // import ColumnGroup from 'primevue/columngroup';
-
 export default {
   name: "demoTable",
   components: {
@@ -309,8 +236,14 @@ export default {
     let prevCustomers = ref();
     let prevSearched = ref();
     let searchText = ref("");
-    let searchCountry = ref("");
+    let accountName = ref("");
+    let searchedEmail = ref("");
+    let searchedUsers = ref("");
     let selectStatus = ref("");
+    let selectedNameFilter = ref("");
+    let selectedEmailFilter = ref("");
+    let selectedUsersFilter = ref("");
+    let prevMainSearchHistry = ref("");
     let showFilters = ref(false);
     const form = reactive({
       name:"",
@@ -346,16 +279,13 @@ export default {
         value: "endsWith"
       },
     ])
-
     const selectedFilter = ref("contains")
-
     // dropdown
     const selectOptions = [
       { id: 1, label: "Business development" },
       { id: 2, label: "Marketing" },
       { id: 3, label: "Sales" },
     ];
-
     //   const toast = useToast();
     const menu = ref();
     const items = ref([
@@ -417,7 +347,6 @@ export default {
         life: 3000,
       });
     };
-
     const selectedCustomers = ref();
     const filters = ref({
       global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -480,18 +409,17 @@ export default {
         currency: "USD",
       });
     };
-    const secondMethod = () => {
+    const clearFilter = () => {
       searchText.value = "";
-      searchCountry.value = "";
-      selectStatus.value = "";
+      accountName.value = "";
+      searchedEmail.value = "";
+      searchedUsers.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
     };
-
     const generateArrayMinMax = (min, max, n) => {
       let list = [min],
         interval = (max - min) / (n - 1);
-
       for (let i = 1; i < n - 1; i++) {
         list.push(min + interval * i);
       }
@@ -499,55 +427,63 @@ export default {
       console.log(list); // prevent floating point arithmetic errors
       //    return list;
     };
+    
+      // selectedUsersFilter,
+      // selectedNameFilter,
+      // selectedEmailFilter,
 
-    const subFilter = (item, value)=>{
-        if(selectedFilter == 'contains'){
-          return item.toLowerCase().includes(value)
-        } else if(selectedFilter == 'startsWith'){
+    const subFilter = (item, value, filter)=>{
+     
+        const selectedFilter = filter;
+        if(selectedFilter == 'contains' && (typeof(value) == 'string')){
+          return item.includes(value)
+        } else if(selectedFilter == 'startsWith' && (typeof(value) == 'string')){
           return item.startsWith(value)
-        } else if(selectedFilter == 'endsWith'){
+        } else if(selectedFilter == 'endsWith' && (typeof(value) == 'string')){
            return item.endsWith(value)
-        } else if(selectedFilter == 'isNotEqualTo'){
+        } else if(selectedFilter == 'isNotEqualTo' && ( typeof(value) == 'number' || typeof(value) == 'string')){
           return item != value
-        } else if(selectedFilter == 'notContain'){
-          console.log("kkkk")
-          return !!(item.match(value) )
-        } else if(selectedFilter == 'isEqualTo'){
+        } else if(selectedFilter == 'notContain' && (typeof(value) == 'string')){
+         return !item.includes(value);
+        } else if(selectedFilter == 'isEqualTo' && ( typeof(value) == 'number' || typeof(value) == 'string')){
           return item == value
         }
     }
-
-    const firstMethod = () => {
-      // console.log("clicked")
-      let filteredData = prevCustomers.value;
-
-      // Mkae sure search value has some valid value, then do filtering
-      if (searchCountry.value) {
-        filteredData = filteredData.filter((val) => {
-          if (
-            !val.country.name && searchCountry.value
-              ? false
-              : !!(searchCountry.value
-                  ?subFilter(val.country.name
-                      .toLowerCase(),
-                      searchCountry.value.toLowerCase().trim())
-                  : true)
-          ) {
-            return true;
-          }
-        });
+    const applyFilter = () => {
+      let filteredData = [];
+      if(searchText.value){
+        filteredData = prevMainSearchHistry.value;
+      } else {
+        filteredData = prevCustomers.value;
       }
-
       // Make sure search value has some valid value, then do filtering
-      if (selectStatus.value) {
+      if (accountName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.status && selectStatus.value
+            !val.name && accountName.value
               ? false
-              : !!(selectStatus.value
-                  ? val.status
-                      .toLowerCase()
-                      .includes(selectStatus.value.toLowerCase().trim())
+              : (accountName.value
+                  ?subFilter(val.name
+                      .toLowerCase(),
+                      accountName.value.toLowerCase().trim(),
+                      selectedNameFilter.value)
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searchedEmail.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.email && searchedEmail.value
+              ? false
+              : !!(searchedEmail.value
+                  ? subFilter(val.email
+                      .toLowerCase(),
+                      searchedEmail.value.toLowerCase().trim(),
+                      selectedEmailFilter.value)
                   : true)
           ) {
             return true;
@@ -555,41 +491,55 @@ export default {
         });
       }
 
+       // Make sure search value has some valid value, then do filtering
+      if (searchedUsers.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.users && searchedUsers.value
+              ? false
+              : !!(searchedUsers.value
+                  ? subFilter(+val.users, +searchedUsers.value,selectedUsersFilter.value)
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+      
       // CHECK wheather record is found againts applied filters
-      if (filteredData.length > 0) {
+      // if (filteredData.length > 0) {
+        // console.log(filteredData[0].country)
         customers.value = filteredData;
         prevSearched.value = filteredData;
-      }
+      // }
     };
-
     const filterMethod = (data, value) => {
       return data.filter(function (customer) {
         return (
           customer.name.toLowerCase().indexOf(value) > -1 ||
-          customer.country.name.toLowerCase().indexOf(value) > -1 ||
-          customer.representative.name.toLowerCase().indexOf(value) > -1
+          customer.email.toLowerCase().indexOf(value) > -1 ||
+          customer.users == value
         );
       });
     };
-
-    const filteredData = () => {
+    const filteredMainMethod = () => {
       // var sortKey = this.sortKey
       let value = searchText.value && searchText.value.toLowerCase();
       // Search  field is blank but dropdown filters have value, JUST gor for dropdown filters
       if (!searchText.value) {
-        firstMethod();
+        prevMainSearchHistry.value = []
+        applyFilter();
         return;
       }
-
       // fileds to be check for filters
-      if (selectStatus.value || searchCountry.value) {
+      if (searchedUsers.value || accountName.value || searchedEmail.value) {
         customers.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
         customers.value = filterMethod(prevCustomers.value, value);
+        prevMainSearchHistry.value = customers.value;
       }
     };
-
     return {
       customers: customers,
       filters,
@@ -600,10 +550,11 @@ export default {
       formatDate,
       statuses,
       selectStatus,
-      filteredData,
+      prevMainSearchHistry,
+      filteredMainMethod,
       searchText,
       prevSearched,
-      searchCountry,
+      accountName,
       items,
       pickedDate,
       menu,
@@ -611,8 +562,13 @@ export default {
       showFilters,
       save,
       form,
-      firstMethod,
-      secondMethod,
+      searchedEmail,
+      searchedUsers,
+      selectedUsersFilter,
+      selectedNameFilter,
+      selectedEmailFilter,
+      applyFilter,
+      clearFilter,
       dropdownFilters,
       selectedFilter,
       selectOptions,
@@ -631,62 +587,61 @@ img {
     margin-left: auto;
   }
 }
-
 .dropdown .dropdown-menu {
   z-index: 1000;
 }
-
 ::v-deep(.p-progressbar) {
   height: 0.5rem;
   background-color: #d8dadc;
-
   .p-progressbar-value {
     background-color: #607d8b;
   }
 }
-
 ::v-deep(.p-datepicker) {
   min-width: 25rem;
-
   td {
     font-weight: 400;
   }
 }
-
 ::v-deep(.p-datatable.p-datatable-customers) {
   .p-datatable-header {
     padding: 1rem;
     text-align: left;
     font-size: 1.5rem;
   }
-
   .p-paginator {
     padding: 1rem;
   }
-
   .p-datatable-thead > tr > th {
     text-align: left;
   }
-
   .p-datatable-tbody > tr > td {
     cursor: auto;
   }
-
   .p-dropdown-label:not(.p-placeholder) {
     text-transform: uppercase;
   }
 }
-.floating-input>input::placeholder {
-    color: transparent;
-}
+// .floating-input>input::placeholder {
+//     color: transparent;
+// }
+// .floating-input>input:focus,
+// .floating-input>input:not(:placeholder-shown) { 
+// @apply pt-8
+// }
+// .floating-input>input:focus~label, 
+// .floating-input>input:not(:placeholder-shown)~label {
+//   @apply opacity-75 scale-75 -translate-y-3 translate-x-1; 
+// }
 
-.floating-input>input:focus,
-.floating-input>input:not(:placeholder-shown) { 
+
+.floating-input>input:focus,.floating-input>select,
+.floating-input>input:not(:placeholder-shown), .floating-input>select:not(:placeholder-shown) { 
 @apply pt-8
 }
-
-.floating-input>input:focus~label, 
-.floating-input>input:not(:placeholder-shown)~label {
+.floating-input>input:focus~label, .floating-input>select:focus~label 
+.floating-input>input:not(:placeholder-shown)~label, .floating-input>select:not(:placeholder-shown)~label {
+  color: #17a9e1;
   @apply opacity-75 scale-75 -translate-y-3 translate-x-1; 
 }
 </style>
