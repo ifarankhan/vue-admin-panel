@@ -38,18 +38,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '@/components/TableDemo.vue')
   },
   {
-    path: '/tableBackup',
-    name: 'table',
-    props: true,
-    meta:{
-      layout: 'visitorLayout',
-      requiresAuth: false,
-      title: 'table',
-      fullScreen: true
-    },
-    component: () => import(/* webpackChunkName: "about" */ '@/components/TableDemoBackup.vue')
-  },
-  {
     path: '/client-control',
     name: 'client-control',
     props: true,
