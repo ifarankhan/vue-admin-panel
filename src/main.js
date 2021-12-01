@@ -4,8 +4,7 @@ import router from './router'
 import store from './store'
 import visitorLayout from './views/layouts/VisitorLayout'
 import mainLayout from './views/layouts/MainLayout'
-import PrimeVue from 'primevue/config';
-
+import PrimeVue from 'primevue/config'; 
 
 import './css/main.css'
 import i18n from './i18n'

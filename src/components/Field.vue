@@ -1,10 +1,8 @@
 <template>
-  <div class="mb-6 last:mb-0">
-    <label v-if="label" class="block font-bold mb-2">{{ label }}</label>
-    <div :class="wrapperClass">
+  <div class="relative mb-5 floating-input">
       <slot />
-    </div>
-    <div v-if="help" class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ help }}</div>
+    <label for="email" class="absolute top-0 left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none ">{{ label }}</label>
+    <div v-if="help" class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ help }}</div>
   </div>
 </template>
 
@@ -39,3 +37,25 @@ export default {
   }
 }
 </script>
+<style scoped>
+/* .floating-input>input::placeholder {
+    color: transparent;
+} */
+
+
+.floating-input>input:focus,
+.floating-input>input:not(:placeholder-shown) { 
+@apply pt-8
+}
+.floating-input>input:focus~label, 
+.floating-input>input:not(:placeholder-shown)~label {
+  color: #17a9e1;
+  @apply opacity-75 scale-75 -translate-y-3 translate-x-1; 
+}
+/* .floating-input>input:not(:placeholder-shown) + label {
+   color: #17a9e1;
+  @apply opacity-75 scale-75 -translate-y-3 translate-x-1; 
+} */
+
+
+</style>

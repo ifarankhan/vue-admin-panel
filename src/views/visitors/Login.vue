@@ -24,7 +24,7 @@
                 autocomplete="username"
                 type="text"
                 v-model="form.userName"
-                class="w-11/12 h-12 max-w-full px-3 py-2 ml-3 text-xs border-gray-700 rounded-full opacity-50  focus:ring-transparent dark:placeholder-gray-400 dark:bg-gray-800"
+                class="w-11/12 h-12 max-w-full px-3 py-2 ml-3 text-xs border-gray-700 rounded-full opacity-50 focus:ring-transparent dark:placeholder-gray-400 dark:bg-gray-800"
               />
             </div>
           </div>
@@ -39,7 +39,7 @@
             autocomplete="current-password"
             type="password"
             v-model="form.password"
-            class="w-11/12 h-12 max-w-full px-3 py-2 ml-3 text-xs border-gray-700 rounded-full opacity-50  focus:ring-transparent dark:placeholder-gray-400 dark:bg-gray-800"
+            class="w-11/12 h-12 max-w-full px-3 py-2 ml-3 text-xs border-gray-700 rounded-full opacity-50 focus:ring-transparent dark:placeholder-gray-400 dark:bg-gray-800"
           />
         </div>
       </div>
@@ -73,7 +73,7 @@
 
       <div class="flex flex-wrap items-center justify-start">
         <button
-          class="inline-flex items-center justify-center w-11/12 p-3 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer  focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlueDark last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue btn-login"
+          class="inline-flex items-center justify-center w-11/12 p-3 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlueDark last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue btn-login"
           type="submit"
         >
           <span class="px-2">{{ $t("Submit") }}</span>
