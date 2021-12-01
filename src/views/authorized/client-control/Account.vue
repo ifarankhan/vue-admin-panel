@@ -1,36 +1,40 @@
 <template>
   <sticky-header :icon="mdiPlus" title="Create Client"></sticky-header>
-  <main-section>
-    <card-component title="Add Client Account" @submit.prevent="submit" form>
-      <field>
-      <control type="text" placeholder="Client/Company Name" v-model="form.cname" />
-      </field>
-      <field>
-      <control type="textarea" placeholder="Account Details"/>
-      </field>
-      <field>
-        <control type="textarea" placeholder="Account Details"/>
-      </field>
-      <field>
-        <control type="textarea" placeholder="Account Details"/>
-      </field>
-      <field>
-        <control type="textarea" placeholder="Account Details"/>
-      </field>
-      <field>
-        <control type="textarea" placeholder="Account Address"/>
-      </field>
-      <divider/>
+  <main-section class="grid grid-cols-3 gap-4">
+     <div class="form col-span-2">
+       <form action="#" @submit.prevent="submit">
+         <field label="Company Name" labelFor="email">
+           <control type="text" v-model="form.companyName" placeholder="Email"/>
+         </field>
+         <field label="Account Detail" labelFor="email">
+           <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
+         </field>
+         <field label="Account Address" labelFor="email">
+           <control type="textarea" v-model="form.accountAddress" placeholder="Account Address"/>
+         </field>
+         <divider/>
+       </form>
+     </div>
+    <div class="">
 
-      <jb-buttons>
-        <jb-button type="submit" color="info" label="Submit" />
-        <jb-button type="reset" color="info" outline label="Reset" />
-      </jb-buttons>
-    </card-component>
+    </div>
+
+
   </main-section>
 
   <sticky-footer>
-    <h1>asdfasdfadsfs</h1>
+    <div class="relative flex justify-end" style="padding-right:15%">
+      <jb-buttons>
+        <check-radio-picker
+            name="sample-checkbox"
+            v-model="customElementsForm.checkbox"
+            :options="{ another: 'Create Another'}"
+        />
+
+        <jb-button type="button" color="info" label="Submit" :click="submit" />
+        <jb-button type="reset" color="info" outline label="Reset" />
+      </jb-buttons>
+    </div>
   </sticky-footer>
 
 </template>
@@ -77,12 +81,9 @@ export default {
     ]
 
     const form = reactive({
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      phone: '',
-      department: selectOptions[0],
-      subject: '',
-      question: ''
+      companyName: '',
+      accountDetails: '',
+      accountAddress: '',
     })
 
     const customElementsForm = reactive({
@@ -93,7 +94,7 @@ export default {
     })
 
     const submit = () => {
-      //
+      console.log(form.companyName)
     }
 
     return {
@@ -107,3 +108,19 @@ export default {
   }
 }
 </script>
+<style scoped>
+::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #fff;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #fff;
+  opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #fff;
+  opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #fff;
+}
+</style>

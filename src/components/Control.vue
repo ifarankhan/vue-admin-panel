@@ -1,11 +1,21 @@
 <template>
-  <input
-    :type="type"
-    :id="id"
-    v-model="computedValue" 
-    class="w-full border border-gray-200 rounded-md h-14 focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
-    autocomplete="off"
-  />
+    <textarea
+        v-if="type==='textarea'"
+        :id="id"
+        v-model="computedValue"
+        class="w-full border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
+        :class="extraClasses"
+        autocomplete="off"
+    ></textarea>
+     <input
+         v-else
+         :type="type"
+         :id="id"
+         v-model="computedValue"
+         class="w-full border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
+         :class="extraClasses"
+         autocomplete="off"
+     />
 </template>
 <script>
 import { computed } from 'vue'
@@ -25,6 +35,7 @@ export default {
     },
   },
   setup (props, { emit }) {
+    let extraClasses = props.type === "textarea"? 'h-32':'h-14';
     const computedValue = computed({
       get: () => props.modelValue,
       set: value => {
@@ -32,13 +43,17 @@ export default {
       }
     })
     return {
-      computedValue
+      computedValue,
+      extraClasses
     }
   }
 }
 </script>
 <style scoped>
 input:hover{
+  border-color: #17a9e1;
+}
+textarea:hover{
   border-color: #17a9e1;
 }
 

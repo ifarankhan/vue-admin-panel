@@ -1,6 +1,6 @@
 <template>
   <section
-      class="p-6 pt-5 bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white sticky top-20 z-50">
+      class="p-6 pt-5 bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white sticky top-20 z-30">
     <h1 class="text-2xl font-normal leading-tight">
       <span v-if="icon">
         <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block">

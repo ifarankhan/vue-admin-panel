@@ -37,25 +37,19 @@ export default {
   }
 }
 </script>
-<style scoped>
-/* .floating-input>input::placeholder {
-    color: transparent;
-} */
-
-
+<style>
 .floating-input>input:focus,
-.floating-input>input:not(:placeholder-shown) { 
+.floating-input>input:not(:placeholder-shown),
+.floating-input>textarea:focus,
+.floating-input>textarea:not(:placeholder-shown){
 @apply pt-8
 }
-.floating-input>input:focus~label, 
-.floating-input>input:not(:placeholder-shown)~label {
+.floating-input>input:focus~label,
+.floating-input>input:not(:placeholder-shown)~label,
+.floating-input>textarea:focus~label,
+.floating-input>textarea:not(:placeholder-shown)~label{
   color: #17a9e1;
-  @apply opacity-75 scale-75 -translate-y-3 translate-x-1; 
+  @apply opacity-75 scale-75 -translate-y-3 translate-x-1;
 }
-/* .floating-input>input:not(:placeholder-shown) + label {
-   color: #17a9e1;
-  @apply opacity-75 scale-75 -translate-y-3 translate-x-1; 
-} */
-
 
 </style>
