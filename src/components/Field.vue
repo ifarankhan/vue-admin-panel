@@ -49,7 +49,7 @@ export default {
 .floating-input>textarea:focus~label,
 .floating-input>textarea:not(:placeholder-shown)~label{
   color: #17a9e1;
-  @apply opacity-75 scale-75 -translate-y-3 translate-x-1;
+  @apply opacity-75 scale-75 -translate-y-5 translate-x-1;
 }
 
 </style>
