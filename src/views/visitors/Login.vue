@@ -294,4 +294,7 @@ export default {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: rgb(255, 255, 255);
 }
+form{
+  width: 30%;
+}
 </style>
