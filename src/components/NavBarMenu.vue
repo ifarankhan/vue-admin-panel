@@ -16,7 +16,7 @@
       <icon v-if="!hasCustomIcon" :path="toggleDropdownIcon" class="hidden transition-colors lg:inline-flex" />
     </a>
     <div
-      class="text-sm border-b border-gray-100 lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-800 dark:border-gray-700"
+      class="text-sm border-b border-gray-100 lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-800 dark:border-gray-700 z-40"
       :class="{'lg:hidden':!isDropdownActive}"
     >
       <slot name="dropdown" />
