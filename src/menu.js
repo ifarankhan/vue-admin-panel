@@ -15,7 +15,7 @@ export default [
       label: 'Dashboard'
     },
     {
-      to: '/clients',
+      to: '/client-control/list',
       icon: mdiAccountConvert ,
       label: 'Client Control'
     },

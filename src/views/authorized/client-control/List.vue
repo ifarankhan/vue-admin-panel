@@ -1,113 +1,99 @@
 <template>
 <div class="px-8 mt-8">
-    <Toolbar>
-      <template #start>
-        <Button label="New" icon="pi pi-plus" class="p-mr-2" />
-      </template>
+    <sticky-header>
+      <Toolbar>
+        <template #start>
+          <psytech-button label="Create New Account" @click=""></psytech-button>
+        </template>
 
-      <template #end>
-        <div class="p-2">
-          <div class="relative inline-block dropdown">
-            <button
-              class="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded rounded-full hover:bg-gray-400"
-              @click.prevent="showFilters = !showFilters"
-            >
-             <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+        <template #end>
+          <div class="p-2">
+            <div class="relative inline-block dropdown">
+              <button
+                  class="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded rounded-full hover:bg-gray-400"
+                  @click.prevent="showFilters = !showFilters"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-                />
-              </svg>
-              <span>Filter</span>
-            </button>
-            <ul
-              class="absolute p-4 pt-1 text-gray-700 bg-white rounded-sm shadow top-11 -left-28 dropdown-menu"
-              style="width: 500px"
-              v-if="showFilters"
-            >
-              <li class="flex">
-                 <field label="Name" labelFor="account">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                  <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
+                </svg>
+                <span>Filter</span>
+              </button>
+              <ul
+                  class="absolute p-4 pt-1 text-gray-700 bg-white rounded-sm shadow top-11 -left-28 dropdown-menu"
+                  style="width: 500px"
+                  v-if="showFilters"
+              >
+                <li class="flex">
+                  <field label="Name" labelFor="account">
                     <control v-model="accountName" type="text" id="name" placeholder=" "/>
-              </field>
+                  </field>
 
-              <field label="Filter Type" labelFor="filterType">
-                  <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
-              </field>
-              </li>
+                  <field label="Filter Type" labelFor="filterType">
+                    <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
+                  </field>
+                </li>
 
-            <li class="flex">
-                 <field label="Email" labelFor="email">
+                <li class="flex">
+                  <field label="Email" labelFor="email">
                     <control v-model="searchedEmail" type="text" id="email" placeholder=" " />
-              </field>
+                  </field>
 
-              <field label="Filter Type" labelFor="filterType">
-                  <control :options="filterDropdown" type="select" v-model="selectedEmailFilter" />
-              </field>
-            </li>
-            
-            <li class="flex">
-                 <field label="Users" labelFor="users">
+                  <field label="Filter Type" labelFor="filterType">
+                    <control :options="filterDropdown" type="select" v-model="selectedEmailFilter" />
+                  </field>
+                </li>
+
+                <li class="flex">
+                  <field label="Users" labelFor="users">
                     <control v-model="searchedUsers" type="text" id="users" placeholder=" " />
-              </field>
+                  </field>
 
-              <field label="Filter Type" labelFor="filterType">
-                  <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
-              </field>
-            </li>
-              <!-- <li class="flex">
-                <button
-                  class="inline-flex items-center justify-center w-11/12 p-2 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlue last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue"
-                  type="submit"
-                   @click="clearFilter()"
-                >
-                  <span class="inline-flex px-2"> Clear all </span>
-                </button>
-
-                <button
-                  class="inline-flex items-center justify-center w-11/12 p-2 mb-4 ml-3 mr-3 text-base font-semibold text-white transition duration-150 duration-200 border border-blue-600 border-none rounded-full cursor-pointer focus:outline-none whitespace-nowrap focus:ring ring-blue-700 hover:bg-blue-600 bg-psytechBlue last:mr-0 hover:bg-psytechWhite hover:text-psytechBlue"
-                  type="submit"
-                  @click="applyFilter()"
-                >
-                  <span class="px-2"> apply </span>
-                </button>
-              </li> -->
-            </ul>
+                  <field label="Filter Type" labelFor="filterType">
+                    <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
+                  </field>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-    
-       <div class="relative pt-2 mx-auto text-gray-600">
-        <input class="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-full focus:outline-none"
-          type="search..." name="search" placeholder="Search" v-model="searchText"  @input="filteredMainMethod()">
-        <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
-          <svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
-            viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
-            width="512px" height="512px">
+
+          <div class="relative pt-2 mx-auto text-gray-600">
+            <input class="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-full focus:outline-none"
+                   type="search..." name="search" placeholder="Search" v-model="searchText"  @input="filteredMainMethod()">
+            <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
+              <svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg"
+                   xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                   viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
+                   width="512px" height="512px">
             <path
-              d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+                d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
           </svg>
-        </button>
-      </div>
-      </template>
-    </Toolbar>
-    
+            </button>
+          </div>
+        </template>
+      </Toolbar>
+    </sticky-header>
+
+
      <DataTable
-            :customers="customers" 
+            :customers="customers"
             :paginator="true"
             :rows="10"
             :rowHover="true"
             :loading="loading"
             :rowsPerPageOptions="[10,25,50]"
             />
-   
+
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
@@ -162,6 +148,8 @@ import NavBarItem from "@/components/NavBarItem";
 import NavBarItemLabel from "@/components/NavBarItemLabel";
 import NavBarMenu from "@/components/NavBarMenu";
 import NavBarMenuDivider from "@/components/NavBarMenuDivider";
+import PsytechButton from "@/components/PsytechButton";
+import StickyHeader from "@/components/StickyHeader";
 export default {
   name: "demoTable",
   components: {
@@ -184,6 +172,8 @@ export default {
     MultiSelect,
     Menu,
     Field,
+    PsytechButton,
+    StickyHeader
   },
   setup() {
     onMounted(() => {
@@ -391,13 +381,13 @@ export default {
       console.log(list); // prevent floating point arithmetic errors
       //    return list;
     };
-    
+
       // selectedUsersFilter,
       // selectedNameFilter,
       // selectedEmailFilter,
 
     const subFilter = (item, value, filter)=>{
-     
+
         const selectedFilter = filter;
         if(selectedFilter == 'contains' && (typeof(value) == 'string')){
           return item.includes(value)
@@ -469,7 +459,7 @@ export default {
           }
         });
       }
-      
+
       // CHECK wheather record is found againts applied filters
       // if (filteredData.length > 0) {
         // console.log(filteredData[0].country)
