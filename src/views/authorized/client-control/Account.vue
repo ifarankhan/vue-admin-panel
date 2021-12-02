@@ -1,10 +1,10 @@
 <template>
   <sticky-header :icon="mdiPlus" title="Create Client"></sticky-header>
   <main-section class="grid grid-cols-3 gap-4">
-     <div class="form col-span-2">
+     <div class="col-span-2 form">
        <form action="#" @submit.prevent="submit">
          <field label="Company Name" labelFor="email">
-           <control type="text" v-model="form.companyName" placeholder="Email"/>
+           <control type="text" v-model="form.companyName"/>
          </field>
          <field label="Account Detail" labelFor="email">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
