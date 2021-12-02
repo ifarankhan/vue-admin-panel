@@ -3,43 +3,54 @@
   <main-section class="grid grid-cols-3 gap-4">
      <div class="form col-span-2">
        <form action="#" @submit.prevent="submit">
-         <field label="Company Name" labelFor="email">
+         <field label="Company Name" labelFor="companyname">
            <control type="text" v-model="form.companyName" placeholder="Email"/>
+           <span
+               v-if="v$.companyName.$error"
+               class="pl-3 font-semibold text-red-700"
+           >
+            {{ $t(v$.companyName.$errors[0].$message) }}
+          </span>
          </field>
-         <field label="Account Detail" labelFor="email">
+         <field label="Account Detail" labelFor="accountDetails">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
+           <span
+               v-if="v$.accountDetails.$error"
+               class="pl-3 font-semibold text-red-700"
+           >
+            {{ $t(v$.accountDetails.$errors[0].$message) }}
+          </span>
          </field>
-         <field label="Account Address" labelFor="email">
+         <field label="Account Address" labelFor="accountAddress">
            <control type="textarea" v-model="form.accountAddress" placeholder="Account Address"/>
+           <span
+               v-if="v$.accountAddress.$error"
+               class="pl-3 font-semibold text-red-700"
+           >
+            {{ $t(v$.accountAddress.$errors[0].$message) }}
+          </span>
          </field>
          <divider/>
        </form>
      </div>
-    <div class="">
-
-    </div>
-
-
   </main-section>
 
   <sticky-footer>
     <div class="relative flex justify-end" style="padding-right:15%">
-      <jb-buttons>
         <check-radio-picker
             name="sample-checkbox"
-            v-model="customElementsForm.checkbox"
+            v-model="form.addAnother"
             :options="{ another: 'Create Another'}"
         />
-
-        <jb-button type="button" color="info" label="Submit" :click="submit" />
-        <jb-button type="reset" color="info" outline label="Reset" />
-      </jb-buttons>
+      <psytech-button label="Create Account" @click="submit"></psytech-button>
+      <psytech-button label="Cancel" type="Secondary" @click="cancel"></psytech-button>
     </div>
   </sticky-footer>
 
 </template>
 <script>
-import { ref, reactive } from 'vue'
+import { ref, reactive,computed } from 'vue'
+import utility from "@/components/composition/utility";
 import { mdiPlus } from '@mdi/js'
 import MainSection from '@/components/MainSection'
 import TitleBar from '@/components/TitleBar'
@@ -49,11 +60,13 @@ import FilePicker from '@/components/FilePicker'
 import Field from '@/components/Field'
 import Control from '@/components/Control'
 import Divider from '@/components/Divider.vue'
-import JbButton from '@/components/JbButton'
-import JbButtons from '@/components/JbButtons'
+import PsytechButton from '@/components/PsytechButton'
 import StickyHeader from "@/components/StickyHeader";
 import StickyFooter from "@/components/StickyFooter";
 import TitleSubBar from '@/components/TitleSubBar'
+import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+
 export default {
   name: "client-control-details",
   components: {
@@ -66,10 +79,10 @@ export default {
     TitleBar,
     Field,
     Control,
-    JbButton,
-    JbButtons,
+    PsytechButton,
     StickyHeader,
-    StickyFooter
+    StickyFooter,
+    utility,
   },
   setup () {
     const titleStack = ref(['Admin', 'Forms'])
@@ -84,24 +97,57 @@ export default {
       companyName: '',
       accountDetails: '',
       accountAddress: '',
+      addAnother: 0
     })
 
-    const customElementsForm = reactive({
-      checkbox: ['lorem'],
-      radio: 'one',
-      switch: ['one'],
-      file: null
-    })
+    // const customElementsForm = reactive({
+    //   checkbox: ['lorem'],
+    //   radio: 'one',
+    //   switch: ['one'],
+    //   file: null
+    // })
+
+    const rules = computed(() => {
+      return {
+        companyName: {
+          required: helpers.withMessage("Company Name is required", required),
+          minLength: minLength(4),
+          maxLength:maxLength(255)
+        },
+        accountDetails: {
+          required: helpers.withMessage("Account Details are required", required),
+          minLength: minLength(10),
+          maxLength:maxLength(255)
+        },
+        accountAddress: {
+          required: helpers.withMessage("Account Address are required", required),
+          minLength: minLength(10),
+          maxLength:maxLength(255)
+        },
+      };
+    });
+
+    const v$ = useVuelidate(rules, form);
 
     const submit = () => {
-      console.log(form.companyName)
+      if (v$.value.$validate() && v$.value.$error) {
+        return true;
+      }
+      //Send validated from to user.
+      console.log(form.addAnother)
+    }
+
+    const cancel = ()=>{
+      const { navigateTo } = utility('dashboard'); navigateTo();
     }
 
     return {
       titleStack,
       selectOptions,
       form,
-      customElementsForm,
+      v$,
+      cancel,
+      // customElementsForm,
       submit,
       mdiPlus
     }
