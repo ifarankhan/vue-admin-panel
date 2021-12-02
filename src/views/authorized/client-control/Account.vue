@@ -5,24 +5,15 @@
        <form action="#" @submit.prevent="submit">
          <field label="Company Name" labelFor="email">
            <control type="text" v-model="form.companyName" placeholder="Email"/>
+           <error-span :error="v$.companyName"></error-span>
          </field>
          <field label="Account Detail" labelFor="accountDetails">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
-           <span
-               v-if="v$.accountDetails.$error"
-               class="pl-3 font-semibold text-red-700"
-           >
-            {{ $t(v$.accountDetails.$errors[0].$message) }}
-          </span>
+           <error-span :error="v$.accountDetails"></error-span>
          </field>
          <field label="Account Address" labelFor="accountAddress">
            <control type="textarea" v-model="form.accountAddress" placeholder="Account Address"/>
-           <span
-               v-if="v$.accountAddress.$error"
-               class="pl-3 font-semibold text-red-700"
-           >
-            {{ $t(v$.accountAddress.$errors[0].$message) }}
-          </span>
+           <error-span :error="v$.accountAddress"></error-span>
          </field>
          <divider/>
        </form>
@@ -60,6 +51,7 @@ import StickyFooter from "@/components/StickyFooter";
 import TitleSubBar from '@/components/TitleSubBar'
 import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import ErrorSpan from "@/components/ErrorSpan";
 
 export default {
   name: "client-control-details",
@@ -76,6 +68,7 @@ export default {
     PsytechButton,
     StickyHeader,
     StickyFooter,
+    ErrorSpan,
     utility,
   },
   setup () {
