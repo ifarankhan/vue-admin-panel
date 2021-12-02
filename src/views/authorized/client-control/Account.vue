@@ -3,14 +3,8 @@
   <main-section class="grid grid-cols-3 gap-4">
      <div class="form col-span-2">
        <form action="#" @submit.prevent="submit">
-         <field label="Company Name" labelFor="companyname">
+         <field label="Company Name" labelFor="email">
            <control type="text" v-model="form.companyName" placeholder="Email"/>
-           <span
-               v-if="v$.companyName.$error"
-               class="pl-3 font-semibold text-red-700"
-           >
-            {{ $t(v$.companyName.$errors[0].$message) }}
-          </span>
          </field>
          <field label="Account Detail" labelFor="accountDetails">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>

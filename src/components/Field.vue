@@ -13,8 +13,8 @@ export default {
   name: 'Field',
   props: {
     label: String,
-    lableFor: String,
-    help: String
+    help: String,
+    lableFor: String
   },
   setup (props, { slots }) {
     const wrapperClass = computed(() => {
@@ -63,3 +63,5 @@ export default {
 }
 
 </style>
+
+

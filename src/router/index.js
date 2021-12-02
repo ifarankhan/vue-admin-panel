@@ -26,18 +26,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/authorized/Dashboard.vue')
   },
   {
-    path: '/table',
-    name: 'table',
-    props: true,
-    meta:{
-      layout: 'visitorLayout',
-      requiresAuth: false,
-      title: 'table',
-      fullScreen: true
-    },
-    component: () => import(/* webpackChunkName: "about" */ '@/components/TableDemo.vue')
-  },
-  {
     path: '/client-control',
     name: 'client-control',
     props: true,
@@ -53,6 +41,11 @@ const routes = [
         path: 'create-client',
         name: 'client-control-create-client',
         component: () => import('../views/authorized/client-control/Account.vue'),
+      },
+      {
+        path: 'list',
+        name: 'client-control-list',
+        component: () => import('../views/authorized/client-control/List.vue'),
       },
     ]
   },
