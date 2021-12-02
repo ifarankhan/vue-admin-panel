@@ -1,7 +1,7 @@
 <template>
   <div class="relative mb-5 floating-input">
       <slot />
-    <label for="email" class="absolute top-0 left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none ">{{ label }}</label>
+    <label :for="lableFor" class="absolute top-0 left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none ">{{ label }}</label>
     <div v-if="help" class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ help }}</div>
   </div>
 </template>
@@ -13,6 +13,7 @@ export default {
   name: 'Field',
   props: {
     label: String,
+    lableFor: String,
     help: String
   },
   setup (props, { slots }) {
@@ -40,16 +41,25 @@ export default {
 <style>
 .floating-input>input:focus,
 .floating-input>input:not(:placeholder-shown),
+.floating-input>select:focus,
+.floating-input>select:not(:placeholder-shown),
 .floating-input>textarea:focus,
 .floating-input>textarea:not(:placeholder-shown){
 @apply pt-8
 }
 .floating-input>input:focus~label,
 .floating-input>input:not(:placeholder-shown)~label,
+.floating-input>select:focus~label,
+.floating-input>select:not(:placeholder-shown)~label,
 .floating-input>textarea:focus~label,
 .floating-input>textarea:not(:placeholder-shown)~label{
   color: #17a9e1;
   @apply opacity-75 scale-75 -translate-y-5 translate-x-1;
+}
+
+.floating-input>select:focus,
+.floating-input>select:not(:placeholder-shown){
+  padding-top: 1.5rem !important;
 }
 
 </style>
