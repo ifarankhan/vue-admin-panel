@@ -53,6 +53,7 @@
                 :key="item.text"
                 @click.prevent="setLocale(item.value)"
                 class="font-semibold"
+                
               >
                 <nav-bar-item-label :label="item.text" icon='' />
               </nav-bar-item>

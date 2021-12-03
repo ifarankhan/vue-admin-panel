@@ -1,98 +1,157 @@
 <template>
-<div class="px-8 mt-8">
+  <div class="px-8 mt-1">
     <sticky-header>
-      <Toolbar>
-        <template #start>
-          <psytech-button label="Create New Account" @click=""></psytech-button>
-        </template>
+      <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
+      <div class="flex justify-between">
+        <!-- left section -->
+        <div>
+          <button
+          @click="$router.push({name:'client-control-create-client'})"
+          class="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+            <span>Create New Client Account</span>
+          </button>
+          <!-- Create New Client Account -->
+          <!-- <psytech-button label="Create New Account"></psytech-button> -->
+        </div>
 
-        <template #end>
+        <!-- Right Section -->
+        <div class="flex">
           <div class="p-2">
             <div class="relative inline-block dropdown">
               <button
-                  class="inline-flex items-center px-4 py-2 font-bold text-gray-800 bg-gray-300 rounded rounded-full hover:bg-gray-400"
-                  @click.prevent="showFilters = !showFilters"
+                class="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+                @click.prevent="showFilters = !showFilters"
               >
                 <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="w-5 h-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
                   <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
                   />
                 </svg>
                 <span>Filter</span>
               </button>
               <ul
-                  class="absolute p-4 pt-1 text-gray-700 bg-white rounded-sm shadow top-11 -left-28 dropdown-menu"
-                  style="width: 500px"
+                  class="absolute text-gray-700 bg-white rounded-md shadow top-12 -left-48 dropdown-menu"
+                  style="min-width: 465px; padding: 16px 15px;"
+                  id="filter-dropdown"
                   v-if="showFilters"
               >
                 <li class="flex">
-                  <field label="Name" labelFor="account">
-                    <control v-model="accountName" type="text" id="name" placeholder=" "/>
+                  <field label="Name" labelFor="account" :applyExtraInputClass="true">
+                    <control v-model="accountName" type="text" id="name" placeholder=" " />
                   </field>
 
-                  <field label="Filter Type" labelFor="filterType">
+                  <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
                   </field>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG @iconWasClicked="(accountName=''),applyFilter()" />
+                  </div> 
                 </li>
 
                 <li class="flex">
-                  <field label="Email" labelFor="email">
+                  <field label="Email" labelFor="email" :applyExtraInputClass="true" >
                     <control v-model="searchedEmail" type="text" id="email" placeholder=" " />
                   </field>
 
-                  <field label="Filter Type" labelFor="filterType">
+                  <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedEmailFilter" />
                   </field>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG @iconWasClicked="(searchedEmail=''),applyFilter()" />
+                  </div>
                 </li>
 
                 <li class="flex">
-                  <field label="Users" labelFor="users">
+                  <field label="Users" labelFor="users" :applyExtraInputClass="true">
                     <control v-model="searchedUsers" type="text" id="users" placeholder=" " />
                   </field>
 
-                  <field label="Filter Type" labelFor="filterType">
+                  <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
                   </field>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG @iconWasClicked="(searchedUsers=''),applyFilter()" />
+                  </div>
+                </li>
+                <li class="flex justify-between">
+                  <div class="flex items-center justify-center ml-3">
+                    <a @click.prevent="clearFilter()" class="text-xs font-semibold no-underline text-psytechBlue">Clear all</a>
+                  </div>
+                  <psytech-button label="Apply" @buttonWasClicked="applyFilter"></psytech-button>
                 </li>
               </ul>
             </div>
           </div>
 
+          <!-- search -->
           <div class="relative pt-2 mx-auto text-gray-600">
-            <input class="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-full focus:outline-none"
-                   type="search..." name="search" placeholder="Search" v-model="searchText"  @input="filteredMainMethod()">
+            <input
+              class="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-full focus:outline-none"
+              type="search..."
+              name="search"
+              placeholder="Search"
+              v-model="searchText"
+              @input="filteredMainMethod()"
+            />
             <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
-              <svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg"
-                   xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
-                   viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
-                   width="512px" height="512px">
-            <path
-                d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-          </svg>
+              <svg
+                class="w-4 h-4 text-gray-600 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                version="1.1"
+                id="Capa_1"
+                x="0px"
+                y="0px"
+                viewBox="0 0 56.966 56.966"
+                style="enable-background: new 0 0 56.966 56.966"
+                xml:space="preserve"
+                width="512px"
+                height="512px"
+              >
+                <path
+                  d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"
+                />
+              </svg>
             </button>
           </div>
-        </template>
-      </Toolbar>
+          <!-- end search -->
+        </div>
+      </div>
     </sticky-header>
 
-
-     <DataTable
-            :customers="customers"
-            :paginator="true"
-            :rows="10"
-            :rowHover="true"
-            :loading="loading"
-            :rowsPerPageOptions="[10,25,50]"
-            />
+    <br />
+    <DataTable
+      :customers="customers"
+      :paginator="true"
+      :rows="10"
+      :rowHover="true"
+      :loading="loading"
+      :rowsPerPageOptions="[10, 25, 50]"
+    />
 
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" :loading="loading"
@@ -122,7 +181,7 @@
                 </template>
             </Column>
     </DataTable> -->
-</div>
+  </div>
 </template>
 
 <script>
@@ -130,7 +189,7 @@ import { ref, onMounted, reactive } from "vue";
 import CustomerService from "@/components/service/CustomeService";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import InputText from "primevue/inputtext";
-import DataTable from '@/components/Table.vue';
+import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
@@ -150,6 +209,7 @@ import NavBarMenu from "@/components/NavBarMenu";
 import NavBarMenuDivider from "@/components/NavBarMenuDivider";
 import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
+import IconSVG from "@/components/IconSVG.vue";
 export default {
   name: "demoTable",
   components: {
@@ -161,6 +221,7 @@ export default {
     NavBarItemLabel,
     InputNumber,
     Control,
+    IconSVG,
     Dropdown,
     Calendar,
     Slider,
@@ -173,7 +234,7 @@ export default {
     Menu,
     Field,
     PsytechButton,
-    StickyHeader
+    StickyHeader,
   },
   setup() {
     onMounted(() => {
@@ -200,9 +261,9 @@ export default {
     let prevMainSearchHistry = ref("");
     let showFilters = ref(false);
     const form = reactive({
-      name:"",
-      email:""
-    })
+      name: "",
+      email: "",
+    });
     const pickedDate = ref(new Date());
     const dropdownFilters = reactive({
       users: "",
@@ -210,30 +271,30 @@ export default {
     const filterDropdown = reactive([
       {
         text: "Is equal to",
-        value: "isEqualTo"
+        value: "isEqualTo",
       },
       {
         text: "Is not equal to",
-        value: "isNotEqualTo"
+        value: "isNotEqualTo",
       },
       {
         text: "Starts with",
-        value: "startsWith"
+        value: "startsWith",
       },
       {
         text: "Contains",
-        value: "contains"
+        value: "contains",
       },
       {
         text: "Does not contain",
-        value: "notContain"
+        value: "notContain",
       },
       {
         text: "Ends With",
-        value: "endsWith"
+        value: "endsWith",
       },
-    ])
-    const selectedFilter = ref("contains")
+    ]);
+    const selectedFilter = ref("contains");
     // dropdown
     const selectOptions = [
       { id: 1, label: "Business development" },
@@ -382,30 +443,35 @@ export default {
       //    return list;
     };
 
-      // selectedUsersFilter,
-      // selectedNameFilter,
-      // selectedEmailFilter,
+    // selectedUsersFilter,
+    // selectedNameFilter,
+    // selectedEmailFilter,
 
-    const subFilter = (item, value, filter)=>{
-
-        const selectedFilter = filter;
-        if(selectedFilter == 'contains' && (typeof(value) == 'string')){
-          return item.includes(value)
-        } else if(selectedFilter == 'startsWith' && (typeof(value) == 'string')){
-          return item.startsWith(value)
-        } else if(selectedFilter == 'endsWith' && (typeof(value) == 'string')){
-           return item.endsWith(value)
-        } else if(selectedFilter == 'isNotEqualTo' && ( typeof(value) == 'number' || typeof(value) == 'string')){
-          return item != value
-        } else if(selectedFilter == 'notContain' && (typeof(value) == 'string')){
-         return !item.includes(value);
-        } else if(selectedFilter == 'isEqualTo' && ( typeof(value) == 'number' || typeof(value) == 'string')){
-          return item == value
-        }
-    }
+    const subFilter = (item, value, filter) => {
+      const selectedFilter = filter;
+      if (selectedFilter == "contains" && typeof value == "string") {
+        return item.includes(value);
+      } else if (selectedFilter == "startsWith" && typeof value == "string") {
+        return item.startsWith(value);
+      } else if (selectedFilter == "endsWith" && typeof value == "string") {
+        return item.endsWith(value);
+      } else if (
+        selectedFilter == "isNotEqualTo" &&
+        (typeof value == "number" || typeof value == "string")
+      ) {
+        return item != value;
+      } else if (selectedFilter == "notContain" && typeof value == "string") {
+        return !item.includes(value);
+      } else if (
+        selectedFilter == "isEqualTo" &&
+        (typeof value == "number" || typeof value == "string")
+      ) {
+        return item == value;
+      }
+    };
     const applyFilter = () => {
       let filteredData = [];
-      if(searchText.value){
+      if (searchText.value) {
         filteredData = prevMainSearchHistry.value;
       } else {
         filteredData = prevCustomers.value;
@@ -416,12 +482,13 @@ export default {
           if (
             !val.name && accountName.value
               ? false
-              : (accountName.value
-                  ?subFilter(val.name
-                      .toLowerCase(),
-                      accountName.value.toLowerCase().trim(),
-                      selectedNameFilter.value)
-                  : true)
+              : accountName.value
+              ? subFilter(
+                  val.name.toLowerCase(),
+                  accountName.value.toLowerCase().trim(),
+                  selectedNameFilter.value
+                )
+              : true
           ) {
             return true;
           }
@@ -434,10 +501,11 @@ export default {
             !val.email && searchedEmail.value
               ? false
               : !!(searchedEmail.value
-                  ? subFilter(val.email
-                      .toLowerCase(),
+                  ? subFilter(
+                      val.email.toLowerCase(),
                       searchedEmail.value.toLowerCase().trim(),
-                      selectedEmailFilter.value)
+                      selectedEmailFilter.value
+                    )
                   : true)
           ) {
             return true;
@@ -445,14 +513,18 @@ export default {
         });
       }
 
-       // Make sure search value has some valid value, then do filtering
+      // Make sure search value has some valid value, then do filtering
       if (searchedUsers.value) {
         filteredData = filteredData.filter((val) => {
           if (
             !val.users && searchedUsers.value
               ? false
               : !!(searchedUsers.value
-                  ? subFilter(+val.users, +searchedUsers.value,selectedUsersFilter.value)
+                  ? subFilter(
+                      +val.users,
+                      +searchedUsers.value,
+                      selectedUsersFilter.value
+                    )
                   : true)
           ) {
             return true;
@@ -462,9 +534,9 @@ export default {
 
       // CHECK wheather record is found againts applied filters
       // if (filteredData.length > 0) {
-        // console.log(filteredData[0].country)
-        customers.value = filteredData;
-        prevSearched.value = filteredData;
+      // console.log(filteredData[0].country)
+      customers.value = filteredData;
+      prevSearched.value = filteredData;
       // }
     };
     const filterMethod = (data, value) => {
@@ -481,7 +553,7 @@ export default {
       let value = searchText.value && searchText.value.toLowerCase();
       // Search  field is blank but dropdown filters have value, JUST gor for dropdown filters
       if (!searchText.value) {
-        prevMainSearchHistry.value = []
+        prevMainSearchHistry.value = [];
         applyFilter();
         return;
       }
@@ -526,7 +598,7 @@ export default {
       dropdownFilters,
       selectedFilter,
       selectOptions,
-      filterDropdown
+      filterDropdown,
     };
   },
 };
@@ -543,5 +615,10 @@ img {
 }
 .dropdown .dropdown-menu {
   z-index: 1000;
+}
+#filter-dropdown {
+  min-width: 465px; 
+  padding: 16px 15px;
+  box-shadow: #3755634d 0px 8px 30px;
 }
 </style>

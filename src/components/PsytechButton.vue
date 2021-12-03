@@ -1,5 +1,5 @@
 <template>
-  <button :class="componentClass">
+  <button :class="componentClass" @click="$emit('buttonWasClicked')">
     {{$t(label)}}
   </button>
 </template>
@@ -8,6 +8,7 @@ import {computed} from "vue"
 
 export default {
   name: "PsytechButton",
+  emits:["buttonWasClicked"],
   props: {
     label:String,
     type: {

@@ -11,7 +11,9 @@
     v-else-if="type == 'select'"
     v-model="computedValue"
     :id="id"
+    class="text-xs font-medium"
     :class="inputElClass"
+    style="height: 45px; min-height: 45px; max-height: 45px"
   >
     <option
       v-for="option in options"
@@ -28,7 +30,9 @@
     :id="id"
     v-model="computedValue"
     :class="inputElClass"
+     class="text-xs font-medium"
     autocomplete="off"
+    style="height: 45px; min-height: 45px; max-height: 45px"
   />
 </template>
 <script>
