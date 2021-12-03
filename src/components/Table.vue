@@ -11,27 +11,27 @@
             <template #loading>
                 Loading {{ defaultText }} data. Please wait.
             </template>
-             <Column header="S/N" sortable style="min-width: 10rem">
+             <Column header="S/N" style="min-width: 10rem">
                 <template #body="{index}">
                     {{ `${  String(index+1).padStart(2, '0')  }` }}
                 </template>
             </Column>
-            <Column field="name" header="Account Name" sortable style="min-width: 10rem">
+            <Column field="name" header="Account Name" style="min-width: 10rem">
                 <template #body="{data}">
                     {{data.name}}
                 </template>
             </Column>
-            <Column field="email" header="Email Address" sortable style="min-width: 10rem">
+            <Column field="email" header="Email Address" style="min-width: 10rem">
                 <template #body="{data}">
                     <span class="image-text">{{data.email}}</span>
                 </template>
             </Column>
-            <Column header="No. of Users" sortable sortField="users" style="min-width: 10rem">
+            <Column header="No. of Users" sortField="users" style="min-width: 10rem">
                  <template #body="{data}">
                     <span class="image-text"> {{data.users}}</span>
                 </template>
             </Column>
-             <Column header="Creation Date" sortable sortField="date" style="min-width: 10rem">
+             <Column header="Creation Date" sortField="date" style="min-width: 10rem">
                  <template #body="{data}">
                     <span class="image-text">{{ formatDate(data.date) }}</span>
                 </template>

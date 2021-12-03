@@ -1,7 +1,7 @@
 <template>
   <sticky-header :icon="mdiPlus" title="Create Client"></sticky-header>
   <main-section class="grid grid-cols-3 gap-4">
-     <div class="form col-span-2">
+     <div class="col-span-2 form">
        <form action="#" @submit.prevent="submit">
          <field label="Company Name" labelFor="email">
            <control type="text" v-model="form.companyName" placeholder="Email"/>
@@ -28,7 +28,7 @@
             :options="{ another: 'Create Another'}"
         />
       <psytech-button label="Create Account" @click="submit"></psytech-button>
-      <psytech-button label="Cancel" type="Secondary" @click="cancel"></psytech-button>
+      <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'client-control-list'})"></psytech-button>
     </div>
   </sticky-footer>
 
