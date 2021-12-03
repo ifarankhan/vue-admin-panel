@@ -54,7 +54,7 @@ module.exports = {
       fontWeight: ['last'],
       textColor: ['last']
     },
-    scrollbar: ['dark', 'rounded']
+    scrollbar: ['dark', 'rounded'],
   },
   plugins: [
     require('@tailwindcss/forms'),

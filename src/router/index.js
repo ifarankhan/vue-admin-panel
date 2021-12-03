@@ -13,7 +13,6 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "about" */ '../views/visitors/Login.vue')
   },
-  
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -25,6 +24,30 @@ const routes = [
       fullScreen: true
     },
     component: () => import(/* webpackChunkName: "about" */ '../views/authorized/Dashboard.vue')
+  },
+  {
+    path: '/client-control',
+    name: 'client-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'client-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/client-control/ClientControl.vue'),
+    children: [
+      {
+        path: 'create-client',
+        name: 'client-control-create-client',
+        component: () => import('../views/authorized/client-control/Account.vue'),
+      },
+      {
+        path: 'list',
+        name: 'client-control-list',
+        component: () => import('../views/authorized/client-control/List.vue'),
+      },
+    ]
   },
   {
     // path: "*",

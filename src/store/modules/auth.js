@@ -1,4 +1,4 @@
-import axios from "../../axios";
+import { private_url, public_url } from "../../axios";
 import utility from "../../components/composition/utility";
 const namespaced = true;
 const state = {
@@ -11,7 +11,7 @@ const mutations = {
 
 const actions = {
     loginAction({},payload){
-       return axios.post('authorize', payload)
+       return public_url.post('authorize', payload)
     }, 
     async refreshTokenAction({}){
        const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
@@ -19,7 +19,7 @@ const actions = {
         token: USER_DATA.authToken,
         refreshToken:  USER_DATA.refreshToken
        }
-      return axios.post('refresh-token', DATA)
+      return private_url.post('refresh-token', DATA)
     },
     async logoutAction({},payload){
         await localStorage.removeItem("userData");

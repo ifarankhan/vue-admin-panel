@@ -84,9 +84,6 @@ export default {
 </script>
 <style scoped>
 @media (min-width: 1280px){
-  form{
-    width: 30%;
-  }
   .box-padding{
     padding: 30px 60px;
   }

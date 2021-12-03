@@ -85,7 +85,7 @@ import CardWidget from "@/components/CardWidget";
 import CardComponent from "@/components/CardComponent";
 import TitleSubBar from "@/components/TitleSubBar";
 import JbButton from "@/components/JbButton";
-import TableList from "@/components/TableList"
+import TableList from "@/components/TableList";
 
 import {
   mdiAccountMultiple,
@@ -107,7 +107,7 @@ export default {
     CardWidget,
     TitleBar,
     Notification,
-    JbButton,
+    JbButton
   },
   setup() {
     const logoutHanlder = async () => {
