@@ -1,13 +1,16 @@
 <template>
-  <button :class="componentClass" @click="$emit('buttonWasClicked')">
-    {{$t(label)}}
+  <button :class="[!$slots.default? componentClass:buttonWithIcon]" @click="$emit('buttonWasClicked')">
+    <template v-if="$slots.default">
+        <slot></slot>
+    </template>
+    <span> {{$t(label)}} </span>
   </button>
 </template>
 <script>
 import {computed} from "vue"
 
 export default {
-  name: "PsytechButton",
+  name: "PsytechButton",  
   emits:["buttonWasClicked"],
   props: {
     label:String,
@@ -15,6 +18,10 @@ export default {
       type: String,
       default: 'primary'
     },
+    buttonWithIcon:{
+      type: String,
+      default: ''
+    }
   },
   setup(props){
     const componentClass = computed(() => {

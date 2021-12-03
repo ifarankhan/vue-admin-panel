@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store';
 import visitorLayout from './views/layouts/VisitorLayout'
 import mainLayout from './views/layouts/MainLayout'
 import PrimeVue from 'primevue/config'; 
