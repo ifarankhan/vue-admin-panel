@@ -1,7 +1,7 @@
 <template>
   <aside
     v-show="!isFullScreen"
-    class="w-60 fixed top-0 z-40 h-screen bg-psytechBlue transition-position lg:left-0 overflow-y-scroll
+    class="w-60 fixed top-0 z-50 h-screen bg-psytechBlue transition-position lg:left-0 overflow-y-scroll
     scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-600 scrollbar-psytechBlue
     dark:scrollbar-track-blue-800 dark:bg-psytechBlue"
     :class="[ isAsideMobileExpanded ? 'left-0' : '-left-60', isAsideLgActive ? 'block' : 'lg:hidden xl:block' ]"

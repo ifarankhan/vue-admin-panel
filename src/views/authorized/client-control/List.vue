@@ -5,9 +5,10 @@
       <div class="flex justify-between">
         <!-- left section -->
         <div>
-          <button
-          @click="$router.push({name:'client-control-create-client'})"
-          class="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+          <psytech-button
+          @buttonWasClicked="$router.push({name:'client-control-create-client'})"
+          label="Create New Client Account"
+          buttonWithIcon="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -23,19 +24,18 @@
                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"
               />
             </svg>
-            <span>Create New Client Account</span>
-          </button>
+          </psytech-button>
           <!-- Create New Client Account -->
-          <!-- <psytech-button label="Create New Account"></psytech-button> -->
         </div>
 
         <!-- Right Section -->
         <div class="flex">
           <div class="p-2">
             <div class="relative inline-block dropdown">
-              <button
-                class="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
-                @click.prevent="showFilters = !showFilters"
+              <psytech-button
+                label="Filter"
+                buttonWithIcon="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+                @buttonWasClicked="showFilters = !showFilters"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -51,8 +51,7 @@
                     d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
                   />
                 </svg>
-                <span>Filter</span>
-              </button>
+              </psytech-button>
               <ul
                   class="absolute text-gray-700 bg-white rounded-md shadow top-12 -left-48 dropdown-menu"
                   style="min-width: 465px; padding: 16px 15px;"
@@ -442,10 +441,6 @@ export default {
       console.log(list); // prevent floating point arithmetic errors
       //    return list;
     };
-
-    // selectedUsersFilter,
-    // selectedNameFilter,
-    // selectedEmailFilter,
 
     const subFilter = (item, value, filter) => {
       const selectedFilter = filter;

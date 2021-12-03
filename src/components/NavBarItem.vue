@@ -73,7 +73,7 @@ export default {
     })
 
     const activeClass = computed(() => {
-      return is.value === 'router-link' ? 'text-blue-500' : null
+      return is.value.includes('router-link') ? 'text-blue-500' : null
     })
 
     return { is, componentClass, activeClass }
