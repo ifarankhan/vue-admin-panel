@@ -2,35 +2,9 @@
   <sticky-header :icon="mdiPlus" title="Create Client"></sticky-header>
   <main-section class="grid grid-cols-3 gap-4">
      <div class="col-span-2 form">
-       <form action="#" @submit.prevent="submit">
-         <field label="Company Name" labelFor="email">
-           <control type="text" v-model="form.companyName" placeholder="Email"/>
-           <error-span :error="v$.companyName"></error-span>
-         </field>
-         <field label="Account Detail" labelFor="accountDetails">
-           <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
-           <error-span :error="v$.accountDetails"></error-span>
-         </field>
-         <field label="Account Address" labelFor="accountAddress">
-           <control type="textarea" v-model="form.accountAddress" placeholder="Account Address"/>
-           <error-span :error="v$.accountAddress"></error-span>
-         </field>
-         <divider/>
-       </form>
+       Jere
      </div>
   </main-section>
-
-  <sticky-footer>
-    <div class="relative flex justify-end" style="padding-right:15%">
-        <check-radio-picker
-            name="sample-checkbox"
-            v-model="form.addAnother"
-            :options="{ another: 'Create Another'}"
-        />
-      <psytech-button label="Create Account" @click="submit"></psytech-button>
-      <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'client-control-list'})"></psytech-button>
-    </div>
-  </sticky-footer>
 
 </template>
 <script>
@@ -50,7 +24,7 @@ import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
 
 export default {
-  name: "client-control-details",
+  name: "client-control-view",
   components: {
     Divider,
     MainSection,
@@ -133,19 +107,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-::-webkit-input-placeholder { /* WebKit browsers */
-  color:    #fff;
-}
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-  color:    #fff;
-  opacity:  1;
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-  color:    #fff;
-  opacity:  1;
-}
-:-ms-input-placeholder { /* Internet Explorer 10+ */
-  color:    #fff;
-}
-</style>

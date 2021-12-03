@@ -1,7 +1,7 @@
 <template>
   <nav
     v-show="isNavBarVisible"
-    class="fixed top-0 left-0 right-0 z-30 flex w-screen h-20 bg-white border-b border-gray-100 transition-position xl:pl-60 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-900"
+    class="fixed top-0 left-0 right-0 z-40 flex w-screen h-20 bg-white border-b border-gray-100 transition-position xl:pl-60 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-900"
     :class="{ 'ml-60': isAsideMobileExpanded }"
   >
     <div class="flex items-stretch flex-1 h-14">
@@ -53,7 +53,7 @@
                 :key="item.text"
                 @click.prevent="setLocale(item.value)"
                 class="font-semibold"
-                
+
               >
                 <nav-bar-item-label :label="item.text" icon='' />
               </nav-bar-item>
@@ -83,7 +83,7 @@
           </template>
         </nav-bar-menu>
 
-        
+
         <!-- <nav-bar-item is-desktop-icon-only @click="logoutHanlder">
           <nav-bar-item-label
             :icon="mdiLogout"
