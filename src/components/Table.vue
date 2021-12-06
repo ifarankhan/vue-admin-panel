@@ -18,7 +18,7 @@
             </Column>
             <Column field="name" header="Account Name" style="min-width: 10rem">
                 <template #body="{data}">
-                    {{data.name}}
+                    <span class=""> {{data.name}} </span>
                 </template>
             </Column>
             <Column field="email" header="Email Address" style="min-width: 10rem">

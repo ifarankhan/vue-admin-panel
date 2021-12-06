@@ -26,6 +26,18 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/authorized/Dashboard.vue')
   },
   {
+    path: '/sample',
+    name: 'sample',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'sample',
+      fullScreen: true
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/components/sample.vue')
+  },
+  {
     path: '/client-control',
     name: 'client-control',
     props: true,

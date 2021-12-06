@@ -1,48 +1,49 @@
 <template>
-  <button :class="[!$slots.default? componentClass:buttonWithIcon]" @click="$emit('buttonWasClicked')">
+  <button :class="componentClass" @click="$emit('buttonWasClicked')">
     <template v-if="$slots.default">
-        <slot></slot>
+      <slot></slot>
     </template>
-    <span> {{$t(label)}} </span>
+    <span> {{ $t(label) }} </span>
   </button>
 </template>
 <script>
-import {computed} from "vue"
+import { computed } from "vue";
 
 export default {
-  name: "PsytechButton",  
-  emits:["buttonWasClicked"],
+  name: "PsytechButton",
+  emits: ["buttonWasClicked"],
   props: {
-    label:String,
+    label: String,
     type: {
       type: String,
-      default: 'primary'
+      default: "primary",
     },
-    buttonWithIcon:{
+    buttonWithIcon: {
       type: String,
-      default: ''
-    }
+      default: "",
+    },
   },
-  setup(props){
+  setup(props) {
     const componentClass = computed(() => {
-      const base = [
-        'm-2',
-        'py-2',
-        'px-4',
-        'rounded-full',
-        'border'
-      ]
-      if (props.type === 'primary') {
-        base.push('bg-psytechBlue hover:bg-blue-700 text-white')
+      const base = ["m-2", "py-2", "px-4", "rounded-full", "border"];
+      if (props.type === "primary") {
+        base.push("bg-psytechBlue hover:bg-blue-700 text-white");
       }
-      if (props.type === 'Secondary') {
-        base.push('bg-transparent hover:bg-blue-500 text-psytechBlue hover:text-white border-psytechBlue hover:border-transparent')
+      if (props.type === "Secondary") {
+        base.push(
+          "bg-transparent hover:bg-blue-500 text-psytechBlue hover:text-white border-psytechBlue hover:border-transparent"
+        );
+      }
+      if (props.type === "outline") {
+        base.push(
+          "inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+        );
       }
       return base;
     });
     return {
-      componentClass
-    }
-  }
-}
+      componentClass,
+    };
+  },
+};
 </script>

@@ -1,5 +1,6 @@
-import { createStore } from 'vuex'
-import auth from './modules/auth'
+import { createStore } from 'vuex';
+import auth from './modules/auth';
+import clientControl from './modules/clientControl';
 
 export default createStore({
   state: {
@@ -80,6 +81,7 @@ export default createStore({
     },
   },
   modules: {
-    auth
+    auth,
+    clientControl
   },
 })

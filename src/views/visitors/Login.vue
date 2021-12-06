@@ -127,7 +127,7 @@
 </template>
 <script>
 import { useStore } from "vuex";
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import FullScreenSection from "@/components/FullScreenSection";
 import CardComponent from "@/components/CardComponent";
 import CheckRadioPicker from "@/components/CheckRadioPicker";
@@ -204,6 +204,7 @@ export default {
               authToken: info?.token,
               refreshToken: info?.refreshToken,
               userName: info?.user?.userName,
+              accountId: info?.user?.accountId,
               distributorUserName: info?.user?.distributorUserName,
               rememberMe: form.rememberMe,
             };
