@@ -2,13 +2,13 @@
   <div class="px-8 mt-1">
     <sticky-header>
       <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
-      <div class="flex justify-between">
+      <div class="grid main-grid md:grid-cols-2">
         <!-- left section -->
         <div>
           <psytech-button
           @buttonWasClicked="$router.push({name:'client-control-create-client'})"
           label="Create New Client Account"
-          buttonWithIcon="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+          type="outline"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -29,12 +29,12 @@
         </div>
 
         <!-- Right Section -->
-        <div class="flex">
-          <div class="p-2">
+        <div class="flex justify-end xs:flex-col">
+          <div>
             <div class="relative inline-block dropdown">
               <psytech-button
                 label="Filter"
-                buttonWithIcon="inline-flex items-center px-4 py-2 font-bold text-gray-700 border-2 border-gray-300 border-solid rounded rounded-full bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+                type="outline"
                 @buttonWasClicked="showFilters = !showFilters"
               >
                 <svg
@@ -53,8 +53,8 @@
                 </svg>
               </psytech-button>
               <ul
-                  class="absolute text-gray-700 bg-white rounded-md shadow top-12 -left-48 dropdown-menu"
-                  style="min-width: 465px; padding: 16px 15px;"
+                  class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-12 -left-12 dropdown-menu"
+                  style="padding: 16px 15px;"
                   id="filter-dropdown"
                   v-if="showFilters"
               >
@@ -62,10 +62,10 @@
                   <field label="Name" labelFor="account" :applyExtraInputClass="true">
                     <control v-model="accountName" type="text" id="name" placeholder=" " />
                   </field>
-
-                  <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                  <select-option :filterDropdown="filterDropdown" v-model="selectedNameFilter"></select-option>
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
-                  </field>
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG @iconWasClicked="(accountName=''),applyFilter()" />
                   </div> 
@@ -76,9 +76,11 @@
                     <control v-model="searchedEmail" type="text" id="email" placeholder=" " />
                   </field>
 
-                  <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                   <select-option :filterDropdown="filterDropdown" v-model="selectedEmailFilter"></select-option>
+
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedEmailFilter" />
-                  </field>
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG @iconWasClicked="(searchedEmail=''),applyFilter()" />
                   </div>
@@ -89,9 +91,11 @@
                     <control v-model="searchedUsers" type="text" id="users" placeholder=" " />
                   </field>
 
-                  <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                  <select-option :filterDropdown="filterDropdown" v-model="selectedUsersFilter"></select-option>
+
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
-                  </field>
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG @iconWasClicked="(searchedUsers=''),applyFilter()" />
                   </div>
@@ -107,12 +111,12 @@
           </div>
 
           <!-- search -->
-          <div class="relative pt-2 mx-auto text-gray-600">
+          <div class="relative pt-2 text-gray-600">
             <input
-              class="h-10 px-5 pr-16 text-sm bg-white border-2 border-gray-300 rounded-full focus:outline-none"
-              type="search..."
+              class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-2 border-gray-300 border-solid rounded-full focus:outline-none"
+              type="search"
               name="search"
-              placeholder="Search"
+              placeholder="Search..."
               v-model="searchText"
               @input="filteredMainMethod()"
             />
@@ -209,6 +213,8 @@ import NavBarMenuDivider from "@/components/NavBarMenuDivider";
 import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
+import SelectOption from '@/components/SelectOption.vue';
+import { useStore } from "vuex";
 export default {
   name: "demoTable",
   components: {
@@ -219,6 +225,7 @@ export default {
     NavBarMenu,
     NavBarItemLabel,
     InputNumber,
+    SelectOption,
     Control,
     IconSVG,
     Dropdown,
@@ -236,7 +243,18 @@ export default {
     StickyHeader,
   },
   setup() {
+
     onMounted(() => {
+      const store = useStore();
+      store
+          .dispatch("clientControl/getAccountUsers")
+          .then(res=>{
+            console.log("response is...", res)
+          })
+          .catch(error=>{
+            console.log("error is...", error)
+        })
+
       customerService.value.getCustomersLarge().then((data) => {
         customers.value = data;
         customers.value.forEach(
@@ -616,4 +634,5 @@ img {
   padding: 16px 15px;
   box-shadow: #3755634d 0px 8px 30px;
 }
+
 </style>

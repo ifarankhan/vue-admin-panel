@@ -82,7 +82,7 @@ export default {
 }
 
 .extra-input-class{
-  width: 290px;
+  width: 310px;
 }
 .extra-select-class{
   width: 190px;
