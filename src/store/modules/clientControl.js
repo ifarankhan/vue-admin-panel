@@ -10,7 +10,7 @@ const mutations = {
 
 const actions = {
     async getAccountUsers({}){
-       const userData = await localStorage.getItem("userData");
+       const userData = await JSON.parse(localStorage.getItem("userData"));
        return private_url.get('account-users', {
         params: {
           accountId: userData.accountId
