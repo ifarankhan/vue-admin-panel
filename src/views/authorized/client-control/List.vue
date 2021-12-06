@@ -53,7 +53,7 @@
                 </svg>
               </psytech-button>
               <ul
-                  class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-12 -left-12 dropdown-menu"
+                  class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-12 dropdown-menu"
                   style="padding: 16px 15px;"
                   id="filter-dropdown"
                   v-if="showFilters"
