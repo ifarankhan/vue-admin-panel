@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
-        'montserrat': "'Montserrat','serif'", 
+        'montserrat': "'Montserrat','serif'",
       },
       zIndex: {
         '-1': '-1'
@@ -39,6 +39,7 @@ module.exports = {
       },
       colors: {
         psytechBlue: '#1baae1',
+        psytechBlueBtHover: '#008ac0',
         psytechGrey: '#a2abab',
         psytechBlueDark: "#17a9e1",
         psytechBlueActive: '#008ac0',

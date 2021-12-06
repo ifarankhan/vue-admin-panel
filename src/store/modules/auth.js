@@ -11,8 +11,8 @@ const mutations = {
 
 const actions = {
     loginAction({},payload){
-       return public_url.post('authorize', payload)
-    }, 
+        return public_url.post('authorize', payload)
+    },
     async refreshTokenAction({}){
        const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
        const DATA = {

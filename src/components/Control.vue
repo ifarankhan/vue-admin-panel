@@ -19,7 +19,7 @@
       v-for="option in options"
       :key="option.value ?? option"
       :value="option.value"
-      class="block p-4 text-xs border-l-4 border-transparent group-hover:border-blue-600 group-hover:bg-gray-100"
+      class="block p-4 text-xs border-l-4 border-transparent top-10 group-hover:border-blue-600 group-hover:bg-gray-100"
     >
       {{ option.text ?? option.text }}
     </option>
