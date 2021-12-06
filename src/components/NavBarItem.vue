@@ -47,7 +47,7 @@ export default {
         'flex-shrink-0',
         'relative',
         'cursor-pointer',
-        'hover:text-blue-500',
+        'hover:text-psytechBlueBtHover',
         props.active ? props.activeColor : 'text-black dark:text-white dark:hover:text-gray-400'
       ]
 
