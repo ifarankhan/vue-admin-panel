@@ -68,7 +68,7 @@
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG @iconWasClicked="(accountName=''),applyFilter()" />
-                  </div> 
+                  </div>
                 </li>
 
                 <li class="flex">
@@ -249,20 +249,31 @@ export default {
       store
           .dispatch("clientControl/getAccountUsers")
           .then(res=>{
-            console.log("response is...", res)
+            let responseArray = res?.data?.data;
+            console.log(responseArray)
+            customers.value = responseArray;
+            customers.value.forEach(
+                    (customer) => (
+                        customer.date = new Date(customer.creationDate),
+                            customer.name = customer.accountName,
+                            customer.users = customer.numberOfUsers
+                    )
+                  );
+            prevCustomers.value = customers.value;
+            loading.value = false;
           })
           .catch(error=>{
             console.log("error is...", error)
         })
 
-      customerService.value.getCustomersLarge().then((data) => {
-        customers.value = data;
-        customers.value.forEach(
-          (customer) => (customer.date = new Date(customer.date))
-        );
-        prevCustomers.value = customers.value;
-        loading.value = false;
-      });
+      // customerService.value.getCustomersLarge().then((data) => {
+      //   customers.value = data;
+      //   customers.value.forEach(
+      //     (customer) => (customer.date = new Date(customer.date))
+      //   );
+      //   prevCustomers.value = customers.value;
+      //   loading.value = false;
+      // });
     });
     const customers = ref();
     let prevCustomers = ref();
@@ -630,7 +641,7 @@ img {
   z-index: 1000;
 }
 #filter-dropdown {
-  min-width: 465px; 
+  min-width: 465px;
   padding: 16px 15px;
   box-shadow: #3755634d 0px 8px 30px;
 }

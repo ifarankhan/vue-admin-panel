@@ -11,11 +11,6 @@
             <template #loading>
                 Loading {{ defaultText }} data. Please wait.
             </template>
-             <Column header="S/N" style="min-width: 10rem">
-                <template #body="{index}">
-                    {{ `${  String(index+1).padStart(2, '0')  }` }}
-                </template>
-            </Column>
             <Column field="name" header="Account Name" style="min-width: 10rem">
                 <template #body="{data}">
                     <span class=""> {{data.name}} </span>
