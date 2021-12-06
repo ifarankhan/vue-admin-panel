@@ -25,18 +25,18 @@ export default {
   },
   setup(props) {
     const componentClass = computed(() => {
-      const base = ["m-2", "py-2", "px-4", "rounded-full", "border"];
+      const base = ["py-2", "px-4", "rounded-full", "border"];
       if (props.type === "primary") {
-        base.push("bg-psytechBlue hover:bg-blue-700 text-white");
+        base.push("m-2 bg-psytechBlue hover:bg-blue-700 text-white");
       }
       if (props.type === "Secondary") {
         base.push(
-          "bg-transparent hover:bg-blue-500 text-psytechBlue hover:text-white border-psytechBlue hover:border-transparent"
+          "m-2 bg-transparent hover:bg-blue-500 text-psytechBlue hover:text-white border-psytechBlue hover:border-transparent"
         );
       }
       if (props.type === "outline") {
         base.push(
-          "inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:opacity-50 hover:border-psytechBlue hover:bg-psytechBlue"
+          "mt-2 mr-2 inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:border-psytechBlue hover:bg-psytechBlue"
         );
       }
       return base;
