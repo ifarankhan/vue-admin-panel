@@ -57,6 +57,7 @@
                   style="padding: 16px 15px;"
                   id="filter-dropdown"
                   v-if="showFilters"
+                  v-click-away="closeFilter"
               >
                 <li class="flex">
                   <field label="Name" labelFor="account" :applyExtraInputClass="true">
@@ -188,8 +189,7 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from "vue";
-import CustomerService from "@/components/service/CustomeService";
+import { ref, onMounted, onBeforeMount, onBeforeUnmount, reactive } from "vue";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import InputText from "primevue/inputtext";
 import DataTable from "@/components/Table.vue";
@@ -243,7 +243,7 @@ export default {
     StickyHeader,
   },
   setup() {
-
+    
     onMounted(() => {
       const store = useStore();
       store
@@ -265,15 +265,6 @@ export default {
           .catch(error=>{
             console.log("error is...", error)
         })
-
-      // customerService.value.getCustomersLarge().then((data) => {
-      //   customers.value = data;
-      //   customers.value.forEach(
-      //     (customer) => (customer.date = new Date(customer.date))
-      //   );
-      //   prevCustomers.value = customers.value;
-      //   loading.value = false;
-      // });
     });
     const customers = ref();
     let prevCustomers = ref();
@@ -323,62 +314,10 @@ export default {
       },
     ]);
     const selectedFilter = ref("contains");
-    // dropdown
-    const selectOptions = [
-      { id: 1, label: "Business development" },
-      { id: 2, label: "Marketing" },
-      { id: 3, label: "Sales" },
-    ];
+
     //   const toast = useToast();
     const menu = ref();
-    const items = ref([
-      {
-        label: "Options",
-        items: [
-          {
-            label: "Update",
-            icon: "pi pi-refresh",
-            command: () => {
-              toast.add({
-                severity: "success",
-                summary: "Updated",
-                detail: "Data Updated",
-                life: 3000,
-              });
-            },
-          },
-          {
-            label: "Delete",
-            icon: "pi pi-times",
-            command: () => {
-              toast.add({
-                severity: "warn",
-                summary: "Delete",
-                detail: "Data Deleted",
-                life: 3000,
-              });
-            },
-          },
-        ],
-      },
-      {
-        label: "Navigate",
-        items: [
-          {
-            label: "Vue Website",
-            icon: "pi pi-external-link",
-            url: "https://vuejs.org/",
-          },
-          {
-            label: "Router",
-            icon: "pi pi-upload",
-            command: () => {
-              window.location.hash = "/fileupload";
-            },
-          },
-        ],
-      },
-    ]);
+
     const toggle = (event) => {
       menu.value.toggle(event);
     };
@@ -391,54 +330,8 @@ export default {
       });
     };
     const selectedCustomers = ref();
-    const filters = ref({
-      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-      name: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      "country.name": {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-      },
-      representative: { value: null, matchMode: FilterMatchMode.IN },
-      date: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-      },
-      balance: {
-        operator: FilterOperator.AND,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-      status: {
-        operator: FilterOperator.OR,
-        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-      },
-      activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
-      verified: { value: null, matchMode: FilterMatchMode.EQUALS },
-    });
-    const customerService = ref(new CustomerService());
     const loading = ref(true);
-    const representatives = [
-      { name: "Amy Elsner", image: "amyelsner.png" },
-      { name: "Anna Fali", image: "annafali.png" },
-      { name: "Asiya Javayant", image: "asiyajavayant.png" },
-      { name: "Bernardo Dominic", image: "bernardodominic.png" },
-      { name: "Elwin Sharvill", image: "elwinsharvill.png" },
-      { name: "Ioni Bowcher", image: "ionibowcher.png" },
-      { name: "Ivan Magalhaes", image: "ivanmagalhaes.png" },
-      { name: "Onyama Limba", image: "onyamalimba.png" },
-      { name: "Stephen Shaw", image: "stephenshaw.png" },
-      { name: "XuXue Feng", image: "xuxuefeng.png" },
-    ];
-    const statuses = ref([
-      "unqualified",
-      "qualified",
-      "new",
-      "negotiation",
-      "renewal",
-      "proposal",
-    ]);
+
     const formatDate = (value) => {
       return value.toLocaleDateString("en-US", {
         day: "2-digit",
@@ -446,12 +339,7 @@ export default {
         year: "numeric",
       });
     };
-    const formatCurrency = (value) => {
-      return value.toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-      });
-    };
+
     const clearFilter = () => {
       searchText.value = "";
       accountName.value = "";
@@ -459,16 +347,6 @@ export default {
       searchedUsers.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
-    };
-    const generateArrayMinMax = (min, max, n) => {
-      let list = [min],
-        interval = (max - min) / (n - 1);
-      for (let i = 1; i < n - 1; i++) {
-        list.push(min + interval * i);
-      }
-      list.push(max);
-      console.log(list); // prevent floating point arithmetic errors
-      //    return list;
     };
 
     const subFilter = (item, value, filter) => {
@@ -590,22 +468,25 @@ export default {
         prevMainSearchHistry.value = customers.value;
       }
     };
+
+    const closeFilter = ()=>{
+      console.log("method is called")
+      if(showFilters.value){
+        showFilters.value = false;
+      } 
+    }
     return {
       customers: customers,
-      filters,
       loading,
-      representatives,
-      formatCurrency,
       selectedCustomers,
       formatDate,
-      statuses,
+      closeFilter,
       selectStatus,
       prevMainSearchHistry,
       filteredMainMethod,
       searchText,
       prevSearched,
       accountName,
-      items,
       pickedDate,
       menu,
       toggle,
@@ -621,7 +502,6 @@ export default {
       clearFilter,
       dropdownFilters,
       selectedFilter,
-      selectOptions,
       filterDropdown,
     };
   },

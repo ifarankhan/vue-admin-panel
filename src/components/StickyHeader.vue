@@ -1,6 +1,6 @@
 <template>
   <section
-      class="sticky z-30 min-h-full pb-3 pt-5 bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white top-20">
+      class="sticky z-30 min-h-full pt-5 pb-3 bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white top-20">
     <slot>
       <h1 class="pl-6 text-2xl font-normal leading-tight">
       <span v-if="icon">

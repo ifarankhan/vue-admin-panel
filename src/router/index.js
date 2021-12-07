@@ -26,18 +26,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/authorized/Dashboard.vue')
   },
   {
-    path: '/sample',
-    name: 'sample',
-    props: true,
-    meta:{
-      layout: 'mainLayout',
-      requiresAuth: true,
-      title: 'sample',
-      fullScreen: true
-    },
-    component: () => import(/* webpackChunkName: "about" */ '@/components/sample.vue')
-  },
-  {
     path: '/client-control',
     name: 'client-control',
     props: true,
@@ -52,12 +40,32 @@ const routes = [
       {
         path: 'create-client',
         name: 'client-control-create-client',
+        // layout: 'mainLayout',
+        requiresAuth: true,
         component: () => import('../views/authorized/client-control/Account.vue'),
       },
       {
         path: 'list',
         name: 'client-control-list',
-        component: () => import('../views/authorized/client-control/List.vue'),
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/client-control/mainList.vue'),
+        requiresAuth: true,
+        children: [
+          {
+            path: '',
+            name: 'list-page',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/client-control/List.vue'),
+          },
+          {
+            path: 'detail',
+            name: 'client-control-list-detail',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/client-control/ClientDetail.vue'),
+          }
+        ]
       },
     ]
   },

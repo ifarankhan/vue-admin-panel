@@ -5,6 +5,7 @@ import store from './store';
 import visitorLayout from './views/layouts/VisitorLayout'
 import mainLayout from './views/layouts/MainLayout'
 import PrimeVue from 'primevue/config'; 
+import VueClickAway from "vue3-click-away";
 
 import './css/main.css'
 import i18n from './i18n'
@@ -38,6 +39,7 @@ router.afterEach(to => {
 const app = createApp(App)
 app.use(i18n)
 app.use(PrimeVue)
+app.use(VueClickAway)
 app.component('visitorLayout', visitorLayout)
 app.component('mainLayout', mainLayout)
 app.use(store)
