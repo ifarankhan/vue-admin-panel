@@ -37,7 +37,7 @@
 import { ref, reactive,computed } from 'vue'
 import utility from "@/components/composition/utility";
 import { mdiPlus } from '@mdi/js'
-import MainSection from '@/components/MainSection'
+import MainSection from '@/components/MainSection';
 import CheckRadioPicker from '@/components/CheckRadioPicker'
 import Field from '@/components/Field'
 import Control from '@/components/Control'
