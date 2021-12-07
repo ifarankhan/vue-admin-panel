@@ -155,6 +155,7 @@
       :rowHover="true"
       :loading="loading"
       :rowsPerPageOptions="[10, 25, 50]"
+      @rowClicked="$router.push({name:'client-control-list-detail'})"
     />
 
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
@@ -243,6 +244,10 @@ export default {
     StickyHeader,
   },
   setup() {
+
+    const showConsole = ()=>{
+      console.log("clicked,,,,,,")
+    }
     
     onMounted(() => {
       const store = useStore();
@@ -250,7 +255,6 @@ export default {
           .dispatch("clientControl/getAccountUsers")
           .then(res=>{
             let responseArray = res?.data?.data;
-            console.log(responseArray)
             customers.value = responseArray;
             customers.value.forEach(
                     (customer) => (
@@ -453,7 +457,7 @@ export default {
     const filteredMainMethod = () => {
       // var sortKey = this.sortKey
       let value = searchText.value && searchText.value.toLowerCase();
-      // Search  field is blank but dropdown filters have value, JUST gor for dropdown filters
+      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
       if (!searchText.value) {
         prevMainSearchHistry.value = [];
         applyFilter();
@@ -470,7 +474,6 @@ export default {
     };
 
     const closeFilter = ()=>{
-      console.log("method is called")
       if(showFilters.value){
         showFilters.value = false;
       } 

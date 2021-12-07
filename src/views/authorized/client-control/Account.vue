@@ -28,7 +28,7 @@
             :options="{ another: 'Create Another'}"
         />
       <psytech-button label="Create Account" @click="submit"></psytech-button>
-      <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'client-control-list'})"></psytech-button>
+      <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'list-page'})"></psytech-button>
     </div>
   </sticky-footer>
 

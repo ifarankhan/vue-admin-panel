@@ -4,7 +4,8 @@
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="rowsPerPageOptions"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            responsiveLayout="scroll" :scrollable="true">
+            responsiveLayout="scroll" :scrollable="true"
+            @row-click="$emit('rowClicked')">
             <template #empty>
                 No {{ defaultText }} found.
             </template>
