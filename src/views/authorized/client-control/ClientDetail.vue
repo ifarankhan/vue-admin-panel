@@ -2,7 +2,7 @@
     <sticky-header>
       <div class="grid grid-cols-2">
         <div class="flex items-center ml-8">
-          <div class="flex items-center justify-center w-8 h-8 bg-black rounded rounded-full">
+          <div class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer" @click="$router.push({name:'list-page'})">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -17,11 +17,13 @@
       </div>
       
       <!-- tab section -->
-      <div class="grid grid-cols-2 gap-x-0">
-        
-      <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0">
+    <!-- <div class="grid grid-cols-2 gap-x-0"> -->
+
+    <!-- <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0"> -->
     <TabGroup>
-      <TabList class="flex p-1 space-x-1 bg-blue-900/20 rounded-xl">
+     <div class="flex">
+       <div class="flex-shrink-0 w-1/3">
+          <TabList class="flex p-1 space-x-1 bg-blue-900/20 rounded-xl">
         <Tab
           as="template"
           v-slot="{ selected }"
@@ -33,7 +35,7 @@
           >
             Account Details
           </button>
-          
+        
         </Tab>
        <Tab
           as="template"
@@ -48,43 +50,90 @@
           </button>
           
         </Tab>
-        <!-- <Tab
-          as="template"
-          v-slot="{ selected }"
-        >
-          <button
-            :class="[
-              'w-full py-2.5 text-sm leading-5 font-medium text-blue-700 rounded-lg',
-              'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60',
-              selected
-                ? 'bg-white shadow'
-                : 'text-blue-100 hover:bg-white/[0.12] hover:text-white',
-            ]"
-          >
-            {{ category }} 
-          </button>
-        </Tab> -->
       </TabList>
+       </div>
 
-      <TabPanels class="mt-2">
-        <TabPanel>
+       <div class="flex items-center justify-around w-2/3 ml-5 flex-shrink-1 ml-28">
+          <div class="flex items-center">
+              <span class="p-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                </svg>
+              </span>
+              <span>
+                 Export Account Activity
+              </span>
+          </div>
+          
+          <div class="flex items-center">
+              <span class="p-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+              </span>
+              <span>
+                 Edit Account
+              </span>
+          </div>
+          
+         <div class="flex items-center">
+              <span class="p-0.5">
+               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+               </svg>
+              </span>
+              <span>
+                 Delete Account
+              </span>
+          </div>
+       </div>
+     </div>
+      
+     <TabPanel>
+        <div class="flex p-4">
+          <div class="w-2/3">
             <div class="ml-1 font-bold text-medium">
                 Account Details
             </div>
-            <div>
+            <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
               Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
             </div>
-        </TabPanel>
-      <TabPanel>Content 2</TabPanel>
-      <!-- <TabPanel>Content 3</TabPanel> -->
-      </TabPanels>
-    </TabGroup>
-  </div>
-          <div class="bg-green-800">
-            second section
-          </div>
+
+            <div class="ml-1 font-bold text-medium">
+                Account Address
+            </div>
+            <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+            </div>
+        </div>
+      <div class="w-1/3">
+          IMAGE WILL COME HERE
       </div>
-      
+    </div>
+            </TabPanel>
+          <!-- <TabPanels class="mt-2">
+            <TabPanel>
+                <div class="ml-1 font-bold text-medium">
+                    Account Details
+                </div>
+                <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
+                </div>
+
+                <div class="ml-1 font-bold text-medium">
+                    Account Address
+                </div>
+                <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                </div>
+            </TabPanel>
+            <TabPanel>Content 2</TabPanel>
+          </TabPanels> -->
+     
+    </TabGroup>
+  
     </sticky-header>
 </template>
 
@@ -142,7 +191,5 @@ export default {
 }
 </script>
 <style scoped>
-  svg {
-      color : #fff;
-  }
+
 </style>
