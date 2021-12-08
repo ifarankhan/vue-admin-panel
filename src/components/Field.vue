@@ -66,7 +66,11 @@ export default {
 .floating-input>textarea:not(:placeholder-shown)~label{
   color: #17a9e1;
   font-weight: 500;
-  @apply opacity-75 scale-75 -translate-y-2.5 translate-x-1;
+  background:#fff;
+  top: 6px;
+  height: 0px;
+  width: 130%;
+  @apply scale-75 -translate-y-2.5 translate-x-1;
 }
 
 .floating-input>select:focus~label,

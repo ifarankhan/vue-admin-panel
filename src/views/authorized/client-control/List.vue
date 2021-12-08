@@ -245,10 +245,6 @@ export default {
   },
   setup() {
 
-    const showConsole = ()=>{
-      console.log("clicked,,,,,,")
-    }
-    
     onMounted(() => {
       const store = useStore();
       store
@@ -325,14 +321,6 @@ export default {
     const toggle = (event) => {
       menu.value.toggle(event);
     };
-    const save = () => {
-      toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: "Data Saved",
-        life: 3000,
-      });
-    };
     const selectedCustomers = ref();
     const loading = ref(true);
 
@@ -355,24 +343,27 @@ export default {
 
     const subFilter = (item, value, filter) => {
       const selectedFilter = filter;
-      if (selectedFilter == "contains" && typeof value == "string") {
-        return item.includes(value);
-      } else if (selectedFilter == "startsWith" && typeof value == "string") {
-        return item.startsWith(value);
-      } else if (selectedFilter == "endsWith" && typeof value == "string") {
-        return item.endsWith(value);
-      } else if (
-        selectedFilter == "isNotEqualTo" &&
-        (typeof value == "number" || typeof value == "string")
-      ) {
-        return item != value;
-      } else if (selectedFilter == "notContain" && typeof value == "string") {
-        return !item.includes(value);
-      } else if (
-        selectedFilter == "isEqualTo" &&
-        (typeof value == "number" || typeof value == "string")
-      ) {
-        return item == value;
+      if (typeof value == "number" || typeof value == "string"){
+        if (
+            selectedFilter == "isNotEqualTo"
+        ) {
+          return item != value;
+        } else if (
+            selectedFilter == "isEqualTo"
+        ) {
+          return item == value;
+        }
+      }
+      if(typeof value == "string"){
+        if (selectedFilter == "contains") {
+          return item.includes(value);
+        } else if (selectedFilter == "startsWith") {
+          return item.startsWith(value);
+        } else if (selectedFilter == "endsWith") {
+          return item.endsWith(value);
+        } else if (selectedFilter == "notContain") {
+          return !item.includes(value);
+        }
       }
     };
     const applyFilter = () => {
@@ -476,7 +467,7 @@ export default {
     const closeFilter = ()=>{
       if(showFilters.value){
         showFilters.value = false;
-      } 
+      }
     }
     return {
       customers: customers,
@@ -494,7 +485,6 @@ export default {
       menu,
       toggle,
       showFilters,
-      save,
       form,
       searchedEmail,
       searchedUsers,
