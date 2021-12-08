@@ -155,7 +155,7 @@
       :rowHover="true"
       :loading="loading"
       :rowsPerPageOptions="[10, 25, 50]"
-      @rowClicked="$router.push({name:'client-control-list-detail'})"
+      @rowClicked="redirectToDetail($event)"
     />
 
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
@@ -190,7 +190,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeMount, onBeforeUnmount, reactive } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import InputText from "primevue/inputtext";
 import DataTable from "@/components/Table.vue";
@@ -216,6 +216,7 @@ import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from '@/components/SelectOption.vue';
 import { useStore } from "vuex";
+import { useRouter } from 'vue-router';
 export default {
   name: "demoTable",
   components: {
@@ -244,13 +245,37 @@ export default {
     StickyHeader,
   },
   setup() {
+    const store = useStore();
+    const router = useRouter()
+    
+    const customers = ref();
+    let prevCustomers = ref();
+    let prevSearched = ref();
+    let searchText = ref("");
+    let accountName = ref("");
+    let searchedEmail = ref("");
+    let searchedUsers = ref("");
+    let selectStatus = ref("");
+    let selectedNameFilter = ref("contains");
+    let selectedEmailFilter = ref("contains");
+    let selectedUsersFilter = ref("isEqualTo");
+    let prevMainSearchHistry = ref("");
+    let showFilters = ref(false);
+    const form = reactive({
+      name: "",
+      email: "",
+    });
 
     const showConsole = ()=>{
       console.log("clicked,,,,,,")
     }
+
+    const redirectToDetail = (e)=>{
+      store.commit("clientControl/setClientDetail",e.data)
+      router.push({name:'client-control-list-detail'})
+    }
     
     onMounted(() => {
-      const store = useStore();
       store
           .dispatch("clientControl/getAccountUsers")
           .then(res=>{
@@ -270,23 +295,7 @@ export default {
             console.log("error is...", error)
         })
     });
-    const customers = ref();
-    let prevCustomers = ref();
-    let prevSearched = ref();
-    let searchText = ref("");
-    let accountName = ref("");
-    let searchedEmail = ref("");
-    let searchedUsers = ref("");
-    let selectStatus = ref("");
-    let selectedNameFilter = ref("contains");
-    let selectedEmailFilter = ref("contains");
-    let selectedUsersFilter = ref("isEqualTo");
-    let prevMainSearchHistry = ref("");
-    let showFilters = ref(false);
-    const form = reactive({
-      name: "",
-      email: "",
-    });
+    
     const pickedDate = ref(new Date());
     const dropdownFilters = reactive({
       users: "",
@@ -498,6 +507,7 @@ export default {
       form,
       searchedEmail,
       searchedUsers,
+      redirectToDetail,
       selectedUsersFilter,
       selectedNameFilter,
       selectedEmailFilter,

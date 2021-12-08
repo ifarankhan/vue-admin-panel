@@ -65,7 +65,7 @@
               </span>
           </div>
           
-          <div class="flex items-center">
+          <div class="flex items-center cursor-pointer" @click="$router.push({name:'client-control-edit-client'})">
               <span class="p-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -112,26 +112,7 @@
       </div>
     </div>
             </TabPanel>
-          <!-- <TabPanels class="mt-2">
-            <TabPanel>
-                <div class="ml-1 font-bold text-medium">
-                    Account Details
-                </div>
-                <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
-                </div>
-
-                <div class="ml-1 font-bold text-medium">
-                    Account Address
-                </div>
-                <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                </div>
-            </TabPanel>
-            <TabPanel>Content 2</TabPanel>
-          </TabPanels> -->
-     
+            
     </TabGroup>
   
     </sticky-header>
@@ -140,6 +121,7 @@
 <script>
 import { ref } from 'vue';
 import StickyHeader from "@/components/StickyHeader";
+import { useStore } from "vuex";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 export default {
   components:{
@@ -151,6 +133,7 @@ export default {
     TabPanel,
   },
   setup() {
+    const store = useStore();
     let categories = ref({
       Recent: [
         {

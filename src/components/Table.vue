@@ -5,7 +5,7 @@
             :rowsPerPageOptions="rowsPerPageOptions"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             responsiveLayout="scroll" :scrollable="true"
-            @row-click="$emit('rowClicked')">
+            @row-click="$emit('rowClicked', $event)">
             <template #empty>
                 No {{ defaultText }} found.
             </template>
@@ -52,6 +52,7 @@ export default {
         DataTable,
         Column
     },
+    emits:['rowClicked'],
     props:{
         customers:{
             type: Array,
@@ -83,8 +84,8 @@ export default {
         }
     },
     setup() {
-        const showConsole = ()=>{
-            console.log("clicked")
+        const showConsole = (e)=>{
+            console.log("clicked",e.data)
         }
 
         const formatDate = (value) => {

@@ -45,6 +45,13 @@ const routes = [
         component: () => import('../views/authorized/client-control/Account.vue'),
       },
       {
+        path: 'edit-client',
+        name: 'client-control-edit-client',
+        // layout: 'mainLayout',
+        requiresAuth: true,
+        component: () => import('../views/authorized/client-control/Edit.vue'),
+      },
+      {
         path: 'list',
         name: 'client-control-list',
         // layout: 'mainLayout',
