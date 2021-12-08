@@ -44,8 +44,16 @@ import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { useStore } from "vuex";
 import ErrorSpan from "@/components/ErrorSpan";
+import store from '../../../store/index';
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    const accountDetail = store.getters['clientControl/getClientDetail'];
+    if(!accountDetail){
+      next({name: 'list-page'})
+    }
+    next()
+  },
   name: "client-control-details",
   components: {
     Divider,
