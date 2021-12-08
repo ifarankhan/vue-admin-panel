@@ -18,7 +18,6 @@
     <div
       class="text-sm border-b border-gray-100 lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-800 dark:border-gray-700"
       :class="{'lg:hidden':!isDropdownActive}"
-      style="position: absolute; z-index: 22222;"
     >
       <slot name="dropdown" />
     </div>

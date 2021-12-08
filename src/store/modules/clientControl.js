@@ -1,11 +1,19 @@
 import { private_url, public_url } from "../../axios";
 const namespaced = true;
 const state = {
+  clientDetail: null
+}
 
+const getters = {
+  getClientDetail: state=>{
+    return state.clientDetail
+  }
 }
 
 const mutations = {
-
+  setClientDetail(state, payload) {
+    state.clientDetail = payload; 
+  },
 }
 
 const actions = {
@@ -22,6 +30,7 @@ const actions = {
 export default {
     namespaced,
     state,
+    getters,
     mutations,
     actions
 }

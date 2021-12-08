@@ -1,12 +1,10 @@
 <template>
   <aside
     v-show="!isFullScreen"
-    class="w-60 fixed top-0 z-50 h-screen bg-psytechBlue transition-position lg:left-0 overflow-y-scroll
-    scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-600 scrollbar-psytechBlue
-    dark:scrollbar-track-blue-800 dark:bg-psytechBlue"
+    class="fixed top-0 z-50 h-screen overflow-y-scroll w-60 bg-psytechBlue transition-position lg:left-0 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-600 scrollbar-psytechBlue dark:scrollbar-track-blue-800 dark:bg-psytechBlue"
     :class="[ isAsideMobileExpanded ? 'left-0' : '-left-60', isAsideLgActive ? 'block' : 'lg:hidden xl:block' ]"
   >
-    <div class="flex flex-row w-full bg-psytechBlue text-white flex-1 h-20 items-center">
+    <div class="flex flex-row items-center flex-1 w-full h-20 text-white bg-psytechBlue">
       <nav-bar-item type="hidden lg:flex xl:hidden" @click="asideLgClose" active-color="text-white" active>
         <icon :path="mdiMenu" class="cursor-pointer" size="24" />
       </nav-bar-item>
@@ -18,7 +16,7 @@
     </div>
     <div>
       <template v-for="(menuGroup, index) in menu">
-        <p v-if="typeof menuGroup === 'string'" :key="`a-${index}`" class="p-3 text-xs uppercase text-white">
+        <p v-if="typeof menuGroup === 'string'" :key="`a-${index}`" class="p-3 text-xs text-white uppercase">
 <!--          {{ menuGroup }}-->
         </p>
         <aside-menu-list

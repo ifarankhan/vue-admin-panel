@@ -1,5 +1,5 @@
 <template>
-  <sticky-header :icon="mdiPlus" title="Create Client"></sticky-header>
+  <sticky-header :icon="mdiPlus" title="Edit Client"></sticky-header>
   <main-section class="grid grid-cols-3 gap-4">
      <div class="col-span-2 form">
        <form action="#" @submit.prevent="submit">
@@ -22,13 +22,8 @@
 
   <sticky-footer>
     <div class="relative flex justify-end" style="padding-right:15%">
-        <check-radio-picker
-            name="sample-checkbox"
-            v-model="form.addAnother"
-            :options="{ another: 'Create Another'}"
-        />
-      <psytech-button label="Create Account" @click="submit"></psytech-button>
-      <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'list-page'})"></psytech-button>
+      <psytech-button label="Edit Account" @click="submit"></psytech-button>
+      <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'client-control-list-detail'})"></psytech-button>
     </div>
   </sticky-footer>
 
@@ -47,9 +42,18 @@ import StickyHeader from "@/components/StickyHeader";
 import StickyFooter from "@/components/StickyFooter";
 import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import { useStore } from "vuex";
 import ErrorSpan from "@/components/ErrorSpan";
+import store from '../../../store/index';
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    const accountDetail = store.getters['clientControl/getClientDetail'];
+    if(!accountDetail){
+      next({name: 'list-page'})
+    }
+    next()
+  },
   name: "client-control-details",
   components: {
     Divider,
@@ -64,7 +68,11 @@ export default {
     utility,
   },
   setup () {
+    const store = useStore();
     const titleStack = ref(['Admin', 'Forms'])
+    const accountDetail = computed(()=>{
+      return store.getters['clientControl/getClientDetail']
+    })
 
     const selectOptions = [
       { id: 1, label: 'Business development' },
@@ -72,10 +80,12 @@ export default {
       { id: 3, label: 'Sales' }
     ]
 
-    const form = reactive({
-      companyName: '',
-      accountDetails: '',
-      accountAddress: '',
+    // console.log("accountDetail",accountDetail.value)
+
+    const form = reactive({ 
+      companyName: accountDetail.value?.accountName??'',
+      accountDetails: accountDetail.value?.accountDescription??'',
+      accountAddress: accountDetail.value?.accountAddres??'',
       addAnother: 0
     })
 

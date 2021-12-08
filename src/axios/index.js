@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AppConfig from "@/config/AppConfig";
+import store from '../store/index';
 const BASE_URL = AppConfig.BASE_URL;
 
 // creating custom instances
@@ -22,9 +23,15 @@ private_url.interceptors.request.use(request => {
   return request;
 })
 
-private_url.interceptors.response.use(response => {
-  return response;
-  }, error => {
 
-  return Promise.reject(error)
-  });
+private_url.interceptors.response.use(response => {
+  return Promise.resolve(response);
+}, (error) => {
+  let res = error.response;
+  if (res) {
+      if(res?.status === 401){
+          store.dispatch('auth/logoutAction','login');
+      }
+  } 
+  return Promise.reject(error);
+})
