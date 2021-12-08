@@ -22,11 +22,6 @@
 
   <sticky-footer>
     <div class="relative flex justify-end" style="padding-right:15%">
-        <check-radio-picker
-            name="sample-checkbox"
-            v-model="form.addAnother"
-            :options="{ another: 'Create Another'}"
-        />
       <psytech-button label="Edit Account" @click="submit"></psytech-button>
       <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'client-control-list-detail'})"></psytech-button>
     </div>
@@ -47,6 +42,7 @@ import StickyHeader from "@/components/StickyHeader";
 import StickyFooter from "@/components/StickyFooter";
 import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import { useStore } from "vuex";
 import ErrorSpan from "@/components/ErrorSpan";
 
 export default {
@@ -64,7 +60,11 @@ export default {
     utility,
   },
   setup () {
+    const store = useStore();
     const titleStack = ref(['Admin', 'Forms'])
+    const accountDetail = computed(()=>{
+      return store.getters['clientControl/getClientDetail']
+    })
 
     const selectOptions = [
       { id: 1, label: 'Business development' },
@@ -72,10 +72,12 @@ export default {
       { id: 3, label: 'Sales' }
     ]
 
-    const form = reactive({
-      companyName: '',
-      accountDetails: '',
-      accountAddress: '',
+    // console.log("accountDetail",accountDetail.value)
+
+    const form = reactive({ 
+      companyName: accountDetail.value?.accountName??'',
+      accountDetails: accountDetail.value?.accountDescription??'',
+      accountAddress: accountDetail.value?.accountAddres??'',
       addAnother: 0
     })
 

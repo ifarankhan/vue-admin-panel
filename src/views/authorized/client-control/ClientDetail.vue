@@ -20,7 +20,8 @@
     <!-- <div class="grid grid-cols-2 gap-x-0"> -->
 
     <!-- <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0"> -->
-    <TabGroup>
+    <div class="ml-4">
+      <TabGroup>
      <div class="flex">
        <div class="flex-shrink-0 w-1/3">
           <TabList class="flex p-1 space-x-1 bg-blue-900/20 rounded-xl">
@@ -29,7 +30,7 @@
           v-slot="{ selected }"
         >
           <button
-           :class="['block px-6 py-4 font-bold text-black active mr-8 hover:text-blue-500 focus:outline-none',
+           :class="['block px-6 ml-2 py-4 font-bold text-black active mr-8 hover:text-blue-500 focus:outline-none',
            selected ?'border-b-2 border-black': 'border-b-2 border-gray-400'
            ]"
           >
@@ -53,7 +54,7 @@
       </TabList>
        </div>
 
-       <div class="flex items-center justify-around w-2/3 ml-5 flex-shrink-1 ml-28">
+       <div class="flex items-center justify-around w-2/3 ml-3 ml-5 flex-shrink-1 ml-28">
           <div class="flex items-center">
               <span class="p-0.5">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
@@ -96,30 +97,30 @@
                 Account Details
             </div>
             <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium laboriosam sunt repellendus veritatis impedit? Quaerat nisi placeat amet ex expedita porro sunt enim, quod eos nam impedit repudiandae soluta ea?
+             {{ accountDetail?.accountDescription??'' }}
             </div>
 
             <div class="ml-1 font-bold text-medium">
                 Account Address
             </div>
             <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                {{ accountDetail?.accountAddres??'' }}
             </div>
         </div>
       <div class="w-1/3">
-          IMAGE WILL COME HERE
+          <!-- IMAGE WILL COME HERE -->
       </div>
     </div>
             </TabPanel>
             
     </TabGroup>
+    </div>
   
     </sticky-header>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import StickyHeader from "@/components/StickyHeader";
 import { useStore } from "vuex";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
@@ -134,6 +135,9 @@ export default {
   },
   setup() {
     const store = useStore();
+    const accountDetail = computed(()=>{
+      return store.getters['clientControl/getClientDetail']
+    })
     let categories = ref({
       Recent: [
         {
@@ -169,7 +173,7 @@ export default {
       ]
     })
 
-    return { categories }
+    return { categories, accountDetail }
   },
 }
 </script>
