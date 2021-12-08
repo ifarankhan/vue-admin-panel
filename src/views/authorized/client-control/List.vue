@@ -266,6 +266,11 @@ export default {
       email: "",
     });
 
+    const redirectToDetail = (e)=>{
+      store.commit("clientControl/setClientDetail",e.data)
+      router.push({name:'client-control-list-detail'})
+    }
+
     onMounted(() => {
       console.log("cmounted again...")
       store
