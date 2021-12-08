@@ -5,24 +5,24 @@
             :rowsPerPageOptions="rowsPerPageOptions"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             responsiveLayout="scroll" :scrollable="true"
-            @row-click="$emit('rowClicked')">
+            @row-click="$emit('rowClicked', $event)">
             <template #empty>
                 No {{ defaultText }} found.
             </template>
             <template #loading>
                 Loading {{ defaultText }} data. Please wait.
             </template>
-            <Column field="name" header="Account Name" style="min-width: 10rem">
+            <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem">
                 <template #body="{data}">
                     <span class=""> {{data.name}} </span>
                 </template>
             </Column>
-            <Column field="email" header="Email Address" style="min-width: 10rem">
+            <Column field="email" header="Email Address" :sortable="true" style="min-width: 10rem">
                 <template #body="{data}">
                     <span class="image-text">{{data.email}}</span>
                 </template>
             </Column>
-            <Column header="No. of Users" sortField="users" style="min-width: 10rem">
+            <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem">
                  <template #body="{data}">
                     <span class="image-text"> {{data.users}}</span>
                 </template>
@@ -52,6 +52,7 @@ export default {
         DataTable,
         Column
     },
+    emits:['rowClicked'],
     props:{
         customers:{
             type: Array,
@@ -83,8 +84,8 @@ export default {
         }
     },
     setup() {
-        const showConsole = ()=>{
-            console.log("clicked")
+        const showConsole = (e)=>{
+            console.log("clicked",e.data)
         }
 
         const formatDate = (value) => {

@@ -155,7 +155,7 @@
       :rowHover="true"
       :loading="loading"
       :rowsPerPageOptions="[10, 25, 50]"
-      @rowClicked="$router.push({name:'client-control-list-detail'})"
+      @rowClicked="redirectToDetail($event)"
     />
 
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
@@ -190,7 +190,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeMount, onBeforeUnmount, reactive } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import InputText from "primevue/inputtext";
 import DataTable from "@/components/Table.vue";
@@ -216,6 +216,7 @@ import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from '@/components/SelectOption.vue';
 import { useStore } from "vuex";
+import { useRouter } from 'vue-router';
 export default {
   name: "demoTable",
   components: {
@@ -244,13 +245,29 @@ export default {
     StickyHeader,
   },
   setup() {
-
-    const showConsole = ()=>{
-      console.log("clicked,,,,,,")
-    }
+    const store = useStore();
+    const router = useRouter()
     
+    const customers = ref();
+    let prevCustomers = ref();
+    let prevSearched = ref();
+    let searchText = ref("");
+    let accountName = ref("");
+    let searchedEmail = ref("");
+    let searchedUsers = ref("");
+    let selectStatus = ref("");
+    let selectedNameFilter = ref("contains");
+    let selectedEmailFilter = ref("contains");
+    let selectedUsersFilter = ref("isEqualTo");
+    let prevMainSearchHistry = ref("");
+    let showFilters = ref(false);
+    const form = reactive({
+      name: "",
+      email: "",
+    });
+
     onMounted(() => {
-      const store = useStore();
+      console.log("cmounted again...")
       store
           .dispatch("clientControl/getAccountUsers")
           .then(res=>{
@@ -270,23 +287,7 @@ export default {
             console.log("error is...", error)
         })
     });
-    const customers = ref();
-    let prevCustomers = ref();
-    let prevSearched = ref();
-    let searchText = ref("");
-    let accountName = ref("");
-    let searchedEmail = ref("");
-    let searchedUsers = ref("");
-    let selectStatus = ref("");
-    let selectedNameFilter = ref("contains");
-    let selectedEmailFilter = ref("contains");
-    let selectedUsersFilter = ref("isEqualTo");
-    let prevMainSearchHistry = ref("");
-    let showFilters = ref(false);
-    const form = reactive({
-      name: "",
-      email: "",
-    });
+    
     const pickedDate = ref(new Date());
     const dropdownFilters = reactive({
       users: "",
@@ -325,14 +326,6 @@ export default {
     const toggle = (event) => {
       menu.value.toggle(event);
     };
-    const save = () => {
-      toast.add({
-        severity: "success",
-        summary: "Success",
-        detail: "Data Saved",
-        life: 3000,
-      });
-    };
     const selectedCustomers = ref();
     const loading = ref(true);
 
@@ -355,24 +348,27 @@ export default {
 
     const subFilter = (item, value, filter) => {
       const selectedFilter = filter;
-      if (selectedFilter == "contains" && typeof value == "string") {
-        return item.includes(value);
-      } else if (selectedFilter == "startsWith" && typeof value == "string") {
-        return item.startsWith(value);
-      } else if (selectedFilter == "endsWith" && typeof value == "string") {
-        return item.endsWith(value);
-      } else if (
-        selectedFilter == "isNotEqualTo" &&
-        (typeof value == "number" || typeof value == "string")
-      ) {
-        return item != value;
-      } else if (selectedFilter == "notContain" && typeof value == "string") {
-        return !item.includes(value);
-      } else if (
-        selectedFilter == "isEqualTo" &&
-        (typeof value == "number" || typeof value == "string")
-      ) {
-        return item == value;
+      if (typeof value == "number" || typeof value == "string"){
+        if (
+            selectedFilter == "isNotEqualTo"
+        ) {
+          return item != value;
+        } else if (
+            selectedFilter == "isEqualTo"
+        ) {
+          return item == value;
+        }
+      }
+      if(typeof value == "string"){
+        if (selectedFilter == "contains") {
+          return item.includes(value);
+        } else if (selectedFilter == "startsWith") {
+          return item.startsWith(value);
+        } else if (selectedFilter == "endsWith") {
+          return item.endsWith(value);
+        } else if (selectedFilter == "notContain") {
+          return !item.includes(value);
+        }
       }
     };
     const applyFilter = () => {
@@ -476,7 +472,7 @@ export default {
     const closeFilter = ()=>{
       if(showFilters.value){
         showFilters.value = false;
-      } 
+      }
     }
     return {
       customers: customers,
@@ -494,10 +490,10 @@ export default {
       menu,
       toggle,
       showFilters,
-      save,
       form,
       searchedEmail,
       searchedUsers,
+      redirectToDetail,
       selectedUsersFilter,
       selectedNameFilter,
       selectedEmailFilter,

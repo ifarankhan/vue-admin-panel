@@ -27,8 +27,9 @@ private_url.interceptors.request.use(request => {
 private_url.interceptors.response.use(response => {
   return Promise.resolve(response);
 }, (error) => {
-  if (error.response) {
-      if(error.response.status === 401){
+  let res = error.response;
+  if (res) {
+      if(res?.status === 401){
           store.dispatch('auth/logoutAction','login');
       }
   } 
