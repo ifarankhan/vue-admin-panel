@@ -22,11 +22,11 @@
 
   <sticky-footer>
     <div class="relative flex justify-end" style="padding-right:15%">
-        <check-radio-picker
+        <!-- <check-radio-picker
             name="sample-checkbox"
             v-model="form.addAnother"
             :options="{ another: 'Create Another'}"
-        />
+        /> -->
       <psytech-button label="Create Account" @click="submit"></psytech-button>
       <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'list-page'})"></psytech-button>
     </div>
