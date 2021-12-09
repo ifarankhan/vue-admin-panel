@@ -23,7 +23,7 @@
     <!-- <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0"> -->
     <div class="ml-4">
       <TabGroup>
-     <div class="box-border flex border-b-2 md:pr-12">
+     <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
        <div class="flex-shrink-0 w-1/3">
           <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
         <Tab
@@ -55,7 +55,7 @@
       </TabList>
        </div>
 
-       <div class="flex items-center justify-around w-2/3 ml-3 ml-5 sm:ml-3 flex-shrink-1 ml-28">
+       <div class="flex items-center justify-around w-2/3 ml-3 ml-5 sm:ml-3 flex-shrink-1 lg:ml-28">
           <div class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1">
               <span class="p-0.5 mr-0.5">
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">

@@ -114,7 +114,7 @@
           <!-- search -->
           <div class="relative pt-2 text-gray-600">
             <input
-              class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-2 border-gray-300 border-solid rounded-full focus:outline-none"
+              class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-gray-300 rounded-full border-1 focus:outline-none focus:ring-psytechBlueBtHover"
               type="search"
               name="search"
               placeholder="Search..."
