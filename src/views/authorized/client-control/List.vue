@@ -247,7 +247,7 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter()
-    
+
     const customers = ref();
     let prevCustomers = ref();
     let prevSearched = ref();
@@ -282,6 +282,7 @@ export default {
                     (customer) => (
                         customer.date = new Date(customer.creationDate),
                             customer.name = customer.accountName,
+                            customer.email = customer.accountAddress,
                             customer.users = customer.numberOfUsers
                     )
                   );
@@ -292,7 +293,7 @@ export default {
             console.log("error is...", error)
         })
     });
-    
+
     const pickedDate = ref(new Date());
     const dropdownFilters = reactive({
       users: "",
