@@ -17,7 +17,7 @@
                     <span class=""> {{data.name}} </span>
                 </template>
             </Column>
-            <Column field="email" header="Email Address" :sortable="true" style="min-width: 10rem">
+            <Column field="email" header="Address" :sortable="true" style="min-width: 10rem">
                 <template #body="{data}">
                     <span class="image-text">{{data.email}}</span>
                 </template>

@@ -12,18 +12,23 @@ const getters = {
 
 const mutations = {
   setClientDetail(state, payload) {
-    state.clientDetail = payload; 
+    state.clientDetail = payload;
   },
 }
 
 const actions = {
     async getAccountUsers({}){
        const userData = await JSON.parse(localStorage.getItem("userData"));
-       return private_url.get('account-users', {
+       return private_url.get('client-accounts', {
         params: {
-          accountId: userData.accountId
+            distributorid: userData.distributorId
         }
       })
+    },
+    async postClientDetails({},payload){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        payload.distributorid = userData.distributorId;
+        return private_url.post('add-account', payload )
     }
 }
 

@@ -205,6 +205,7 @@ export default {
               refreshToken: info?.refreshToken,
               userName: info?.user?.userName,
               accountId: info?.user?.accountId,
+              distributorId: info?.user?.distributorId,
               distributorUserName: info?.user?.distributorUserName,
               rememberMe: form.rememberMe,
             };

@@ -48,9 +48,10 @@ import StickyFooter from "@/components/StickyFooter";
 import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
+import { useStore } from "vuex";
 
 export default {
-  name: "client-control-details",
+  name: "client-control-create-client",
   components: {
     Divider,
     MainSection,
@@ -62,8 +63,10 @@ export default {
     StickyFooter,
     ErrorSpan,
     utility,
+    useStore
   },
   setup () {
+    let store = useStore();
     const titleStack = ref(['Admin', 'Forms'])
 
     const selectOptions = [
@@ -112,7 +115,31 @@ export default {
       if (v$.value.$validate() && v$.value.$error) {
         return true;
       }
-      //Send validated from to user.
+      form.loader = true;
+      store
+          .dispatch("clientControl/postClientDetails", {
+            account: form.companyName,
+            description: form.accountDetails,
+            accountaddress: form.accountAddress,
+          })
+          .then(async (res) => {
+            console.log(res);
+            let info = res?.data?.data;
+
+            if (info.token) {
+              await localStorage.setItem("userData", JSON.stringify(USER_DATA));
+              const { navigateTo } = utility("dashboard");
+              navigateTo();
+            } else {
+              throw new Error("Something went wrong. Please try again.!");
+            }
+          })
+          .catch((error) => {
+            form.error = error?.response?.data?.data?.message ?? error.message;
+          })
+          .finally(() => {
+            form.loader = false;
+          });
       console.log(form.addAnother)
     }
 
