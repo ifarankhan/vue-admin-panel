@@ -210,8 +210,8 @@ export default {
            const RESPONSE = res?.data;
           if(RESPONSE.status == 500){
             throw new Error(RESPONSE.data.message)
-          } else if (RESPONSE.data.error) {
-            throw new Error(RESPONSE.data.error);
+          } else if (RESPONSE.data.message) {
+            throw new Error(RESPONSE.data.message);
           } else if (!form.addAnother) {
             store.commit("clientControl/setClientDetail", {
               accountName: form.companyName,

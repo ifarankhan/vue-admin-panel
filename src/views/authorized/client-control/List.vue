@@ -357,11 +357,11 @@ export default {
         value: "isNotEqualTo",
       },
       {
-        text: "Less then",
+        text: "Is less than",
         value: "lessThen",
       },
       {
-        text: "Greater then",
+        text: "Is greater than",
         value: "greaterThen",
       },
     ]);
