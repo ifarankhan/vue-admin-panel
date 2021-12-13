@@ -27,7 +27,7 @@ const actions = {
     },
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
-        payload.distributorid = userData.distributorId;
+        payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload )
     }
 }
