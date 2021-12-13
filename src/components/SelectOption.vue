@@ -24,7 +24,7 @@
       </ListboxButton>
 
       <transition leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
-        <ListboxOptions class="absolute z-10 w-full py-1 mt-2 overflow-auto text-base bg-white rounded-md shadow-lg style-2 max-h-28 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+        <ListboxOptions class="absolute z-10 w-full py-1 mt-2 overflow-auto text-base bg-white rounded-md shadow-lg style-2 max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
           <ListboxOption as="template" v-for="item in filterDropdown" :key="item.value" :value="item.value" v-slot="{ active, selected }">
             <li :class="[active ? 'text-psytechBlue' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9']">
               <div class="flex items-center">

@@ -1,14 +1,14 @@
 <template>
   <sticky-header>
     <div class="grid grid-cols-2 md:px-2">
-      <div class="flex items-center ml-8">
+      <div class="flex items-center pl-4 ml-4">
         <div
-          class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer "
+          class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-7 h-7 "
           @click="$router.push({ name: 'list-page' })"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6"
+            class="w-4 h-4"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -21,7 +21,7 @@
             />
           </svg>
         </div>
-        <div class="ml-3 font-bold text-medium">{{ accountDetail && accountDetail.accountName }} </div>
+        <div class="ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.accountName }} </div>
       </div>
       <div class="mr-11 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
@@ -442,5 +442,9 @@ export default {
 .div-hover:hover svg line {
   stroke: #008ac0;
   color: #008ac0;
+}
+.truncate > div {
+    white-space:pre-wrap;
+    word-wrap:break-word;
 }
 </style>

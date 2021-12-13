@@ -72,6 +72,7 @@
                       type="text"
                       id="name"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
                   <select-option
@@ -99,6 +100,7 @@
                       type="text"
                       id="address"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
 
@@ -128,6 +130,7 @@
                       type="text"
                       id="users"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
 
