@@ -72,6 +72,7 @@
                       type="text"
                       id="name"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
                   <select-option
@@ -99,6 +100,7 @@
                       type="text"
                       id="address"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
 
@@ -128,6 +130,7 @@
                       type="text"
                       id="users"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
 
@@ -556,5 +559,8 @@ img {
   min-width: 465px;
   padding: 16px 15px;
   box-shadow: #3755634d 0px 8px 30px;
+}
+input[type="search" i]:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-search-cancel-button {
+  cursor: pointer;
 }
 </style>

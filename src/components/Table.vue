@@ -31,7 +31,7 @@
                     <span class="image-text"> {{data.users}}</span>
                 </template>
             </Column>
-             <Column header="Creation Date" sortField="date" style="min-width: 10rem; cursor: pointer">
+             <Column header="Creation Date" sortField="date" :sortable="true" style="min-width: 10rem; cursor: pointer">
                  <template #body="{data}">
                     <span class="image-text">{{ formatDate(data.date) }}</span>
                 </template>
@@ -172,14 +172,6 @@ export default {
 
 .truncate > div {
     white-space:pre-wrap;
-     word-wrap:break-word;
-    // width: 160 px\9;
-    // white-space: nowrap;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // -o-text-overflow: ellipsis;
-    // -ms-text-overflow: ellipsis;
-    // display: block;
-    // position: absolute;
+    word-wrap:break-word;
 }
 </style>
