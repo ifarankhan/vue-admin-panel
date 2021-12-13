@@ -30,6 +30,7 @@
     :id="id"
     v-model="computedValue"
     :class="inputElClass"
+    v-on:keyup.enter="$emit('enterPressed')"
      class="text-xs font-medium"
     autocomplete="off"
     style="height: 45px; min-height: 45px; max-height: 45px"
