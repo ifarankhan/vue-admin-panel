@@ -6,9 +6,11 @@
         <!-- left section -->
         <div>
           <psytech-button
-          @buttonWasClicked="$router.push({name:'client-control-create-client'})"
-          label="Create New Client Account"
-          type="outline"
+            @buttonWasClicked="
+              $router.push({ name: 'client-control-create-client' })
+            "
+            label="Create New Client Account"
+            type="outline"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -53,59 +55,108 @@
                 </svg>
               </psytech-button>
               <ul
-                  class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-12 dropdown-menu"
-                  style="padding: 16px 15px;"
-                  id="filter-dropdown"
-                  v-if="showFilters"
-                  v-click-away="closeFilter"
+                class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
+                style="padding: 16px 15px"
+                id="filter-dropdown"
+                v-if="showFilters"
+                v-click-away="closeFilter"
               >
                 <li class="flex">
-                  <field label="Name" labelFor="account" :applyExtraInputClass="true">
-                    <control v-model="accountName" type="text" id="name" placeholder=" " />
+                  <field
+                    label="Name"
+                    labelFor="account"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="accountName"
+                      type="text"
+                      id="name"
+                      placeholder=" "
+                    />
                   </field>
-                  <select-option :filterDropdown="filterDropdown" v-model="selectedNameFilter"></select-option>
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedNameFilter"
+                  ></select-option>
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
-                    <IconSVG @iconWasClicked="(accountName=''),applyFilter()" />
+                    <IconSVG
+                      @iconWasClicked="(accountName = ''), applyFilter()"
+                    />
                   </div>
                 </li>
 
                 <li class="flex">
-                  <field label="Email" labelFor="email" :applyExtraInputClass="true" >
-                    <control v-model="searchedEmail" type="text" id="email" placeholder=" " />
+                  <field
+                    label="Address"
+                    labelFor="address"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="searchedaddress"
+                      type="text"
+                      id="address"
+                      placeholder=" "
+                    />
                   </field>
 
-                   <select-option :filterDropdown="filterDropdown" v-model="selectedEmailFilter"></select-option>
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedaddressFilter"
+                  ></select-option>
 
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedEmailFilter" />
+                    <control :options="filterDropdown" type="select" v-model="selectedaddressFilter" />
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
-                    <IconSVG @iconWasClicked="(searchedEmail=''),applyFilter()" />
+                    <IconSVG
+                      @iconWasClicked="(searchedaddress = ''), applyFilter()"
+                    />
                   </div>
                 </li>
 
                 <li class="flex">
-                  <field label="Users" labelFor="users" :applyExtraInputClass="true">
-                    <control v-model="searchedUsers" type="text" id="users" placeholder=" " />
+                  <field
+                    label="Users"
+                    labelFor="users"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="searchedUsers"
+                      type="text"
+                      id="users"
+                      placeholder=" "
+                    />
                   </field>
 
-                  <select-option :filterDropdown="filterDropdown" v-model="selectedUsersFilter"></select-option>
+                  <select-option
+                    :filterDropdown="numberDropdown"
+                    v-model="selectedUsersFilter"
+                  ></select-option>
 
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
-                    <IconSVG @iconWasClicked="(searchedUsers=''),applyFilter()" />
+                    <IconSVG
+                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
+                    />
                   </div>
                 </li>
                 <li class="flex justify-between">
                   <div class="flex items-center justify-center ml-3">
-                    <a @click.prevent="clearFilter()" class="text-xs font-semibold no-underline text-psytechBlue">Clear all</a>
+                    <a
+                      @click.prevent="clearFilter()"
+                      class="text-xs font-semibold no-underline text-psytechBlue"
+                      >Clear all</a
+                    >
                   </div>
-                  <psytech-button label="Apply" @buttonWasClicked="applyFilter"></psytech-button>
+                  <psytech-button
+                    label="Apply"
+                    @buttonWasClicked="applyFilter"
+                  ></psytech-button>
                 </li>
               </ul>
             </div>
@@ -151,11 +202,12 @@
     <DataTable
       :customers="customers"
       :paginator="true"
-      :rows="10"
+      :rows="50"
       :rowHover="true"
       :loading="loading"
       :rowsPerPageOptions="[10, 25, 50]"
       @rowClicked="redirectToDetail($event)"
+      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
     />
 
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
@@ -175,9 +227,9 @@
                     {{data.name}}
                 </template>
             </Column>
-            <Column field="email" header="Email Address" sortable style="min-width: 14rem">
+            <Column field="address" header="address Address" sortable style="min-width: 14rem">
                 <template #body="{data}">
-                    <span class="image-text">{{data.email}}</span>
+                    <span class="image-text">{{data.address}}</span>
                 </template>
             </Column>
             <Column header="No. of Users" sortable sortField="users" style="min-width: 14rem">
@@ -191,107 +243,74 @@
 
 <script>
 import { ref, onMounted, reactive } from "vue";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
 import InputText from "primevue/inputtext";
 import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
-import InputNumber from "primevue/inputnumber";
-import Slider from "primevue/slider";
-import Button from "primevue/button";
-import Column from "primevue/column";
-import Dropdown from "primevue/dropdown";
-import MultiSelect from "primevue/multiselect";
-import Toolbar from "primevue/toolbar";
-import Menu from "primevue/menu";
-import Menubar from "primevue/menubar";
 import Datepicker from "vue3-datepicker";
-import NavBarItem from "@/components/NavBarItem";
-import NavBarItemLabel from "@/components/NavBarItemLabel";
-import NavBarMenu from "@/components/NavBarMenu";
-import NavBarMenuDivider from "@/components/NavBarMenuDivider";
 import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
-import SelectOption from '@/components/SelectOption.vue';
+import SelectOption from "@/components/SelectOption.vue";
 import { useStore } from "vuex";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 export default {
   name: "demoTable",
   components: {
     InputText,
     DataTable,
-    NavBarItem,
-    NavBarMenuDivider,
-    NavBarMenu,
-    NavBarItemLabel,
-    InputNumber,
     SelectOption,
     Control,
     IconSVG,
-    Dropdown,
     Calendar,
-    Slider,
-    Toolbar,
     Datepicker,
-    Button,
-    Menubar,
-    Column,
-    MultiSelect,
-    Menu,
     Field,
     PsytechButton,
     StickyHeader,
   },
   setup() {
     const store = useStore();
-    const router = useRouter()
+    const router = useRouter();
 
     const customers = ref();
     let prevCustomers = ref();
     let prevSearched = ref();
     let searchText = ref("");
     let accountName = ref("");
-    let searchedEmail = ref("");
+    let searchedaddress = ref("");
     let searchedUsers = ref("");
     let selectStatus = ref("");
     let selectedNameFilter = ref("contains");
-    let selectedEmailFilter = ref("contains");
+    let selectedaddressFilter = ref("contains");
     let selectedUsersFilter = ref("isEqualTo");
     let prevMainSearchHistry = ref("");
     let showFilters = ref(false);
     const form = reactive({
       name: "",
-      email: "",
+      address: "",
     });
 
-    const redirectToDetail = (e)=>{
-      store.commit("clientControl/setClientDetail",e.data)
-      router.push({name:'client-control-list-detail'})
-    }
-
     onMounted(() => {
-      console.log("cmounted again...")
       store
-          .dispatch("clientControl/getAccountUsers")
-          .then(res=>{
-            let responseArray = res?.data?.data;
-            customers.value = responseArray;
-            customers.value.forEach(
-                    (customer) => (
-                        customer.date = new Date(customer.creationDate),
-                            customer.name = customer.accountName,
-                            customer.email = customer.accountAddress,
-                            customer.users = customer.numberOfUsers
-                    )
-                  );
-            prevCustomers.value = customers.value;
-            loading.value = false;
-          })
-          .catch(error=>{
-            console.log("error is...", error)
+        .dispatch("clientControl/getAccountUsers")
+        .then((res) => {
+          let responseArray = res?.data?.data;
+          customers.value = responseArray;
+          customers.value.forEach(
+            (customer) => (
+              (customer.date = new Date(customer.creationDate)),
+              (customer.name = customer.accountName),
+              (customer.address = customer.accountAddress),
+              (customer.users = customer.numberOfUsers)
+            )
+          );
+          prevCustomers.value = customers.value;
+          loading.value = false;
         })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
     });
 
     const pickedDate = ref(new Date());
@@ -324,29 +343,36 @@ export default {
         value: "endsWith",
       },
     ]);
+
+    const numberDropdown = reactive([
+      {
+        text: "Is equal to",
+        value: "isEqualTo",
+      },
+      {
+        text: "Is not equal to",
+        value: "isNotEqualTo",
+      },
+      {
+        text: "Less then",
+        value: "lessThen",
+      },
+      {
+        text: "Greater then",
+        value: "greaterThen",
+      },
+    ]);
     const selectedFilter = ref("contains");
 
     //   const toast = useToast();
-    const menu = ref();
 
-    const toggle = (event) => {
-      menu.value.toggle(event);
-    };
     const selectedCustomers = ref();
     const loading = ref(true);
-
-    const formatDate = (value) => {
-      return value.toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-    };
 
     const clearFilter = () => {
       searchText.value = "";
       accountName.value = "";
-      searchedEmail.value = "";
+      searchedaddress.value = "";
       searchedUsers.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
@@ -354,18 +380,18 @@ export default {
 
     const subFilter = (item, value, filter) => {
       const selectedFilter = filter;
-      if (typeof value == "number" || typeof value == "string"){
-        if (
-            selectedFilter == "isNotEqualTo"
-        ) {
+      if (typeof value == "number" || typeof value == "string") {
+        if (selectedFilter == "isNotEqualTo") {
           return item != value;
-        } else if (
-            selectedFilter == "isEqualTo"
-        ) {
+        } else if (selectedFilter == "isEqualTo") {
           return item == value;
+        } else if (selectedFilter == "lessThen") {
+          return item < value;
+        } else if (selectedFilter == "greaterThen") {
+          return item > value;
         }
       }
-      if(typeof value == "string"){
+      if (typeof value == "string") {
         if (selectedFilter == "contains") {
           return item.includes(value);
         } else if (selectedFilter == "startsWith") {
@@ -403,16 +429,16 @@ export default {
         });
       }
       // Make sure search value has some valid value, then do filtering
-      if (searchedEmail.value) {
+      if (searchedaddress.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.email && searchedEmail.value
+            !val.address && searchedaddress.value
               ? false
-              : !!(searchedEmail.value
+              : !!(searchedaddress.value
                   ? subFilter(
-                      val.email.toLowerCase(),
-                      searchedEmail.value.toLowerCase().trim(),
-                      selectedEmailFilter.value
+                      val.address.toLowerCase(),
+                      searchedaddress.value.toLowerCase().trim(),
+                      selectedaddressFilter.value
                     )
                   : true)
           ) {
@@ -425,7 +451,7 @@ export default {
       if (searchedUsers.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.users && searchedUsers.value
+            !val.users && val.users != 0 && searchedUsers.value
               ? false
               : !!(searchedUsers.value
                   ? subFilter(
@@ -441,17 +467,14 @@ export default {
       }
 
       // CHECK wheather record is found againts applied filters
-      // if (filteredData.length > 0) {
-      // console.log(filteredData[0].country)
       customers.value = filteredData;
       prevSearched.value = filteredData;
-      // }
     };
     const filterMethod = (data, value) => {
       return data.filter(function (customer) {
         return (
           customer.name.toLowerCase().indexOf(value) > -1 ||
-          customer.email.toLowerCase().indexOf(value) > -1 ||
+          customer.address.toLowerCase().indexOf(value) > -1 ||
           customer.users == value
         );
       });
@@ -466,7 +489,7 @@ export default {
         return;
       }
       // fileds to be check for filters
-      if (searchedUsers.value || accountName.value || searchedEmail.value) {
+      if (searchedUsers.value || accountName.value || searchedaddress.value) {
         customers.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
@@ -475,16 +498,21 @@ export default {
       }
     };
 
-    const closeFilter = ()=>{
-      if(showFilters.value){
+    const closeFilter = () => {
+      if (showFilters.value) {
         showFilters.value = false;
       }
-    }
+    };
+
+    const redirectToDetail = (e) => {
+      store.commit("clientControl/setClientDetail", e.data);
+      router.push({ name: "client-control-list-detail" });
+    };
+
     return {
       customers: customers,
       loading,
       selectedCustomers,
-      formatDate,
       closeFilter,
       selectStatus,
       prevMainSearchHistry,
@@ -493,16 +521,15 @@ export default {
       prevSearched,
       accountName,
       pickedDate,
-      menu,
-      toggle,
+      numberDropdown,
       showFilters,
       form,
-      searchedEmail,
+      searchedaddress,
       searchedUsers,
       redirectToDetail,
       selectedUsersFilter,
       selectedNameFilter,
-      selectedEmailFilter,
+      selectedaddressFilter,
       applyFilter,
       clearFilter,
       dropdownFilters,
@@ -530,5 +557,4 @@ img {
   padding: 16px 15px;
   box-shadow: #3755634d 0px 8px 30px;
 }
-
 </style>

@@ -69,33 +69,19 @@ export default {
   },
   setup () {
     const store = useStore();
-    const titleStack = ref(['Admin', 'Forms'])
     const accountDetail = computed(()=>{
       return store.getters['clientControl/getClientDetail']
     })
-
-    const selectOptions = [
-      { id: 1, label: 'Business development' },
-      { id: 2, label: 'Marketing' },
-      { id: 3, label: 'Sales' }
-    ]
 
     // console.log("accountDetail",accountDetail.value)
 
     const form = reactive({ 
       companyName: accountDetail.value?.accountName??'',
       accountDetails: accountDetail.value?.accountDescription??'',
-      accountAddress: accountDetail.value?.accountAddres??'',
+      accountAddress: accountDetail.value?.accountAddress??'',
       addAnother: 0
     })
-
-    // const customElementsForm = reactive({
-    //   checkbox: ['lorem'],
-    //   radio: 'one',
-    //   switch: ['one'],
-    //   file: null
-    // })
-
+    
     const rules = computed(() => {
       return {
         companyName: {
@@ -131,12 +117,9 @@ export default {
     }
 
     return {
-      titleStack,
-      selectOptions,
       form,
       v$,
       cancel,
-      // customElementsForm,
       submit,
       mdiPlus
     }

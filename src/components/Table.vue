@@ -1,7 +1,8 @@
 <template>
      <DataTable :value="customers" :paginator="paginator" class="p-datatable-customers" :rows="rows"
+            :rowStyleClass="rowClass"
             dataKey="id" :rowHover="rowHover" :loading="loading"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             responsiveLayout="scroll" :scrollable="true"
@@ -12,22 +13,25 @@
             <template #loading>
                 Loading {{ defaultText }} data. Please wait.
             </template>
-            <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem">
+            <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <span class=""> {{data.name}} </span>
+                    <div class="truncate">
+                         <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> </span>
+                         <span>{{data.name}} </span>
+                 </div>
                 </template>
             </Column>
-            <Column field="email" header="Address" :sortable="true" style="min-width: 10rem">
+            <Column field="address" header="Address" :sortable="true" style="min-width: 10rem; cursor: pointer">
                 <template #body="{data}">
-                    <span class="image-text">{{data.email}}</span>
+                    <div  class="truncate">{{data.address}}</div>
                 </template>
             </Column>
-            <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem">
+            <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem; cursor: pointer">
                  <template #body="{data}">
                     <span class="image-text"> {{data.users}}</span>
                 </template>
             </Column>
-             <Column header="Creation Date" sortField="date" style="min-width: 10rem">
+             <Column header="Creation Date" sortField="date" style="min-width: 10rem; cursor: pointer">
                  <template #body="{data}">
                     <span class="image-text">{{ formatDate(data.date) }}</span>
                 </template>
@@ -35,7 +39,7 @@
             <Column style="min-width: 10rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body>
                   <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" @click="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
@@ -58,13 +62,20 @@ export default {
             type: Array,
             default: []
         },
+        image:{
+            type: Boolean,
+            default: false
+        },
+        paginatorTemplate: {
+            type: String,
+        },
         paginator:{
             type: Boolean,
-            default: true
+            default: false
         },
         rows:{
             type: Number,
-            default: 10
+            default: null
         },
         rowHover:{
             type: Boolean,
@@ -76,7 +87,7 @@ export default {
         },
         rowsPerPageOptions:{
             type: Array,
-            default: [10,25,50]
+            default: null
         },
         defaultText:{
             type: String,
@@ -85,7 +96,7 @@ export default {
     },
     setup() {
         const showConsole = (e)=>{
-            console.log("clicked",e.data)
+            // console.log("clicked",e.data)
         }
 
         const formatDate = (value) => {
@@ -104,6 +115,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+ .p-datatable-wrapper{
+    border-radius: 18px !important;
+    background-color: gray !important;
+  }
+  .rowClass{
+      cursor: pointer;
+  }
 ::v-deep(.p-paginator) {
   .p-paginator-current {
     margin-left: auto;
@@ -145,5 +163,23 @@ export default {
 }
 .my-center-text > svg{
     float: right;
+}
+
+.truncate {
+    max-width: 160px;
+    // width: 160 px\9;
+}
+
+.truncate > div {
+    white-space:pre-wrap;
+     word-wrap:break-word;
+    // width: 160 px\9;
+    // white-space: nowrap;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    // -o-text-overflow: ellipsis;
+    // -ms-text-overflow: ellipsis;
+    // display: block;
+    // position: absolute;
 }
 </style>
