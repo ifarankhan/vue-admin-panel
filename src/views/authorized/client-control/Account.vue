@@ -194,9 +194,9 @@ export default {
 
     const v$ = useVuelidate(rules, form);
     const submit = () => {
-      // if (v$.value.$validate() && v$.value.$error) {
-      //   return true;
-      // }
+      if (v$.value.$validate() && v$.value.$error) {
+        return true;
+      }
       showSuccessAlert.value = false;
       form.error = ''
       form.loader = true;
