@@ -4,7 +4,7 @@
       <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
       <div class="grid main-grid md:grid-cols-2">
         <!-- left section -->
-        <div>
+        <div class="mb-2">
           <psytech-button
             @buttonWasClicked="
               $router.push({ name: 'client-control-create-client' })
@@ -200,8 +200,6 @@
         </div>
       </div>
     </sticky-header>
-
-    <br />
     <DataTable
       :customers="customers"
       :paginator="true"
@@ -293,7 +291,6 @@ export default {
       name: "",
       address: "",
     });
-
     onMounted(() => {
       store
         .dispatch("clientControl/getAccountUsers")
@@ -544,6 +541,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.stick-header{
+  margin-top: -7px;
+}
 img {
   vertical-align: middle;
 }
