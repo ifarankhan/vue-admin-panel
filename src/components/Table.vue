@@ -1,6 +1,5 @@
 <template>
      <DataTable :value="customers" :paginator="paginator" class="p-datatable-customers" :rows="rows"
-            :rowStyleClass="rowClass"
             dataKey="id" :rowHover="rowHover" :loading="loading"
             :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions"
@@ -15,7 +14,7 @@
             </template>
             <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <div class="truncate">
+                    <div class="truncate custome-width">
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> </span>
                          <span>{{data.name}} </span>
                  </div>
@@ -23,7 +22,7 @@
             </Column>
             <Column field="address" header="Address" :sortable="true" style="min-width: 10rem; cursor: pointer">
                 <template #body="{data}">
-                    <div  class="truncate">{{data.address}}</div>
+                    <div  class="truncate custome-width">{{data.address}}</div>
                 </template>
             </Column>
             <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem; cursor: pointer">
@@ -51,6 +50,7 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import { onMounted } from 'vue';
 export default {
     components:{
         DataTable,
@@ -106,7 +106,7 @@ export default {
                 year: "numeric",
             })
         }
-
+       
         return {
             showConsole,
             formatDate
@@ -114,14 +114,25 @@ export default {
     },
 }
 </script>
-<style lang="scss" scoped>
- .p-datatable-wrapper{
-    border-radius: 18px !important;
-    background-color: gray !important;
-  }
-  .rowClass{
-      cursor: pointer;
-  }
+<style lang="scss">
+.p-datatable-wrapper{
+  margin-top: 20px;
+}
+.p-datatable-thead tr{
+    position: fixed;
+    width: 84.2% !important;
+} 
+
+@media screen and (max-width: 1024px) {
+  .p-datatable-thead tr{
+     width: 94% !important;
+    }
+}
+
+.custome-width{
+    width: 160px;
+}
+
 ::v-deep(.p-paginator) {
   .p-paginator-current {
     margin-left: auto;
@@ -163,11 +174,6 @@ export default {
 }
 .my-center-text > svg{
     float: right;
-}
-
-.truncate {
-    max-width: 160px;
-    // width: 160 px\9;
 }
 
 .truncate > div {
