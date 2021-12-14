@@ -106,7 +106,7 @@ export default {
                 year: "numeric",
             })
         }
-       
+
         return {
             showConsole,
             formatDate
@@ -120,12 +120,15 @@ export default {
 }
 .p-datatable-thead tr{
     position: fixed;
-    width: 84.2% !important;
-} 
+    width: calc(100% - 305px)  !important;
+}
+.p-datatable-tbody{
+  margin-top: 57px;
+}
 
 @media screen and (max-width: 1024px) {
   .p-datatable-thead tr{
-     width: 94% !important;
+     width: calc(100% - 305px)  !important;
     }
 }
 
