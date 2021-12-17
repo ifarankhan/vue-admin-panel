@@ -17,13 +17,19 @@ const mutations = {
 }
 
 const actions = {
-    async getAccountUsers({}){
+    async getAccountUsers({},payload){
        const userData = await JSON.parse(localStorage.getItem("userData"));
-       return private_url.get('client-accounts', {
-        params: {
-            distributorid: userData.distributorId
-        }
+       return private_url.get('account-users', {
+        params: payload
       })
+    },
+    async getClientAccount({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('client-accounts', {
+            params: {
+                distributorid: userData.distributorId
+            }
+        })
     },
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
