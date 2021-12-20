@@ -12,7 +12,53 @@
             <template #loading>
                 Loading {{ defaultText }} data. Please wait.
             </template>
-            <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
+            <span v-if="tableType=='accountUsers'">
+              <Column field="firstName" header="First Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                    <div>
+                         <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> </span>
+                         <span>{{data.firstName}} </span>
+                 </div>
+                </template>
+              </Column>
+              <Column field="familyname" header="Family Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data.familyName}} </span>
+                </template>
+              </Column>
+              <Column field="email" header="User Name" :sortable="true" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div class="truncate">{{data.email}}</div>
+                  </template>
+              </Column>
+              <Column header="User Type" sortField="usertype" :sortable="true" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text"> {{userTypes[data.userType]}}</span>
+                  </template>
+              </Column>
+               <Column header="Credits" sortField="credits" :sortable="true" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text">{{ data.credits }}</span>
+                  </template>
+              </Column>
+              <Column header="Status" sortField="status" :sortable="true" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text">{{ data.status?"Active":"In-Active" }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+            <span v-else>
+              <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div class="truncate custome-width">
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> </span>
@@ -20,31 +66,33 @@
                  </div>
                 </template>
             </Column>
-            <Column field="address" header="Address" :sortable="true" style="min-width: 10rem; cursor: pointer">
-                <template #body="{data}">
-                    <div  class="truncate custome-width">{{data.address}}</div>
-                </template>
-            </Column>
-            <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem; cursor: pointer">
-                 <template #body="{data}">
-                    <span class="image-text"> {{data.users}}</span>
-                </template>
-            </Column>
-             <Column header="Creation Date" sortField="date" :sortable="true" style="min-width: 10rem; cursor: pointer">
-                 <template #body="{data}">
-                    <span class="image-text">{{ formatDate(data.date) }}</span>
-                </template>
-            </Column>
-            <Column style="min-width: 10rem; cursor: pointer" bodyStyle="text-align:right">
+              <Column field="address" header="Address" :sortable="true" style="min-width: 10rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div  class="truncate custome-width">{{data.address}}</div>
+                  </template>
+              </Column>
+              <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text"> {{data.users}}</span>
+                  </template>
+              </Column>
+               <Column header="Creation Date" sortField="date" :sortable="true" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text">{{ formatDate(data.date) }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 10rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body>
                   <div class="my-center-text">
                     <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
               </template>
             </Column>
+            </span>
+
     </DataTable>
 </template>
 <script>
@@ -92,9 +140,22 @@ export default {
         defaultText:{
             type: String,
             default: 'record'
+        },
+        tableType:{
+          type: String,
+          default: 'users'
         }
+
     },
     setup() {
+        let userTypes = [
+          "Professional",
+          "Solution",
+          "Training",
+          "Test admin",
+          "Integration"
+        ];
+
         const showConsole = (e)=>{
             // console.log("clicked",e.data)
         }
@@ -109,7 +170,8 @@ export default {
 
         return {
             showConsole,
-            formatDate
+            formatDate,
+            userTypes
         }
     },
 }
@@ -118,18 +180,12 @@ export default {
 .p-datatable-wrapper{
   margin-top: 20px;
 }
-.p-datatable-thead tr{
+.fixedheader .p-datatable-thead tr{
     position: fixed;
     width: calc(100% - 305px)  !important;
 }
-.p-datatable-tbody{
+.fixedheader .p-datatable-tbody{
   margin-top: 57px;
-}
-
-@media screen and (max-width: 1024px) {
-  .p-datatable-thead tr{
-     width: calc(100% - 305px)  !important;
-    }
 }
 
 .custome-width{
