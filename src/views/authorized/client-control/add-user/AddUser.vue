@@ -85,7 +85,7 @@
     </div>
     
     <!-- middle section step == 0 -->
-        <div class="flex p-4 md:mt-6" v-show="showStep == 0">
+    <div class="flex p-4 md:mt-6" v-show="showStep == 0">
       <div class="w-2/3">
         <!--  -->
         <div>
@@ -107,6 +107,7 @@
           <div class="flex justify-between w-2/5 pl-4">
             <div v-for="(item, index) in activeBlockList" :key="index">
               <check-radio-picker
+                :disabled="index ==0? true: false"
                 name="active-block"
                 v-model="activeBlocked"
                 type="radio"
@@ -274,13 +275,14 @@
         </div>
       </div>
     </div>
+    
     <!-- step == 2 -->
     <div class="flex p-4 md:mt-16" v-show="showStep == 2">
       <div class="w-11/12">
         <!--  -->
         <div class="pl-4 mb-10">
           <div class="flex items-center">
-             <span>
+             <span class="cursor-pointer" @click="collapsable.tests = !collapsable.tests">
                 <svg viewBox="0 0 24 24" width="25" height="25" class="inline-block">
                   <path :d="mdiChevronDown"/>
                 </svg>
@@ -289,7 +291,7 @@
              <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
           </div>
           <!--  -->
-          <div class="flex pl-4 mt-2">
+          <div class="flex pl-4 mt-2" v-if="collapsable.tests">
             <div v-for="(item, index) in testsArray" :key="index" class="w-1/5 mb-4 mr-8"> 
               <check-radio-picker
                 name="sample-checkbox"
@@ -306,7 +308,7 @@
         <!--  -->
          <div class="pl-4 mb-10">
           <div class="flex items-center">
-             <span>
+             <span class="cursor-pointer" @click="collapsable.batteries = !collapsable.batteries">
                 <svg viewBox="0 0 24 24" width="25" height="25" class="inline-block">
                   <path :d="mdiChevronDown"/>
                 </svg>
@@ -315,7 +317,7 @@
              <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
           </div>
           <!--  -->
-          <div class="flex pl-4 mt-2">
+          <div class="flex pl-4 mt-2" v-if="collapsable.batteries">
             <div v-for="(item, index) in testsArray" :key="index" class="w-1/5 mb-4 mr-8"> 
               <check-radio-picker
                 name="sample-checkbox"
@@ -329,10 +331,10 @@
           <!--  -->
         </div>
 
-           <!--  -->
+        <!--  -->
          <div class="pl-4">
           <div class="flex items-center">
-             <span>
+             <span class="cursor-pointer" @click="collapsable.solutions = !collapsable.solutions">
                 <svg viewBox="0 0 24 24" width="25" height="25" class="inline-block">
                   <path :d="mdiChevronDown"/>
                 </svg>
@@ -341,7 +343,7 @@
              <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
           </div>
           <!--  -->
-          <div class="flex pl-4 mt-2">
+          <div class="flex pl-4 mt-2" v-if="collapsable.solutions">
             <div v-for="(item, index) in testsArray" :key="index" class="w-1/5 mb-4 mr-8"> 
               <check-radio-picker
                 name="sample-checkbox"
@@ -676,6 +678,11 @@ export default {
     const notifications = reactive(["No", "Yes"]);
     const sharedCredit = ref('')
     const allowedToUpdateCredit = ref('')
+    const collapsable = reactive({
+      tests: true,
+      batteries: true,
+      solutions: true
+    })
 
     const userDetail = reactive({
       userType: "",
@@ -767,6 +774,7 @@ export default {
       tooglePinIcon,
       goToBackHandler,
       gotoNextHandler,
+      collapsable,
       updateCredit,
       toggleCredits,
       mdiChevronDown,

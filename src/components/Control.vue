@@ -35,12 +35,12 @@
     autocomplete="off"
     style="height: 45px; min-height: 45px; max-height: 45px"
   />
-    <control-icon
+    <!-- <control-icon
     @iconWasClicked="$emit('iconWasClicked')"
     v-if="icon"
     :icon="icon"
     :h="controlIconH"
-  />
+  /> -->
 </template>
 <script>
 import { computed } from "vue";
