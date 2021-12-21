@@ -78,10 +78,6 @@ export default {
       props.options ? "select" : props.type
     );
 
-    const clicked = ()=>{
-      console.log("okokok")
-    }
-
     const controlIconH = computed(() => props.type === 'textarea' ? 'h-full' : 'h-12')
 
     const inputElClass = computed(() => {
@@ -96,7 +92,6 @@ export default {
     return {
       computedValue,
       inputElClass,
-      clicked,
       computedType,
       controlIconH,
       extraClasses

@@ -18,6 +18,10 @@ export default {
       type: String,
       default: "primary",
     },
+    extraClasses:{
+      type: String,
+      default: null
+    },
     buttonWithIcon: {
       type: String,
       default: "",
@@ -53,6 +57,9 @@ export default {
         base.push(
           "mt-2 mr-2 inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:border-psytechBlue hover:bg-psytechBlueBtHover"
         );
+      }
+      if(props.extraClasses){
+        base.push(props.extraClasses)
       }
       return base;
     });
