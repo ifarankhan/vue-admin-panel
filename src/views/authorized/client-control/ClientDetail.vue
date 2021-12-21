@@ -461,7 +461,7 @@
                 <li class="flex">
                   <field
                     label="User Name"
-                    labelFor="address"
+                    labelFor="userName"
                     :applyExtraInputClass="true"
                   >
                     <control
@@ -485,21 +485,21 @@
 
                 <li class="flex">
                   <field
-                    label="Users"
-                    labelFor="users"
-                    :applyExtraInputClass="true"
+                      label="Credits"
+                      labelFor="credits"
+                      :applyExtraInputClass="true"
                   >
                     <control
-                      v-model="searchedUsers"
-                      type="text"
-                      id="users"
-                      placeholder=" "
+                        v-model="searchedCredits"
+                        type="text"
+                        id="users"
+                        placeholder=" "
                     />
                   </field>
 
                   <select-option
-                    :filterDropdown="numberDropdown"
-                    v-model="selectedUsersFilter"
+                      :filterDropdown="numberDropdown"
+                      v-model="selectedCreditsFilter"
                   ></select-option>
 
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
@@ -507,7 +507,7 @@
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
+                        @iconWasClicked="(searchedCredits = ''), applyFilter()"
                     />
                   </div>
                 </li>
@@ -662,11 +662,11 @@ export default {
     let selectedNameFilter = ref("contains");
     let selectedUserNameFilter = ref("contains");
     let selectedFamilyNameFilter = ref("contains");
-    let selectedUsersFilter = ref("isEqualTo");
-    let searchedUsers = ref("");
     let accountName = ref("");
     let searchUserName = ref("");
     let searchFamilyName = ref("");
+    let searchedCredits = ref("");
+    let selectedCreditsFilter = ref("isEqualTo");
     const filterDropdown = reactive([
       {
         text: "Is equal to",
@@ -723,7 +723,7 @@ export default {
         return;
       }
       // fileds to be check for filters
-      if (searchedUsers.value || accountName.value || searchUserName.value) {
+      if (searchedCredits.value || accountName.value || searchUserName.value) {
         userArray.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
@@ -760,11 +760,11 @@ export default {
       if (searchUserName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.address && searchUserName.value
+              !val.email && searchUserName.value
                   ? false
                   : !!(searchUserName.value
                   ? subFilter(
-                      val.address.toLowerCase(),
+                      val.email.toLowerCase(),
                       searchUserName.value.toLowerCase().trim(),
                       selectedUserNameFilter.value
                   )
@@ -793,17 +793,18 @@ export default {
         });
       }
 
+
       // Make sure search value has some valid value, then do filtering
-      if (searchedUsers.value) {
+      if (searchedCredits.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.users && val.users != 0 && searchedUsers.value
+              !val.credits && val.credits != 0 && searchedCredits.value
                   ? false
-                  : !!(searchedUsers.value
+                  : !!(searchedCredits.value
                   ? subFilter(
-                      +val.users,
-                      +searchedUsers.value,
-                      selectedUsersFilter.value
+                      +val.credits,
+                      +searchedCredits.value,
+                      selectedCreditsFilter.value
                   )
                   : true)
           ) {
@@ -830,7 +831,6 @@ export default {
       searchText.value = "";
       accountName.value = "";
       searchUserName.value = "";
-      searchedUsers.value = "";
       searchFamilyName.value = "";
       userArray.value = prevCustomers.value;
       prevSearched.value = [];
@@ -869,18 +869,18 @@ export default {
       filteredMainMethod,
       applyFilter,
       clearFilter,
-      searchedUsers,
       prevMainSearchHistry,
       prevSearched,
       numberDropdown,
       filterDropdown,
       accountName,
       searchUserName,
-      selectedUsersFilter,
       selectedNameFilter,
       selectedUserNameFilter,
       searchFamilyName,
       selectedFamilyNameFilter,
+      searchedCredits,
+      selectedCreditsFilter
     };
   },
 };
