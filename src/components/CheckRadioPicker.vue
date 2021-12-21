@@ -1,13 +1,14 @@
 <template>
   <div class="flex flex-wrap justify-start -mb-3" :class="{'flex-col':column}">
-    <label v-for="(value, key) in options" :key="key" class="mb-3 mr-6 last:mr-0">
+    <label v-for="(value, key) in options" :key="key" class="block pl-4 mb-3 mr-6 last:mr-0 label">
       <input
+        :disabled="disabled"
         :type="inputType"
         :name="name"
         v-model="computedValue"
-        :value="key" class="w-5 h-5 text-psytechBlueBtHover form-checkbox focus:ring-transparent">
-      <span class="check"></span>
-      <span class="ml-1 control-label mr-1.5">{{ value }}</span>
+        :value="key" class="w-4 h-4 text-psytechBlueBtHover form-checkbox focus:ring-transparent">
+      <span class="inline-block check"></span>
+      <span class="ml-1.5 text-sm font-semibold control-label mr-1.5"> {{ value }} </span>
     </label>
   </div>
   
@@ -27,6 +28,10 @@ export default {
       type: String,
       required: true
     },
+    disabled:{
+      type: String,
+      default: false
+    },
     type: {
       type: String,
       default: 'checkbox'
@@ -39,6 +44,7 @@ export default {
     const computedValue = computed({
       get: () => props.modelValue,
       set: value => {
+        console.log("vlaue iskkk", value)
         emit('update:modelValue', value)
       }
     })
@@ -52,3 +58,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.label {
+    /* display: block; */
+    /* padding-left: 15px; */
+    text-indent: -21px;
+}
+</style>

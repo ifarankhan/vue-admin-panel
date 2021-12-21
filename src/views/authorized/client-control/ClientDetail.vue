@@ -1,14 +1,14 @@
 <template>
   <sticky-header>
     <div class="grid grid-cols-2 md:px-2">
-      <div class="flex items-center pl-4 ml-4">
+      <div class="flex items-center ml-8">
         <div
-          class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-7 h-7 "
+          class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer "
           @click="$router.push({ name: 'list-page' })"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
+            class="w-6 h-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -21,7 +21,7 @@
             />
           </svg>
         </div>
-        <div class="ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.accountName }} </div>
+        <div class="ml-3 font-bold text-medium">{{ accountDetail && accountDetail.accountName }} </div>
       </div>
       <div class="mr-11 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
@@ -55,7 +55,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Account Users (03)
+                  Account Users ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers :'' }})
                 </button>
               </Tab>
             </TabList>
@@ -309,20 +309,293 @@
             </div>
           </div>
         </TabPanel>
-        
+
+        <TabPanel>
+            <div class="mt-4 ml-5">
+               <!-- $router.push({ name: 'client-control-add-user' }) -->
+          <psytech-button
+            @buttonWasClicked="''"
+            label="Add User"
+            type="outline"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
+          </psytech-button>
+          <!-- Create New Client Account -->
+        </div>
+        <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" -->
+        <div class="mt-4 mb-2 ml-5">
+          <p class="pl-2 text-sm font-semibold">Master User:</p>
+          <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
+            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+            <table class="border border-gray-200 rounded-md table-auto hover:table-fixed">
+              <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Family Name</th>
+                <th>User Name</th>
+                <th>User Type</th>
+                <th>Credits</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-if="masterUser.length === 0">
+                <td colspan="6">
+                  <div class="flex items-center content-center justify-center font-bold">{{ $t('No master user found for this account.') }}</div>
+                </td>
+              </tr>
+              <tr v-else v-for="(user, index) in masterUser" :key="index">
+                <td>{{user.firstName}}</td>
+                <td>{{user.familyName}}</td>
+                <td>{{user.email}}</td>
+                <td>Professional</td>
+                <td>{{ user.credits }}</td>
+                <td>{{ user.status?"Active":"In-Active" }}</td>
+              </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+
+        <!--    -->
+        <div class="grid mt-5 main-grid md:grid-cols-2">
+        <!-- left section -->
+        <div class="flex items-end mb-5 ml-4">
+         <p class="pl-2 text-sm font-semibold">Other Users:</p>
+        </div>
+
+        <!-- Right Section -->
+        <div class="flex justify-end mb-5 mr-10 xs:flex-col">
+          <div>
+            <div class="relative inline-block dropdown">
+              <psytech-button
+                label="Filter"
+                type="outline"
+                @buttonWasClicked="showFilters = !showFilters"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5 mr-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
+                </svg>
+              </psytech-button>
+              <ul
+                class="absolute z-40 w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
+                style="padding: 16px 15px"
+                id="filter-dropdown"
+                v-if="showFilters"
+                v-click-away="closeFilter"
+              >
+                <li class="flex">
+                  <field
+                    label="First Name"
+                    labelFor="account"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="accountName"
+                      type="text"
+                      id="name"
+                      placeholder=" "
+                    />
+                  </field>
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedNameFilter"
+                  ></select-option>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(accountName = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                      label="Family Name"
+                      labelFor="familyName"
+                      :applyExtraInputClass="true"
+                  >
+                    <control
+                        v-model="searchFamilyName"
+                        type="text"
+                        id="address"
+                        placeholder=" "
+                    />
+                  </field>
+
+                  <select-option
+                      :filterDropdown="filterDropdown"
+                      v-model="selectedFamilyNameFilter"
+                  ></select-option>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                        @iconWasClicked="(searchFamilyName = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                    label="User Name"
+                    labelFor="address"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="searchUserName"
+                      type="text"
+                      id="address"
+                      placeholder=" "
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedUserNameFilter"
+                  ></select-option>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(searchUserName = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                    label="Users"
+                    labelFor="users"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="searchedUsers"
+                      type="text"
+                      id="users"
+                      placeholder=" "
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="numberDropdown"
+                    v-model="selectedUsersFilter"
+                  ></select-option>
+
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                    <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
+                  </field> -->
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+                <li class="flex justify-between">
+                  <div class="flex items-center justify-center ml-3">
+                    <a
+                      @click.prevent="clearFilter()"
+                      class="text-xs font-semibold no-underline text-psytechBlue"
+                      >Clear all</a
+                    >
+                  </div>
+                  <psytech-button
+                    label="Apply"
+                    @buttonWasClicked="applyFilter"
+                  ></psytech-button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- search -->
+          <div class="relative pt-2 text-gray-600">
+            <input
+              class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-gray-300 rounded-full border-1 focus:outline-none focus:ring-psytechBlueBtHover"
+              type="search"
+              name="search"
+              placeholder="Search..."
+              v-model="searchText"
+              @input="filteredMainMethod()"
+            />
+            <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
+              <svg
+                class="w-4 h-4 text-gray-600 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                version="1.1"
+                id="Capa_1"
+                x="0px"
+                y="0px"
+                viewBox="0 0 56.966 56.966"
+                style="enable-background: new 0 0 56.966 56.966"
+                xml:space="preserve"
+                width="512px"
+                height="512px"
+              >
+                <path
+                  d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"
+                />
+              </svg>
+            </button>
+          </div>
+          <!-- end search -->
+        </div>
+      </div>
+      <!-- table two -->
+       <div class="mt-2 ml-5">
+          <div class="mr-10 md:pr-12 lg:pr-0">
+             <DataTable
+                :customers="userArray"
+                :rowHover="true"
+                :paginator="true"
+                :rowsPerPageOptions="[10, 20, 30]"
+                :rows="10"
+                :loading="loading"
+                @rowClicked="''"
+                :image='true'
+                tableType="accountUsers"
+              />
+          </div>
+        </div>
+        </TabPanel>
       </TabGroup>
     </div>
   </sticky-header>
 </template>
 
 <script>
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed,onMounted } from "vue";
 import StickyHeader from "@/components/StickyHeader";
 import PsytechButton from "@/components/PsytechButton";
 import DataTable from "@/components/Table.vue";
 import { useStore } from "vuex";
 import store from "../../../store/index";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import SelectOption from "@/components/SelectOption.vue";
+import Field from "@/components/Field.vue";
+import Control from "@/components/Control.vue";
+
 export default {
   beforeRouteEnter(to, from, next) {
     const accountDetail = store.getters["clientControl/getClientDetail"];
@@ -335,6 +608,9 @@ export default {
     StickyHeader,
     PsytechButton,
     DataTable,
+    Field,
+    Control,
+    SelectOption,
     TabGroup,
     TabList,
     Tab,
@@ -346,9 +622,11 @@ export default {
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
-    const customers = ref();
-    const customersTwo = ref();
+    const userArray = ref();
     let showFilters = ref(false);
+    let prevCustomers = ref();
+    let loading = ref();
+    let masterUser = ref();
 
     const formatDate = (value) => {
           return new Date(value).toLocaleDateString("en-US", {
@@ -358,82 +636,252 @@ export default {
           })
       }
 
-    const Data1 = reactive([
-      {
-         "isMasterAccount":false,
-         "loginID":0,
-         "userType":0,
-         "securityLevel":0,
-         "loginAsType":0,
-         "accountName":"4362",
-         "accountId":8723,
-         "masterUserId":-1,
-         "numberOfUsers":0,
-         "creationDate": new Date("2021-12-09T09:16:00Z"),
-         "accountAddress":"Ciklum",
-         "accountDescription":"testing",
-         "distributorId":0,
-         "userId":0
-      }
-    ])
+    onMounted(() => {
+      store
+          .dispatch("clientControl/getAccountUsers",{
+            accountId: accountDetail.value?.accountId??''
+          })
+          .then((res) => {
+            let responseArray = res?.data?.data;
+            userArray.value = responseArray;
+            masterUser.value = userArray.value.filter(item => item.isMasterAccount)
+            userArray.value = userArray.value.filter(item => !item.isMasterAccount)
+            prevCustomers.value = userArray.value;
+            loading.value = false;
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          });
+    });
 
-    const Data = reactive([
+
+    //Search and filters starts from here
+    let searchText = ref("");
+    let prevMainSearchHistry = ref("");
+    let prevSearched = ref();
+    let selectedNameFilter = ref("contains");
+    let selectedUserNameFilter = ref("contains");
+    let selectedFamilyNameFilter = ref("contains");
+    let selectedUsersFilter = ref("isEqualTo");
+    let searchedUsers = ref("");
+    let accountName = ref("");
+    let searchUserName = ref("");
+    let searchFamilyName = ref("");
+    const filterDropdown = reactive([
       {
-         "isMasterAccount":false,
-         "loginID":0,
-         "userType":0,
-         "securityLevel":0,
-         "loginAsType":0,
-         "accountName":"4362",
-         "accountId":8723,
-         "masterUserId":-1,
-         "numberOfUsers":0,
-         "creationDate": new Date("2021-12-09T09:16:00Z"),
-         "accountAddress":"Ciklum",
-         "accountDescription":"testing",
-         "distributorId":0,
-         "userId":0
+        text: "Is equal to",
+        value: "isEqualTo",
       },
       {
-         "isMasterAccount":false,
-         "loginID":0,
-         "userType":0,
-         "securityLevel":0,
-         "loginAsType":0,
-         "accountName":"8puWn3Fi6uz5ilab5M7EOKGvtY1QlzPBeM4SbTJ8I7OqQ29BS5OQdCh9Akwg6J91PgzqS4xcTkfts47igyOhv23mE7ofWp6GQIfMMEfhMUUact4DKQN6INh1p1TnuTpyIHf5idmiT1i2WmIj2Ne8kn37MWUFPNVLrLt4pr6MRI1CC8bpVWZX2payouo3ixxzikZGzjmD",
-         "accountId":8743,
-         "masterUserId":-1,
-         "numberOfUsers":0,
-         "creationDate": new Date("2021-12-10T11:37:00Z"),
-         "accountAddress":"8puWn3Fi6uz5ilab5M7EOKGvtY1QlzPBeM4SbTJ8I7OqQ29BS5OQdCh9Akwg6J91PgzqS4xcTkfts47igyOhv23mE7ofWp6GQIfMMEfhMUUact4DKQN6INh1p1TnuTpyIHf5idmiT1i2WmIj2Ne8kn37MWUFPNVLrLt4pr6MRI1CC8bpVWZX2payouo3ixxzikZGzjmDXNOpQneLeW9EOG1JkuZ6h9DenTwE8kIuYOqOhwBtPIcetyn6vJJZUSL",
-         "accountDescription":"8puWn3Fi6uz5ilab5M7EOKGvtY1QlzPBeM4SbTJ8I7OqQ29BS5OQdCh9Akwg6J91PgzqS4xcTkfts47igyOhv23mE7ofWp6GQIfMMEfhMUUact4DKQN6INh1p1TnuTpyIHf5idmiT1i2WmIj2Ne8kn37MWUFPNVLrLt4pr6MRI1CC8bpVWZX2payouo3ixxzikZGzjmDXNOpQneLeW9EOG1JkuZ6h9DenTwE8kIuYOqOhwBtPIcetyn6vJJZUSL",
-         "distributorId":0,
-         "userId":0
+        text: "Is not equal to",
+        value: "isNotEqualTo",
+      },
+      {
+        text: "Starts with",
+        value: "startsWith",
+      },
+      {
+        text: "Contains",
+        value: "contains",
+      },
+      {
+        text: "Does not contain",
+        value: "notContain",
+      },
+      {
+        text: "Ends With",
+        value: "endsWith",
       },
     ]);
 
-     Data1.forEach(
-            (customer) => (
-              (customer.date = new Date(customer.creationDate)),
-              (customer.name = customer.accountName),
-              (customer.address = customer.accountAddress),
-              (customer.users = customer.numberOfUsers)
-            )
-          );
+    const numberDropdown = reactive([
+      {
+        text: "Is equal to",
+        value: "isEqualTo",
+      },
+      {
+        text: "Is not equal to",
+        value: "isNotEqualTo",
+      },
+      {
+        text: "Is less than",
+        value: "lessThen",
+      },
+      {
+        text: "Is greater than",
+        value: "greaterThen",
+      },
+    ]);
 
-    customers.value =  Data1;
+    const filteredMainMethod = () => {
+      // var sortKey = this.sortKey
+      let value = searchText.value && searchText.value.toLowerCase();
+      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
+      if (!searchText.value) {
+        prevMainSearchHistry.value = [];
+        applyFilter();
+        return;
+      }
+      // fileds to be check for filters
+      if (searchedUsers.value || accountName.value || searchUserName.value) {
+        userArray.value = filterMethod(prevSearched.value, value);
+      } else {
+        // default, When no filters is applied
+        userArray.value = filterMethod(prevCustomers.value, value);
+        prevMainSearchHistry.value = userArray.value;
+      }
+    };
+    const applyFilter = () => {
+      let filteredData = [];
+      if (searchText.value) {
+        filteredData = prevMainSearchHistry.value;
+      } else {
+        filteredData = prevCustomers.value;
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (accountName.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.firstName && accountName.value
+                  ? false
+                  : accountName.value
+                  ? subFilter(
+                      val.firstName.toLowerCase(),
+                      accountName.value.toLowerCase().trim(),
+                      selectedNameFilter.value
+                  )
+                  : true
+          ) {
+            return true;
+          }
+        });
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searchUserName.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.address && searchUserName.value
+                  ? false
+                  : !!(searchUserName.value
+                  ? subFilter(
+                      val.address.toLowerCase(),
+                      searchUserName.value.toLowerCase().trim(),
+                      selectedUserNameFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searchFamilyName.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.familyName && searchFamilyName.value
+                  ? false
+                  : !!(searchFamilyName.value
+                  ? subFilter(
+                      val.familyName.toLowerCase(),
+                      searchFamilyName.value.toLowerCase().trim(),
+                      selectedFamilyNameFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
 
-    Data.forEach(
-        (customer) => (
-          (customer.date = new Date(customer.creationDate)),
-          (customer.name = customer.accountName),
-          (customer.address = customer.accountAddress),
-          (customer.users = customer.numberOfUsers)
-        )
-      );
-    customersTwo.value = Data;
+      // Make sure search value has some valid value, then do filtering
+      if (searchedUsers.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.users && val.users != 0 && searchedUsers.value
+                  ? false
+                  : !!(searchedUsers.value
+                  ? subFilter(
+                      +val.users,
+                      +searchedUsers.value,
+                      selectedUsersFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
 
-    return { showFilters, accountDetail, formatDate, customers, customersTwo };
+      // CHECK wheather record is found againts applied filters
+      userArray.value = filteredData;
+      prevSearched.value = filteredData;
+    };
+    const filterMethod = (data, value) => {
+      return data.filter(function (customer) {
+        return (
+            customer.firstName.toLowerCase().indexOf(value) > -1 ||
+            customer.familyName.toLowerCase().indexOf(value) > -1 ||
+            customer.email.toLowerCase().indexOf(value) > -1 ||
+            customer.credits == value
+        );
+      });
+    };
+    const clearFilter = () => {
+      searchText.value = "";
+      accountName.value = "";
+      searchUserName.value = "";
+      searchedUsers.value = "";
+      searchFamilyName.value = "";
+      userArray.value = prevCustomers.value;
+      prevSearched.value = [];
+    };
+
+    const subFilter = (item, value, filter) => {
+      const selectedFilter = filter;
+      if (typeof value == "number" || typeof value == "string") {
+        if (selectedFilter == "isNotEqualTo") {
+          return item != value;
+        } else if (selectedFilter == "isEqualTo") {
+          return item == value;
+        } else if (selectedFilter == "lessThen") {
+          return item < value;
+        } else if (selectedFilter == "greaterThen") {
+          return item > value;
+        }
+      }
+      if (typeof value == "string") {
+        if (selectedFilter == "contains") {
+          return item.includes(value);
+        } else if (selectedFilter == "startsWith") {
+          return item.startsWith(value);
+        } else if (selectedFilter == "endsWith") {
+          return item.endsWith(value);
+        } else if (selectedFilter == "notContain") {
+          return !item.includes(value);
+        }
+      }
+    };
+
+
+
+    return { showFilters, accountDetail, formatDate, masterUser, userArray,
+      searchText,
+      filteredMainMethod,
+      applyFilter,
+      clearFilter,
+      searchedUsers,
+      prevMainSearchHistry,
+      prevSearched,
+      numberDropdown,
+      filterDropdown,
+      accountName,
+      searchUserName,
+      selectedUsersFilter,
+      selectedNameFilter,
+      selectedUserNameFilter,
+      searchFamilyName,
+      selectedFamilyNameFilter,
+    };
   },
 };
 </script>
@@ -443,8 +891,9 @@ export default {
   stroke: #008ac0;
   color: #008ac0;
 }
-.truncate > div {
-    white-space:pre-wrap;
-    word-wrap:break-word;
+#filter-dropdown {
+  min-width: 465px;
+  padding: 16px 15px;
+  box-shadow: #3755634d 0px 8px 30px;
 }
 </style>

@@ -8,7 +8,6 @@
         <path :d="icon"/>
       </svg>
       </span>
-
         {{ $t(title) }}
       </h1>
     </slot>
