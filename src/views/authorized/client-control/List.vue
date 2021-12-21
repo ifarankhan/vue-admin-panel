@@ -200,16 +200,19 @@
         </div>
       </div>
     </sticky-header>
-    <DataTable
-      :customers="customers"
-      :paginator="true"
-      :rows="50"
-      :rowHover="true"
-      :loading="loading"
-      :rowsPerPageOptions="[10, 25, 50]"
-      @rowClicked="redirectToDetail($event)"
-      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-    />
+    <div class="fixedheader">
+      <DataTable
+          :customers="customers"
+          :paginator="true"
+          :rows="50"
+          :rowHover="true"
+          :loading="loading"
+          :rowsPerPageOptions="[10, 25, 50]"
+          @rowClicked="redirectToDetail($event)"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+      />
+    </div>
+
 
     <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" :loading="loading"
@@ -293,7 +296,7 @@ export default {
     });
     onMounted(() => {
       store
-        .dispatch("clientControl/getAccountUsers")
+        .dispatch("clientControl/getClientAccount")
         .then((res) => {
           let responseArray = res?.data?.data;
           customers.value = responseArray;

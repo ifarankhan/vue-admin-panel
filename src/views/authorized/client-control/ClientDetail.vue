@@ -55,7 +55,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Account Users (03)
+                  Account Users ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers :'' }})
                 </button>
               </Tab>
             </TabList>
@@ -340,13 +340,35 @@
         <div class="mt-4 mb-2 ml-5">
           <p class="pl-2 text-sm font-semibold">Master User:</p>
           <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
-             <DataTable
-                :customers="customers"
-                :rowHover="true"
-                :loading="loading"
-                @rowClicked="''"
-                :image='true'
-              />
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <table class="table-auto hover:table-fixed border border-gray-200 rounded-md">
+              <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Family Name</th>
+                <th>User Name</th>
+                <th>User Type</th>
+                <th>Credits</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-if="masterUser.length === 0">
+                <td colspan="6">
+                  <div class="content-center justify-center flex items-center font-bold">{{ $t('No master user found for this account.') }}</div>
+                </td>
+              </tr>
+              <tr v-else v-for="(user, index) in masterUser" :key="index">
+                <td>{{user.firstName}}</td>
+                <td>{{user.familyName}}</td>
+                <td>{{user.email}}</td>
+                <td>Professional</td>
+                <td>{{ user.credits }}</td>
+                <td>{{ user.status?"Active":"In-Active" }}</td>
+              </tr>
+              </tbody>
+            </table>
+            </div>
           </div>
         </div>
 
@@ -354,7 +376,7 @@
         <div class="grid mt-5 main-grid md:grid-cols-2">
         <!-- left section -->
         <div class="flex items-end mb-5 ml-4">
-         <p class="pl-2 text-sm font-semibold">Master User:</p>
+         <p class="pl-2 text-sm font-semibold">Other Users:</p>
         </div>
 
         <!-- Right Section -->
@@ -382,7 +404,7 @@
                 </svg>
               </psytech-button>
               <ul
-                class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
+                class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu z-40"
                 style="padding: 16px 15px"
                 id="filter-dropdown"
                 v-if="showFilters"
@@ -527,11 +549,15 @@
        <div class="mt-2 ml-5">
           <div class="mr-10 md:pr-12 lg:pr-0">
              <DataTable
-                :customers="customersTwo"
+                :customers="userArray"
                 :rowHover="true"
+                :paginator="true"
+                :rowsPerPageOptions="[10, 20, 30]"
+                :rows="10"
                 :loading="loading"
                 @rowClicked="''"
                 :image='true'
+                tableType="accountUsers"
               />
           </div>
         </div>
@@ -542,13 +568,17 @@
 </template>
 
 <script>
-import { reactive, ref, computed } from "vue";
+import { reactive, ref, computed,onMounted } from "vue";
 import StickyHeader from "@/components/StickyHeader";
 import PsytechButton from "@/components/PsytechButton";
 import DataTable from "@/components/Table.vue";
 import { useStore } from "vuex";
 import store from "../../../store/index";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import SelectOption from "@/components/SelectOption.vue";
+import Field from "@/components/Field.vue";
+import Control from "@/components/Control.vue";
+
 export default {
   beforeRouteEnter(to, from, next) {
     const accountDetail = store.getters["clientControl/getClientDetail"];
@@ -561,6 +591,9 @@ export default {
     StickyHeader,
     PsytechButton,
     DataTable,
+    Field,
+    Control,
+    SelectOption,
     TabGroup,
     TabList,
     Tab,
@@ -572,9 +605,11 @@ export default {
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
-    const customers = ref();
-    const customersTwo = ref();
+    const userArray = ref();
     let showFilters = ref(false);
+    let prevCustomers = ref();
+    let loading = ref();
+    let masterUser = ref();
 
     const formatDate = (value) => {
           return new Date(value).toLocaleDateString("en-US", {
@@ -584,82 +619,227 @@ export default {
           })
       }
 
-    const Data1 = reactive([
-      {
-         "isMasterAccount":false,
-         "loginID":0,
-         "userType":0,
-         "securityLevel":0,
-         "loginAsType":0,
-         "accountName":"4362",
-         "accountId":8723,
-         "masterUserId":-1,
-         "numberOfUsers":0,
-         "creationDate": new Date("2021-12-09T09:16:00Z"),
-         "accountAddress":"Ciklum",
-         "accountDescription":"testing",
-         "distributorId":0,
-         "userId":0
-      }
-    ])
+    onMounted(() => {
+      store
+          .dispatch("clientControl/getAccountUsers",{
+            accountId: accountDetail.value?.accountId??''
+          })
+          .then((res) => {
+            let responseArray = res?.data?.data;
+            userArray.value = responseArray;
+            masterUser.value = userArray.value.filter(item => item.isMasterAccount)
+            userArray.value = userArray.value.filter(item => !item.isMasterAccount)
+            prevCustomers.value = userArray.value;
+            loading.value = false;
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          });
+    });
 
-    const Data = reactive([
+
+    //Search and filters starts from here
+    let searchText = ref("");
+    let prevMainSearchHistry = ref("");
+    let prevSearched = ref();
+    let selectedNameFilter = ref("contains");
+    let selectedaddressFilter = ref("contains");
+    let selectedUsersFilter = ref("isEqualTo");
+    let searchedUsers = ref("");
+    let accountName = ref("");
+    let searchedaddress = ref("");
+    const filterDropdown = reactive([
       {
-         "isMasterAccount":false,
-         "loginID":0,
-         "userType":0,
-         "securityLevel":0,
-         "loginAsType":0,
-         "accountName":"4362",
-         "accountId":8723,
-         "masterUserId":-1,
-         "numberOfUsers":0,
-         "creationDate": new Date("2021-12-09T09:16:00Z"),
-         "accountAddress":"Ciklum",
-         "accountDescription":"testing",
-         "distributorId":0,
-         "userId":0
+        text: "Is equal to",
+        value: "isEqualTo",
       },
       {
-         "isMasterAccount":false,
-         "loginID":0,
-         "userType":0,
-         "securityLevel":0,
-         "loginAsType":0,
-         "accountName":"8puWn3Fi6uz5ilab5M7EOKGvtY1QlzPBeM4SbTJ8I7OqQ29BS5OQdCh9Akwg6J91PgzqS4xcTkfts47igyOhv23mE7ofWp6GQIfMMEfhMUUact4DKQN6INh1p1TnuTpyIHf5idmiT1i2WmIj2Ne8kn37MWUFPNVLrLt4pr6MRI1CC8bpVWZX2payouo3ixxzikZGzjmD",
-         "accountId":8743,
-         "masterUserId":-1,
-         "numberOfUsers":0,
-         "creationDate": new Date("2021-12-10T11:37:00Z"),
-         "accountAddress":"8puWn3Fi6uz5ilab5M7EOKGvtY1QlzPBeM4SbTJ8I7OqQ29BS5OQdCh9Akwg6J91PgzqS4xcTkfts47igyOhv23mE7ofWp6GQIfMMEfhMUUact4DKQN6INh1p1TnuTpyIHf5idmiT1i2WmIj2Ne8kn37MWUFPNVLrLt4pr6MRI1CC8bpVWZX2payouo3ixxzikZGzjmDXNOpQneLeW9EOG1JkuZ6h9DenTwE8kIuYOqOhwBtPIcetyn6vJJZUSL",
-         "accountDescription":"8puWn3Fi6uz5ilab5M7EOKGvtY1QlzPBeM4SbTJ8I7OqQ29BS5OQdCh9Akwg6J91PgzqS4xcTkfts47igyOhv23mE7ofWp6GQIfMMEfhMUUact4DKQN6INh1p1TnuTpyIHf5idmiT1i2WmIj2Ne8kn37MWUFPNVLrLt4pr6MRI1CC8bpVWZX2payouo3ixxzikZGzjmDXNOpQneLeW9EOG1JkuZ6h9DenTwE8kIuYOqOhwBtPIcetyn6vJJZUSL",
-         "distributorId":0,
-         "userId":0
+        text: "Is not equal to",
+        value: "isNotEqualTo",
+      },
+      {
+        text: "Starts with",
+        value: "startsWith",
+      },
+      {
+        text: "Contains",
+        value: "contains",
+      },
+      {
+        text: "Does not contain",
+        value: "notContain",
+      },
+      {
+        text: "Ends With",
+        value: "endsWith",
       },
     ]);
 
-     Data1.forEach(
-            (customer) => (
-              (customer.date = new Date(customer.creationDate)),
-              (customer.name = customer.accountName),
-              (customer.address = customer.accountAddress),
-              (customer.users = customer.numberOfUsers)
-            )
-          );
+    const numberDropdown = reactive([
+      {
+        text: "Is equal to",
+        value: "isEqualTo",
+      },
+      {
+        text: "Is not equal to",
+        value: "isNotEqualTo",
+      },
+      {
+        text: "Is less than",
+        value: "lessThen",
+      },
+      {
+        text: "Is greater than",
+        value: "greaterThen",
+      },
+    ]);
 
-    customers.value =  Data1;
+    const filteredMainMethod = () => {
+      // var sortKey = this.sortKey
+      let value = searchText.value && searchText.value.toLowerCase();
+      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
+      if (!searchText.value) {
+        prevMainSearchHistry.value = [];
+        applyFilter();
+        return;
+      }
+      // fileds to be check for filters
+      if (searchedUsers.value || accountName.value || searchedaddress.value) {
+        userArray.value = filterMethod(prevSearched.value, value);
+      } else {
+        // default, When no filters is applied
+        userArray.value = filterMethod(prevCustomers.value, value);
+        prevMainSearchHistry.value = userArray.value;
+      }
+    };
+    const applyFilter = () => {
+      let filteredData = [];
+      if (searchText.value) {
+        filteredData = prevMainSearchHistry.value;
+      } else {
+        filteredData = prevCustomers.value;
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (accountName.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.name && accountName.value
+                  ? false
+                  : accountName.value
+                  ? subFilter(
+                      val.name.toLowerCase(),
+                      accountName.value.toLowerCase().trim(),
+                      selectedNameFilter.value
+                  )
+                  : true
+          ) {
+            return true;
+          }
+        });
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searchedaddress.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.address && searchedaddress.value
+                  ? false
+                  : !!(searchedaddress.value
+                  ? subFilter(
+                      val.address.toLowerCase(),
+                      searchedaddress.value.toLowerCase().trim(),
+                      selectedaddressFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
 
-    Data.forEach(
-        (customer) => (
-          (customer.date = new Date(customer.creationDate)),
-          (customer.name = customer.accountName),
-          (customer.address = customer.accountAddress),
-          (customer.users = customer.numberOfUsers)
-        )
-      );
-    customersTwo.value = Data;
+      // Make sure search value has some valid value, then do filtering
+      if (searchedUsers.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.users && val.users != 0 && searchedUsers.value
+                  ? false
+                  : !!(searchedUsers.value
+                  ? subFilter(
+                      +val.users,
+                      +searchedUsers.value,
+                      selectedUsersFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
 
-    return { showFilters, accountDetail, formatDate, customers, customersTwo };
+      // CHECK wheather record is found againts applied filters
+      userArray.value = filteredData;
+      prevSearched.value = filteredData;
+    };
+    const filterMethod = (data, value) => {
+      return data.filter(function (customer) {
+        return (
+            customer.firstName.toLowerCase().indexOf(value) > -1 ||
+            customer.familyName.toLowerCase().indexOf(value) > -1 ||
+            customer.email.toLowerCase().indexOf(value) > -1 ||
+            customer.credits == value
+        );
+      });
+    };
+    const clearFilter = () => {
+      searchText.value = "";
+      accountName.value = "";
+      searchedaddress.value = "";
+      searchedUsers.value = "";
+      userArray.value = prevCustomers.value;
+      prevSearched.value = [];
+    };
+
+    const subFilter = (item, value, filter) => {
+      const selectedFilter = filter;
+      if (typeof value == "number" || typeof value == "string") {
+        if (selectedFilter == "isNotEqualTo") {
+          return item != value;
+        } else if (selectedFilter == "isEqualTo") {
+          return item == value;
+        } else if (selectedFilter == "lessThen") {
+          return item < value;
+        } else if (selectedFilter == "greaterThen") {
+          return item > value;
+        }
+      }
+      if (typeof value == "string") {
+        if (selectedFilter == "contains") {
+          return item.includes(value);
+        } else if (selectedFilter == "startsWith") {
+          return item.startsWith(value);
+        } else if (selectedFilter == "endsWith") {
+          return item.endsWith(value);
+        } else if (selectedFilter == "notContain") {
+          return !item.includes(value);
+        }
+      }
+    };
+
+
+
+    return { showFilters, accountDetail, formatDate, masterUser, userArray,
+      searchText,
+      filteredMainMethod,
+      searchedUsers,
+      prevMainSearchHistry,
+      prevSearched,
+      numberDropdown,
+      filterDropdown,
+      accountName,
+      searchedaddress,
+      selectedUsersFilter,
+      selectedNameFilter,
+      selectedaddressFilter,
+    };
   },
 };
 </script>
@@ -668,5 +848,10 @@ export default {
 .div-hover:hover svg line {
   stroke: #008ac0;
   color: #008ac0;
+}
+#filter-dropdown {
+  min-width: 465px;
+  padding: 16px 15px;
+  box-shadow: #3755634d 0px 8px 30px;
 }
 </style>
