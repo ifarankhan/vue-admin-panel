@@ -832,6 +832,7 @@ export default {
       accountName.value = "";
       searchUserName.value = "";
       searchFamilyName.value = "";
+      searchedCredits.value="";
       userArray.value = prevCustomers.value;
       prevSearched.value = [];
     };
