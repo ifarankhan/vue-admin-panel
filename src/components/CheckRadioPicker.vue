@@ -2,6 +2,7 @@
   <div class="flex flex-wrap justify-start -mb-3" :class="{'flex-col':column}">
     <label v-for="(value, key) in options" :key="key" class="block pl-4 mb-3 mr-6 last:mr-0 label">
       <input
+        :disabled="disabled"
         :type="inputType"
         :name="name"
         v-model="computedValue"
@@ -26,6 +27,10 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    disabled:{
+      type: String,
+      default: false
     },
     type: {
       type: String,
