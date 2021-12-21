@@ -312,10 +312,9 @@
 
         <TabPanel>
             <div class="mt-4 ml-5">
+               <!-- $router.push({ name: 'client-control-add-user' }) -->
           <psytech-button
-            @buttonWasClicked="
-              $router.push({ name: 'client-control-add-user' })
-            "
+            @buttonWasClicked="''"
             label="Add User"
             type="outline"
           >
@@ -340,8 +339,8 @@
         <div class="mt-4 mb-2 ml-5">
           <p class="pl-2 text-sm font-semibold">Master User:</p>
           <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
-            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table class="table-auto hover:table-fixed border border-gray-200 rounded-md">
+            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+            <table class="border border-gray-200 rounded-md table-auto hover:table-fixed">
               <thead>
               <tr>
                 <th>First Name</th>
@@ -355,7 +354,7 @@
               <tbody>
               <tr v-if="masterUser.length === 0">
                 <td colspan="6">
-                  <div class="content-center justify-center flex items-center font-bold">{{ $t('No master user found for this account.') }}</div>
+                  <div class="flex items-center content-center justify-center font-bold">{{ $t('No master user found for this account.') }}</div>
                 </td>
               </tr>
               <tr v-else v-for="(user, index) in masterUser" :key="index">
@@ -404,7 +403,7 @@
                 </svg>
               </psytech-button>
               <ul
-                class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu z-40"
+                class="absolute z-40 w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
                 style="padding: 16px 15px"
                 id="filter-dropdown"
                 v-if="showFilters"

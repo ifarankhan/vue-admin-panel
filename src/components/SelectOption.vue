@@ -1,15 +1,15 @@
 <template>
-  <Listbox as="div" v-model="computedValue" class="extra-select-class" style="margin-top: 0.55rem">
+  <Listbox as="div" v-model="computedValue" :class="[customeWidth?'extra-select-class-width' : 'extra-select-class']" style="margin-top: 0.55rem">
     <div class="relative">
       <ListboxButton
        style="height: 45px; min-height: 45px; max-height: 45px"
        class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:bg-opacity-50 focus:outline-none focus:ring-none focus:border-0 sm:text-sm"
        >
           <div class="-mt-.25 text-xs font-semibold text-psytechBlue">
-              Filter Type
+              {{ labelText }}
           </div>
           <div class="text-xs font-semibold text-gray-800">
-              {{ filterDropdown?.find(item=> item.value == computedValue).text??'' }}
+              {{ filterDropdown?.find(item=> item.value == computedValue)?.text }}
           </div>
         <!-- <span class="flex items-center">
           <img :src="selected.avatar" alt="" class="flex-shrink-0 w-6 h-6 rounded-full" />
@@ -56,6 +56,14 @@ export default {
     type: {
       type: String,
       default: "text",
+    },
+    customeWidth:{
+      type: String,
+      default: false
+    },
+    labelText:{
+      type: String,
+      default: 'Filter Type'
     },
     filterDropdown: Array,
     modelValue: {
@@ -105,6 +113,11 @@ export default {
 
 .extra-select-class{
   width: 287px;
+  margin-right: 15px;
+}
+
+.extra-select-class-width{
+  width: 96%;
   margin-right: 15px;
 }
 </style>

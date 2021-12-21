@@ -1,5 +1,5 @@
 <template>
-  <div class="px-8 mt-1">
+  <div class="px-8">
     <sticky-header>
       <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
       <div class="grid main-grid md:grid-cols-2">

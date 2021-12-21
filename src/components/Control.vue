@@ -31,20 +31,28 @@
     v-model="computedValue"
     :class="inputElClass"
     v-on:keyup.enter="$emit('enterPressed')"
-     class="text-xs font-medium"
+    class="text-xs font-medium"
     autocomplete="off"
     style="height: 45px; min-height: 45px; max-height: 45px"
   />
+    <!-- <control-icon
+    @iconWasClicked="$emit('iconWasClicked')"
+    v-if="icon"
+    :icon="icon"
+    :h="controlIconH"
+  /> -->
 </template>
 <script>
 import { computed } from "vue";
+import ControlIcon from '@/components/ControlIcon'
 export default {
-  emits: ["update:modelValue", "right-icon-click"],
+  emits: ["update:modelValue", "right-icon-click","iconWasClicked"],
   props: {
     type: {
       type: String,
       default: "text",
     },
+    icon: String,
     options: Array,
     id: {
       type: String,
@@ -53,6 +61,9 @@ export default {
       type: [String, Number, Boolean, Array, Object],
       default: "",
     },
+  },
+  components:{
+    ControlIcon
   },
   setup(props, { emit }) {
      let extraClasses = props.type === "textarea"? 'h-32':'h-14';
@@ -67,6 +78,8 @@ export default {
       props.options ? "select" : props.type
     );
 
+    const controlIconH = computed(() => props.type === 'textarea' ? 'h-full' : 'h-12')
+
     const inputElClass = computed(() => {
       const base = [
         'w-full m-w-full border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"',
@@ -80,6 +93,7 @@ export default {
       computedValue,
       inputElClass,
       computedType,
+      controlIconH,
       extraClasses
     };
   },
