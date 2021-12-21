@@ -34,6 +34,21 @@ export default {
           "m-2 bg-transparent hover:bg-psytechBlueBtHover text-psytechBlue hover:text-white border-psytechBlue hover:border-transparent"
         );
       }
+      if (props.type == "dark") {
+        base.push(
+          "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechDark text-white"
+        );
+      }
+      if(props.type == 'light'){
+         base.push(
+          "mt-2 mr-2 inline-flex items-center text-sm bg-psytechLight text-white px-10 py-1"
+        );
+      }
+      if(props.type == 'black'){
+         base.push(
+          "mt-2 mr-2 inline-flex items-center text-sm bg-psytechBlack text-white px-10 py-1"
+        );
+      }
       if (props.type === "outline") {
         base.push(
           "mt-2 mr-2 inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:border-psytechBlue hover:bg-psytechBlueBtHover"
