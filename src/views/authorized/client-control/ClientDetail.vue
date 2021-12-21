@@ -412,7 +412,7 @@
               >
                 <li class="flex">
                   <field
-                    label="Name"
+                    label="First Name"
                     labelFor="account"
                     :applyExtraInputClass="true"
                   >
@@ -427,9 +427,6 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedNameFilter"
                   ></select-option>
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
                       @iconWasClicked="(accountName = ''), applyFilter()"
@@ -439,12 +436,37 @@
 
                 <li class="flex">
                   <field
-                    label="Address"
+                      label="Family Name"
+                      labelFor="familyName"
+                      :applyExtraInputClass="true"
+                  >
+                    <control
+                        v-model="searchFamilyName"
+                        type="text"
+                        id="address"
+                        placeholder=" "
+                    />
+                  </field>
+
+                  <select-option
+                      :filterDropdown="filterDropdown"
+                      v-model="selectedFamilyNameFilter"
+                  ></select-option>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                        @iconWasClicked="(searchFamilyName = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                    label="User Name"
                     labelFor="address"
                     :applyExtraInputClass="true"
                   >
                     <control
-                      v-model="searchedaddress"
+                      v-model="searchUserName"
                       type="text"
                       id="address"
                       placeholder=" "
@@ -453,15 +475,11 @@
 
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedaddressFilter"
+                    v-model="selectedUserNameFilter"
                   ></select-option>
-
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedaddressFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedaddress = ''), applyFilter()"
+                      @iconWasClicked="(searchUserName = ''), applyFilter()"
                     />
                   </div>
                 </li>
@@ -643,11 +661,13 @@ export default {
     let prevMainSearchHistry = ref("");
     let prevSearched = ref();
     let selectedNameFilter = ref("contains");
-    let selectedaddressFilter = ref("contains");
+    let selectedUserNameFilter = ref("contains");
+    let selectedFamilyNameFilter = ref("contains");
     let selectedUsersFilter = ref("isEqualTo");
     let searchedUsers = ref("");
     let accountName = ref("");
-    let searchedaddress = ref("");
+    let searchUserName = ref("");
+    let searchFamilyName = ref("");
     const filterDropdown = reactive([
       {
         text: "Is equal to",
@@ -704,7 +724,7 @@ export default {
         return;
       }
       // fileds to be check for filters
-      if (searchedUsers.value || accountName.value || searchedaddress.value) {
+      if (searchedUsers.value || accountName.value || searchUserName.value) {
         userArray.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
@@ -723,11 +743,11 @@ export default {
       if (accountName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.name && accountName.value
+              !val.firstName && accountName.value
                   ? false
                   : accountName.value
                   ? subFilter(
-                      val.name.toLowerCase(),
+                      val.firstName.toLowerCase(),
                       accountName.value.toLowerCase().trim(),
                       selectedNameFilter.value
                   )
@@ -738,16 +758,34 @@ export default {
         });
       }
       // Make sure search value has some valid value, then do filtering
-      if (searchedaddress.value) {
+      if (searchUserName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.address && searchedaddress.value
+              !val.address && searchUserName.value
                   ? false
-                  : !!(searchedaddress.value
+                  : !!(searchUserName.value
                   ? subFilter(
                       val.address.toLowerCase(),
-                      searchedaddress.value.toLowerCase().trim(),
-                      selectedaddressFilter.value
+                      searchUserName.value.toLowerCase().trim(),
+                      selectedUserNameFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searchFamilyName.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.familyName && searchFamilyName.value
+                  ? false
+                  : !!(searchFamilyName.value
+                  ? subFilter(
+                      val.familyName.toLowerCase(),
+                      searchFamilyName.value.toLowerCase().trim(),
+                      selectedFamilyNameFilter.value
                   )
                   : true)
           ) {
@@ -792,8 +830,9 @@ export default {
     const clearFilter = () => {
       searchText.value = "";
       accountName.value = "";
-      searchedaddress.value = "";
+      searchUserName.value = "";
       searchedUsers.value = "";
+      searchFamilyName.value = "";
       userArray.value = prevCustomers.value;
       prevSearched.value = [];
     };
@@ -829,16 +868,20 @@ export default {
     return { showFilters, accountDetail, formatDate, masterUser, userArray,
       searchText,
       filteredMainMethod,
+      applyFilter,
+      clearFilter,
       searchedUsers,
       prevMainSearchHistry,
       prevSearched,
       numberDropdown,
       filterDropdown,
       accountName,
-      searchedaddress,
+      searchUserName,
       selectedUsersFilter,
       selectedNameFilter,
-      selectedaddressFilter,
+      selectedUserNameFilter,
+      searchFamilyName,
+      selectedFamilyNameFilter,
     };
   },
 };
