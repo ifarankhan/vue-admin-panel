@@ -825,6 +825,7 @@ export default {
         }, 
         trainingdetails: { 
           required: helpers.withMessage("Detail is required", required),
+          maxLength: helpers.withMessage("Detail is required", maxLength(255)),
         },
         credits: { 
           minValue: helpers.withMessage("Update Amount should be between 20 to 1000",minValue(20)),
