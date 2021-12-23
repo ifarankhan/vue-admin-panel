@@ -1,6 +1,7 @@
 <template>
-  <sticky-header>
-    <div class="grid grid-cols-2 md:px-2">
+  <!-- <sticky-header> -->
+<div class="pt-10">
+      <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer "
@@ -21,7 +22,7 @@
             />
           </svg>
         </div>
-        <div class="ml-3 font-bold text-medium">{{ accountDetail && accountDetail.accountName }} </div>
+        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.accountName }} </div>
       </div>
       <div class="mr-11 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
@@ -312,9 +313,8 @@
 
         <TabPanel>
             <div class="mt-4 ml-5">
-               <!-- $router.push({ name: 'client-control-add-user' }) -->
           <psytech-button
-            @buttonWasClicked="''"
+            @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
             label="Add User"
             type="outline"
           >
@@ -581,7 +581,8 @@
         </TabPanel>
       </TabGroup>
     </div>
-  </sticky-header>
+</div>
+  <!-- </sticky-header> -->
 </template>
 
 <script>
