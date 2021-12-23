@@ -67,7 +67,13 @@ const actions = {
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload )
-    }
+    },
+    async postAddAccountUser({state},payload){
+      payload.distributorid = state.clientDetail.distributorId;
+      payload.accountid = state.clientDetail.accountId;
+      console.log("payloadpayload",payload)
+      return private_url.post('add-account-user', payload )
+  }
 }
 
 export default {

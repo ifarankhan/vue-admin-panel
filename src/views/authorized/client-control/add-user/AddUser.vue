@@ -1,4 +1,5 @@
 <template>
+ <Loader v-if="loader" :toBeBigger="true" />
   <div class="p-5">
       <h1 class="pb-3 pl-6 mt-10 ml-1 text-2xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white">
       <span>
@@ -240,7 +241,7 @@
             <span class="ml-6 text-sm">{{ item.description }}</span>
           </div>
           <div class="mt-5">
-              <error-span :error="v$.tests"></error-span>
+              <error-span :error="v$.traininglevel"></error-span>
           </div>
         </div>
         <!--  -->
@@ -270,7 +271,7 @@
               <span class="inline-block w-full">
                 <error-span :error="v$.trainingprovider"></error-span>
               </span>
-              <span class="inline-block w-full ml-16">
+              <span class="inline-block w-full ml-20">
                 <error-span :error="v$.trainingyear"></error-span>
               </span>
           </div>
@@ -329,7 +330,7 @@
           <div class="grid grid-cols-4 gap-8 pl-4 mt-2" v-if="collapsable.tests">
             <div v-for="(item, index) in testsArray" :key="index"> 
               <check-radio-picker
-                name="sample-checkbox"
+                name="tests-checkbox"
                 v-model="item.isDefaultTest"
                 setValue="another"
                 :options="{ [item.testID]: item.testID }"
@@ -356,8 +357,8 @@
           <div class="grid grid-cols-4 gap-8 pl-4 mt-2" v-if="collapsable.batteries">
             <div v-for="(item, index) in battriesArray" :key="index"> 
               <check-radio-picker
-                name="sample-checkbox"
-                v-model="item.batteryID"
+                name="batteries-checkbox"
+                v-model="item.isDefaultBattery"
                 setValue="another"
                 :options="{ [item.batteryID]: item.batteryTitle }"
               />
@@ -383,7 +384,7 @@
           <div class="grid grid-cols-4 gap-8 pl-4 mt-2" v-if="collapsable.solutions">
             <div v-for="(item, index) in solutionsArray" :key="index"> 
               <check-radio-picker
-                name="sample-checkbox"
+                name="solution-checkbox"
                 v-model="item.isDefaultBattery"
                 setValue="another"
                 :options="{ [item.batteryID]: item.batteryTitle }"
@@ -402,6 +403,12 @@
     <div class="flex p-4 md:mt-6" v-show="showStep == 3">
       <div class="w-3/4">
         <!--  -->
+        <error-alert
+        v-if="errorText"
+        @dismissError="errorText = ''"
+        :error="errorText"
+        :showTranslatedError="false"
+      />
         <div>
           <p class="pl-4 mb-2 text-sm font-semibold">Credit Control:</p>
           <div class="flex">
@@ -458,12 +465,14 @@
                 />
               </field>
              </div>
-             <div>
+             <!-- <div class="flex w-1/5"> -->
+              <div>
                <psytech-button label="Cancel" type="dark" @buttonWasClicked="(toggleCredits = false)"></psytech-button>
              </div>
              <div>
                 <psytech-button label="Update Credit" type="black" extraClasses="pl-6 pr-6" @buttonWasClicked="gotoNextHandler()"></psytech-button>
              </div>
+             <!-- </div> -->
           </div>
            <div class="ml-3">
               <error-span :error="v$.credits"></error-span>
@@ -477,6 +486,7 @@
             <div v-for="(item, index) in notifications" :key="index">
               <check-radio-picker
                 name="shared-credit"
+                :disabled="true"
                 v-model="userDetail.sharedCredit"
                 type="radio"
                 :options="{ [index]: item }"
@@ -498,6 +508,7 @@
           <div class="flex justify-between w-1/5 pl-4">
             <div v-for="(item, index) in notifications" :key="index">
               <check-radio-picker
+                :disabled="true"
                 name="update-credit"
                 v-model="userDetail.allowedToUpdateCredit"
                 type="radio"
@@ -541,8 +552,11 @@
       <div>
         <psytech-button label="Back" type="light" @buttonWasClicked="goToBackHandler()"></psytech-button>
       </div>
-      <div>
+      <div v-if="showStep != 3">
         <psytech-button label="Next" type="black" @buttonWasClicked="gotoNextHandler()"></psytech-button>
+      </div>
+       <div v-if="showStep == 3">
+        <psytech-button label="Create User" type="black" @buttonWasClicked="addAccountUserMethod()"></psytech-button>
       </div>
     </div>
   </div>
@@ -550,7 +564,6 @@
 
 <script>
 import { ref, reactive, computed, onMounted, watch } from "vue";
-import utility from "@/components/composition/utility";
 import { mdiPlus, mdiEyeOff, mdiEye, mdiChevronDown } from "@mdi/js";
 import MainSection from "@/components/MainSection";
 import TitleBar from "@/components/TitleBar";
@@ -560,19 +573,30 @@ import FilePicker from "@/components/FilePicker";
 import Field from "@/components/Field";
 import Control from "@/components/Control";
 import Divider from "@/components/Divider.vue";
+import utility from "@/components/composition/utility";
 import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import StickyFooter from "@/components/StickyFooter";
 import IconSVG from "@/components/IconSVG.vue";
 import TitleSubBar from "@/components/TitleSubBar";
+import Loader from "@/components/Loader.vue";
+import ErrorAlert from "@/components/ErrorAlert.vue";
 import { numeric, minLength, maxLength, minValue, maxValue, helpers, required, email } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { useStore } from "vuex";
+import store from "../../../../store/index";
 import _ from "lodash";
 import SelectOption from "@/components/SelectOption.vue";
 import ErrorSpan from "@/components/ErrorSpan";
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    const accountDetail = store.getters["clientControl/getClientDetail"];
+    if (!accountDetail) {
+      next({ name: "list-page" });
+    }
+    next();
+  },
   name: "client-control-details",
   components: {
     TitleSubBar,
@@ -584,16 +608,19 @@ export default {
     CardComponent,
     TitleBar,
     Field,
+    Loader,
     Control,
     IconSVG,
     PsytechButton,
     StickyHeader,
+    ErrorAlert,
     StickyFooter,
     ErrorSpan,
     utility,
   },
   setup() {
     const store = useStore();
+    let errorText = ref("");
     const form = reactive({
       companyName: "",
       accountDetails: "",
@@ -602,6 +629,7 @@ export default {
       loader: false,
       addAnother: "another",
     });
+    let loader = ref(false);
     const userDetail = reactive({
       userType: "",
       firstname: "",
@@ -610,9 +638,12 @@ export default {
       password: "",
       pin: "",
       credits:0,
-      tests: null,
-      allowedToUpdateCredit: false,
-      sharedCredit: false,
+      tests: [],
+      solution: [],
+      batteries:[],
+      traininglevel:[],
+      allowedToUpdateCredit: 0,
+      sharedCredit: 0,
       sendNotifications: 0,
       trainingprovider:'',
       trainingyear:'',
@@ -634,7 +665,7 @@ export default {
   .map((year, index) => {
     return {
       text: year + index,
-      value: year + index
+      value: String(year + index)
     }
   })
 
@@ -651,7 +682,6 @@ export default {
               }
             })
           }
-          // console.log("response is....", RESPONSE_DATA)
         })
         .catch((error) => {
           console.log("error is...", error);
@@ -665,11 +695,7 @@ export default {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status == 200){
             testsArray.value = RESPONSE_DATA.data;
-            // .map(item=> {
-            //   return {...item, selected:false}
-            // })
           }
-          // console.log("response is....", RESPONSE_DATA)
         })
         .catch((error) => {
           console.log("error is...", error);
@@ -683,11 +709,7 @@ export default {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status == 200){
             solutionsArray.value = RESPONSE_DATA.data;
-            // .map(item=> {
-            //   return {...item, selected:false}
-            // })
           }
-          // console.log("response is....", RESPONSE_DATA)
         })
         .catch((error) => {
           console.log("error is...", error);
@@ -701,11 +723,7 @@ export default {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status == 200){
             battriesArray.value = RESPONSE_DATA.data;
-            // .data.map(item=> {
-            //   return {...item, selected:false}
-            // })
           }
-          // console.log("response is....", RESPONSE_DATA)
         })
         .catch((error) => {
           console.log("error is...", error);
@@ -750,7 +768,7 @@ export default {
       },
     ]);
    watch(() => _.cloneDeep(trainingArray),(currentValue, _) => {
-        userDetail.tests = currentValue.map(item=> item.selected && item.value).filter(item=> item)
+        userDetail.traininglevel = currentValue.map(item=> item.selected && item.value).filter(item=> item)
       }
     );
 
@@ -776,11 +794,11 @@ export default {
 
     const updateCredit = reactive({
       availableCredit: 0,
-      updateAmount: 20,
+      updateAmount: '',
       purchaseId: ""
     })
     watch(() => _.cloneDeep(updateCredit),(currentValue, _) => {
-        userDetail.credits = currentValue;
+        userDetail.credits = +currentValue.updateAmount;
       }
     );
 
@@ -814,7 +832,7 @@ export default {
           minLength: helpers.withMessage("Pin must be of 4 digits", minLength(4)),
           maxLength: helpers.withMessage("Pin must be of 4 digits", maxLength(4)),
         },
-        tests: { 
+        traininglevel: { 
           required: helpers.withMessage("One type must be selected", required),
         },
         trainingprovider: { 
@@ -825,10 +843,10 @@ export default {
         }, 
         trainingdetails: { 
           required: helpers.withMessage("Detail is required", required),
-          maxLength: helpers.withMessage("Detail is required", maxLength(255)),
+          maxLength: helpers.withMessage("Detail should not be greater than 255 characters.", maxLength(255)),
         },
         credits: { 
-          minValue: helpers.withMessage("Update Amount should be between 20 to 1000",minValue(20)),
+          minValue: helpers.withMessage("Update Amount should be between 20 to 1000",minValue(19)),
           maxValue: helpers.withMessage("Update Amount should be between 20 to 1000",maxValue(1000)),
         },
       };
@@ -845,12 +863,6 @@ export default {
     
     const gotoNextHandler = ()=>{
       let next = false;
-      // console.log(v$.value.userType.$invalid)
-      // console.log(v$.value.firstname.$invalid)
-      // console.log(v$.value.familyname.$invalid)
-      // console.log(v$.value.email.$invalid)
-      // console.log(v$.value.password.$invalid)
-      // console.log(v$.value.pin.$invalid)
       v$.value.$validate() 
       if (
          v$.value.userType.$invalid
@@ -862,7 +874,7 @@ export default {
            next = true;
         return true;
       }
-      if( (showStep.value == 1) && (v$.value.tests.$invalid
+      if( (showStep.value == 1) && (v$.value.traininglevel.$invalid
        || v$.value.trainingyear.$invalid
        || v$.value.trainingdetails.$invalid) ){
          next = true;
@@ -872,15 +884,52 @@ export default {
         return
       }
 
-      const userDetailData = {...userDetail};
-
-      userDetailData.userType = Number(userDetail.userType); 
-      userDetailData.sendNotifications = userDetail.sendNotifications ==1? true: false;
+      if(userDetail.userType == 3){
+        userDetail.allowedToUpdateCredit = 1;
+        userDetail.sharedCredit = 1;
+      }
      
-     console.log("user detial....",userDetailData, next)
      if(!next){
        showStep.value = showStep.value + 1;
      }
+    }
+
+    const addAccountUserMethod = ()=>{
+      const userDetailData = {...userDetail};
+      console.log(testsArray.value.map(item=> item.isDefaultTest && item.testID).filter(item=> item))
+      userDetailData.userType = Number(userDetail.userType); 
+      // userDetailData.traininglevel = Object.values(userDetailData.traininglevel)
+
+      let array = []
+
+      Object.keys(userDetailData.traininglevel).forEach(function(key) {
+        array.push(String(userDetailData.traininglevel[key]))
+})
+   userDetailData.traininglevel = array;
+      userDetailData.tests = testsArray.value.map(item=> item.isDefaultTest && item.testID).filter(item=> item);
+      userDetailData.solution =solutionsArray.value.map(item=> item.isDefaultBattery && String(item.batteryID)).filter(item=> item);
+      userDetailData.batteries = battriesArray.value.map(item=> item.isDefaultBattery && String(item.batteryID)).filter(item=> item);
+      userDetailData.sendNotifications = userDetail.sendNotifications ==1? true: false;
+      errorText.value = '';
+      loader.value = true
+         store
+        .dispatch("clientControl/postAddAccountUser",userDetailData)
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if(RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message){
+            loader.value = false;
+            const { navigateTo } = utility("client-control-list-detail");
+            navigateTo();
+          //  console.log("resposne...", res)
+          } else{
+            throw new Error(RESPONSE_DATA.data.message);
+          }
+        })
+        .catch((error) => {2
+        loader.value = false;
+        errorText.value = error?.message ?? "";
+          console.log("error is...", error);
+        });
     }
 
     return {
@@ -896,8 +945,11 @@ export default {
       trainingProvidersArray,
       goToBackHandler,
       gotoNextHandler,
+      addAccountUserMethod,
       solutionsArray,
       yearsArray,
+      loader,
+      errorText,
       collapsable,
       updateCredit,
       toggleCredits,
