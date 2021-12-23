@@ -57,7 +57,6 @@ export default {
   font-weight: 500;
   @apply opacity-75 scale-75 -translate-y-2.5 translate-x-1;
 }
-
 .floating-input>textarea:focus,
 .floating-input>textarea:not(:placeholder-shown){
 @apply pt-8

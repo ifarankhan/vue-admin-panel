@@ -31,6 +31,38 @@ const actions = {
             }
         })
     },
+    async getTrainingProviders({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('training-providers', {
+            params: {
+              accountId: userData.accountId
+            }
+        })
+    },
+    async getCollectTests({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('collect-tests', {
+          params: {
+            distributorId: userData.distributorId
+          }
+      })
+    },
+    async getCollectSolutions({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('collect-solutions', {
+          params: {
+            distributorId: userData.distributorId
+          }
+      })
+    },
+    async getCollectBattries({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('collect-batteries', {
+          params: {
+            distributorId: userData.distributorId
+          }
+      })
+    },
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
