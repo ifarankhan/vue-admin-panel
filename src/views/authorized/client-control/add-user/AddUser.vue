@@ -110,12 +110,12 @@
     </div>
 
     <!-- middle section step == 0 -->
-    <div class="flex p-4 md:mt-6" v-show="showStep == 0">
+    <div class="flex p-4 ml-3 md:mt-6" v-show="showStep == 0">
       <div class="w-2/3">
         <!--  -->
-        <div>
-          <p class="pl-4 mb-2 text-sm font-semibold">User Type:</p>
-          <div class="flex justify-between w-11/12 pl-4">
+        <div class="ml-3">
+          <p class="mb-2 text-sm font-semibold">User Type</p>
+          <div class="flex justify-between w-9/12 pl-2">
             <div v-for="(type, value) in userTypes" :key="value">
               <check-radio-picker
                 name="user-types"
@@ -130,9 +130,9 @@
           </div>
         </div>
         <!--  -->
-        <div class="mt-8">
-          <p class="pl-4 mb-2 text-sm font-semibold">User Status:</p>
-          <div class="flex justify-between w-2/5 pl-4">
+        <div class="mt-6 ml-3">
+          <p class="mb-2 text-sm font-semibold">User Status</p>
+          <div class="flex justify-between w-1/4 pl-2">
             <div v-for="(item, index) in activeBlockList" :key="index">
               <check-radio-picker
                 :disabled="index == 0 ? true : false"
@@ -146,9 +146,9 @@
         </div>
 
         <!--  -->
-        <div class="mt-10">
-          <p class="pl-4 mb-2 text-sm font-semibold">User Details:</p>
-          <div class="flex w-9/12 pl-1">
+        <div class="mt-8 ml-3">
+          <p class="mb-1 text-sm font-semibold">User Details</p>
+          <div class="flex w-9/12 -ml-2">
             <div class="w-full">
               <field label="First Name" labelFor="email">
                 <control
@@ -168,7 +168,7 @@
               </field>
             </div>
           </div>
-          <div class="flex w-9/12">
+          <div class="flex w-9/12 -ml-2" v-if="v$.firstname">
             <span class="inline-block w-full">
               <error-span :error="v$.firstname"></error-span>
             </span>
@@ -177,7 +177,7 @@
             </span>
           </div>
           <!--  -->
-          <div class="flex w-9/12 pl-1">
+          <div class="flex w-9/12 -ml-2">
             <div class="w-full">
               <field label="User Name/ Email Address" labelFor="email">
                 <control
@@ -188,11 +188,14 @@
               </field>
             </div>
           </div>
-          <span class="inline-block w-full" v-if="emailIsTaken">
+          <span class="inline-block w-full -ml-2" v-if="emailIsTaken">
             <error-span customeError="That email is already taken"></error-span>
           </span>
+           <span class="inline-block w-full -ml-2" v-if="v$.email.$invalid">
+            <error-span :error="v$.email"></error-span>
+          </span>
           <!--  -->
-          <div class="flex w-9/12 pl-1">
+          <div class="flex w-9/12 -ml-2">
             <div class="w-full">
               <field label="Password" labelFor="password">
                 <control
@@ -204,7 +207,7 @@
                 />
               </field>
             </div>
-            <div class="w-full">
+            <div class="w-full -ml-2">
               <field label="Pin" labelFor="pin">
                 <control
                   @iconWasClicked="tooglePinIcon = !tooglePinIcon"
@@ -216,7 +219,7 @@
               </field>
             </div>
           </div>
-          <div class="flex w-9/12">
+          <div class="flex w-9/12 -ml-2">
             <span class="inline-block w-full">
               <error-span :error="v$.password"></error-span>
             </span>
@@ -227,10 +230,10 @@
 
           <!--  -->
           <div class="mt-8">
-            <p class="pl-4 mb-2 text-sm font-semibold">
+            <p class="mb-2 text-sm font-semibold">
               Receive Email Notification:
             </p>
-            <div class="flex justify-between w-2/5 pl-4">
+            <div class="flex justify-between w-1/5 pl-2">
               <div v-for="(type, value) in notifications" :key="value">
                 <check-radio-picker
                   name="send-notification"
