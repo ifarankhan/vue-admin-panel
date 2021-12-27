@@ -250,14 +250,14 @@
     </div>
 
     <!-- step == 1 -->
-    <div class="flex p-4 md:mt-6" v-show="showStep == 1">
+    <div class="flex p-4 ml-2 md:mt-6" v-show="showStep == 1">
       <div class="w-2/3">
         <!--  -->
         <div class="pl-4">
           <p class="mb-2 text-sm font-semibold">
             Select Training / Qualification Type:
           </p>
-          <div v-for="(item, index) in trainingArray" :key="index" class="mb-4">
+          <div v-for="(item, index) in trainingArray" :key="index" class="mb-4 ml-1.5">
             <check-radio-picker
               name="sample-checkbox"
               v-model="item.selected"
@@ -272,10 +272,10 @@
         </div>
         <!--  -->
 
-        <div class="pl-5 mt-12">
-          <p class="text-sm font-semibold">Add a Training Providers:</p>
+        <div class="mt-12 ml-3">
+          <p class="pl-2 text-sm font-semibold">Add a Training Providers:</p>
           <div class="flex w-10/12 pl-1">
-            <div class="w-full">
+            <div class="w-full pl-1">
               <select-option
                 :filterDropdown="trainingProvidersArray"
                 labelText="Name / Email address"
@@ -284,7 +284,7 @@
               ></select-option>
             </div>
 
-            <div class="w-full">
+            <div class="w-full pl-1">
               <select-option
                 :filterDropdown="yearsArray"
                 labelText="Year of Training"
@@ -339,7 +339,7 @@
     </div>
 
     <!-- step == 2 -->
-    <div class="flex p-4 md:mt-16" v-show="showStep == 2">
+    <div class="flex p-4 md:mt-10" v-show="showStep == 2">
       <div class="w-11/12">
         <!--  -->
         <div class="pl-4 mb-10">
@@ -475,8 +475,8 @@
           :showTranslatedError="false"
         />
         <div>
-          <p class="pl-4 mb-2 text-sm font-semibold">Credit Control:</p>
-          <div class="flex">
+          <p class="pl-4 ml-1.5 text-sm font-semibold">Credit Control</p>
+          <div class="flex ml-3.5">
             <div class="w-full">
               <field label="Available Credit" labelFor="credit">
                 <control
@@ -513,22 +513,22 @@
         <!--  -->
 
         <div
-          class="mt-4 ml-2 rounded-md md:p-2 lg:px-2 lg:py-4 bg-psytechLightGray"
+          class="w-11/12 p-2 mt-4 ml-6 rounded-md bg-psytechLightGray"
           v-if="toggleCredits"
         >
-          <div class="flex">
-            <div class="w-56 md:w-96">
+          <div class="flex w-full">
+            <div class="w-80">
               <field label="Update Amount" labelFor="update-amount">
                 <control v-model="updateCredit.updateAmount" placeholder=" " />
               </field>
             </div>
-            <div class="w-56 md:w-96">
+            <div class="w-80">
               <field label="Purchase ID" labelFor="purchase-id">
                 <control v-model="updateCredit.purchaseId" placeholder=" " />
               </field>
             </div>
             <!-- <div class="flex w-1/5"> -->
-            <div>
+            <div class="mt-1 ml-10">
               <psytech-button
                 label="Cancel"
                 type="dark"
@@ -539,7 +539,7 @@
                 "
               ></psytech-button>
             </div>
-            <div>
+            <div class="mt-1">
               <psytech-button
                 label="Update Credit"
                 type="black"
@@ -557,9 +557,9 @@
         </div>
 
         <!--  -->
-        <div class="mt-8">
-          <p class="pl-4 mb-2 text-sm font-semibold">Shared Credit:</p>
-          <div class="flex justify-between w-1/5 pl-4">
+        <div class="mt-8 ml-2">
+          <p class="pl-4 mb-2 text-sm font-semibold">Shared Credit</p>
+          <div class="flex justify-between w-1/5 pl-4 ml-1">
             <div v-for="(item, index) in notifications" :key="index">
               <check-radio-picker
                 name="shared-credit"
@@ -573,7 +573,7 @@
         </div>
 
         <!--  -->
-        <div class="w-2/4 p-4 mt-8 ml-2 rounded-md bg-psytechLightGray">
+        <div class="w-2/4 p-4 mt-8 ml-5 rounded-md bg-psytechLightGray">
           <p class="text-xs font-medium leading-4">
             <span class="text-sm font-semibold">Note:</span>
             If shared, the Master User holds all credits for the clients
@@ -583,11 +583,11 @@
         </div>
 
         <!--  -->
-        <div class="mt-8">
+        <div class="mt-8 ml-2">
           <p class="pl-4 mb-2 text-sm font-semibold">
-            Allowed to update Credit:
+            Allowed to update Credit
           </p>
-          <div class="flex justify-between w-1/5 pl-4">
+          <div class="flex justify-between w-1/5 pl-4 ml-1">
             <div v-for="(item, index) in notifications" :key="index">
               <check-radio-picker
                 :disabled="true"
@@ -992,6 +992,10 @@ export default {
             "Update Amount should be between 20 to 1000",
             minValue(19)
           ),
+          maxLength: helpers.withMessage(
+            "Update Amount should be between 20 to 1000",
+            maxLength(4)
+          ),
           maxValue: helpers.withMessage(
             "Update Amount should be between 20 to 1000",
             maxValue(1000)
@@ -1067,6 +1071,9 @@ export default {
 
     const addAccountUserMethod = () => {
       const userDetailData = { ...userDetail };
+      if(+userDetailData.credits > 1000){
+        return true
+      }
       userDetailData.userType = Number(userDetail.userType);
 
       let array = [];
