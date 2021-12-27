@@ -2,6 +2,7 @@
     <textarea
         v-if="type=='textarea'"
         :id="id"
+        placeholder=" "
         v-model="computedValue"
         class="w-full h-24 border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
         :class="extraClasses"
@@ -30,17 +31,18 @@
     :id="id"
     v-model="computedValue"
     :class="inputElClass"
+    placeholder=" "
     v-on:keyup.enter="$emit('enterPressed')"
     class="text-xs font-medium"
     autocomplete="off"
     style="height: 45px; min-height: 45px; max-height: 45px"
   />
-    <!-- <control-icon
+    <control-icon
     @iconWasClicked="$emit('iconWasClicked')"
     v-if="icon"
     :icon="icon"
     :h="controlIconH"
-  /> -->
+  />
 </template>
 <script>
 import { computed } from "vue";

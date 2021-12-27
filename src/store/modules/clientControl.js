@@ -12,13 +12,17 @@ const getters = {
 
 const mutations = {
   setClientDetail(state, payload) {
-    state.clientDetail = payload;
+    if(payload.incrementAccUser){
+      const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
+      state.clientDetail = updatedClientDtail;
+    } else{
+      state.clientDetail = payload;
+    } 
   },
 }
 
 const actions = {
     async getAccountUsers({},payload){
-       const userData = await JSON.parse(localStorage.getItem("userData"));
        return private_url.get('account-users', {
         params: payload
       })
@@ -31,11 +35,55 @@ const actions = {
             }
         })
     },
+    async getTrainingProviders({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('training-providers', {
+            params: {
+              accountId: userData.accountId
+            }
+        })
+    },
+    async userEmailCheck({}, payload){
+      return private_url.get('user-check', {
+          params: {
+            email: payload
+          }
+      })
+    },
+    async getCollectTests({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('collect-tests', {
+          params: {
+            distributorId: userData.distributorId
+          }
+      })
+    },
+    async getCollectSolutions({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('collect-solutions', {
+          params: {
+            distributorId: userData.distributorId
+          }
+      })
+    },
+    async getCollectBattries({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('collect-batteries', {
+          params: {
+            distributorId: userData.distributorId
+          }
+      })
+    },
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload )
-    }
+    },
+    async postAddAccountUser({state},payload){
+      payload.distributorid = state.clientDetail.distributorId;
+      payload.accountid = state.clientDetail.accountId;
+      return private_url.post('add-account-user', payload )
+  }
 }
 
 export default {

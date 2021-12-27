@@ -1,6 +1,7 @@
 <template>
-  <sticky-header>
-    <div class="grid grid-cols-2 md:px-2">
+  <!-- <sticky-header> -->
+<div class="pt-10">
+      <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer "
@@ -21,7 +22,7 @@
             />
           </svg>
         </div>
-        <div class="ml-3 font-bold text-medium">{{ accountDetail && accountDetail.accountName }} </div>
+        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.accountName }} </div>
       </div>
       <div class="mr-11 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
@@ -312,9 +313,8 @@
 
         <TabPanel>
             <div class="mt-4 ml-5">
-               <!-- $router.push({ name: 'client-control-add-user' }) -->
           <psytech-button
-            @buttonWasClicked="''"
+            @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
             label="Add User"
             type="outline"
           >
@@ -352,7 +352,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-if="masterUser.length === 0">
+              <tr v-if="masterUser && masterUser.length === 0">
                 <td colspan="6">
                   <div class="flex items-center content-center justify-center font-bold">{{ $t('No master user found for this account.') }}</div>
                 </td>
@@ -581,7 +581,8 @@
         </TabPanel>
       </TabGroup>
     </div>
-  </sticky-header>
+</div>
+  <!-- </sticky-header> -->
 </template>
 
 <script>
@@ -595,6 +596,7 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import SelectOption from "@/components/SelectOption.vue";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
+import IconSVG from "@/components/IconSVG.vue";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -611,6 +613,7 @@ export default {
     Field,
     Control,
     SelectOption,
+    IconSVG,
     TabGroup,
     TabList,
     Tab,

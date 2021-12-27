@@ -58,7 +58,7 @@ export default {
       default: "text",
     },
     customeWidth:{
-      type: String,
+      type: Boolean,
       default: false
     },
     labelText:{

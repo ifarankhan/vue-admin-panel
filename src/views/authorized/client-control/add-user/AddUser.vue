@@ -1,13 +1,16 @@
 <template>
+  <Loader v-if="loader" :toBeBigger="true" />
   <div class="p-5">
-      <h1 class="pb-3 pl-6 mt-10 ml-1 text-2xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white">
+    <h1
+      class="pb-3 pl-6 mt-10 ml-1 text-2xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white"
+    >
       <span>
         <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block">
-        <path :d="mdiPlus"/>
-      </svg>
+          <path :d="mdiPlus" />
+        </svg>
       </span>
-        Add User
-      </h1>
+      Add User
+    </h1>
     <div class="flex p-4 mx-4">
       <div class="flex items-center w-6">
         <div
@@ -15,75 +18,97 @@
         ></div>
       </div>
       <div class="flex items-center w-2/4">
-        <div class="relative flex items-center text-xs font-semibold" :class="[showStep !=0 ?'text-gray-800 text-opacity-50':'']">
+        <div
+          class="relative flex items-center text-xs font-semibold"
+          :class="[showStep != 0 ? 'text-gray-800 text-opacity-50' : '']"
+        >
           <div
-            class="flex items-center justify-center w-8 h-8 py-3 border-2 border-teal-600 rounded-full"
-            :class="[showStep ==0 ?'bg-black text-white': 'text-gray-800 text-opacity-50']"
+            class="flex items-center justify-center w-8 h-8 py-3 border-2 border-teal-600 rounded-full "
+            :class="[
+              showStep == 0
+                ? 'bg-black text-white'
+                : 'text-gray-800 text-opacity-50',
+            ]"
           >
             1
           </div>
-          <div
-            class="absolute top-0 w-32 mt-10 -ml-12 text-center"
-          >
+          <div class="absolute top-0 w-32 mt-10 -ml-12 text-center">
             User Detail
           </div>
         </div>
         <div
-          class="flex-auto border-t-2 border-teal-600 "
+          v-if="userDetail.userType != 4 && userDetail.userType != 1"
+          class="flex-auto border-t-2 border-teal-600"
         ></div>
-        <div class="relative flex items-center text-xs font-semibold" :class="[showStep !=1 ?'text-gray-800 text-opacity-50':'']">
+        <div
+          v-if="userDetail.userType != 4 && userDetail.userType != 1"
+          class="relative flex items-center text-xs font-semibold"
+          :class="[showStep != 1 ? 'text-gray-800 text-opacity-50' : '']"
+        >
           <div
-            class="flex items-center justify-center w-8 h-8 py-3 bg-teal-600 border-2 border-teal-600 rounded-full"
-            :class="[showStep ==1 ?'bg-black text-white': 'text-gray-800 text-opacity-50']"
+            class="flex items-center justify-center w-8 h-8 py-3 bg-teal-600 border-2 border-teal-600 rounded-full "
+            :class="[
+              showStep == 1
+                ? 'bg-black text-white'
+                : 'text-gray-800 text-opacity-50',
+            ]"
           >
             2
           </div>
-          <div
-            class="absolute top-0 w-32 mt-10 -ml-10 text-center"
-          >
+          <div class="absolute top-0 w-32 mt-10 -ml-10 text-center">
             Training Selection
           </div>
         </div>
+        <div class="flex-auto border-t-2 border-gray-300"></div>
         <div
-          class="flex-auto border-t-2 border-gray-300 "
-        ></div>
-        <div class="relative flex items-center text-xs font-semibold" :class="[showStep !=2 ?'text-gray-800 text-opacity-50':'']">
+          class="relative flex items-center text-xs font-semibold"
+          :class="[showStep != 2 ? 'text-gray-800 text-opacity-50' : '']"
+        >
           <div
-            class="flex items-center justify-center w-8 h-8 py-3 border-2 rounded-full"
-            :class="[showStep ==2 ?'bg-black text-white': 'text-gray-800 text-opacity-50']"
+            class="flex items-center justify-center w-8 h-8 py-3 border-2 rounded-full "
+            :class="[
+              showStep == 2
+                ? 'bg-black text-white'
+                : 'text-gray-800 text-opacity-50',
+            ]"
           >
-            3
+            {{
+              userDetail.userType != 1 && userDetail.userType != 4 ? "3" : "2"
+            }}
           </div>
-          <div
-            class="absolute top-0 w-32 mt-10 -ml-10 text-center"
-          >
+          <div class="absolute top-0 w-32 mt-10 -ml-10 text-center">
             Integration
           </div>
         </div>
         <div
           class="flex-auto transition duration-500 ease-in-out border-t-2 border-gray-300 "
         ></div>
-        <div class="relative flex items-center text-xs font-semibold" :class="[showStep !=3 ?'text-gray-800 text-opacity-50':'']">
+        <div
+          class="relative flex items-center text-xs font-semibold"
+          :class="[showStep != 3 ? 'text-gray-800 text-opacity-50' : '']"
+        >
           <div
-            class="flex items-center justify-center w-8 h-8 py-3 border-2 border-gray-300 rounded-full"
-            :class="[showStep ==3 ?'bg-black text-white': 'text-gray-800 text-opacity-50']"
+            class="flex items-center justify-center w-8 h-8 py-3 border-2 border-gray-300 rounded-full "
+            :class="[
+              showStep == 3
+                ? 'bg-black text-white'
+                : 'text-gray-800 text-opacity-50',
+            ]"
           >
-            4
+            {{
+              userDetail.userType != 1 && userDetail.userType != 4 ? "4" : "3"
+            }}
           </div>
-          <div
-            class="absolute top-0 w-32 mt-10 -ml-10 text-center "
-          >
+          <div class="absolute top-0 w-32 mt-10 -ml-10 text-center">
             Training
           </div>
         </div>
       </div>
       <div class="flex items-center w-5/12">
-        <div
-          class="flex-auto border-t-2 border-teal-600 "
-        ></div>
+        <div class="flex-auto border-t-2 border-teal-600"></div>
       </div>
     </div>
-    
+
     <!-- middle section step == 0 -->
     <div class="flex p-4 md:mt-6" v-show="showStep == 0">
       <div class="w-2/3">
@@ -100,6 +125,9 @@
               />
             </div>
           </div>
+          <div class="mt-5">
+            <error-span :error="v$.userType"></error-span>
+          </div>
         </div>
         <!--  -->
         <div class="mt-8">
@@ -107,7 +135,7 @@
           <div class="flex justify-between w-2/5 pl-4">
             <div v-for="(item, index) in activeBlockList" :key="index">
               <check-radio-picker
-                :disabled="index ==0? true: false"
+                :disabled="index == 0 ? true : false"
                 name="active-block"
                 v-model="activeBlocked"
                 type="radio"
@@ -140,6 +168,14 @@
               </field>
             </div>
           </div>
+          <div class="flex w-9/12">
+            <span class="inline-block w-full">
+              <error-span :error="v$.firstname"></error-span>
+            </span>
+            <span class="inline-block w-full">
+              <error-span :error="v$.familyname"></error-span>
+            </span>
+          </div>
           <!--  -->
           <div class="flex w-9/12 pl-1">
             <div class="w-full">
@@ -152,6 +188,9 @@
               </field>
             </div>
           </div>
+          <span class="inline-block w-full" v-if="emailIsTaken">
+            <error-span customeError="That email is already taken"></error-span>
+          </span>
           <!--  -->
           <div class="flex w-9/12 pl-1">
             <div class="w-full">
@@ -159,9 +198,9 @@
                 <control
                   @iconWasClicked="tooglePasswordIcon = !tooglePasswordIcon"
                   :icon="tooglePasswordIcon ? mdiEye : mdiEyeOff"
-                  :type="tooglePasswordIcon?'text':'password'"
+                  :type="tooglePasswordIcon ? 'text' : 'password'"
                   v-model="userDetail.password"
-                  placeholder="password"
+                  placeholder=" "
                 />
               </field>
             </div>
@@ -170,12 +209,20 @@
                 <control
                   @iconWasClicked="tooglePinIcon = !tooglePinIcon"
                   :icon="tooglePinIcon ? mdiEye : mdiEyeOff"
-                  :type="tooglePinIcon?'text':'password'"
+                  :type="tooglePinIcon ? 'text' : 'password'"
                   v-model="userDetail.pin"
-                  placeholder="pin"
+                  placeholder=" "
                 />
               </field>
             </div>
+          </div>
+          <div class="flex w-9/12">
+            <span class="inline-block w-full">
+              <error-span :error="v$.password"></error-span>
+            </span>
+            <span class="inline-block w-full">
+              <error-span :error="v$.pin"></error-span>
+            </span>
           </div>
 
           <!--  -->
@@ -183,16 +230,15 @@
             <p class="pl-4 mb-2 text-sm font-semibold">
               Receive Email Notification:
             </p>
-            <div class="flex justify-between w-2/5 pl-4"> 
-            <div v-for="(type, value) in notifications" :key="value">
-              <check-radio-picker
-                name="send-notification"
-                v-model="userDetail.sendNotifications"
-                type="radio"
-                :options="{ [value]: type }"
-              />
-            </div>
-            
+            <div class="flex justify-between w-2/5 pl-4">
+              <div v-for="(type, value) in notifications" :key="value">
+                <check-radio-picker
+                  name="send-notification"
+                  v-model="userDetail.sendNotifications"
+                  type="radio"
+                  :options="{ [value]: type }"
+                />
+              </div>
             </div>
           </div>
           <!--  -->
@@ -200,7 +246,7 @@
       </div>
     </div>
 
-      <!-- step == 1 -->
+    <!-- step == 1 -->
     <div class="flex p-4 md:mt-6" v-show="showStep == 1">
       <div class="w-2/3">
         <!--  -->
@@ -217,6 +263,9 @@
             />
             <span class="ml-6 text-sm">{{ item.description }}</span>
           </div>
+          <div class="mt-5">
+            <error-span :error="v$.traininglevel"></error-span>
+          </div>
         </div>
         <!--  -->
 
@@ -225,25 +274,33 @@
           <div class="flex w-10/12 pl-1">
             <div class="w-full">
               <select-option
-                :filterDropdown="filterDropdown"
+                :filterDropdown="trainingProvidersArray"
                 labelText="Name / Email address"
-                :customeWidth='true'
-                v-model="selectedNameFilter"
+                :customeWidth="true"
+                v-model="userDetail.trainingprovider"
               ></select-option>
             </div>
 
             <div class="w-full">
               <select-option
-                :filterDropdown="filterDropdown"
+                :filterDropdown="yearsArray"
                 labelText="Year of Training"
-                v-model="selectedNameFilter"
-                :customeWidth='true'
+                v-model="userDetail.trainingyear"
+                :customeWidth="true"
               ></select-option>
             </div>
           </div>
+          <div class="flex w-9/12 mt-1">
+            <span class="inline-block w-full">
+              <error-span :error="v$.trainingprovider"></error-span>
+            </span>
+            <span class="inline-block w-full ml-20">
+              <error-span :error="v$.trainingyear"></error-span>
+            </span>
+          </div>
 
           <!--  -->
-          <div class="mt-6">
+          <!-- <div class="mt-6">
             <div class="flex inline-block w-2/4 mt-4 ml-2">
               <img class="inline-block object-cover w-12 h-12 rounded-full" src="https://images.pexels.com/photos/2955305/pexels-photo-2955305.jpeg?auto=compress&cs=tinysrgb&h=650&w=940" alt="Profile image"/>
               <div class="inline-block ml-2">
@@ -259,99 +316,144 @@
             </span>
             <span class="text-xs opacity-50 cursor-pointer"> Remove </span>
             </div>
-          </div>
+          </div> -->
 
           <!--  -->
           <div class="mt-8">
-             <field label="Account Address" labelFor="accountAddress">
+            <field label="Account Address" labelFor="accountAddress">
               <control
                 type="textarea"
-                v-model="form.accountAddress"
-                placeholder="Account Address"
+                v-model="userDetail.trainingdetails"
+                placeholder="Details of the Training"
               />
-              <error-span :error="v$.accountAddress"></error-span>
             </field>
+            <div class="mt-1">
+              <error-span :error="v$.trainingdetails"></error-span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
+
     <!-- step == 2 -->
     <div class="flex p-4 md:mt-16" v-show="showStep == 2">
       <div class="w-11/12">
         <!--  -->
         <div class="pl-4 mb-10">
           <div class="flex items-center">
-             <span class="cursor-pointer" @click="collapsable.tests = !collapsable.tests">
-                <svg viewBox="0 0 24 24" width="25" height="25" class="inline-block">
-                  <path :d="mdiChevronDown"/>
-                </svg>
-             </span>
-             <span class="-ml-0.5 text-sm font-semibold">Tests :</span>
-             <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+            <span
+              class="cursor-pointer"
+              @click="collapsable.tests = !collapsable.tests"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d="mdiChevronDown" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Tests :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
           </div>
           <!--  -->
-          <div class="flex pl-4 mt-2" v-if="collapsable.tests">
-            <div v-for="(item, index) in testsArray" :key="index" class="w-1/5 mb-4 mr-8"> 
+          <div
+            class="grid grid-cols-4 gap-8 pl-4 mt-2"
+            v-if="collapsable.tests"
+          >
+            <div v-for="(item, index) in testsArray" :key="index">
               <check-radio-picker
-                name="sample-checkbox"
-                v-model="item.selected"
+                name="tests-checkbox"
+                v-model="item.isDefaultTest"
                 setValue="another"
-                :options="{ another: item.text }"
+                :options="{ [item.testID]: item.testID }"
               />
-              <p class="ml-4 text-sm">{{ item.description }}</p>
-            </div>
-          </div>
-          <!--  -->
-        </div>
-        
-        <!--  -->
-         <div class="pl-4 mb-10">
-          <div class="flex items-center">
-             <span class="cursor-pointer" @click="collapsable.batteries = !collapsable.batteries">
-                <svg viewBox="0 0 24 24" width="25" height="25" class="inline-block">
-                  <path :d="mdiChevronDown"/>
-                </svg>
-             </span>
-             <span class="-ml-0.5 text-sm font-semibold">Batteries :</span>
-             <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
-          </div>
-          <!--  -->
-          <div class="flex pl-4 mt-2" v-if="collapsable.batteries">
-            <div v-for="(item, index) in testsArray" :key="index" class="w-1/5 mb-4 mr-8"> 
-              <check-radio-picker
-                name="sample-checkbox"
-                v-model="item.selected"
-                setValue="another"
-                :options="{ another: item.text }"
-              />
-              <p class="ml-4 text-sm">{{ item.description }}</p>
+              <p class="ml-4 text-sm">{{ item.testName }}</p>
+              <p class="ml-4 text-sm font-semibold">
+                Allow Unsupervised:
+                {{ item.allowedUnsupervised ? "Yes" : "No" }}
+              </p>
             </div>
           </div>
           <!--  -->
         </div>
 
         <!--  -->
-         <div class="pl-4">
+        <div class="pl-4 mb-10">
           <div class="flex items-center">
-             <span class="cursor-pointer" @click="collapsable.solutions = !collapsable.solutions">
-                <svg viewBox="0 0 24 24" width="25" height="25" class="inline-block">
-                  <path :d="mdiChevronDown"/>
-                </svg>
-             </span>
-             <span class="-ml-0.5 text-sm font-semibold">Solutions :</span>
-             <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+            <span
+              class="cursor-pointer"
+              @click="collapsable.batteries = !collapsable.batteries"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d="mdiChevronDown" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Batteries :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
           </div>
           <!--  -->
-          <div class="flex pl-4 mt-2" v-if="collapsable.solutions">
-            <div v-for="(item, index) in testsArray" :key="index" class="w-1/5 mb-4 mr-8"> 
+          <div
+            class="grid grid-cols-4 gap-8 pl-4 mt-2"
+            v-if="collapsable.batteries"
+          >
+            <div v-for="(item, index) in battriesArray" :key="index">
               <check-radio-picker
-                name="sample-checkbox"
-                v-model="item.selected"
+                name="batteries-checkbox"
+                v-model="item.isDefaultBattery"
                 setValue="another"
-                :options="{ another: item.text }"
+                :options="{ [item.batteryID]: item.batteryTitle }"
               />
-              <p class="ml-4 text-sm">{{ item.description }}</p>
+              <p class="ml-4 text-sm">{{ item.batteryName }}</p>
+              <p class="ml-4 text-sm font-semibold">
+                Allow Unsupervised: {{ item.allowUnsupervised ? "Yes" : "No" }}
+              </p>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+
+        <!--  -->
+        <div class="pl-4">
+          <div class="flex items-center">
+            <span
+              class="cursor-pointer"
+              @click="collapsable.solutions = !collapsable.solutions"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d="mdiChevronDown" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Solutions :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+          </div>
+          <!--  -->
+          <div
+            class="grid grid-cols-4 gap-8 pl-4 mt-2"
+            v-if="collapsable.solutions"
+          >
+            <div v-for="(item, index) in solutionsArray" :key="index">
+              <check-radio-picker
+                name="solution-checkbox"
+                v-model="item.isDefaultBattery"
+                setValue="another"
+                :options="{ [item.batteryID]: item.batteryTitle }"
+              />
+              <p class="ml-4 text-sm">{{ item.batteryName }}</p>
+              <p class="ml-4 text-sm font-semibold">
+                Allow Unsupervised: {{ item.allowUnsupervised ? "Yes" : "No" }}
+              </p>
             </div>
           </div>
           <!--  -->
@@ -359,25 +461,31 @@
       </div>
     </div>
 
-
     <!-- showStep == 3 -->
     <div class="flex p-4 md:mt-6" v-show="showStep == 3">
       <div class="w-3/4">
         <!--  -->
+        <error-alert
+          v-if="errorText"
+          @dismissError="errorText = ''"
+          :error="errorText"
+          :showTranslatedError="false"
+        />
         <div>
           <p class="pl-4 mb-2 text-sm font-semibold">Credit Control:</p>
           <div class="flex">
-             <div class="w-full">
+            <div class="w-full">
               <field label="Available Credit" labelFor="credit">
                 <control
-                  v-model="userDetail.credits"
+                  :disabled="true"
+                  v-model="updateCredit.availableCredit"
                   placeholder=" "
                 />
               </field>
-             </div>
-             <div class="w-full">
+            </div>
+            <div class="w-full">
               <psytech-button
-                @buttonWasClicked="(toggleCredits = true)"
+                @buttonWasClicked="toggleCredits = true"
                 label="Update Credits"
                 type="outline"
               >
@@ -396,35 +504,52 @@
                   />
                 </svg>
               </psytech-button>
-             </div>
+            </div>
           </div>
         </div>
         <!--  -->
 
-        <div class="p-4 mt-4 ml-2 rounded-md bg-psytechLightGray" v-if="toggleCredits">
+        <div
+          class="mt-4 ml-2 rounded-md md:p-2 lg:px-2 lg:py-4 bg-psytechLightGray"
+          v-if="toggleCredits"
+        >
           <div class="flex">
-             <div class="w-2/5">
+            <div class="w-56 md:w-96">
               <field label="Update Amount" labelFor="update-amount">
-                <control
-                  v-model="updateCredit.updateAmount"
-                  placeholder=" "
-                />
+                <control v-model="updateCredit.updateAmount" placeholder=" " />
               </field>
-             </div>
-            <div class="w-2/5">
+            </div>
+            <div class="w-56 md:w-96">
               <field label="Purchase ID" labelFor="purchase-id">
-                <control
-                  v-model="updateCredit.purchaseId"
-                  placeholder=" "
-                />
+                <control v-model="updateCredit.purchaseId" placeholder=" " />
               </field>
-             </div>
-             <div>
-               <psytech-button label="Cancel" type="dark" @buttonWasClicked="(toggleCredits = false)"></psytech-button>
-             </div>
-             <div>
-                <psytech-button label="Update Credit" type="black" extraClasses="pl-6 pr-6" @buttonWasClicked="gotoNextHandler()"></psytech-button>
-             </div>
+            </div>
+            <!-- <div class="flex w-1/5"> -->
+            <div>
+              <psytech-button
+                label="Cancel"
+                type="dark"
+                @buttonWasClicked="
+                  (toggleCredits = false),
+                    (updateCredit.availableCredit = updateCredit.updateAmount =
+                      0)
+                "
+              ></psytech-button>
+            </div>
+            <div>
+              <psytech-button
+                label="Update Credit"
+                type="black"
+                extraClasses="pl-6 pr-6"
+                @buttonWasClicked="
+                  updateCredit.availableCredit = updateCredit.updateAmount
+                "
+              ></psytech-button>
+            </div>
+            <!-- </div> -->
+          </div>
+          <div class="ml-3">
+            <error-span :error="v$.credits"></error-span>
           </div>
         </div>
 
@@ -435,7 +560,8 @@
             <div v-for="(item, index) in notifications" :key="index">
               <check-radio-picker
                 name="shared-credit"
-                v-model="sharedCredit"
+                :disabled="true"
+                v-model="userDetail.sharedCredit"
                 type="radio"
                 :options="{ [index]: item }"
               />
@@ -445,19 +571,25 @@
 
         <!--  -->
         <div class="w-2/4 p-4 mt-8 ml-2 rounded-md bg-psytechLightGray">
-          <p class="text-xs font-medium leading-4"><span class="text-sm font-semibold">Note:</span>
-            If shared, the Master User holds all credits for the clients account. All users in the account will have access to this pool of credits.
+          <p class="text-xs font-medium leading-4">
+            <span class="text-sm font-semibold">Note:</span>
+            If shared, the Master User holds all credits for the clients
+            account. All users in the account will have access to this pool of
+            credits.
           </p>
         </div>
 
         <!--  -->
         <div class="mt-8">
-          <p class="pl-4 mb-2 text-sm font-semibold">Allowed to update Credit:</p>
+          <p class="pl-4 mb-2 text-sm font-semibold">
+            Allowed to update Credit:
+          </p>
           <div class="flex justify-between w-1/5 pl-4">
             <div v-for="(item, index) in notifications" :key="index">
               <check-radio-picker
+                :disabled="true"
                 name="update-credit"
-                v-model="allowedToUpdateCredit"
+                v-model="userDetail.allowedToUpdateCredit"
                 type="radio"
                 :options="{ [index]: item }"
               />
@@ -466,7 +598,7 @@
         </div>
 
         <!--  -->
-        <div class="mt-8">
+        <!-- <div class="mt-8">
           <p class="pl-4 mb-2 text-sm font-semibold">Monthly Update Limit:</p>
           <div class="w-2/5">
               <field label="Monthly Update Limit" labelFor="credit">
@@ -476,8 +608,7 @@
                 />
               </field>
             </div>
-        </div>
-
+        </div> -->
       </div>
     </div>
 
@@ -488,27 +619,42 @@
   </div>
 
   <!-- Bottom Navigation -->
-  <div class="flex justify-center w-11/12">
+  <div class="flex justify-center w-11/12 mb-3">
     <div class="w-1/12 ml-12">
-      <psytech-button label="Cancel" type="dark" 
-      @buttonWasClicked="
-              $router.push({ name: 'list-page' })
-            "></psytech-button>
+      <psytech-button
+        label="Cancel"
+        type="dark"
+        @buttonWasClicked="$router.push({ name: 'list-page' })"
+      ></psytech-button>
     </div>
     <div class="flex justify-end w-11/12">
       <div>
-        <psytech-button label="Back" type="light" @buttonWasClicked="goToBackHandler()"></psytech-button>
+        <psytech-button
+          label="Back"
+          type="light"
+          @buttonWasClicked="goToBackHandler()"
+        ></psytech-button>
       </div>
-      <div>
-        <psytech-button label="Next" type="black" @buttonWasClicked="gotoNextHandler()"></psytech-button>
+      <div v-if="showStep != 3">
+        <psytech-button
+          label="Next"
+          type="black"
+          @buttonWasClicked="gotoNextHandler()"
+        ></psytech-button>
+      </div>
+      <div v-if="showStep == 3">
+        <psytech-button
+          label="Create User"
+          type="black"
+          @buttonWasClicked="addAccountUserMethod()"
+        ></psytech-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, reactive, computed } from "vue";
-import utility from "@/components/composition/utility";
+import { ref, reactive, computed, onMounted, watch } from "vue";
 import { mdiPlus, mdiEyeOff, mdiEye, mdiChevronDown } from "@mdi/js";
 import MainSection from "@/components/MainSection";
 import TitleBar from "@/components/TitleBar";
@@ -518,17 +664,39 @@ import FilePicker from "@/components/FilePicker";
 import Field from "@/components/Field";
 import Control from "@/components/Control";
 import Divider from "@/components/Divider.vue";
+import utility from "@/components/composition/utility";
 import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import StickyFooter from "@/components/StickyFooter";
 import IconSVG from "@/components/IconSVG.vue";
 import TitleSubBar from "@/components/TitleSubBar";
-import { minLength, helpers, required, maxLength } from "@vuelidate/validators";
+import Loader from "@/components/Loader.vue";
+import ErrorAlert from "@/components/ErrorAlert.vue";
+import {
+  numeric,
+  minLength,
+  maxLength,
+  minValue,
+  maxValue,
+  helpers,
+  required,
+  email,
+} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import { useStore } from "vuex";
+import store from "../../../../store/index";
+import _ from "lodash";
 import SelectOption from "@/components/SelectOption.vue";
 import ErrorSpan from "@/components/ErrorSpan";
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    const accountDetail = store.getters["clientControl/getClientDetail"];
+    if (!accountDetail) {
+      next({ name: "list-page" });
+    }
+    next();
+  },
   name: "client-control-details",
   components: {
     TitleSubBar,
@@ -540,15 +708,19 @@ export default {
     CardComponent,
     TitleBar,
     Field,
+    Loader,
     Control,
     IconSVG,
     PsytechButton,
     StickyHeader,
+    ErrorAlert,
     StickyFooter,
     ErrorSpan,
     utility,
   },
   setup() {
+    const store = useStore();
+    let errorText = ref("");
     const form = reactive({
       companyName: "",
       accountDetails: "",
@@ -557,54 +729,123 @@ export default {
       loader: false,
       addAnother: "another",
     });
+    let loader = ref(false);
+    const emailIsTaken = ref(false);
+    const userDetail = reactive({
+      userType: "",
+      firstname: "",
+      familyname: "",
+      email: "",
+      password: "",
+      pin: "",
+      credits: 0,
+      tests: [],
+      solution: [],
+      batteries: [],
+      traininglevel: [],
+      allowedToUpdateCredit: 0,
+      sharedCredit: 0,
+      sendNotifications: 0,
+      trainingprovider: "",
+      trainingyear: "",
+      trainingdetails: "",
+    });
+    const trainingProvidersArray = ref([]);
+    const testsArray = ref([]);
+    const solutionsArray = ref([]);
+    const battriesArray = ref([]);
 
-    const showStep = ref(0)
-    const filterDropdown = reactive([
-      {
-        text: "Is equal to",
-        value: "isEqualTo",
-      },
-      {
-        text: "Is not equal to",
-        value: "isNotEqualTo",
-      },
-      {
-        text: "Starts with",
-        value: "startsWith",
-      },
-      {
-        text: "Contains",
-        value: "contains",
-      },
-      {
-        text: "Does not contain",
-        value: "notContain",
-      },
-      {
-        text: "Ends With",
-        value: "endsWith",
-      },
-    ]);
+    onMounted(() => {
+      loadAllTrainingProviders();
+      loadAllCollectTests();
+      loadAllCollectSolutions();
+      loadAllCollectBattries();
+    });
+    const rangeOfYears = (start, end) =>
+      Array(end - start + 1)
+        .fill(start)
+        .map((year, index) => {
+          return {
+            text: year + index,
+            value: String(year + index),
+          };
+        });
+
+    const loadAllTrainingProviders = () => {
+      store
+        .dispatch("clientControl/getTrainingProviders")
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200) {
+            trainingProvidersArray.value = RESPONSE_DATA.data.map((item) => {
+              return {
+                text: item,
+                value: item,
+              };
+            });
+          }
+        })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
+    };
+
+    const loadAllCollectTests = () => {
+      store
+        .dispatch("clientControl/getCollectTests")
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200) {
+            testsArray.value = RESPONSE_DATA.data;
+          }
+        })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
+    };
+
+    const loadAllCollectSolutions = () => {
+      store
+        .dispatch("clientControl/getCollectSolutions")
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200) {
+            solutionsArray.value = RESPONSE_DATA.data;
+          }
+        })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
+    };
+
+    const loadAllCollectBattries = () => {
+      store
+        .dispatch("clientControl/getCollectBattries")
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200) {
+            battriesArray.value = RESPONSE_DATA.data;
+          }
+        })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
+    };
+
+    const yearsArray = ref([]);
+    const endYear = new Date(
+      new Date().setFullYear(new Date().getFullYear() + 20)
+    ).getFullYear();
+    yearsArray.value = rangeOfYears(new Date().getFullYear(), endYear);
+
+    const showStep = ref(0);
 
     let selectedNameFilter = ref("");
-    const goToBackHandler = ()=>{
-      if(showStep.value <= 0){
-        return 
-      }
-     showStep.value = showStep.value - 1;
-    }
-
-    const gotoNextHandler = ()=>{
-      if(showStep.value >= 3){
-        return
-      }
-     showStep.value = showStep.value + 1;
-    }
 
     const trainingArray = reactive([
       {
         text: "Test User Personality & Ability (TUP & TUA) or Psytech Test Certificate (PTC)",
-        value: "All",
+        value: "PTC",
         selected: false,
         description: "Access to all assessments",
       },
@@ -630,38 +871,15 @@ export default {
           "Allow the new user to only administer/Invite respondents to complete Psytech assessments",
       },
     ]);
+    watch(
+      () => _.cloneDeep(trainingArray),
+      (currentValue, _) => {
+        userDetail.traininglevel = currentValue
+          .map((item) => item.selected && item.value)
+          .filter((item) => item);
+      }
+    );
 
-    const testsArray = reactive([
-      {
-        text: "15 FQ",
-        value: "All",
-        selected: false,
-        description: "Fifteen Factor Questionarie Plus",
-      },
-      {
-        text: "Supporting Emotional Intelligence in the Workplace",
-        value: "TUP",
-        selected: false,
-        description:
-          "Fifteen Factor Ideal Profile Questionarie",
-      },
-      {
-        text: "Supporting Emotional Intelligence in the Workplace",
-        value: "TUP",
-        selected: false,
-        description:
-          "Fifteen Factor Ideal Profile Questionarie",
-      },
-      {
-        text: "Supporting Emotional Intelligence in the Workplace",
-        value: "TUP",
-        selected: false,
-        description:
-          "Fifteen Factor Ideal Profile Questionarie",
-      },
-    ]);
-
-    const titleStack = ref(["Admin", "Forms"]);
     const refBox = ref(false);
     const userTypes = reactive([
       "Professional",
@@ -670,125 +888,255 @@ export default {
       "Test admin",
       "Integration",
     ]);
-    const activeBlockList = reactive([
-      "Active",
-      "Blocked"
-    ])
-    const activeBlocked = ref(1)
+    const activeBlockList = reactive(["Active", "Blocked"]);
+    const activeBlocked = ref(1);
     const notifications = reactive(["No", "Yes"]);
-    const sharedCredit = ref('')
-    const allowedToUpdateCredit = ref('')
     const collapsable = reactive({
       tests: true,
       batteries: true,
-      solutions: true
-    })
-
-    const userDetail = reactive({
-      userType: "",
-      firstname: "",
-      familyname: "",
-      email: "",
-      password: "",
-      pin: "",
-      credits:0,
-      sendNotifications: 1,
+      solutions: true,
     });
 
     const updateCredit = reactive({
-      updateAmount: '',
-      purchaseId: ""
-    })
-    const toggleCredits = ref(false)
+      availableCredit: 0,
+      updateAmount: "",
+      purchaseId: "",
+    });
+    watch(
+      () => _.cloneDeep(updateCredit),
+      (currentValue, _) => {
+        userDetail.credits = +currentValue.updateAmount;
+      }
+    );
 
-    const selectOptions = [
-      { id: 1, label: "Business development" },
-      { id: 2, label: "Marketing" },
-      { id: 3, label: "Sales" },
-    ];
-
-    // const form = reactive({
-    //   companyName: '',
-    //   accountDetails: '',
-    //   accountAddress: '',
-    //   addAnother: 0
-    // })
+    const toggleCredits = ref(false);
 
     const tooglePasswordIcon = ref(false);
-    const tooglePinIcon = ref(false); 
+    const tooglePinIcon = ref(false);
 
     const rules = computed(() => {
       return {
-        companyName: {
-          required: helpers.withMessage("Company Name is required", required),
-          minLength: minLength(4),
-          maxLength: maxLength(255),
-        },
-        accountDetails: {
+        userType: {
           required: helpers.withMessage(
-            "Account Details are required",
+            "One user type must be selected",
             required
           ),
-          minLength: minLength(10),
-          maxLength: maxLength(255),
         },
-        accountAddress: {
+        firstname: {
+          required: helpers.withMessage("First Name is required", required),
+        },
+        familyname: {
+          required: helpers.withMessage("Family Name is required", required),
+        },
+        email: {
+          email: helpers.withMessage("Email is invalid", email),
+          required: helpers.withMessage("Email is required", required),
+          async isUnique(val) {
+            if (!val) return false;
+            store
+              .dispatch("clientControl/userEmailCheck", val)
+              .then((res) => {
+                emailIsTaken.value = res.data.data.accountExists;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+        },
+        password: {
+          required: helpers.withMessage("Password is required", required),
+          minLength: helpers.withMessage(
+            "Password must be at least 8 characters",
+            minLength(8)
+          ),
+        },
+        pin: {
+          required: helpers.withMessage("Pin is required", required),
+          numeric: helpers.withMessage("Numeric values are allowed", numeric),
+          minLength: helpers.withMessage(
+            "Pin must be of 4 digits",
+            minLength(4)
+          ),
+          maxLength: helpers.withMessage(
+            "Pin must be of 4 digits",
+            maxLength(4)
+          ),
+        },
+        traininglevel: {
+          required: helpers.withMessage("One type must be selected", required),
+        },
+        trainingprovider: {
           required: helpers.withMessage(
-            "Account Address are required",
+            "Year of training is required",
             required
           ),
-          minLength: minLength(10),
-          maxLength: maxLength(255),
+        },
+        trainingyear: {
+          required: helpers.withMessage(
+            "Name / Email address is required",
+            required
+          ),
+        },
+        trainingdetails: {
+          required: helpers.withMessage("Detail is required", required),
+          maxLength: helpers.withMessage(
+            "Detail should not be greater than 255 characters.",
+            maxLength(255)
+          ),
+        },
+        credits: {
+          minValue: helpers.withMessage(
+            "Update Amount should be between 20 to 1000",
+            minValue(19)
+          ),
+          maxValue: helpers.withMessage(
+            "Update Amount should be between 20 to 1000",
+            maxValue(1000)
+          ),
         },
       };
     });
 
-    const v$ = useVuelidate(rules, form);
+    const v$ = useVuelidate(rules, userDetail);
 
-    const submit = () => {
-      if (v$.value.$validate() && v$.value.$error) {
-        return true;
+    const goToBackHandler = () => {
+      if (showStep.value <= 0) {
+        return;
       }
-      //Send validated from to user.
-      console.log(form.addAnother);
+
+      if (showStep.value == 2) {
+        if (userDetail.userType == 1 || userDetail.userType == 4) {
+          showStep.value = showStep.value - 2;
+          return true;
+        }
+      }
+      showStep.value = showStep.value - 1;
     };
 
-    const cancel = () => {
-      const { navigateTo } = utility("dashboard");
-      navigateTo();
+    const gotoNextHandler = () => {
+      if (showStep.value >= 3) {
+        return true;
+      }
+      let next = false;
+      v$.value.$validate();
+      if (
+        v$.value.userType.$invalid ||
+        v$.value.firstname.$invalid ||
+        v$.value.familyname.$invalid ||
+        v$.value.email.$invalid ||
+        v$.value.password.$invalid ||
+        v$.value.pin.$invalid
+      ) {
+        next = true;
+        return true;
+      }
+      if (
+        showStep.value == 1 &&
+        userDetail.userType != 1 &&
+        userDetail.userType != 4 &&
+        (v$.value.traininglevel.$invalid ||
+          v$.value.trainingyear.$invalid ||
+          v$.value.trainingdetails.$invalid)
+      ) {
+        next = true;
+        return true;
+      }
+
+      if (userDetail.userType == 3) {
+        userDetail.allowedToUpdateCredit = 1;
+        userDetail.sharedCredit = 1;
+      }
+
+      if (
+        !emailIsTaken.value &&
+        (userDetail.userType == 1 || userDetail.userType == 4)
+      ) {
+        if (showStep.value == 0) {
+          showStep.value = showStep.value + 2;
+          return true;
+        }
+      }
+
+      if (!next && !emailIsTaken.value) {
+        showStep.value = showStep.value + 1;
+      }
+    };
+
+    const addAccountUserMethod = () => {
+      const userDetailData = { ...userDetail };
+      userDetailData.userType = Number(userDetail.userType);
+
+      let array = [];
+
+      Object.keys(userDetailData.traininglevel).forEach(function (key) {
+        array.push(String(userDetailData.traininglevel[key]));
+      });
+      userDetailData.traininglevel = array;
+      userDetailData.tests = testsArray.value
+        .map((item) => item.isDefaultTest && item.testID)
+        .filter((item) => item);
+      userDetailData.solution = solutionsArray.value
+        .map((item) => item.isDefaultBattery && String(item.batteryID))
+        .filter((item) => item);
+      userDetailData.batteries = battriesArray.value
+        .map((item) => item.isDefaultBattery && String(item.batteryID))
+        .filter((item) => item);
+      userDetailData.sendNotifications =
+        userDetail.sendNotifications == 1 ? true : false;
+      errorText.value = "";
+      loader.value = true;
+      store
+        .dispatch("clientControl/postAddAccountUser", userDetailData)
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+            loader.value = false;
+            store.commit("clientControl/setClientDetail", {
+              incrementAccUser: true,
+            });
+            const { navigateTo } = utility("client-control-list-detail");
+            navigateTo();
+          } else {
+            throw new Error(RESPONSE_DATA.data.message);
+          }
+        })
+        .catch((error) => {
+          loader.value = false;
+          errorText.value = error?.message ?? "";
+        });
     };
 
     return {
-      titleStack,
-      selectOptions,
       form,
-      v$,
-      cancel,
       refBox,
+      v$,
       showStep,
       mdiEye,
-      filterDropdown,
       selectedNameFilter,
       mdiEyeOff,
       tooglePasswordIcon,
       tooglePinIcon,
+      emailIsTaken,
+      trainingProvidersArray,
       goToBackHandler,
       gotoNextHandler,
+      addAccountUserMethod,
+      solutionsArray,
+      yearsArray,
+      loader,
+      errorText,
       collapsable,
       updateCredit,
       toggleCredits,
       mdiChevronDown,
       testsArray,
+      battriesArray,
       activeBlockList,
-      sharedCredit,
-      allowedToUpdateCredit,
       activeBlocked,
       userDetail,
       userTypes,
       notifications,
       trainingArray,
-      // customElementsForm,
-      submit,
       mdiPlus,
     };
   },
@@ -812,26 +1160,6 @@ export default {
 :-ms-input-placeholder {
   /* Internet Explorer 10+ */
   color: #fff;
-}
-label:after {
-  content: '+';
-  position: absolute;
-  right: 1em;
-  color: #fff;
-}
-
-input:checked + label:after {
-  content: '-';
-  line-height: .8em;
-}
-
-.accordion__content{
-  max-height: 0em;
-  transition: all 0.4s cubic-bezier(0.865, 0.14, 0.095, 0.87);
-}
-input[name='panel']:checked ~ .accordion__content {
-  /* Get this as close to what height you expect */
-  max-height: 50em;
 }
 </style>
 
