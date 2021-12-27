@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="avatar" :alt="name" class="rounded-full block h-auto w-full max-w-full" :class="bg" />
+    <img :src="avatar" :alt="name" class="block w-full h-auto max-w-full rounded-full" :class="bg" />
   </div>
 </template>
 

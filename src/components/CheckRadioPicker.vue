@@ -29,7 +29,7 @@ export default {
       required: true
     },
     disabled:{
-      type: String,
+      type: Boolean,
       default: false
     },
     type: {

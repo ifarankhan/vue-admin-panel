@@ -12,13 +12,17 @@ const getters = {
 
 const mutations = {
   setClientDetail(state, payload) {
-    state.clientDetail = payload;
+    if(payload.incrementAccUser){
+      const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
+      state.clientDetail = updatedClientDtail;
+    } else{
+      state.clientDetail = payload;
+    } 
   },
 }
 
 const actions = {
     async getAccountUsers({},payload){
-       const userData = await JSON.parse(localStorage.getItem("userData"));
        return private_url.get('account-users', {
         params: payload
       })
@@ -38,6 +42,13 @@ const actions = {
               accountId: userData.accountId
             }
         })
+    },
+    async userEmailCheck({}, payload){
+      return private_url.get('user-check', {
+          params: {
+            email: payload
+          }
+      })
     },
     async getCollectTests({}){
       const userData = await JSON.parse(localStorage.getItem("userData"));
@@ -71,7 +82,6 @@ const actions = {
     async postAddAccountUser({state},payload){
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;
-      console.log("payloadpayload",payload)
       return private_url.post('add-account-user', payload )
   }
 }
