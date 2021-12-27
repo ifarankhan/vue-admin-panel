@@ -343,17 +343,18 @@
             <table class="border border-gray-200 rounded-md table-auto hover:table-fixed">
               <thead>
               <tr>
-                <th>First Name</th>
-                <th>Family Name</th>
-                <th>User Name</th>
-                <th>User Type</th>
-                <th>Credits</th>
-                <th>Status</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;">First Name</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;">Family Name</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;">User Name</th>
+                <th style="min-width: 12rem; cursor: pointer; text-align:left;">User Type</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;">Credits</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;">Status</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;"> </th>
               </tr>
               </thead>
               <tbody>
               <tr v-if="masterUser && masterUser.length === 0">
-                <td colspan="6">
+                <td colspan="7">
                   <div class="flex items-center content-center justify-center font-bold">{{ $t('No master user found for this account.') }}</div>
                 </td>
               </tr>
@@ -364,6 +365,14 @@
                 <td>Professional</td>
                 <td>{{ user.credits }}</td>
                 <td>{{ user.status?"Active":"In-Active" }}</td>
+                <td>
+                   <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+                </td>
               </tr>
               </tbody>
             </table>
