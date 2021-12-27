@@ -31,6 +31,7 @@
     :id="id"
     v-model="computedValue"
     :class="inputElClass"
+    :disabled="disabled"
     placeholder=" "
     v-on:keyup.enter="$emit('enterPressed')"
     class="text-xs font-medium"
@@ -53,6 +54,10 @@ export default {
     type: {
       type: String,
       default: "text",
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     icon: String,
     options: Array,
