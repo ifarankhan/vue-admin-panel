@@ -352,7 +352,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-if="masterUser.length === 0">
+              <tr v-if="masterUser && masterUser.length === 0">
                 <td colspan="6">
                   <div class="flex items-center content-center justify-center font-bold">{{ $t('No master user found for this account.') }}</div>
                 </td>
@@ -596,6 +596,7 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import SelectOption from "@/components/SelectOption.vue";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
+import IconSVG from "@/components/IconSVG.vue";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -612,6 +613,7 @@ export default {
     Field,
     Control,
     SelectOption,
+    IconSVG,
     TabGroup,
     TabList,
     Tab,

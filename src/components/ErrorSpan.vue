@@ -1,14 +1,23 @@
 <template>
   <span
       v-if="error.$error"
-      class="pl-3 font-semibold text-red-700"
+      class="pl-3 text-sm font-semibold text-red-700"
   >
-            {{ $t(error.$errors[0].$message) }}
+    {{ error.$errors[0].$message }}
   </span>
+  <span class="pl-3 text-sm font-semibold text-red-700" v-if="customeError"> {{ customeError }} </span>
 </template>
 <script>
 export default {
   name: "ErrorSpan",
-  props: ['error']
+  props:{
+    error: {
+      default: ''
+    },
+    customeError: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>

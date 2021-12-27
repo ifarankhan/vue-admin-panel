@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center flex-col justify-center overflow-hidden fixed inset-0" :class="zIndex">
+  <div class="fixed inset-0 flex flex-col items-center justify-center overflow-hidden" :class="zIndex">
     <transition
       enter-active-class="transition duration-150 ease-in"
       enter-from-class="opacity-0"
