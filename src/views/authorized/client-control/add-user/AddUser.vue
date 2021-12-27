@@ -168,7 +168,7 @@
               </field>
             </div>
           </div>
-          <div class="flex w-9/12 -ml-2">
+          <div class="flex w-9/12 -ml-2" v-if="v$.firstname">
             <span class="inline-block w-full">
               <error-span :error="v$.firstname"></error-span>
             </span>
@@ -191,7 +191,7 @@
           <span class="inline-block w-full -ml-2" v-if="emailIsTaken">
             <error-span customeError="That email is already taken"></error-span>
           </span>
-           <span class="inline-block w-full -ml-2" v-else>
+           <span class="inline-block w-full -ml-2" v-if="v$.email.$invalid">
             <error-span :error="v$.email"></error-span>
           </span>
           <!--  -->
