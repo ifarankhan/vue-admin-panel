@@ -2,10 +2,10 @@
   <Loader v-if="loader" :toBeBigger="true" />
   <div class="p-5">
     <h1
-      class="pb-3 pl-6 mt-10 ml-1 text-2xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white"
+      class="pb-3 pl-6 mt-10 ml-1 text-3xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white"
     >
       <span>
-        <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block">
+        <svg viewBox="0 0 24 24" width="35" height="35" class="inline-block">
           <path :d="mdiPlus" />
         </svg>
       </span>
@@ -77,7 +77,7 @@
             }}
           </div>
           <div class="absolute top-0 w-32 mt-10 -ml-10 text-center">
-            Integration
+            Assessments
           </div>
         </div>
         <div
@@ -100,7 +100,7 @@
             }}
           </div>
           <div class="absolute top-0 w-32 mt-10 -ml-10 text-center">
-            Training
+            Credit Control
           </div>
         </div>
       </div>
@@ -129,13 +129,54 @@
             <error-span :error="v$.userType"></error-span>
           </div>
         </div>
+
+        <!--  -->
+          <div class="mt-2 ml-1" v-if="userDetail.userType == 3">
+          <p class="pl-2 text-sm font-semibold">Add a Supervisor</p>
+          <div class="flex w-9/12 pl-1">
+            <div class="w-full pl-1">
+              <select-option
+                :filterDropdown="supervisorsArray"
+                labelText="Supervisors"
+                :customeWidth="true"
+                v-model="userDetail.supervisor"
+              ></select-option>
+            </div>
+          </div>
+          <div class="flex w-9/12 mt-1">
+            <span class="inline-block w-full">
+              <error-span :error="v$.supervisor"></error-span>
+            </span>
+          </div>
+      </div>
+      
+      <!--  -->
+      <!-- <div class="mt-2 ml-5">
+      <div class="flex inline-block w-2/4 mt-4 ml-2">
+        {{ userDetail.supervisor && supervisorsArray.find(item=>item.value == userDetail.supervisor ).firstName[0].toUpperCase() }}
+        <div class="inline-block ml-2">
+          <p class="text-sm font-bold">First Name:{{ userDetail.supervisor && supervisorsArray.find(item=>item.value == userDetail.supervisor ).firstName }}</p>
+          <p class="text-sm opacity-50">Family Name: {{ userDetail.supervisor && supervisorsArray.find(item=>item.value == userDetail.supervisor ).familyName }} </p>
+          <p class="text-sm opacity-50">Username: {{ userDetail.supervisor && supervisorsArray.find(item=>item.value == userDetail.supervisor ).text }} </p>
+        </div>
+        
+        <span class="ml-4 cursor-pointer">
+          <IconSVG
+          :applyClass="true"
+          @iconWasClicked="(accountName = '')"
+        />
+      </span>
+      <span class="text-xs opacity-50 cursor-pointer"> Remove </span>
+      </div>
+      </div> -->
+
         <!--  -->
         <div class="mt-6 ml-3">
           <p class="mb-2 text-sm font-semibold">User Status</p>
           <div class="flex justify-between w-1/4 pl-2">
             <div v-for="(item, index) in activeBlockList" :key="index">
               <check-radio-picker
-                :disabled="index == 0 ? true : false"
+                :disabled="true"
                 name="active-block"
                 v-model="activeBlocked"
                 type="radio"
@@ -213,6 +254,7 @@
                   @iconWasClicked="tooglePinIcon = !tooglePinIcon"
                   :icon="tooglePinIcon ? mdiEye : mdiEyeOff"
                   :type="tooglePinIcon ? 'text' : 'password'"
+                  maxlength="4"
                   v-model="userDetail.pin"
                   placeholder=" "
                 />
@@ -322,7 +364,7 @@
           </div> -->
 
           <!--  -->
-          <div class="mt-8">
+          <div class="w-10/12 mt-8">
             <field label="Account Address" labelFor="accountAddress">
               <control
                 type="textarea"
@@ -465,7 +507,7 @@
     </div>
 
     <!-- showStep == 3 -->
-    <div class="flex p-4 md:mt-6" v-show="showStep == 3">
+    <div class="flex p-4 md:mt-6" v-show="showStep ==3">
       <div class="w-3/4">
         <!--  -->
         <error-alert
@@ -489,6 +531,7 @@
             <div class="w-full">
               <psytech-button
                 @buttonWasClicked="toggleCredits = true"
+                :smallText="true"
                 label="Update Credits"
                 type="outline"
               >
@@ -513,13 +556,13 @@
         <!--  -->
 
         <div
-          class="w-11/12 p-2 mt-4 ml-6 rounded-md bg-psytechLightGray"
+          class="w-9/12 p-2 mt-4 ml-6 rounded-md bg-psytechLightGray"
           v-if="toggleCredits"
         >
           <div class="flex w-full">
             <div class="w-80">
               <field label="Update Amount" labelFor="update-amount">
-                <control v-model="updateCredit.updateAmount" placeholder=" " />
+                <control v-model="updateCredit.updateAmount" placeholder=" " maxlength="4" />
               </field>
             </div>
             <div class="w-80">
@@ -528,7 +571,7 @@
               </field>
             </div>
             <!-- <div class="flex w-1/5"> -->
-            <div class="mt-1 ml-10">
+            <div class="mt-1 ml-6">
               <psytech-button
                 label="Cancel"
                 type="dark"
@@ -541,7 +584,7 @@
             </div>
             <div class="mt-1">
               <psytech-button
-                label="Update Credit"
+                label="Update"
                 type="black"
                 extraClasses="pl-6 pr-6"
                 @buttonWasClicked="
@@ -573,13 +616,20 @@
         </div>
 
         <!--  -->
-        <div class="w-2/4 p-4 mt-8 ml-5 rounded-md bg-psytechLightGray">
-          <p class="text-xs font-medium leading-4">
-            <span class="text-sm font-semibold">Note:</span>
-            If shared, the Master User holds all credits for the clients
-            account. All users in the account will have access to this pool of
-            credits.
-          </p>
+        <div class="w-9/12 p-4 mt-8 ml-5 rounded-md bg-psytechLightGray">
+        <div class="flex">
+          <div>
+            <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block">
+              <path :d="mdiFileChartOutline"/>
+            </svg>
+          </div>
+            <p class="text-base">
+              <span class="font-semibold">Note:</span>
+              If shared, the Master User holds all credits for the clients
+              account. All users in the account will have access to this pool of
+              credits.
+            </p>
+          </div>
         </div>
 
         <!--  -->
@@ -634,7 +684,8 @@
       <div>
         <psytech-button
           label="Back"
-          type="light"
+          :type="showStep==0?'light':'dark'"
+          :enabledBackBtn="true"
           @buttonWasClicked="goToBackHandler()"
         ></psytech-button>
       </div>
@@ -658,7 +709,7 @@
 
 <script>
 import { ref, reactive, computed, onMounted, watch } from "vue";
-import { mdiPlus, mdiEyeOff, mdiEye, mdiChevronDown } from "@mdi/js";
+import { mdiPlus, mdiEyeOff, mdiEye, mdiChevronDown, mdiFileChartOutline } from "@mdi/js";
 import MainSection from "@/components/MainSection";
 import TitleBar from "@/components/TitleBar";
 import CardComponent from "@/components/CardComponent";
@@ -724,6 +775,7 @@ export default {
   setup() {
     const store = useStore();
     let errorText = ref("");
+    let supervisorsArray = ref([]);
     const form = reactive({
       companyName: "",
       accountDetails: "",
@@ -742,6 +794,7 @@ export default {
       password: "",
       pin: "",
       credits: 0,
+      supervisor:'',
       tests: [],
       solution: [],
       batteries: [],
@@ -759,6 +812,7 @@ export default {
     const battriesArray = ref([]);
 
     onMounted(() => {
+      loadAllAccSupervisors();
       loadAllTrainingProviders();
       loadAllCollectTests();
       loadAllCollectSolutions();
@@ -773,6 +827,25 @@ export default {
             value: String(year + index),
           };
         });
+
+    const loadAllAccSupervisors = ()=>{
+            store
+        .dispatch("clientControl/getAccountSupervisors")
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if(RESPONSE_DATA.status ==200){
+            supervisorsArray.value = RESPONSE_DATA.data.map(item=> {
+              return {
+                text: item.username,
+                value: item.userID,
+                familyName: item.familyName,
+                firstName: item.firstName,
+              }
+            })
+          }
+        })
+        .catch((error) => { });
+    }
 
     const loadAllTrainingProviders = () => {
       store
@@ -988,6 +1061,7 @@ export default {
           ),
         },
         credits: {
+          numeric: helpers.withMessage("Numeric values are allowed", numeric),
           minValue: helpers.withMessage(
             "Update Amount should be between 20 to 1000",
             minValue(19)
@@ -1050,8 +1124,9 @@ export default {
       }
 
       if (userDetail.userType == 3) {
-        userDetail.allowedToUpdateCredit = 1;
-        userDetail.sharedCredit = 1;
+        userDetail.allowedToUpdateCredit = userDetail.sharedCredit = 1;
+      } else{
+        userDetail.allowedToUpdateCredit = userDetail.sharedCredit = 0;
       }
 
       if (
@@ -1075,6 +1150,10 @@ export default {
         return true
       }
       userDetailData.userType = Number(userDetail.userType);
+
+      if(userDetailData.userType != 3){
+        userDetailData.supervisor = ""
+      }
 
       let array = [];
 
@@ -1132,9 +1211,11 @@ export default {
       gotoNextHandler,
       addAccountUserMethod,
       solutionsArray,
+      supervisorsArray,
       yearsArray,
       loader,
       errorText,
+      mdiFileChartOutline,
       collapsable,
       updateCredit,
       toggleCredits,

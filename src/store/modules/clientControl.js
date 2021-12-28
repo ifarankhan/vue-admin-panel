@@ -74,6 +74,15 @@ const actions = {
           }
       })
     },
+    async getAccountSupervisors({state}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.get('account-supervisors', {
+          params: {
+            distributorId: userData.distributorId,
+            accountId: state.clientDetail.accountId
+          }
+      })
+    },  
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;

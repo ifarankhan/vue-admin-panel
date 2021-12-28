@@ -33,6 +33,9 @@
     :class="inputElClass"
     :disabled="disabled"
     placeholder=" "
+    :maxlength="maxlength"
+    onfocus="this.removeAttribute('readonly');"
+    readonly
     v-on:keyup.enter="$emit('enterPressed')"
     class="text-xs font-medium"
     autocomplete="off"
@@ -58,6 +61,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    maxlength:{
+      type: String,
+      default: ''
     },
     icon: String,
     options: Array,

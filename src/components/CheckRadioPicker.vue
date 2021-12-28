@@ -6,9 +6,11 @@
         :type="inputType"
         :name="name"
         v-model="computedValue"
-        :value="key" class="w-4 h-4 text-psytechBlueBtHover form-checkbox focus:ring-transparent">
+        :aria-labelledby="disabled ?'option-disabled':''" 
+        :aria-describedby="option-disabled?'option-disabled':''"
+        :value="key" class="w-4 h-4 border-gray-200 text-psytechBlueBtHover form-checkbox focus:ring-transparent">
       <span class="check"></span>
-      <span class="ml-1.5 text-sm font-semibold control-label mr-1.5"> {{ value }} </span>
+      <span class="ml-1.5 text-sm font-semibold control-label mr-1.5" :class="[disabled?'text-gray-400':'']"> {{ value }} </span>
     </label>
   </div>
   
