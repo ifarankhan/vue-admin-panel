@@ -1,7 +1,7 @@
 <template>
   <div class="relative m-2 floating-input" :class="[applyExtraInputClass? 'extra-input-class': '', applyExtraSelectClass?'extra-select-class':'']">
       <slot />
-    <label :for="lableFor" class="absolute left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none -top-2 ">{{ label }}</label>
+    <label :for="lableFor" class="absolute left-0 h-full px-3 py-5 transition-all duration-100 ease-in-out origin-left transform pointer-events-none -top-2">{{ label }}</label>
     <div v-if="help" class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ help }}</div>
   </div>
 </template>
