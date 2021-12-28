@@ -18,6 +18,14 @@ export default {
       type: String,
       default: "primary",
     },
+    smallText:{
+      type: Boolean,
+      default: false
+    },
+    enabledBackBtn:{
+      type: Boolean,
+      default: false
+    },
     extraClasses:{
       type: String,
       default: null
@@ -42,6 +50,9 @@ export default {
         base.push(
           "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechDark text-white"
         );
+        if(props.enabledBackBtn){
+          base.push("px-10 py-1")
+        }
       }
       if(props.type == 'light'){
          base.push(
@@ -57,6 +68,9 @@ export default {
         base.push(
           "mt-2 mr-2 inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:border-psytechBlue hover:bg-psytechBlueBtHover"
         );
+      }
+      if(props.smallText){
+        base.push('text-gray-400')
       }
       if(props.extraClasses){
         base.push(props.extraClasses)
