@@ -329,6 +329,7 @@
             <div class="w-full pl-1">
               <select-option
                 :filterDropdown="yearsArray"
+                :allyMarginRight="false"
                 labelText="Year of Training"
                 v-model="userDetail.trainingyear"
                 :customeWidth="true"
@@ -1151,8 +1152,12 @@ export default {
       }
       userDetailData.userType = Number(userDetail.userType);
 
-      if(userDetailData.userType != 3){
-        userDetailData.supervisor = ""
+      // if(userDetailData.userType != 3){
+      //   userDetailData.supervisor = ""
+      // }
+
+      if(!userDetailData.supervisor){
+        delete userDetailData.supervisor;
       }
 
       let array = [];
