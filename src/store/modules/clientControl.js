@@ -16,9 +16,10 @@ const mutations = {
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
       state.clientDetail = updatedClientDtail;
     } else{
+      console.log("akndlk")
       state.clientDetail = payload;
     } 
-  },
+  }
 }
 
 const actions = {
@@ -86,12 +87,22 @@ const actions = {
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
-        return private_url.post('add-account', payload )
+        return private_url.post('add-account', payload)
+    },
+    async updateClientDetail({state, commit},payload){
+        const DATA = payload;
+        return private_url.put('account', payload).then(res=>{
+          if(res.data?.data?.accountUpdatedSuccessfully){
+            const payload = {...state.clientDetail,accountAddress: DATA.accountAddress, accountDescription: DATA.description}
+            commit("setClientDetail", payload)
+          }
+          return new Promise((resolve,_)=> resolve(res))
+        }).catch(error=> new Promise((_,reject)=> reject(error)))
     },
     async postAddAccountUser({state},payload){
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;
-      return private_url.post('add-account-user', payload )
+      return private_url.post('add-account-user', payload)
   }
 }
 
