@@ -224,6 +224,7 @@
                 <control
                   type="text"
                   v-model="userDetail.email"
+                  @onFocusLeave="isUnique"
                   placeholder="Name"
                 />
               </field>
@@ -1008,17 +1009,6 @@ export default {
         email: {
           email: helpers.withMessage("Email is invalid", email),
           required: helpers.withMessage("Email is required", required),
-          async isUnique(val) {
-            if (!val) return false;
-            store
-              .dispatch("clientControl/userEmailCheck", val)
-              .then((res) => {
-                emailIsTaken.value = res.data.data.accountExists;
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          },
         },
         password: {
           required: helpers.withMessage("Password is required", required),
@@ -1095,6 +1085,18 @@ export default {
       showStep.value = showStep.value - 1;
     };
 
+    const isUnique = async ()=>{
+            if (!userDetail.email) return false;
+            store
+              .dispatch("clientControl/userEmailCheck", userDetail.email)
+              .then((res) => {
+                emailIsTaken.value = res.data.data.accountExists;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+
     const gotoNextHandler = () => {
       if (showStep.value >= 3) {
         return true;
@@ -1165,7 +1167,6 @@ export default {
       Object.keys(userDetailData.traininglevel).forEach(function (key) {
         array.push(String(userDetailData.traininglevel[key]));
       });
-      userDetailData.traininglevel = array;
       userDetailData.tests = testsArray.value
         .map((item) => item.isDefaultTest && item.testID)
         .filter((item) => item);
@@ -1219,6 +1220,7 @@ export default {
       supervisorsArray,
       yearsArray,
       loader,
+      isUnique,
       errorText,
       mdiFileChartOutline,
       collapsable,

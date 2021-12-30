@@ -1,12 +1,24 @@
 <template>
+  <Loader v-if="form.loader" :toBeBigger="true" />
   <sticky-header :icon="mdiPlus" title="Edit Client"></sticky-header>
   <main-section class="grid grid-cols-3 gap-4">
      <div class="col-span-2 form">
        <form action="#" @submit.prevent="submit">
-         <field label="Company Name" labelFor="email">
-           <control type="text" v-model="form.companyName" placeholder="Email"/>
-           <error-span :error="v$.companyName"></error-span>
-         </field>
+              <error-alert
+              v-if="errorText"
+              @dismissError="errorText = ''"
+              :error="errorText"
+              :showTranslatedError="false"
+            />
+            <div class="ml-2.5 font-bold text-medium">Account Name</div>
+              <div
+                class="p-3 mt-1 mb-4 ml-2 text-justify bg-gray-200"
+                style="word-wrap: break-word; width: 98.3%;"
+              >
+                {{
+                 form.companyName
+                }}
+              </div>
          <field label="Account Detail" labelFor="accountDetails">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
            <error-span :error="v$.accountDetails"></error-span>
@@ -29,7 +41,7 @@
 
 </template>
 <script>
-import { ref, reactive,computed } from 'vue'
+import { ref,reactive,computed } from 'vue'
 import utility from "@/components/composition/utility";
 import { mdiPlus } from '@mdi/js'
 import MainSection from '@/components/MainSection';
@@ -43,8 +55,10 @@ import StickyFooter from "@/components/StickyFooter";
 import {minLength, helpers, required,maxLength} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import { useStore } from "vuex";
+import Loader from "@/components/Loader.vue";
 import ErrorSpan from "@/components/ErrorSpan";
 import store from '../../../store/index';
+import ErrorAlert from "@/components/ErrorAlert.vue";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -65,30 +79,26 @@ export default {
     StickyHeader,
     StickyFooter,
     ErrorSpan,
+    Loader,
+    ErrorAlert,
     utility,
   },
   setup () {
+    let errorText = ref("");
     const store = useStore();
     const accountDetail = computed(()=>{
       return store.getters['clientControl/getClientDetail']
     })
-
-    // console.log("accountDetail",accountDetail.value)
-
+    
     const form = reactive({ 
       companyName: accountDetail.value?.accountName??'',
       accountDetails: accountDetail.value?.accountDescription??'',
       accountAddress: accountDetail.value?.accountAddress??'',
-      addAnother: 0
+      loader: false
     })
     
     const rules = computed(() => {
       return {
-        companyName: {
-          required: helpers.withMessage("Company Name is required", required),
-          minLength: minLength(4),
-          maxLength:maxLength(255)
-        },
         accountDetails: {
           required: helpers.withMessage("Account Details are required", required),
           minLength: minLength(10),
@@ -105,21 +115,38 @@ export default {
     const v$ = useVuelidate(rules, form);
 
     const submit = () => {
-      if (v$.value.$validate() && v$.value.$error) {
-        return true;
-      }
+      // if (v$.value.$validate() && v$.value.$error) {
+      //   return true;
+      // }
+      form.loader = true;
+      errorText.value = "";
       //Send validated from to user.
-      console.log(form.addAnother)
-    }
+      const DATA = {
+        accountId: accountDetail.value.accountId,
+        accountAddress: form.accountAddress,
+        description: form.accountDetails
+      }
 
-    const cancel = ()=>{
-      const { navigateTo } = utility('dashboard'); navigateTo();
+      store
+      .dispatch("clientControl/updateClientDetail", DATA).then(res=>{
+        const RESPONSE_DATA = res.data;
+       if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+         const { navigateTo } = utility('client-control-list-detail'); navigateTo();
+       }
+      else{
+          throw new Error(RESPONSE_DATA.data.message);
+        }
+      }).catch(error=>{
+        errorText.value = error?.message ?? "";
+      }).finally(()=>{
+        form.loader = false;
+      })
     }
 
     return {
       form,
       v$,
-      cancel,
+      errorText,
       submit,
       mdiPlus
     }
