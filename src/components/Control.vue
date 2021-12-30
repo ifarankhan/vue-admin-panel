@@ -35,6 +35,7 @@
     placeholder=" "
     :maxlength="maxlength"
     onfocus="this.removeAttribute('readonly');"
+    @blur="$emit('onFocusLeave')"
     readonly
     v-on:keyup.enter="$emit('enterPressed')"
     class="text-xs font-medium"
