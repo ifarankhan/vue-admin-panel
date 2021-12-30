@@ -367,14 +367,14 @@
 
           <!--  -->
           <div class="w-10/12 mt-8">
-            <field label="Account Address" labelFor="accountAddress">
+            <field label="Training Details" labelFor="trainingDetails">
               <control
                 type="textarea"
                 v-model="userDetail.trainingdetails"
                 placeholder="Details of the Training"
               />
             </field>
-            <div class="mt-1">
+            <div>
               <error-span :error="v$.trainingdetails"></error-span>
             </div>
           </div>
@@ -1034,13 +1034,13 @@ export default {
         },
         trainingprovider: {
           required: helpers.withMessage(
-            "Year of training is required",
+            "Name / Email address is required",
             required
           ),
-        },
+        }, 
         trainingyear: {
           required: helpers.withMessage(
-            "Name / Email address is required",
+            "Year of training is required",
             required
           ),
         },
