@@ -679,7 +679,7 @@
       <psytech-button
         label="Cancel"
         type="dark"
-        @buttonWasClicked="$router.push({ name: 'list-page' })"
+        @buttonWasClicked="$router.push({ name: 'client-control-list-detail' })"
       ></psytech-button>
     </div>
     <div class="flex justify-end w-11/12">
