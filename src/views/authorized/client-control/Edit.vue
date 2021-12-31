@@ -34,7 +34,7 @@
 
   <sticky-footer>
     <div class="relative flex justify-end" style="padding-right:15%">
-      <psytech-button label="Edit Account" @click="submit"></psytech-button>
+      <psytech-button label="Update" @click="submit"></psytech-button>
       <psytech-button label="Cancel" type="Secondary" @buttonWasClicked="$router.push({name:'client-control-list-detail'})"></psytech-button>
     </div>
   </sticky-footer>
