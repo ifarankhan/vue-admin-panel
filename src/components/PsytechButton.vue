@@ -69,6 +69,11 @@ export default {
           "mt-2 mr-2 inline-flex items-center font-bold text-gray-700 border-2 border-gray-300 border-solid bg-transparent-300 hover:text-white hover:border-psytechBlue hover:bg-psytechBlueBtHover"
         );
       }
+      if (props.type === "danger") {
+        base.push(
+          "mt-2 mr-2 inline-flex items-center font-medium text-white bg-psytechRed text-sm px-10"
+        );
+      }
       if(props.smallText){
         base.push('text-gray-400')
       }

@@ -45,6 +45,7 @@ module.exports = {
         psytechLight: "#E5E5E5",
         psytechBlack: "#000000",
         psytechLightGray:'#0000001A',
+        psytechRed:'#BC2A2A',
         psytechBlueDark: "#17a9e1",
         psytechBlueActive: '#008ac0',
         psytechBlueHover: '#3db7e6',
