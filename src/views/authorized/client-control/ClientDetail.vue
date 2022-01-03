@@ -1,5 +1,30 @@
 <template>
   <!-- <sticky-header> -->
+        <Dialog v-model:visible="displayBasic" :style="{width: '25vw'}" :modal="true">
+          <template #header>
+              <h3 class="text-lg font-medium">Delete Account</h3>
+            </template>
+            <p class="text-base font-semibold text-black">Are you sure you want to delete the following Account?</p>
+            <template #footer>
+               <div class="flex justify-between">
+                  <div>
+                   <psytech-button
+                    label="NO"
+                    type="outline"
+                    :extraClasses="'text-sm font-medium text-psytechBlue px-10  border-psytechBlue'"
+                    @buttonWasClicked="displayBasic=false"
+                  ></psytech-button>
+                </div>
+                 <div>
+                   <psytech-button
+                    label="YES"
+                    type="danger"
+                    @buttonWasClicked="''"
+                  ></psytech-button>
+                </div>
+               </div>
+            </template>
+        </Dialog>
 <div class="pt-10">
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
@@ -24,7 +49,7 @@
         </div>
         <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.accountName }} </div>
       </div>
-      <div class="mr-11 place-self-end">
+      <div class="mr-12 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
         <span class="text-sm"> {{ accountDetail && accountDetail.creationDate?formatDate(accountDetail.creationDate):'' }} </span>
       </div>
@@ -37,7 +62,7 @@
     <div class="ml-4">
       <TabGroup>
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
-          <div class="flex-shrink-0 w-1/3">
+          <div class="flex-shrink-0 w-1/2" id="export_account">
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
               <Tab as="template" v-slot="{ selected }">
                 <button
@@ -63,7 +88,7 @@
           </div>
 
           <div
-            class="flex items-center justify-around w-2/3 ml-3 ml-5 sm:ml-3 flex-shrink-1 lg:ml-28"
+            class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
@@ -137,6 +162,11 @@
                 </svg>
               </span>
               <span> Export Account Activity </span>
+              <Calendar ref="cf" :showIcon="true" @show="openCalender" :showOnFocus="false" view="month" dateFormat="mm/yy" @date-select="costomeMethod">
+                <template #footer>
+                  <div @click="closeCalender" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
+                </template>
+              </Calendar>
             </div>
 
             <div
@@ -207,6 +237,7 @@
 
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
+              @click="openBasic"
             >
               <span class="p-0.5">
                 <svg
@@ -286,7 +317,7 @@
                   !accountDetail?.accountDescription ? 'line-through' : '',
                 ]"
                 class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
-                style="word-wrap: break-word"
+                style="word-wrap: break-word;"
               >
                 {{
                   accountDetail?.accountDescription
@@ -606,6 +637,9 @@ import SelectOption from "@/components/SelectOption.vue";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
 import IconSVG from "@/components/IconSVG.vue";
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import Calendar from 'primevue/calendar';
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -621,6 +655,9 @@ export default {
     DataTable,
     Field,
     Control,
+    Dialog,
+    Calendar,
+    Button,
     SelectOption,
     IconSVG,
     TabGroup,
@@ -630,6 +667,34 @@ export default {
     TabPanel,
   },
   setup() {
+    const displayBasic = ref(false);
+    const openBasic = () => {
+            displayBasic.value = true;
+        };
+    const closeBasic = () => {
+        displayBasic.value = false;
+    };
+
+    let cf = ref()
+    const openCalender = ()=>{
+      const date = new Date();
+      const month = date.getMonth()
+
+      let datePicker = document.getElementsByClassName("p-datepicker")[0];
+      let c = document.getElementsByClassName("p-monthpicker")[0].children;
+
+      datePicker.style.width = "294px";
+      datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
+     
+      c[month].style.backgroundColor = "#000";
+      c[month].style.color = "#fff";
+      c[month].style.boxShadow = "none";
+    }
+
+    const closeCalender = ()=>{
+      cf.value.overlayVisible = false;
+    }
+
     const store = useStore();
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
@@ -879,9 +944,15 @@ export default {
 
     return { showFilters, accountDetail, formatDate, masterUser, userArray,
       searchText,
+      displayBasic,
+      openBasic,
+      closeBasic,
       filteredMainMethod,
       applyFilter,
       clearFilter,
+      openCalender,
+      cf,
+      closeCalender,
       prevMainSearchHistry,
       prevSearched,
       numberDropdown,
@@ -898,7 +969,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .div-hover:hover svg path,
 .div-hover:hover svg line {
   stroke: #008ac0;
@@ -908,5 +979,22 @@ export default {
   min-width: 465px;
   padding: 16px 15px;
   box-shadow: #3755634d 0px 8px 30px;
+}
+.calender .p-inputtext{
+  border: 0;
+  display: none;
+}
+.calender .p-button{
+  background: #fff;
+  color: #000;
+  border: none;
+}
+.calender .p-button:enabled:active, .calender .p-button:enabled:hover{
+  background: #fff;
+  color: #000;
+  border: none;
+}
+.calender .p-button:focus{
+  box-shadow: none;
 }
 </style>
