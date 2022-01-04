@@ -604,7 +604,7 @@
       </div>
       <!-- table two -->
        <div class="mt-2 ml-5">
-          <div class="mr-10 md:pr-12 lg:pr-0">
+          <div class="mr-10 sticky-header-footer md:pr-12 lg:pr-0">
              <DataTable
                 :customers="userArray"
                 :rowHover="true"
@@ -626,7 +626,7 @@
 </template>
 
 <script>
-import { reactive, ref, computed,onMounted } from "vue";
+import { reactive, ref, computed, onMounted, onUnmounted } from "vue";
 import StickyHeader from "@/components/StickyHeader";
 import PsytechButton from "@/components/PsytechButton";
 import DataTable from "@/components/Table.vue";
@@ -668,6 +668,7 @@ export default {
   },
   setup() {
     const displayBasic = ref(false);
+    const scrollPosition = ref(null);
     const openBasic = () => {
             displayBasic.value = true;
         };
@@ -713,7 +714,34 @@ export default {
           })
       }
 
+    const updateScroll = ()=> {
+      scrollPosition.value = window.scrollY
+      let added = false;
+      if(window.scrollY > 405 && !added){
+        added = true;
+        const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
+        const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
+        let tr = document.getElementsByClassName("p-datatable-thead")[0].children;
+
+        tableHead.style.position = "absolute";
+        tableHead.style.top = "-406px";
+        tableBody.classList.add("margin-table-body");
+        tableHead.children[0].classList.add("header-footer");
+
+      } else if(window.scrollY < 405){
+         const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
+         const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
+         added = false;
+
+         tableHead.style.position = null;
+         tableHead.style.top = null; 
+         tableBody.classList.remove("margin-table-body");
+         tableHead.children[0].classList.remove("header-footer");
+      }
+    }
+
     onMounted(() => {
+      window.addEventListener('scroll', updateScroll);
       store
           .dispatch("clientControl/getAccountUsers",{
             accountId: accountDetail.value?.accountId??''
@@ -730,6 +758,10 @@ export default {
             console.log("error is...", error);
           });
     });
+
+    onUnmounted(()=>{
+      window.removeEventListener('scroll', updateScroll);
+    })
 
 
     //Search and filters starts from here
@@ -942,7 +974,7 @@ export default {
 
 
 
-    return { showFilters, accountDetail, formatDate, masterUser, userArray,
+    return { showFilters, accountDetail, scrollPosition, formatDate, masterUser, userArray,
       searchText,
       displayBasic,
       openBasic,
@@ -970,6 +1002,10 @@ export default {
 };
 </script>
 <style>
+.header-footer{
+  position: fixed !important;
+  width: calc(100% - 315px)  !important;
+}
 .div-hover:hover svg path,
 .div-hover:hover svg line {
   stroke: #008ac0;
@@ -979,6 +1015,9 @@ export default {
   min-width: 465px;
   padding: 16px 15px;
   box-shadow: #3755634d 0px 8px 30px;
+}
+.margin-table-body{
+  margin-top: 57px;
 }
 .calender .p-inputtext{
   border: 0;
