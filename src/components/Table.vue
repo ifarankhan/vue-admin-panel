@@ -188,6 +188,16 @@ export default {
   margin-top: 57px;
 }
 
+.fixedheader .p-paginator{
+  position: sticky !important;
+  inset-block-end: 0 !important;
+}
+
+.sticky-header-footer .p-paginator{
+  position: sticky !important;
+  inset-block-end: 0 !important;
+}
+
 .custome-width{
     width: 160px;
 }
