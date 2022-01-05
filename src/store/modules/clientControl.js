@@ -89,6 +89,15 @@ const actions = {
         payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload)
     },
+    async deleteClientAccount({}){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      return private_url.delete('accounts', {
+          params: {
+            distributorId: userData.distributorId,
+            accountId: state.clientDetail.accountId
+          }
+      })
+    },
     async updateClientDetail({state, commit},payload){
         const DATA = payload;
         return private_url.put('account', payload).then(res=>{
