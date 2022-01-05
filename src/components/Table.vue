@@ -194,8 +194,8 @@ export default {
 }
 
 .sticky-header-footer .p-paginator{
-  position: sticky !important;
-  inset-block-end: 0 !important;
+  // position: sticky !important;
+  // inset-block-end: 0 !important;
 }
 
 .custome-width{

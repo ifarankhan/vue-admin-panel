@@ -4,7 +4,15 @@
           <template #header>
               <h3 class="text-lg font-medium">Delete Account</h3>
             </template>
-            <p class="text-base font-semibold text-black">Are you sure you want to delete the following Account?</p>
+            <p class="text-sm font-semibold text-black w-80">Are you sure you want to delete the following Account?</p>
+            <div class="flex mt-1">
+              <div class="flex items-center justify-center w-10 h-10 text-white rounded-full" style="background-color: rgba(0, 0, 0, 0.4);">
+               {{ accountDetail && accountDetail.accountName.split(" ").map(item=>item[0].toUpperCase()).join("") }}
+              </div>
+              <div>
+                <span class="mt-1 ml-1 text-sm font-medium text-black">{{ accountDetail && accountDetail.accountName }}</span>
+              </div>
+            </div>
             <template #footer>
                <div class="flex justify-between">
                   <div>
@@ -19,7 +27,7 @@
                    <psytech-button
                     label="YES"
                     type="danger"
-                    @buttonWasClicked="''"
+                    @buttonWasClicked="deleteAccountMethod()"
                   ></psytech-button>
                 </div>
                </div>
@@ -634,6 +642,7 @@ import { useStore } from "vuex";
 import store from "../../../store/index";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import SelectOption from "@/components/SelectOption.vue";
+import utility from "@/components/composition/utility";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
 import IconSVG from "@/components/IconSVG.vue";
@@ -715,29 +724,29 @@ export default {
       }
 
     const updateScroll = ()=> {
-      scrollPosition.value = window.scrollY
-      let added = false;
-      if(window.scrollY > 405 && !added){
-        added = true;
-        const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
-        const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
-        let tr = document.getElementsByClassName("p-datatable-thead")[0].children;
+      // scrollPosition.value = window.scrollY
+      // let added = false;
+      // if(window.scrollY > 405 && !added){
+      //   added = true;
+      //   const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
+      //   const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
+      //   let tr = document.getElementsByClassName("p-datatable-thead")[0].children;
 
-        tableHead.style.position = "absolute";
-        tableHead.style.top = "-406px";
-        tableBody.classList.add("margin-table-body");
-        tableHead.children[0].classList.add("header-footer");
+      //   tableHead.style.position = "absolute";
+      //   tableHead.style.top = "-406px";
+      //   tableBody.classList.add("margin-table-body");
+      //   tableHead.children[0].classList.add("header-footer");
 
-      } else if(window.scrollY < 405){
-         const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
-         const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
-         added = false;
+      // } else if(window.scrollY < 405){
+      //    const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
+      //    const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
+      //    added = false;
 
-         tableHead.style.position = null;
-         tableHead.style.top = null; 
-         tableBody.classList.remove("margin-table-body");
-         tableHead.children[0].classList.remove("header-footer");
-      }
+      //    tableHead.style.position = null;
+      //    tableHead.style.top = null; 
+      //    tableBody.classList.remove("margin-table-body");
+      //    tableHead.children[0].classList.remove("header-footer");
+      // }
     }
 
     onMounted(() => {
@@ -972,6 +981,22 @@ export default {
       }
     };
 
+    const deleteAccountMethod = ()=>{
+       store
+          .dispatch("clientControl/deleteClientAccount")
+          .then((res) => {
+            if(res?.data?.data?.deleted){
+              displayBasic.value=false
+              const { navigateTo } = utility("list-page");
+              navigateTo();
+              // console.log("response is...",res.data.data)
+            }
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          });
+    }
+
 
 
     return { showFilters, accountDetail, scrollPosition, formatDate, masterUser, userArray,
@@ -986,6 +1011,7 @@ export default {
       cf,
       closeCalender,
       prevMainSearchHistry,
+      deleteAccountMethod,
       prevSearched,
       numberDropdown,
       filterDropdown,
@@ -1002,6 +1028,9 @@ export default {
 };
 </script>
 <style>
+.p-dialog{
+  border-radius: 16px !important;
+}
 .header-footer{
   position: fixed !important;
   width: calc(100% - 315px)  !important;
