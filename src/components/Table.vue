@@ -13,7 +13,7 @@
                 Loading {{ defaultText }} data. Please wait.
             </template>
             <span v-if="tableType=='accountUsers'">
-              <Column field="firstName" header="First Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
+              <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div>
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> </span>
@@ -21,27 +21,27 @@
                  </div>
                 </template>
               </Column>
-              <Column field="familyname" header="Family Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
+              <Column field="familyname" header="Family Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                    <span>{{data.familyName}} </span>
                 </template>
               </Column>
-              <Column field="email" header="User Name" :sortable="true" style="min-width: 15rem; cursor: pointer">
+              <Column field="email" header="User Name" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
                   <template #body="{data}">
                       <div class="truncate">{{data.email}}</div>
                   </template>
               </Column>
-              <Column header="User Type" sortField="usertype" :sortable="true" style="min-width: 10rem; cursor: pointer">
+              <Column header="User Type" sortField="usertype" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text"> {{userTypes[data.userType]}}</span>
                   </template>
               </Column>
-               <Column header="Credits" sortField="credits" :sortable="true" style="min-width: 5rem; cursor: pointer">
+               <Column header="Credits" sortField="credits" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text">{{ data.credits }}</span>
                   </template>
               </Column>
-              <Column header="Status" sortField="status" :sortable="true" style="min-width: 5rem; cursor: pointer">
+              <Column header="Status" sortField="status" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text">{{ data.status?"Active":"In-Active" }}</span>
                   </template>
@@ -58,7 +58,7 @@
             </Column>
             </span>
             <span v-else>
-              <Column field="name" header="Account Name" :sortable="true" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div class="truncate custome-width">
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" /> </span>
@@ -66,17 +66,17 @@
                  </div>
                 </template>
             </Column>
-              <Column field="address" header="Address" :sortable="true" style="min-width: 10rem; cursor: pointer">
+              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                   <template #body="{data}">
                       <div  class="truncate custome-width">{{data.address}}</div>
                   </template>
               </Column>
-              <Column header="No. of Users" sortField="users" :sortable="true" style="min-width: 10rem; cursor: pointer">
+              <Column header="No. of Users" sortField="users" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text"> {{data.users}}</span>
                   </template>
               </Column>
-               <Column header="Creation Date" sortField="date" :sortable="true" style="min-width: 10rem; cursor: pointer">
+               <Column header="Creation Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text">{{ formatDate(data.date) }}</span>
                   </template>
@@ -98,7 +98,6 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import { onMounted } from 'vue';
 export default {
     components:{
         DataTable,
@@ -124,6 +123,10 @@ export default {
         rows:{
             type: Number,
             default: null
+        },
+        sortTable:{
+          type: Boolean,
+          default: true
         },
         rowHover:{
             type: Boolean,
@@ -194,8 +197,8 @@ export default {
 }
 
 .sticky-header-footer .p-paginator{
-  // position: sticky !important;
-  // inset-block-end: 0 !important;
+  position: sticky !important;
+  inset-block-end: 0 !important;
 }
 
 .custome-width{
