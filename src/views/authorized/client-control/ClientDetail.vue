@@ -377,18 +377,27 @@
         <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" -->
         <div class="mt-4 mb-2 ml-5">
           <p class="pl-2 text-sm font-semibold">Master User:</p>
-          <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
+          <div class="mr-10 md:pr-12 lg:pr-0">
+            <DataTable
+                :customers="masterUser"
+                :loading="loading"
+                @rowClicked="''"
+                :sortTable="false"
+                tableType="accountUsers"
+              />
+            </div>
+          <!-- <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
             <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
             <table class="border border-gray-200 rounded-md table-auto hover:table-fixed">
               <thead>
               <tr>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;">First Name</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;">Family Name</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;">User Name</th>
-                <th style="min-width: 12rem; cursor: pointer; text-align:left;">User Type</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;">Credits</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;">Status</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;"> </th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">First Name</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">Family Name</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">User Name</th>
+                <th style="min-width: 12rem; cursor: pointer; text-align:left;" class="text-base font-semibold">User Type</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">Credits</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">Status</th>
+                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold"> </th>
               </tr>
               </thead>
               <tbody>
@@ -416,7 +425,7 @@
               </tbody>
             </table>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!--    -->
@@ -724,29 +733,29 @@ export default {
       }
 
     const updateScroll = ()=> {
-      // scrollPosition.value = window.scrollY
-      // let added = false;
-      // if(window.scrollY > 405 && !added){
-      //   added = true;
-      //   const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
-      //   const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
-      //   let tr = document.getElementsByClassName("p-datatable-thead")[0].children;
+      scrollPosition.value = window.scrollY
+      let added = false;
+      if(window.scrollY > 448 && !added){
+        added = true;
+        const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
+        const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
 
-      //   tableHead.style.position = "absolute";
-      //   tableHead.style.top = "-406px";
-      //   tableBody.classList.add("margin-table-body");
-      //   tableHead.children[0].classList.add("header-footer");
+        tableHead.style.position = "absolute";
+        tableHead.style.top = "-448px";
+        tableBody.classList.add("margin-table-body");
+        tableHead.children[0].classList.add("header-footer");
 
-      // } else if(window.scrollY < 405){
-      //    const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
-      //    const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
-      //    added = false;
+      } else if(window.scrollY < 448){
+         const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
+        //  console.log("tableHead",tableHead)
+         const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
+         added = false;
 
-      //    tableHead.style.position = null;
-      //    tableHead.style.top = null; 
-      //    tableBody.classList.remove("margin-table-body");
-      //    tableHead.children[0].classList.remove("header-footer");
-      // }
+         tableHead.style.position = null;
+         tableHead.style.top = null; 
+         tableBody.classList.remove("margin-table-body");
+         tableHead.children[0].classList.remove("header-footer");
+      }
     }
 
     onMounted(() => {
