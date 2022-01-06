@@ -55,7 +55,8 @@ const actions = {
       const userData = await JSON.parse(localStorage.getItem("userData"));
       return private_url.get('collect-tests', {
           params: {
-            distributorId: userData.distributorId
+            distributorId: userData.distributorId,
+            personality: true
           }
       })
     },
@@ -71,7 +72,8 @@ const actions = {
       const userData = await JSON.parse(localStorage.getItem("userData"));
       return private_url.get('collect-batteries', {
           params: {
-            distributorId: userData.distributorId
+            distributorId: userData.distributorId,
+            personality: true
           }
       })
     },
