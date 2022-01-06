@@ -34,6 +34,8 @@
             </template>
         </Dialog>
 
+         
+
 <div class="pt-10">
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
@@ -645,6 +647,7 @@
         </TabPanel>
       </TabGroup>
     </div>
+
 </div>
   <!-- </sticky-header> -->
 </template>
@@ -693,7 +696,6 @@ export default {
   },
   setup() {
     const displayBasic = ref(false); 
-    const quitDialog = ref(false); 
     const scrollPosition = ref(null);
     const openBasic = () => {
             displayBasic.value = true;
@@ -702,28 +704,21 @@ export default {
         displayBasic.value = false;
     };
 
-    const openQuitDialog = () => {
-            quitDialog.value = true;
-        };
-    const closeQuitDialog = () => {
-        quitDialog.value = false;
-    };
-
     let cf = ref()
     const openCalender = ()=>{
       const date = new Date();
       const month = date.getMonth()
 
       let datePicker = document.getElementsByClassName("p-datepicker")[0];
-      let c = document.getElementsByClassName("p-monthpicker")[0].children;
+      let calendar = document.getElementsByClassName("p-monthpicker")[0].children;
 
       datePicker.style.width = "294px";
       datePicker.style.marginTop = "24px";
       datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
      
-      c[month].style.backgroundColor = "#000";
-      c[month].style.color = "#fff";
-      c[month].style.boxShadow = "none";
+      calendar[month].style.backgroundColor = "#000";
+      calendar[month].style.color = "#fff";
+      calendar[month].style.boxShadow = "none";
     }
 
     const showCalender = ()=>{
@@ -765,15 +760,18 @@ export default {
         tableHead.children[0].classList.add("header-footer");
 
       } else if(window.scrollY < 448){
+        if(!tableHead && !tableBody){
+          return 
+        }
          const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
-        //  console.log("tableHead",tableHead)
          const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
+         
          added = false;
-
          tableHead.style.position = null;
          tableHead.style.top = null; 
-         tableBody.classList.remove("margin-table-body");
          tableHead.children[0].classList.remove("header-footer");
+         tableBody.classList?.remove("margin-table-body");
+
       }
     }
 
@@ -1037,10 +1035,7 @@ export default {
       clearFilter,
       openCalender,
       cf,
-      quitDialog,
       showCalender,
-      openQuitDialog,
-      closeQuitDialog,
       closeCalender,
       prevMainSearchHistry,
       deleteAccountMethod,

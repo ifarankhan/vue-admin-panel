@@ -1,5 +1,14 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
+  
+  <!-- quit-dialog -->
+  <quit-dialog 
+    v-if="showQuitDialog" 
+    headerText="Quit Editing"
+    @dialogClosed="(showQuitDialog = false)"
+    @quitConfirmed="$router.push({ name: 'client-control-list-detail' })"
+  />
+
   <div class="p-5">
     <h1
       class="pb-3 pl-6 mt-10 ml-1 text-3xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white"
@@ -679,7 +688,7 @@
       <psytech-button
         label="Cancel"
         type="dark"
-        @buttonWasClicked="$router.push({ name: 'client-control-list-detail' })"
+        @buttonWasClicked="showQuitDialog = true"
       ></psytech-button>
     </div>
     <div class="flex justify-end w-11/12">
@@ -728,6 +737,7 @@ import IconSVG from "@/components/IconSVG.vue";
 import TitleSubBar from "@/components/TitleSubBar";
 import Loader from "@/components/Loader.vue";
 import ErrorAlert from "@/components/ErrorAlert.vue";
+import QuitDialog from '@/components/QuitDialog.vue';
 import {
   numeric,
   minLength,
@@ -753,7 +763,7 @@ export default {
     }
     next();
   },
-  name: "client-control-details",
+  name: "client-control-add-user",
   components: {
     TitleSubBar,
     Divider,
@@ -763,6 +773,7 @@ export default {
     SelectOption,
     CardComponent,
     TitleBar,
+    QuitDialog,
     Field,
     Loader,
     Control,
@@ -776,6 +787,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const showQuitDialog = ref(false);
     let errorText = ref("");
     let supervisorsArray = ref([]);
     const form = reactive({
@@ -1222,6 +1234,7 @@ export default {
       loader,
       isUnique,
       errorText,
+      showQuitDialog,
       mdiFileChartOutline,
       collapsable,
       updateCredit,
