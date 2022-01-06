@@ -693,7 +693,7 @@ export default {
   },
   setup() {
     const displayBasic = ref(false); 
-    const quitDialog = ref(true); 
+    const quitDialog = ref(false); 
     const scrollPosition = ref(null);
     const openBasic = () => {
             displayBasic.value = true;
