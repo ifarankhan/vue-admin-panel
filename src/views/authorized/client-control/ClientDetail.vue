@@ -33,6 +33,7 @@
                </div>
             </template>
         </Dialog>
+
 <div class="pt-10">
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
@@ -100,6 +101,7 @@
           >
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
+              @click="showCalender"
             >
               <span class="p-0.5 mr-0.5">
                 <svg
@@ -170,7 +172,12 @@
                 </svg>
               </span>
               <span> Export Account Activity </span>
-              <Calendar ref="cf" :showIcon="true" @show="openCalender" :showOnFocus="false" view="month" dateFormat="mm/yy" @date-select="costomeMethod">
+              <span class="drop-icon ml-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 10 6">
+                  <path id="Polygon_11" data-name="Polygon 11" d="M5,0l5,6H0Z" transform="translate(10 6) rotate(180)" fill="#707070"/>
+                </svg>
+              </span>
+              <Calendar ref="cf" @show="openCalender" :showOnFocus="false" view="month" dateFormat="mm/yy" @date-select="costomeMethod">
                 <template #footer>
                   <div @click="closeCalender" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
                 </template>
@@ -685,13 +692,21 @@ export default {
     TabPanel,
   },
   setup() {
-    const displayBasic = ref(false);
+    const displayBasic = ref(false); 
+    const quitDialog = ref(true); 
     const scrollPosition = ref(null);
     const openBasic = () => {
             displayBasic.value = true;
         };
     const closeBasic = () => {
         displayBasic.value = false;
+    };
+
+    const openQuitDialog = () => {
+            quitDialog.value = true;
+        };
+    const closeQuitDialog = () => {
+        quitDialog.value = false;
     };
 
     let cf = ref()
@@ -703,6 +718,7 @@ export default {
       let c = document.getElementsByClassName("p-monthpicker")[0].children;
 
       datePicker.style.width = "294px";
+      datePicker.style.marginTop = "24px";
       datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
      
       c[month].style.backgroundColor = "#000";
@@ -710,6 +726,9 @@ export default {
       c[month].style.boxShadow = "none";
     }
 
+    const showCalender = ()=>{
+      cf.value.overlayVisible = true;
+    }
     const closeCalender = ()=>{
       cf.value.overlayVisible = false;
     }
@@ -1018,6 +1037,10 @@ export default {
       clearFilter,
       openCalender,
       cf,
+      quitDialog,
+      showCalender,
+      openQuitDialog,
+      closeQuitDialog,
       closeCalender,
       prevMainSearchHistry,
       deleteAccountMethod,
@@ -1044,6 +1067,13 @@ export default {
   position: fixed !important;
   width: calc(100% - 315px)  !important;
 }
+.div-hover:hover *{
+  cursor: pointer;
+  color: #008ac0;
+}
+.div-hover:hover .drop-icon svg path{
+  fill: #008ac0;
+}
 .div-hover:hover svg path,
 .div-hover:hover svg line {
   stroke: #008ac0;
@@ -1065,6 +1095,7 @@ export default {
   background: #fff;
   color: #000;
   border: none;
+  width: 1.5rem !important;
 }
 .calender .p-button:enabled:active, .calender .p-button:enabled:hover{
   background: #fff;

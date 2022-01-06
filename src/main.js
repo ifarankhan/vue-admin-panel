@@ -7,6 +7,10 @@ import mainLayout from './views/layouts/MainLayout'
 import PrimeVue from 'primevue/config'; 
 import VueClickAway from "vue3-click-away";
 
+import 'primevue/resources/themes/lara-light-indigo/theme.css';       //theme
+import 'primevue/resources/primevue.min.css';                 //core css
+import 'primeicons/primeicons.css';
+
 import './css/main.css'
 import i18n from './i18n'
 
