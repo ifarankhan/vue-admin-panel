@@ -1,5 +1,5 @@
 <template>
-     <Dialog v-model:visible="quitDialog" :style="{width: '25vw'}" :modal="true">
+     <Dialog v-model:visible="quitDialog" :style="{width: '25vw'}" :modal="true" @hide="$emit('dialogClosed')">
           <template #header>
               <h3 class="text-lg font-medium">{{ headerText }}</h3>
             </template>
