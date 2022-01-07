@@ -52,6 +52,7 @@ import NavBarItem from '@/components/NavBarItem'
 import Icon from '@/components/Icon'
 import { mdiPlus } from '@mdi/js';
 import LogoWhite from '@/components/LogoWhite'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'AsideMenu',
