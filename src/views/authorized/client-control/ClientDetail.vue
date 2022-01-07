@@ -102,7 +102,7 @@
             class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
             <div
-              class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
+              class="flex items-center pb-1 hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="showCalender"
             >
               <span class="p-0.5 mr-0.5">
@@ -760,17 +760,19 @@ export default {
         tableHead.children[0].classList.add("header-footer");
 
       } else if(window.scrollY < 448){
-        if(!tableHead && !tableBody){
-          return 
-        }
+        added = false;
          const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
          const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
-         
-         added = false;
-         tableHead.style.position = null;
-         tableHead.style.top = null; 
-         tableHead.children[0].classList.remove("header-footer");
-         tableBody.classList?.remove("margin-table-body");
+        
+        if(tableHead){
+          tableHead.style.position = null;
+          tableHead.style.top = null; 
+          tableHead.children[0].classList.remove("header-footer");
+        }
+
+        if(tableBody){
+          tableBody.classList?.remove("margin-table-body");
+        }
 
       }
     }
