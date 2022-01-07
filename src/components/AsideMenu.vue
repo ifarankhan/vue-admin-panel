@@ -17,7 +17,7 @@
     <div>
       <template v-for="(menuGroup, index) in menu">
         <p v-if="typeof menuGroup === 'string'" :key="`a-${index}`" class="p-3 text-xs text-white uppercase">
-<!--          {{ menuGroup }}-->
+        <!-- {{ menuGroup }}-->
         </p>
         <aside-menu-list
           v-else
@@ -64,12 +64,11 @@ export default {
   },
   setup () {
     const store = useStore()
-
+    
     const isFullScreen = computed(() => store.state.isFullScreen)
     const isAsideMobileExpanded = computed(() => store.state.isAsideMobileExpanded)
 
-    let credits = ref("0");
-    credits = computed(() => {
+    let credits = computed(() => {
       const USER_DATA = JSON.parse(localStorage.getItem("userData"));
       return USER_DATA?.credits ?? "0";
     });
