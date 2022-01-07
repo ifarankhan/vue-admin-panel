@@ -207,7 +207,7 @@ export default {
               accountId: info?.user?.accountId,
               distributorId: info?.user?.distributorId,
               distributorUserName: info?.user?.distributorUserName,
-              credits: info?.credits,
+              credits: String(info?.credits),
               rememberMe: form.rememberMe,
             };
             await localStorage.setItem("userData", JSON.stringify(USER_DATA));
