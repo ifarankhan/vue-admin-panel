@@ -70,7 +70,7 @@ export default {
 
     let credits = computed(() => {
       const USER_DATA = JSON.parse(localStorage.getItem("userData"));
-      return USER_DATA?.credits ?? "0";
+      return USER_DATA?.credits;
     });
 
     const isAsideLgActive = computed(() => store.state.isAsideLgActive)
