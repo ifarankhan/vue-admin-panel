@@ -17,7 +17,7 @@
     <div>
       <template v-for="(menuGroup, index) in menu">
         <p v-if="typeof menuGroup === 'string'" :key="`a-${index}`" class="p-3 text-xs text-white uppercase">
-<!--          {{ menuGroup }}-->
+        <!-- {{ menuGroup }}-->
         </p>
         <aside-menu-list
           v-else
@@ -27,16 +27,30 @@
         />
       </template>
     </div>
+    <div class="absolute w-11/12 p-4 border-2 rounded-md right-2.5 bottom-12 credits border-psytechBorderColor bg-psytechBlueHover h-30">
+      <p class="text-base text-white"> Credits balance: </p>
+      <p class="flex justify-between -mt-1 text-base text-lg text-white">
+        <span>
+          {{ credits }} 
+        </span>
+         <span class="plus-icon">
+          <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block" color="red">
+          <path :d="mdiPlus"/>
+        </svg>
+       </span>
+      </p>
+    </div>
   </aside>
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { mdiMenu } from '@mdi/js'
 import AsideMenuList from '@/components/AsideMenuList'
 import NavBarItem from '@/components/NavBarItem'
 import Icon from '@/components/Icon'
+import { mdiPlus } from '@mdi/js';
 import LogoWhite from '@/components/LogoWhite'
 
 export default {
@@ -50,9 +64,14 @@ export default {
   },
   setup () {
     const store = useStore()
-
+    
     const isFullScreen = computed(() => store.state.isFullScreen)
     const isAsideMobileExpanded = computed(() => store.state.isAsideMobileExpanded)
+
+    let credits = computed(() => {
+      const USER_DATA = JSON.parse(localStorage.getItem("userData"));
+      return USER_DATA?.credits ?? "0";
+    });
 
     const isAsideLgActive = computed(() => store.state.isAsideLgActive)
 
@@ -69,9 +88,20 @@ export default {
       isAsideMobileExpanded,
       isAsideLgActive,
       asideLgClose,
+      credits,
+      mdiPlus,
       menuClick,
       mdiMenu
     }
   }
 }
 </script>
+<style scoped>
+.credits:hover{
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.2);
+}
+.plus-icon{
+  fill: #fff;
+}
+</style>
