@@ -20,7 +20,11 @@
       </span>
       Add User
     </h1>
-    <div class="flex p-4 mx-4">
+    <Tabs 
+    :showStep="showStep"
+    :userType="userDetail.userType"
+    />
+    <!-- <div class="flex p-4 mx-4">
       <div class="flex items-center w-6">
         <div
           class="flex-auto transition duration-500 ease-in-out border-t-2 border-teal-600 "
@@ -116,7 +120,7 @@
       <div class="flex items-center w-5/12">
         <div class="flex-auto border-t-2 border-teal-600"></div>
       </div>
-    </div>
+    </div> -->
 
     <!-- middle section step == 0 -->
     <div class="flex p-4 ml-3 md:mt-6" v-show="showStep == 0">
@@ -737,6 +741,7 @@ import IconSVG from "@/components/IconSVG.vue";
 import TitleSubBar from "@/components/TitleSubBar";
 import Loader from "@/components/Loader.vue";
 import ErrorAlert from "@/components/ErrorAlert.vue";
+import Tabs from '@/components/user/Tabs.vue';
 import QuitDialog from '@/components/QuitDialog.vue';
 import {
   numeric,
@@ -776,6 +781,7 @@ export default {
     QuitDialog,
     Field,
     Loader,
+    Tabs,
     Control,
     IconSVG,
     PsytechButton,

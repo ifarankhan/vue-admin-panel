@@ -105,7 +105,7 @@
               class="flex items-center pb-1 hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="showCalender"
             >
-              <span class="p-0.5 mr-0.5">
+              <span class="p-0.5 pb-1 mr-0.5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20.307"

@@ -77,7 +77,7 @@ const routes = [
             name: 'client-control-add-user',
             requiresAuth: true,
             // layout: 'mainLayout',
-            component: () => import('../views/authorized/client-control/add-user/AddUser.vue'),
+            component: () => import('../views/authorized/client-control/user/AddUser.vue'),
           }
         ]
       },
