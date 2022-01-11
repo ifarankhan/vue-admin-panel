@@ -34,7 +34,7 @@
             </template>
         </Dialog>
 
-         
+
 
 <div class="pt-10">
       <div class="grid grid-cols-2 md:px-2">
@@ -105,7 +105,7 @@
               class="flex items-center pb-1 hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="showCalender"
             >
-              <span class="p-0.5 mr-0.5">
+              <span class="p-0.5 pb-1 mr-0.5">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20.307"
@@ -638,7 +638,7 @@
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
                 :loading="loading"
-                @rowClicked="''"
+                @rowClicked="redirectToDetail($event)"
                 :image='true'
                 tableType="accountUsers"
               />
@@ -668,6 +668,7 @@ import IconSVG from "@/components/IconSVG.vue";
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
+import { useRouter } from "vue-router";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -695,7 +696,8 @@ export default {
     TabPanel,
   },
   setup() {
-    const displayBasic = ref(false); 
+    const router = useRouter();
+    const displayBasic = ref(false);
     const scrollPosition = ref(null);
     const openBasic = () => {
             displayBasic.value = true;
@@ -715,7 +717,7 @@ export default {
       datePicker.style.width = "294px";
       datePicker.style.marginTop = "24px";
       datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
-     
+
       calendar[month].style.backgroundColor = "#000";
       calendar[month].style.color = "#fff";
       calendar[month].style.boxShadow = "none";
@@ -763,10 +765,10 @@ export default {
         added = false;
          const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
          const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
-        
+
         if(tableHead){
           tableHead.style.position = null;
-          tableHead.style.top = null; 
+          tableHead.style.top = null;
           tableHead.children[0].classList.remove("header-footer");
         }
 
@@ -776,6 +778,11 @@ export default {
 
       }
     }
+
+    const redirectToDetail = (e) => {
+      store.commit("clientControl/setClientUserDetails", e.data);
+      router.push({ name: "client-control-view-user" });
+    };
 
     onMounted(() => {
       window.addEventListener('scroll', updateScroll);
@@ -1037,6 +1044,7 @@ export default {
       clearFilter,
       openCalender,
       cf,
+      redirectToDetail,
       showCalender,
       closeCalender,
       prevMainSearchHistry,
