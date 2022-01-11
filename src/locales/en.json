@@ -14,6 +14,9 @@
   "Email is required": "Email is required",
   "Email is invalid": "Email is invalid",
   "Password is required": "Password is required",
-  "Request failed with status code 404": "Request failed with status code 404"
+  "Request failed with status code 404": "Request failed with status code 404",
+  "User Details": "User Details",
+  "Trainings": "Trainings",
+  "Assessments": "Assessments",
+  "Credit Control": "Credit Control"
 }
-  

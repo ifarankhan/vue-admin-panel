@@ -780,7 +780,7 @@ export default {
     }
 
     const redirectToDetail = (e) => {
-      //store.commit("clientControl/setClientDetail", e.data);
+      store.commit("clientControl/setClientUserDetails", e.data);
       router.push({ name: "client-control-view-user" });
     };
 

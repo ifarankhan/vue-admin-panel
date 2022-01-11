@@ -1,13 +1,18 @@
 import { private_url, public_url } from "../../axios";
 const namespaced = true;
 const state = {
-  clientDetail: null
+    clientDetail: null,
+    clientUserDetail:null,
 }
 
 const getters = {
   getClientDetail: state=>{
     return state.clientDetail
+  },
+  getClientUserDetail: state=>{
+      return state.clientUserDetail
   }
+
 }
 
 const mutations = {
@@ -16,9 +21,12 @@ const mutations = {
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
       state.clientDetail = updatedClientDtail;
     } else{
-      console.log("akndlk")
       state.clientDetail = payload;
-    } 
+    }
+  },
+  setClientUserDetails(state, payload){
+      const updatedClientUser = {...payload}
+      state.clientUserDetail = updatedClientUser;
   }
 }
 
@@ -33,6 +41,15 @@ const actions = {
         return private_url.get('client-accounts', {
             params: {
                 distributorid: userData.distributorId
+            }
+        })
+    },
+    async getClientUserDetails({}){
+        const userDetails = await state.clientUserDetail
+        return private_url.get('account-user-details', {
+            params: {
+                accountId: userDetails.accountId,
+                userId: userDetails.userId
             }
         })
     },
@@ -85,7 +102,7 @@ const actions = {
             accountId: state.clientDetail.accountId
           }
       })
-    },  
+    },
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
