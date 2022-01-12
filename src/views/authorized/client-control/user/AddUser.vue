@@ -105,13 +105,11 @@
 </template>
 
 <script>
-import { ref, reactive, computed, watch } from "vue";
+import { ref, reactive } from "vue";
 import { mdiPlus } from "@mdi/js";
 import MainSection from "@/components/MainSection";
-import TitleBar from "@/components/TitleBar";
 import utility from "@/components/composition/utility";
 import PsytechButton from "@/components/PsytechButton";
-import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import Loader from "@/components/Loader.vue";
 import ErrorAlert from "@/components/ErrorAlert.vue";

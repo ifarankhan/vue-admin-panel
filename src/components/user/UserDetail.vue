@@ -192,6 +192,7 @@ import _ from "lodash";
 import SelectOption from "@/components/SelectOption.vue";
 import Control from "@/components/Control";
 import IconSVG from "@/components/IconSVG.vue";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import {
   numeric,
   minLength,
@@ -211,6 +212,7 @@ export default {
     ErrorSpan,
   },
    setup (props, { emit }) {
+    const { userTypes, notifications } = useClientUser();
     let supervisorsArray = ref([]);
     const emailIsTaken = ref(false);
     const userDetail = reactive({
@@ -246,17 +248,9 @@ export default {
     const tooglePasswordIcon = ref(false);
     const tooglePinIcon = ref(false);
 
-    const userTypes = reactive([
-      "Professional",
-      "Solution",
-      "Training",
-      "Test admin",
-      "Integration",
-    ]);
+   
     const activeBlockList = reactive(["Active", "Blocked"]);
     const activeBlocked = ref(1);
-
-    const notifications = reactive(["No", "Yes"]);
     
     const store = useStore();
     const loadAllAccSupervisors = ()=>{

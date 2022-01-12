@@ -669,6 +669,7 @@ import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import { useRouter } from "vue-router";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -697,6 +698,7 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const { formatDate } = useClientUser();
     const displayBasic = ref(false);
     const scrollPosition = ref(null);
     const openBasic = () => {
@@ -739,14 +741,6 @@ export default {
     let prevCustomers = ref();
     let loading = ref();
     let masterUser = ref();
-
-    const formatDate = (value) => {
-          return new Date(value).toLocaleDateString("en-US", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-          })
-      }
 
     const updateScroll = ()=> {
       scrollPosition.value = window.scrollY
