@@ -84,21 +84,24 @@
       <div class="p-2">
         <TabPanels>
           <TabPanel>
-            <div class="user-details-listing" v-if="user">
+            <div class="user-details-listing" v-if="userDetailsList">
               <div class="grid w-6/12 grid-cols-2 gap-4">
                 <div class="font-bold">User type:</div>
-                <div>{{userDetails.userType}}</div>
+                <div>{{userTypes[userDetailsList.userType]}}</div>
                 <div class="font-bold">User Status:</div>
-                <div>{{userDetails.activated}}</div>
+                <div>{{ userDetailsList.activated?"Active":"In-Active" }}</div>
                 <div class="font-bold">Name:</div>
-                <div>{{userDetails.firstName}}</div>
+                <div>{{userDetailsList.firstName}}</div>
                 <div class="font-bold">User Name/ Email Address:</div>
-                <div>{{userDetails.username}}</div>
+                <div>{{userDetailsList.username}}</div>
                 <div class="font-bold">Pin:</div>
-                <div>{{userDetails.pin}}</div>
+                <div>{{userDetailsList.pin}}</div>
                 <div class="col-span-2 font-bold">Receive Email Notifications</div>
                 <div class="col-span-2">Yes No</div>
               </div>
+            </div>
+            <div class="user-details-listing" v-else>
+              <p>No data available for this user</p>
             </div>
 
           </TabPanel>
@@ -147,7 +150,7 @@ export default {
   setup(){
     const { userTypes, formatDate } = useClientUser();
     const user = ref();
-    const userDetails = ref();
+    const userDetailsList = ref();
     const store = useStore();
     let loading = ref();
     const accountDetail = computed(() => {
@@ -160,8 +163,7 @@ export default {
           .then((res) => {
             let responseArray = res?.data?.data;
             user.value = responseArray;
-            userDetails.value =  responseArray?.userDetails;
-            console.log(userDetails)
+            userDetailsList.value =  responseArray?.userDetails;
             loading.value = false;
           })
           .catch((error) => {
@@ -169,8 +171,8 @@ export default {
           });
     });
 
-  
-    return {accountDetail, userTypes, formatDate,loading,user,userDetails}
+
+    return {accountDetail, userTypes, formatDate,loading,user,userDetailsList}
   }
 }
 </script>
