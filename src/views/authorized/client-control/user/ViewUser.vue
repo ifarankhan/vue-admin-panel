@@ -85,7 +85,7 @@
         <TabPanels>
           <TabPanel>
             <div class="user-details-listing" v-if="user">
-              <div class="grid grid-cols-2 gap-4 w-6/12">
+              <div class="grid w-6/12 grid-cols-2 gap-4">
                 <div class="font-bold">User type:</div>
                 <div>{{userDetails.userType}}</div>
                 <div class="font-bold">User Status:</div>
@@ -118,6 +118,7 @@ import {useStore} from "vuex";
 import StickyHeader from "@/components/StickyHeader";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import Button from 'primevue/button';
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import Loader from "@/components/Loader.vue";
 
 export default {
@@ -144,6 +145,7 @@ export default {
     next();
   },
   setup(){
+    const { userTypes, formatDate } = useClientUser();
     const user = ref();
     const userDetails = ref();
     const store = useStore();
@@ -167,14 +169,8 @@ export default {
           });
     });
 
-    const formatDate = (value) => {
-      return new Date(value).toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-    }
-    return {accountDetail,formatDate,loading,user,userDetails}
+  
+    return {accountDetail, userTypes, formatDate,loading,user,userDetails}
   }
 }
 </script>

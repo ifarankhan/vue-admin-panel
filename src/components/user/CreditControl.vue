@@ -165,6 +165,7 @@ import CheckRadioPicker from "@/components/CheckRadioPicker";
 import Field from "@/components/Field";
 import Control from "@/components/Control";
 import SelectOption from "@/components/SelectOption.vue";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import {
   numeric,
   helpers,
@@ -182,12 +183,12 @@ export default {
     ErrorSpan,
   },
    setup (props, { emit }) {
+     const { notifications } = useClientUser();
      const creditControl = reactive({
       credits: 0,
       allowedToUpdateCredit: +props.shareAndAlowCreditVal,
       sharedCredit: +props.shareAndAlowCreditVal,
     });
-    const notifications = reactive(["No", "Yes"]);
     const updateCredit = reactive({
       availableCredit: 0,
       updateAmount: "",
@@ -231,7 +232,7 @@ export default {
       }
     });
 
-    const v$ = useVuelidate(rules, creditControl);
+   const v$ = useVuelidate(rules, creditControl);
 
    const creditControlMethod = ()=>{
       v$.value.$validate();
