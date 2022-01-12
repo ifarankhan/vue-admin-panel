@@ -97,6 +97,7 @@ import { useStore } from "vuex";
 import Control from "@/components/Control";
 import IconSVG from "@/components/IconSVG.vue";
 import _ from "lodash";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import SelectOption from "@/components/SelectOption.vue";
 import {
   maxLength,
@@ -115,6 +116,7 @@ export default {
   },
    setup (props, { emit }) {
      const store = useStore();
+     const { trainingArray } = useClientUser();
      const trainingProvidersArray = ref([]);
      const trainingDetail = reactive({
       traininglevel: [],
@@ -122,36 +124,7 @@ export default {
       trainingyear: "",
       trainingdetails: "",
     });
-
-   const trainingArray = reactive([
-      {
-        text: "Test User Personality & Ability (TUP & TUA) or Psytech Test Certificate (PTC)",
-        value: "PTC",
-        selected: false,
-        description: "Access to all assessments",
-      },
-      {
-        text: "Test User Personality TUP",
-        value: "TUP",
-        selected: false,
-        description:
-          "Allow the new GS2020 account to have access to all Personality assessments",
-      },
-      {
-        text: "Test User Ability TUA",
-        value: "TUA",
-        selected: false,
-        description:
-          "Allow the new account to have access to all Reasoning/Ability and Solutions",
-      },
-      {
-        text: "Assistant Test User ATU",
-        value: "ATU",
-        selected: false,
-        description:
-          "Allow the new user to only administer/Invite respondents to complete Psytech assessments",
-      },
-    ]);
+    
     watch(
       () => _.cloneDeep(trainingArray),
       (currentValue, _) => {

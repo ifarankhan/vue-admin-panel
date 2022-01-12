@@ -8,7 +8,8 @@
       <div class="flex items-center w-2/4">
         <div
           class="relative flex items-center text-xs font-semibold"
-          :class="[showStep != 0 ? 'text-gray-800 text-opacity-50' : '']"
+          :class="[showStep != 0 ? 'text-gray-800 text-opacity-50' : '', enabledClick?'cursor-pointer':'']"
+          @click="enabledClick? $emit('updatedShowStep', 0):null"
         >
           <div
             class="flex items-center justify-center w-8 h-8 py-3 border-2 border-teal-600 rounded-full "
@@ -32,6 +33,7 @@
           v-if="userType != 4 && userType != 1"
           class="relative flex items-center text-xs font-semibold"
           :class="[showStep != 1 ? 'text-gray-800 text-opacity-50' : '']"
+          @click="enabledClick? $emit('updatedShowStep', 1):null"
         >
           <div
             class="flex items-center justify-center w-8 h-8 py-3 bg-teal-600 border-2 border-teal-600 rounded-full "
@@ -51,6 +53,7 @@
         <div
           class="relative flex items-center text-xs font-semibold"
           :class="[showStep != 2 ? 'text-gray-800 text-opacity-50' : '']"
+          @click="enabledClick? $emit('updatedShowStep', 2):null"
         >
           <div
             class="flex items-center justify-center w-8 h-8 py-3 border-2 rounded-full "
@@ -74,6 +77,7 @@
         <div
           class="relative flex items-center text-xs font-semibold"
           :class="[showStep != 3 ? 'text-gray-800 text-opacity-50' : '']"
+          @click="enabledClick? $emit('updatedShowStep', 3):null"
         >
           <div
             class="flex items-center justify-center w-8 h-8 py-3 border-2 border-gray-300 rounded-full "
@@ -100,9 +104,8 @@
 <script>
 
 export default {
-  props:['showStep','userType'],
+  props:['showStep','userType',"enabledClick"],
     setup() {
-        
     },
 }
 </script>

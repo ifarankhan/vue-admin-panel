@@ -17,12 +17,13 @@
           <path :d="mdiPlus" />
         </svg>
       </span>
-      Add User
+      Edit User
     </h1>
     <Tabs 
+    :enabledClick="true"
     :showStep="showStep"
-    :enabledClick="false"
     :userType="userDetail.userType"
+    @updatedShowStep="(showStep=$event)"
     />
 
 
