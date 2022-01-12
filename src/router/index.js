@@ -80,6 +80,13 @@ const routes = [
             component: () => import('../views/authorized/client-control/user/AddUser.vue'),
           },
           {
+            path: 'edit-user',
+            name: 'client-control-edit-user',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/client-control/user/EditUser.vue'),
+          },
+          {
             path: 'view-user',
             name: 'client-control-view-user',
             requiresAuth: true,

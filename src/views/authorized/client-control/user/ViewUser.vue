@@ -80,6 +80,77 @@
             </Tab>
           </TabList>
         </div>
+
+         <div
+            class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
+          >
+            <div
+              class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
+              @click="$router.push({ name: 'client-control-edit-user' })"
+            >
+              <span class="p-0.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16.379"
+                  height="16.379"
+                  viewBox="0 0 16.379 16.379"
+                >
+                  <g
+                    id="Group_36470"
+                    data-name="Group 36470"
+                    transform="translate(-375.022 -3059.904)"
+                  >
+                    <g
+                      id="Group_36468"
+                      data-name="Group 36468"
+                      transform="translate(375.686 3060.406)"
+                    >
+                      <path
+                        id="Path_13490"
+                        data-name="Path 13490"
+                        d="M389.065,3066.208l-8.242,8.243-5.137,1.169,1.169-5.136,8.242-8.243,1.216-1.216a1.64,1.64,0,0,1,2.263-.279l1.983,1.985a1.638,1.638,0,0,1-.277,2.261Z"
+                        transform="translate(-375.686 -3060.406)"
+                        fill="none"
+                        stroke="#2a2a2a"
+                        stroke-width="1"
+                      />
+                      <line
+                        id="Line_315"
+                        data-name="Line 315"
+                        x2="3.677"
+                        y2="3.677"
+                        transform="translate(9.562 1.974)"
+                        fill="#fff"
+                        stroke="#2a2a2a"
+                        stroke-width="1"
+                      />
+                      <line
+                        id="Line_316"
+                        data-name="Line 316"
+                        x2="3.677"
+                        y2="3.677"
+                        transform="translate(8.074 3.462)"
+                        fill="#fff"
+                        stroke="#2a2a2a"
+                        stroke-width="1"
+                      />
+                      <path
+                        id="Path_13491"
+                        data-name="Path 13491"
+                        d="M377.819,3074.535a4.344,4.344,0,0,0,3.969,3.967"
+                        transform="translate(-376.344 -3064.764)"
+                        fill="none"
+                        stroke="#2a2a2a"
+                        stroke-width="1"
+                      />
+                    </g>
+                  </g>
+                </svg>
+              </span>
+              <span> Edit User </span>
+            </div>
+            
+          </div>
       </div>
       <div class="p-2">
         <TabPanels>
