@@ -35,7 +35,7 @@
   <div class="pt-6 pl-20">
     <Loader v-if="loading" :toBeBigger="true" />
     <TabGroup>
-      <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
+      <div class="box-border flex border-b-2 md:pr-12 lg:pr-0 tab-headers">
         <div class="flex-shrink-0" id="export_account">
           <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
             <Tab as="template" v-slot="{ selected }">
@@ -152,7 +152,7 @@
 
           </div>
       </div>
-      <div class="p-2">
+      <div class="p-2 mt-20">
         <TabPanels>
           <TabPanel>
             <div class="user-details-listing" v-if="userDetailsList">
@@ -169,7 +169,7 @@
                 <div>{{userDetailsList.pin}}</div>
                 <div class="col-span-2 font-bold">Receive Email Notifications</div>
                 <div class="col-span-2" >
-                  <div class="flex justify-between w-1/5 pl-2">
+                  <div class="flex justify-between w-4/12 pl-2">
                     <check-radio-picker
                         name="send-notification"
                         v-model="sendNotification"
@@ -331,3 +331,10 @@ export default {
   }
 }
 </script>
+<style>
+.tab-headers{
+  position: fixed;
+  background: white;
+  width: 100%;
+}
+</style>
