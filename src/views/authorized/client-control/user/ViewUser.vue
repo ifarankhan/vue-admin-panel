@@ -82,7 +82,7 @@
         </div>
 
          <div
-            class="flex items-center justify-end w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-28"
+            class="flex items-center justify-center w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
             <div
               class="flex items-center mr-10 cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
