@@ -24,7 +24,16 @@
     :enabledClick="false"
     :userType="userDetail.userType"
     />
-
+    
+    <div class="flex w-2/3 p-4 ml-3 md:mt-6" v-if="errorText">
+      <div class="w-3/4">
+          <error-alert
+            @dismissError="errorText = ''"
+            :error="errorText"
+            :showTranslatedError="false"
+          />
+      </div>
+    </div>
 
     <!-- middle section step == 0 -->
     <div class="flex p-4 ml-3 md:mt-6" v-show="showStep ==0">
@@ -277,6 +286,7 @@ export default {
         .filter((item) => item);
       data.sendNotifications =
         data.sendNotifications == 1 ? true : false;
+      
       errorText.value = "";
       loader.value = true;
       store

@@ -82,10 +82,10 @@
         </div>
 
          <div
-            class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
+            class="flex items-center justify-end w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
             <div
-              class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
+              class="flex items-center mr-10 cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="$router.push({ name: 'client-control-edit-user' })"
             >
               <span class="p-0.5">
@@ -148,6 +148,76 @@
                 </svg>
               </span>
               <span> Edit User </span>
+            </div>
+            <div
+              class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
+            >
+              <span class="p-0.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="16.427"
+                  viewBox="0 0 19 18.427"
+                >
+                  <g
+                    id="Group_36445"
+                    data-name="Group 36445"
+                    transform="translate(-459.764 -2813.831)"
+                  >
+                    <line
+                      id="Line_307"
+                      data-name="Line 307"
+                      x2="18"
+                      transform="translate(460.264 2816.206)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-width="1"
+                    />
+                    <rect
+                      id="Rectangle_3696"
+                      data-name="Rectangle 3696"
+                      width="5.613"
+                      height="1.727"
+                      transform="translate(466.422 2813.831)"
+                    />
+                    <path
+                      id="Path_13069"
+                      data-name="Path 13069"
+                      d="M472.953,2830.47H462.884l-.725-15.03h11.67Z"
+                      transform="translate(1.516 1.287)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1"
+                    />
+                    <line
+                      id="Line_308"
+                      data-name="Line 308"
+                      x2="0.489"
+                      y2="10.272"
+                      transform="translate(467.081 2819.192)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-width="1"
+                    />
+                    <line
+                      id="Line_309"
+                      data-name="Line 309"
+                      x1="0.489"
+                      y2="10.272"
+                      transform="translate(471.44 2819.192)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-width="1"
+                    />
+                  </g>
+                </svg>
+              </span>
+              <span> Delete User </span>
             </div>
             
           </div>
@@ -232,7 +302,6 @@ export default {
             let responseArray = res?.data?.data;
             user.value = responseArray;
             userDetails.value =  responseArray?.userDetails;
-            console.log(userDetails)
             loading.value = false;
           })
           .catch((error) => {

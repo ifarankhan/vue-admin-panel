@@ -3,6 +3,7 @@ const namespaced = true;
 const state = {
     clientDetail: null,
     clientUserDetail:null,
+    individualClientUserDetail: null
 }
 
 const getters = {
@@ -11,6 +12,9 @@ const getters = {
   },
   getClientUserDetail: state=>{
       return state.clientUserDetail
+  },
+  getIndClientUser: state=>{
+    return state.individualClientUserDetail
   }
 
 }
@@ -27,6 +31,9 @@ const mutations = {
   setClientUserDetails(state, payload){
       const updatedClientUser = {...payload}
       state.clientUserDetail = updatedClientUser;
+  },
+  setIndividualClientUserDetail(state, payload){
+    state.individualClientUserDetail = payload;
   }
 }
 
@@ -44,14 +51,19 @@ const actions = {
             }
         })
     },
-    async getClientUserDetails({}){
-        const userDetails = await state.clientUserDetail
-        return private_url.get('account-user-details', {
-            params: {
-                accountId: userDetails.accountId,
-                userId: userDetails.userId
-            }
-        })
+    async getClientUserDetails({state, commit}){
+      return private_url.get('account-user-details', {
+        params: {
+          accountId: state.clientUserDetail.accountId,
+          userId: state.clientUserDetail.userId
+      }
+      }).then(res=>{ 
+        let data = res.data?.data?.userDetails;
+        if(data){
+          commit("setIndividualClientUserDetail", data)
+        }
+        return new Promise((resolve,_)=> resolve(res))
+      }).catch(error=> new Promise((_,reject)=> reject(error)))
     },
     async getTrainingProviders({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
@@ -127,6 +139,14 @@ const actions = {
           return new Promise((resolve,_)=> resolve(res))
         }).catch(error=> new Promise((_,reject)=> reject(error)))
     },
+    async updateIndUserDetail({state},payload){
+      const DATA = payload;
+      DATA.accountid = state.individualClientUserDetail.accountID,
+      DATA.userid = state.individualClientUserDetail.userID
+      return private_url.patch('user-details', null,{
+        params: DATA
+      })
+  },
     async postAddAccountUser({state},payload){
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;

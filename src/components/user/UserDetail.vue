@@ -64,7 +64,7 @@
           <div class="flex justify-between w-1/4 pl-2">
             <div v-for="(item, index) in activeBlockList" :key="index">
               <check-radio-picker
-                :disabled="true"
+                :disabled="disableUserStaus"
                 name="active-block"
                 v-model="activeBlocked"
                 type="radio"
@@ -117,15 +117,33 @@
                 />
               </field>
             </div>
+            <div class="w-full" v-if="onUserEdit">
+               <field label="Pin" labelFor="pin">
+                <control
+                  @iconWasClicked="tooglePinIcon = !tooglePinIcon"
+                  :icon="tooglePinIcon ? mdiEye : mdiEyeOff"
+                  :type="tooglePinIcon ? 'text' : 'password'"
+                  maxlength="4"
+                  v-model="userDetail.pin"
+                  placeholder=" "
+                />
+              </field>
+            </div>
           </div>
-          <span class="inline-block w-full -ml-2" v-if="emailIsTaken">
-            <error-span customeError="That email is already taken"></error-span>
-          </span>
-           <span class="inline-block w-full -ml-2" v-if="v$.email.$dirty && v$.email.$invalid">
-            <error-span :error="v$.email"></error-span>
-          </span>
-          <!--  -->
           <div class="flex w-9/12 -ml-2">
+            <span class="inline-block w-full -ml-2" v-if="emailIsTaken">
+              <error-span customeError="That email is already taken"></error-span>
+            </span>
+            <span class="inline-block w-full -ml-2" v-if="v$.email.$dirty && v$.email.$invalid">
+              <error-span :error="v$.email"></error-span>
+            </span>
+
+            <span class="inline-block w-full" v-if="onUserEdit">
+                <error-span :error="v$.pin"></error-span>
+              </span>
+           </div>
+          <!--  -->
+          <div class="flex w-9/12 -ml-2" v-if="!onUserEdit">
             <div class="w-full">
               <field label="Password" labelFor="password">
                 <control
@@ -150,7 +168,7 @@
               </field>
             </div>
           </div>
-          <div class="flex w-9/12 -ml-2">
+          <div class="flex w-9/12 -ml-2" v-if="!onUserEdit">
             <span class="inline-block w-full">
               <error-span :error="v$.password"></error-span>
             </span>
@@ -162,7 +180,7 @@
           <!--  -->
           <div class="mt-8">
             <p class="mb-2 text-sm font-semibold">
-              Receive Email Notification:
+              Receive Email Notification: 
             </p>
             <div class="flex justify-between w-1/5 pl-2">
               <div v-for="(type, value) in notifications" :key="value">
@@ -203,6 +221,16 @@ import {
 } from "@vuelidate/validators";
 export default {
  name: "client-control-user-detail",
+ props: {
+   disableUserStaus:{
+     type: Boolean,
+     default: true
+   },
+   onUserEdit:{
+     type: Boolean,
+     default: false
+   }
+ },
  components: {
     CheckRadioPicker,
     SelectOption,
@@ -212,17 +240,18 @@ export default {
     ErrorSpan,
   },
    setup (props, { emit }) {
+     const store = useStore();
     const { userTypes, notifications } = useClientUser();
     let supervisorsArray = ref([]);
     const emailIsTaken = ref(false);
+    const indUserDetail = store.getters['clientControl/getIndClientUser']
     const userDetail = reactive({
-      userType: "",
-      firstname: "",
-      familyname: "",
-      email: "",
-      password: "",
-      pin: "",
-      sendNotifications: 0,
+      userType: indUserDetail?.userType??"",
+      firstname:indUserDetail?.firstName??"",
+      familyname: indUserDetail?.familyName??"",
+      email: indUserDetail?.username??"",
+      pin: indUserDetail?.pin??"",
+      sendNotifications: indUserDetail && indUserDetail.receiveSystemEmailNotifications?1:0,
     });
 
     watch(
@@ -247,12 +276,15 @@ export default {
 
     const tooglePasswordIcon = ref(false);
     const tooglePinIcon = ref(false);
-
-   
-    const activeBlockList = reactive(["Active", "Blocked"]);
-    const activeBlocked = ref(1);
     
-    const store = useStore();
+    const activeBlockList = reactive(["Active", "Blocked"]);
+    let emailNotValue = 1;
+    if(indUserDetail){
+      emailNotValue = indUserDetail.activated ? 1: 0;
+    }
+    
+    const activeBlocked = ref(emailNotValue);
+    
     const loadAllAccSupervisors = ()=>{
         store
         .dispatch("clientControl/getAccountSupervisors")
@@ -325,14 +357,15 @@ export default {
         v$.value.firstname.$invalid ||
         v$.value.familyname.$invalid ||
         v$.value.email.$invalid ||
-        v$.value.password.$invalid ||
+        (!props.onUserEdit && v$.value.password.$invalid ) ||
         v$.value.pin.$invalid
       ) {
         emit("valid", { notDone: ()=> {} })
         return true;
       }
       emit("valid", { done: ()=> {
-        emit("userDetail",userDetail)
+        const data = {...userDetail,activeBlocked: activeBlocked.value}
+        emit("userDetail",data)
       } })
         
     }
