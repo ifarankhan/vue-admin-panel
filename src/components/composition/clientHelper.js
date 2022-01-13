@@ -18,7 +18,7 @@ export function useClientUser() {
     }
 
   const trainingArray = reactive([
-      {
+      { 
         text: "Test User Personality & Ability (TUP & TUA) or Psytech Test Certificate (PTC)",
         value: "PTC",
         selected: false,

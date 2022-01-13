@@ -1,12 +1,6 @@
 <template>
      <div class="w-3/4">
         <!--  -->
-        <error-alert
-          v-if="errorText"
-          @dismissError="errorText = ''"
-          :error="errorText"
-          :showTranslatedError="false"
-        />
         <div>
           <p class="pl-4 ml-1.5 text-sm font-semibold">Credit Control</p>
           <div class="flex ml-3.5">
@@ -69,7 +63,7 @@
                 @buttonWasClicked="
                   (toggleCredits = false),
                     (updateCredit.availableCredit = updateCredit.updateAmount =
-                      20)
+                      0)
                 "
               ></psytech-button>
             </div>

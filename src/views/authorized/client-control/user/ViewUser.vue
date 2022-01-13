@@ -82,10 +82,10 @@
         </div>
 
          <div
-            class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
+            class="flex items-center justify-end w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
             <div
-              class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
+              class="flex items-center mr-10 cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="$router.push({ name: 'client-control-edit-user' })"
             >
               <span class="p-0.5">
@@ -149,6 +149,77 @@
               </span>
               <span> Edit User </span>
             </div>
+            <div
+              class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
+            >
+              <span class="p-0.5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="16.427"
+                  viewBox="0 0 19 18.427"
+                >
+                  <g
+                    id="Group_36445"
+                    data-name="Group 36445"
+                    transform="translate(-459.764 -2813.831)"
+                  >
+                    <line
+                      id="Line_307"
+                      data-name="Line 307"
+                      x2="18"
+                      transform="translate(460.264 2816.206)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-width="1"
+                    />
+                    <rect
+                      id="Rectangle_3696"
+                      data-name="Rectangle 3696"
+                      width="5.613"
+                      height="1.727"
+                      transform="translate(466.422 2813.831)"
+                    />
+                    <path
+                      id="Path_13069"
+                      data-name="Path 13069"
+                      d="M472.953,2830.47H462.884l-.725-15.03h11.67Z"
+                      transform="translate(1.516 1.287)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1"
+                    />
+                    <line
+                      id="Line_308"
+                      data-name="Line 308"
+                      x2="0.489"
+                      y2="10.272"
+                      transform="translate(467.081 2819.192)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-width="1"
+                    />
+                    <line
+                      id="Line_309"
+                      data-name="Line 309"
+                      x1="0.489"
+                      y2="10.272"
+                      transform="translate(471.44 2819.192)"
+                      fill="none"
+                      stroke="#000"
+                      stroke-linecap="round"
+                      stroke-width="1"
+                    />
+                  </g>
+                </svg>
+              </span>
+              <span> Delete User </span>
+            </div>
+            
 
           </div>
       </div>
@@ -201,21 +272,21 @@
                <!--  -->
                <div class="pt-2">
                  <div v-for="(item, index) in selectedTrannings" :key="index" class="mb-1.5 mt-1.5">
-                   <div class="grid overflow-hidden auto-cols-auto grid-rows-2 gap-2 mt-1">
-                     <div class="box row-span-2 col-span-1 pt-1 w-4">
-                        <span class="flex justify-center items-center justify-center w-6 h-6 text-white bg-black rounded rounded-full p-2">
+                   <div class="grid grid-rows-2 gap-2 mt-1 overflow-hidden auto-cols-auto">
+                     <div class="w-4 col-span-1 row-span-2 pt-1 box">
+                        <span class="flex items-center justify-center w-6 h-6 p-2 text-white bg-black rounded rounded-full">
                           {{index+1}}
                         </span>
                      </div>
-                     <div class="box col-start-2 col-span-8 pt-1 font-bold"><p>{{ item.text }}</p></div>
-                     <div class="box col-start-2 col-span-8"><p>{{ item.description }}</p></div>
+                     <div class="col-span-8 col-start-2 pt-1 font-bold box"><p>{{ item.text }}</p></div>
+                     <div class="col-span-8 col-start-2 box"><p>{{ item.description }}</p></div>
                    </div>
                  </div>
                </div>
              </div>
-             <div class="training-provider pt-2">
+             <div class="pt-2 training-provider">
                <h3 class="font-bold">Training Provider:</h3>
-               <div class="image flex">
+               <div class="flex image">
                 <div>
                   <img class="inline-block w-10 h-10 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                 </div>
@@ -225,18 +296,18 @@
                  </div>
                </div>
              </div>
-             <div class="training-provider pt-2" v-if="userDetailsList.trainingYear">
+             <div class="pt-2 training-provider" v-if="userDetailsList.trainingYear">
                <h3 class="font-bold">Year of Training:</h3>
                <div class="year">
-                 <span class="flex justify-center items-center justify-center w-36 h-8 text-white bg-black rounded rounded-full p-2">
+                 <span class="flex items-center justify-center h-8 p-2 text-white bg-black rounded rounded-full w-36">
                     {{userDetailsList.trainingYear}}
                  </span>
                </div>
              </div>
-             <div class="training-provider pt-2" v-if="userDetailsList.trainingNotes">
+             <div class="pt-2 training-provider" v-if="userDetailsList.trainingNotes">
                <h3 class="font-bold">Details of the Training:</h3>
                <div class="details-of-training">
-                 <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200 h-24 border border-gray-400 rounded-md" style="overflow-wrap: break-word;">
+                 <div class="w-11/12 h-24 p-4 mt-2 mb-4 text-justify bg-gray-200 border border-gray-400 rounded-md" style="overflow-wrap: break-word;">
                    {{userDetailsList.trainingNotes}}
                  </div>
                </div>

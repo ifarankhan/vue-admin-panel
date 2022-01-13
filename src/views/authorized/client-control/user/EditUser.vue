@@ -19,18 +19,20 @@
       </span>
       Edit User
     </h1>
+    <!-- {{ viewUserDetail }}  -->
     <Tabs 
     :enabledClick="true"
     :showStep="showStep"
     :userType="userDetail.userType"
     @updatedShowStep="(showStep=$event)"
     />
-
-
+    
     <!-- middle section step == 0 -->
     <div class="flex p-4 ml-3 md:mt-6" v-show="showStep ==0">
       <User-detail 
       ref="userDetailRef"
+      :disableUserStaus="false"
+      :onUserEdit="true"
       @valid="checkForValidity($event)"
       @userTypeSelected="updateUserType($event)"
       @isEmailTaken="emailIsTaken = $event"
@@ -72,14 +74,23 @@
 
   <!-- Bottom Navigation -->
   <div class="flex justify-center w-11/12 mb-3">
-    <div class="w-1/12 ml-12">
+    <div class="flex w-1/2 ml-12">
+     <div>
       <psytech-button
         label="Cancel"
         type="dark"
         @buttonWasClicked="showQuitDialog = true"
       ></psytech-button>
-    </div>
-    <div class="flex justify-end w-11/12">
+     </div>
+    <div>
+        <psytech-button
+          label="Update User"
+          type="black"
+          @buttonWasClicked="updateAccountUserMethod()"
+        ></psytech-button>
+      </div>
+     </div>
+    <div class="flex justify-end w-1/2">
       <div>
         <psytech-button
           label="Back"
@@ -93,13 +104,6 @@
           label="Next"
           type="black"
           @buttonWasClicked="gotoNextHandler()"
-        ></psytech-button>
-      </div>
-      <div v-if="showStep == 3">
-        <psytech-button
-          label="Create User"
-          type="black"
-          @buttonWasClicked="addAccountUserMethod()"
         ></psytech-button>
       </div>
     </div>
@@ -150,16 +154,21 @@ export default {
   },
   setup() {
     const store = useStore();
+    let userDetaialTabData = ref("");
+    const trainingSelectionTabData = ref(null);
+    const assessmentsTabData = ref(null);
+    const creditControlTabData = ref(null);
     const userDetailRef = ref('');
     const assessmentsRef = ref(''); 
     const creditControlRef = ref(''); 
     const trainingDetailRef = ref('');
     let isInvalid = ref(true);
-    let userDetailData = reactive({})
+    let userDetailData = reactive(null)
     const showQuitDialog = ref(false);
     let errorText = ref("");
     let loader = ref(false);
     const emailIsTaken = ref(false);
+    let viewUserDetail = ref(null);
     const userDetail = reactive({
       userType: "",
       allowedToUpdateCredit: 0,
@@ -175,10 +184,7 @@ export default {
     }
         
     const setUserDetail = (e)=>{
-      userDetailData = {
-        ...userDetailData,
-        ...e
-      } 
+      userDetailData = e;
     }
 
     const checkForValidity = (e)=>{
@@ -212,13 +218,10 @@ export default {
         return true;
       }
       
-      if(showStep.value ==0){
-        await userDetailRef?.value?.userDetailMethod()
-      }
-      
       if(showStep.value ==1){
         trainingDetailRef?.value?.trainingDetailMethod()
       }
+      
       if(showStep.value ==2){
         assessmentsRef?.value?.assessmentDetailMethod()
       }
@@ -242,53 +245,25 @@ export default {
       }
     };
 
-    const addAccountUserMethod =  () => {
-      creditControlRef?.value?.creditControlMethod()
-      const data = _.cloneDeep(userDetailData)
-      data.userType = Number(userDetailData.userType);
-
-      if(!data.supervisor){
-        delete data.supervisor;
+    const updateAccountUserMethod =  async() => {
+      if(showStep.value ==0){
+        await userDetailRef?.value?.userDetailMethod()
       }
-
-      if(data.userType !=3){
-        data.supervisor = 0
+      const data = {
+        firstname:userDetailData?.firstname,
+        familyname:userDetailData?.familyname,
+        email:userDetailData?.email,
+        pin:userDetailData?.pin,
+        active:userDetailData && userDetailData.activeBlocked? true: false,
+        receiveEmailNotifications: userDetailData && userDetailData.sendNotifications?true: false
       }
-
-      if(data.userType != 0 && data.userType != 4){
-        data.traininglevel = [];
-        data.trainingprovider = "";
-        data.trainingyear = "";
-        data.trainingdetails = "";
-      }
-
-      let array = [];
-
-      Object.keys(userDetailData.traininglevel).forEach(function (key) {
-        array.push(String(data.traininglevel[key]));
-      });
-      data.tests = userDetailData.tests
-        .map((item) => item.isDefaultTest && item.testID)
-        .filter((item) => item);
-      data.solution = userDetailData.solution
-        .map((item) => item.isDefaultBattery && String(item.batteryID))
-        .filter((item) => item);
-      data.batteries = userDetailData.solution
-        .map((item) => item.isDefaultBattery && String(item.batteryID))
-        .filter((item) => item);
-      data.sendNotifications =
-        data.sendNotifications == 1 ? true : false;
-      errorText.value = "";
       loader.value = true;
-      store
-        .dispatch("clientControl/postAddAccountUser", data)
+       store
+        .dispatch("clientControl/updateIndUserDetail", data)
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
             loader.value = false;
-            store.commit("clientControl/setClientDetail", {
-              incrementAccUser: true,
-            });
             const { navigateTo } = utility("client-control-list-detail");
             navigateTo();
           } else {
@@ -299,10 +274,14 @@ export default {
           loader.value = false;
           errorText.value = error?.message ?? "";
         });
+     
     };
-
     return {
       checkForValidity,
+      userDetaialTabData,
+      trainingSelectionTabData,
+      assessmentsTabData,
+      creditControlTabData,
       userDetailRef,
       assessmentsRef,
       creditControlRef,
@@ -311,11 +290,12 @@ export default {
       isInvalid,
       userDetailData,
       emailIsTaken,
+      viewUserDetail,
       updateUserType,
       goToBackHandler,
       gotoNextHandler,
       userDetail,
-      addAccountUserMethod,
+      updateAccountUserMethod,
       setUserDetail,
       loader,
       errorText,
