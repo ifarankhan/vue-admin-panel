@@ -35,7 +35,7 @@
   <div class="pt-6 pl-20">
     <Loader v-if="loading" :toBeBigger="true" />
     <TabGroup>
-      <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
+      <div class="box-border flex border-b-2 md:pr-12 lg:pr-0 tab-headers">
         <div class="flex-shrink-0" id="export_account">
           <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
             <Tab as="template" v-slot="{ selected }">
@@ -149,31 +149,103 @@
               </span>
               <span> Edit User </span>
             </div>
-            
+
           </div>
       </div>
-      <div class="p-2">
+      <div class="p-2 mt-20">
         <TabPanels>
           <TabPanel>
-            <div class="user-details-listing" v-if="user">
+            <div class="user-details-listing" v-if="userDetailsList">
               <div class="grid w-6/12 grid-cols-2 gap-4">
                 <div class="font-bold">User type:</div>
-                <div>{{userDetails.userType}}</div>
+                <div>{{userTypes[userDetailsList.userType]}}</div>
                 <div class="font-bold">User Status:</div>
-                <div>{{userDetails.activated}}</div>
+                <div>{{ userDetailsList.activated?"Active":"In-Active" }}</div>
                 <div class="font-bold">Name:</div>
-                <div>{{userDetails.firstName}}</div>
+                <div>{{userDetailsList.firstName}}</div>
                 <div class="font-bold">User Name/ Email Address:</div>
-                <div>{{userDetails.username}}</div>
+                <div>{{userDetailsList.username}}</div>
                 <div class="font-bold">Pin:</div>
-                <div>{{userDetails.pin}}</div>
+                <div>{{userDetailsList.pin}}</div>
                 <div class="col-span-2 font-bold">Receive Email Notifications</div>
-                <div class="col-span-2">Yes No</div>
+                <div class="col-span-2" >
+                  <div class="flex justify-between w-4/12 pl-2">
+                    <check-radio-picker
+                        name="send-notification"
+                        v-model="sendNotification"
+                        type="radio"
+                        :options="{ [1]: 'Yes' }"
+                        :disabled="true"
+                    />
+                    <check-radio-picker
+                        name="send-notification"
+                        v-model="sendNotification"
+                        type="radio"
+                        :options="{ [0]: 'No' }"
+                        :disabled="true"
+                    />
+                  </div>
+
+                 </div>
               </div>
+            </div>
+            <div class="user-details-listing" v-else>
+              <p>No data available for this user</p>
             </div>
 
           </TabPanel>
-          <TabPanel>Content 2</TabPanel>
+          <TabPanel>
+            <div class="w-2/3">
+           <div class="flex flex-col space-y-8">
+             <div class="user-details-trainings" v-if="selectedTrannings">
+               <!--  -->
+               <div class="pt-2">
+                 <div v-for="(item, index) in selectedTrannings" :key="index" class="mb-1.5 mt-1.5">
+                   <div class="grid overflow-hidden auto-cols-auto grid-rows-2 gap-2 mt-1">
+                     <div class="box row-span-2 col-span-1 pt-1 w-4">
+                        <span class="flex justify-center items-center justify-center w-6 h-6 text-white bg-black rounded rounded-full p-2">
+                          {{index+1}}
+                        </span>
+                     </div>
+                     <div class="box col-start-2 col-span-8 pt-1 font-bold"><p>{{ item.text }}</p></div>
+                     <div class="box col-start-2 col-span-8"><p>{{ item.description }}</p></div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+             <div class="training-provider pt-2">
+               <h3 class="font-bold">Training Provider:</h3>
+               <div class="image flex">
+                <div>
+                  <img class="inline-block w-10 h-10 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                </div>
+                 <div class="pl-3">
+                   <div class="font-semibold">{{ userDetailsList.trainingProvider?userDetailsList.trainingProvider:"No Data"}}</div>
+                   <div class="text-gray-500">Training Title</div>
+                 </div>
+               </div>
+             </div>
+             <div class="training-provider pt-2" v-if="userDetailsList.trainingYear">
+               <h3 class="font-bold">Year of Training:</h3>
+               <div class="year">
+                 <span class="flex justify-center items-center justify-center w-36 h-8 text-white bg-black rounded rounded-full p-2">
+                    {{userDetailsList.trainingYear}}
+                 </span>
+               </div>
+             </div>
+             <div class="training-provider pt-2" v-if="userDetailsList.trainingNotes">
+               <h3 class="font-bold">Details of the Training:</h3>
+               <div class="details-of-training">
+                 <div class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200 h-24 border border-gray-400 rounded-md" style="overflow-wrap: break-word;">
+                   {{userDetailsList.trainingNotes}}
+                 </div>
+               </div>
+             </div>
+           </div>
+
+
+            </div>
+          </TabPanel>
           <TabPanel>Content 3</TabPanel>
           <TabPanel>Content 4</TabPanel>
         </TabPanels>
@@ -191,6 +263,8 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import Loader from "@/components/Loader.vue";
+import {colorsBorders, colorsText} from "@/colors";
+import CheckRadioPicker from "@/components/CheckRadioPicker";
 
 export default {
   components:{
@@ -201,7 +275,8 @@ export default {
     TabPanels,
     TabPanel,
     Button,
-    Loader
+    Loader,
+    CheckRadioPicker
   },
   name: "client-control-view-user",
   beforeRouteEnter(to, from, next) {
@@ -216,11 +291,14 @@ export default {
     next();
   },
   setup(){
-    const { userTypes, formatDate } = useClientUser();
+    const { userTypes, formatDate, trainingArray } = useClientUser();
     const user = ref();
-    const userDetails = ref();
+    const userDetailsList = ref();
+    const trannings = ref();
     const store = useStore();
     let loading = ref();
+    let sendNotifications= ref();
+
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
@@ -231,8 +309,8 @@ export default {
           .then((res) => {
             let responseArray = res?.data?.data;
             user.value = responseArray;
-            userDetails.value =  responseArray?.userDetails;
-            console.log(userDetails)
+            userDetailsList.value =  responseArray?.userDetails;
+            trannings.value = userDetailsList.value.trainingLevel;
             loading.value = false;
           })
           .catch((error) => {
@@ -240,8 +318,23 @@ export default {
           });
     });
 
-  
-    return {accountDetail, userTypes, formatDate,loading,user,userDetails}
+    const selectedTrannings = computed(() => {
+       trannings.value = trannings.value.split(',');
+      return trainingArray.filter(val => trannings.value.includes(val.value));
+    });
+
+    const sendNotification = computed(()=>{
+      return userDetailsList && userDetailsList.receiveSystemEmailNotifications?1:0
+    })
+
+    return {accountDetail, userTypes, formatDate,loading,user,userDetailsList,selectedTrannings,sendNotification}
   }
 }
 </script>
+<style>
+.tab-headers{
+  position: fixed;
+  background: white;
+  width: 100%;
+}
+</style>
