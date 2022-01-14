@@ -28,7 +28,8 @@
         <span class="text-sm"> {{ accountDetail && accountDetail.creationDate?formatDate(accountDetail.creationDate):'' }} </span>
       </div>
       <div class="pt-6 pl-20 text-xl">
-        <h2>Master Account user </h2>
+        <h2 v-if="userDetailsList?.isMasterUser">Master Account user </h2>
+        <h2 v-else>Account user </h2>
       </div>
     </div>
   </sticky-header>
@@ -219,7 +220,7 @@
               </span>
               <span> Delete User </span>
             </div>
-            
+
 
           </div>
       </div>
@@ -381,11 +382,11 @@ export default {
             let responseArray = res?.data?.data;
             user.value = responseArray;
             userDetailsList.value =  responseArray?.userDetails;
-            trannings.value = userDetailsList.value.trainingLevel;
+            trannings.value = responseArray?.userDetails?.trainingLevel;
             loading.value = false;
           })
           .catch((error) => {
-            console.log("error is...", error);
+            console.log("error is...", error.message);
           });
     });
 
@@ -406,6 +407,7 @@ export default {
 .tab-headers{
   position: fixed;
   background: white;
-  width: 100%;
+  width: calc(100% - 150px);
+  justify-content: space-between;
 }
 </style>
