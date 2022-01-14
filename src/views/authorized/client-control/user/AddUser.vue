@@ -264,10 +264,10 @@ export default {
       }
 
       if(data.userType != 0 && data.userType != 4){
-        data.traininglevel = [];
-        data.trainingprovider = "";
-        data.trainingyear = "";
-        data.trainingdetails = "";
+        // data.traininglevel = [];
+        // data.trainingprovider = "";
+        // data.trainingyear = "";
+        // data.trainingdetails = "";
       }
 
       let array = [];
