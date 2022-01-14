@@ -98,6 +98,8 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import { useClientUser } from "@/components/composition/clientHelper.js";
+
 export default {
     components:{
         DataTable,
@@ -151,24 +153,10 @@ export default {
 
     },
     setup() {
-        let userTypes = [
-          "Professional",
-          "Solution",
-          "Training",
-          "Test admin",
-          "Integration"
-        ];
+       const { userTypes, formatDate } = useClientUser();
 
-        const showConsole = (e)=>{
+       const showConsole = (e)=>{
             // console.log("clicked",e.data)
-        }
-
-        const formatDate = (value) => {
-            return value.toLocaleDateString("en-US", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-            })
         }
 
         return {

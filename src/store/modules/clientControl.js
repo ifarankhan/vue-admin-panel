@@ -1,13 +1,22 @@
 import { private_url, public_url } from "../../axios";
 const namespaced = true;
 const state = {
-  clientDetail: null
+    clientDetail: null,
+    clientUserDetail:null,
+    individualClientUserDetail: null
 }
 
 const getters = {
   getClientDetail: state=>{
     return state.clientDetail
+  },
+  getClientUserDetail: state=>{
+      return state.clientUserDetail
+  },
+  getIndClientUser: state=>{
+    return state.individualClientUserDetail
   }
+
 }
 
 const mutations = {
@@ -16,9 +25,15 @@ const mutations = {
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
       state.clientDetail = updatedClientDtail;
     } else{
-      console.log("akndlk")
       state.clientDetail = payload;
-    } 
+    }
+  },
+  setClientUserDetails(state, payload){
+      const updatedClientUser = {...payload}
+      state.clientUserDetail = updatedClientUser;
+  },
+  setIndividualClientUserDetail(state, payload){
+    state.individualClientUserDetail = payload;
   }
 }
 
@@ -35,6 +50,20 @@ const actions = {
                 distributorid: userData.distributorId
             }
         })
+    },
+    async getClientUserDetails({state, commit}){
+      return private_url.get('account-user-details', {
+        params: {
+          accountId: state.clientUserDetail.accountId,
+          userId: state.clientUserDetail.userId
+      }
+      }).then(res=>{ 
+        let data = res.data?.data?.userDetails;
+        if(data){
+          commit("setIndividualClientUserDetail", data)
+        }
+        return new Promise((resolve,_)=> resolve(res))
+      }).catch(error=> new Promise((_,reject)=> reject(error)))
     },
     async getTrainingProviders({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
@@ -85,7 +114,7 @@ const actions = {
             accountId: state.clientDetail.accountId
           }
       })
-    },  
+    },
     async postClientDetails({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
@@ -110,6 +139,14 @@ const actions = {
           return new Promise((resolve,_)=> resolve(res))
         }).catch(error=> new Promise((_,reject)=> reject(error)))
     },
+    async updateIndUserDetail({state},payload){
+      const DATA = payload;
+      DATA.accountid = state.individualClientUserDetail.accountID,
+      DATA.userid = state.individualClientUserDetail.userID
+      return private_url.patch('user-details', null,{
+        params: DATA
+      })
+  },
     async postAddAccountUser({state},payload){
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;
