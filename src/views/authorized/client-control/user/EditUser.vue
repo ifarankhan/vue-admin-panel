@@ -270,6 +270,7 @@ export default {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
             loader.value = false;
+            store.commit("clientControl/setIndividualClientUserDetail", null);
             const { navigateTo } = utility("client-control-list-detail");
             navigateTo();
           } else {
