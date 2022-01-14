@@ -7,6 +7,7 @@
             <div v-for="(type, value) in userTypes" :key="value">
               <check-radio-picker
                 name="user-types"
+                :disabled="onUserEdit"
                 v-model="userDetail.userType"
                 type="radio"
                 :options="{ [value]: type }"

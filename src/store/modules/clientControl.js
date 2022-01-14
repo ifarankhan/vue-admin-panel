@@ -34,6 +34,8 @@ const mutations = {
   },
   setIndividualClientUserDetail(state, payload){
     state.individualClientUserDetail = payload;
+    console.log("payload is...", payload)
+    console.log("state.individualClientUserDetail",state.individualClientUserDetail)
   }
 }
 
