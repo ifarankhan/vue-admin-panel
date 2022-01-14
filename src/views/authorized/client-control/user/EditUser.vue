@@ -4,8 +4,8 @@
   <quit-dialog 
     v-if="showQuitDialog" 
     headerText="Quit Editing"
-    @dialogClosed="(showQuitDialog = false)"
-    @quitConfirmed="$router.push({ name: 'client-control-list-detail' })"
+    @dialogClosed="(showQuitDialog = false)" 
+    @quitConfirmed="onConformQuitDialog" 
   />
 
   <div class="p-5">
@@ -245,6 +245,12 @@ export default {
       }
     };
 
+   const onConformQuitDialog = () =>{
+      store.commit("clientControl/setIndividualClientUserDetail", null);
+      const { navigateTo } = utility("client-control-list-detail");
+            navigateTo();
+    }
+
     const updateAccountUserMethod =  async() => {
       if(showStep.value ==0){
         await userDetailRef?.value?.userDetailMethod()
@@ -274,11 +280,11 @@ export default {
           loader.value = false;
           errorText.value = error?.message ?? "";
         });
-     
     };
     return {
       checkForValidity,
       userDetaialTabData,
+      onConformQuitDialog,
       trainingSelectionTabData,
       assessmentsTabData,
       creditControlTabData,
