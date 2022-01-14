@@ -198,10 +198,10 @@ export default {
         .map((item) => item.isDefaultTest && item.testID)
         .filter((item) => item);
       const solution = solutionsArray.value
-        .map((item) => item.isDefaultBattery && String(item.batteryID))
+        .map((item) => item.isDefaultBattery && item.batteryID)
         .filter((item) => item);
       const batteries = battriesArray.value
-        .map((item) => item.isDefaultBattery && String(item.batteryID))
+        .map((item) => item.isDefaultBattery && item.batteryID)
         .filter((item) => item);
         const data = {
             tests,

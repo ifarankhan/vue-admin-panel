@@ -6,8 +6,8 @@
           <div class="flex justify-between w-9/12 pl-2">
             <div v-for="(type, value) in userTypes" :key="value">
               <check-radio-picker
-                name="user-types"
                 :disabled="onUserEdit"
+                name="user-types"
                 v-model="userDetail.userType"
                 type="radio"
                 :options="{ [value]: type }"
