@@ -163,7 +163,7 @@ export default {
     const creditControlRef = ref(''); 
     const trainingDetailRef = ref('');
     let isInvalid = ref(true);
-    let userDetailData = reactive({})
+    let userDetailData = reactive(null)
     const showQuitDialog = ref(false);
     let errorText = ref("");
     let loader = ref(false);
@@ -174,7 +174,11 @@ export default {
       sharedCredit: 0,
     });
 
+    let showStep = ref(0);
+
     const updateUserType = (e)=>{
+      // showStep.value = e;
+      userDetail.userType = +e;
     if (e == 3) {
       userDetail.allowedToUpdateCredit = userDetail.sharedCredit = 1;
     } else{
@@ -183,10 +187,13 @@ export default {
     }
         
     const setUserDetail = (e)=>{
+      const data = _.cloneDeep(e)
+      const prevData = _.cloneDeep(userDetailData) 
       userDetailData = {
-        ...userDetailData,
-        ...e
-      } 
+        ...prevData,
+        ...data
+      }
+      // console.log("userDetailData",userDetailData) 
     }
 
     const checkForValidity = (e)=>{
@@ -199,7 +206,7 @@ export default {
       }
     }
 
-    const showStep = ref(0);
+    
    
     const goToBackHandler = () => {
       if (showStep.value <= 0) {
@@ -253,39 +260,29 @@ export default {
     const addAccountUserMethod =  () => {
       creditControlRef?.value?.creditControlMethod()
       const data = _.cloneDeep(userDetailData)
+      console.log("userDetailData",data)
       data.userType = Number(userDetailData.userType);
 
-      if(!data.supervisor){
+      if(!userDetailData.supervisor){
         delete data.supervisor;
       }
 
-      if(data.userType !=3){
+      if(userDetailData.userType !=3){
         data.supervisor = 0
       }
 
-      if(data.userType != 0 && data.userType != 4){
+      if(+userDetailData.userType === 1 || +userDetailData.userType === 4){
+        console.log("entered...")
         data.traininglevel = [];
         data.trainingprovider = "";
         data.trainingyear = "";
         data.trainingdetails = "";
       }
 
-      let array = [];
+      console.log("now data is...",data)
 
-      Object.keys(userDetailData.traininglevel).forEach(function (key) {
-        array.push(String(data.traininglevel[key]));
-      });
-      data.tests = userDetailData.tests
-        .map((item) => item.isDefaultTest && item.testID)
-        .filter((item) => item);
-      data.solution = userDetailData.solution
-        .map((item) => item.isDefaultBattery && String(item.batteryID))
-        .filter((item) => item);
-      data.batteries = userDetailData.solution
-        .map((item) => item.isDefaultBattery && String(item.batteryID))
-        .filter((item) => item);
       data.sendNotifications =
-        data.sendNotifications == 1 ? true : false;
+        userDetailData.sendNotifications == 1 ? true : false;
       
       errorText.value = "";
       loader.value = true;
