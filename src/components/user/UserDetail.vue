@@ -264,6 +264,9 @@ export default {
 
     const isUnique = async ()=>{
       if (!userDetail.email) return false;
+      if(indUserDetail?.username == userDetail.email){
+        return false
+      }
       store
         .dispatch("clientControl/userEmailCheck", userDetail.email)
         .then((res) => {

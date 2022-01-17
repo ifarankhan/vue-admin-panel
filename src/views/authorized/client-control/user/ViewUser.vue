@@ -395,7 +395,7 @@ export default {
     });
 
     const sendNotification = computed(()=>{
-      return userDetailsList && userDetailsList.receiveSystemEmailNotifications?1:0
+      return userDetailsList && userDetailsList.value.receiveSystemEmailNotifications?1:0
     })
 
     return {accountDetail, userTypes, formatDate,loading,user,userDetailsList,selectedTrannings,sendNotification}
