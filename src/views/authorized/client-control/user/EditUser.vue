@@ -255,13 +255,16 @@ export default {
       if(showStep.value ==0){
         await userDetailRef?.value?.userDetailMethod()
       }
+      if(!isInvalid.value || emailIsTaken.value){
+        return
+      }
       const data = {
         firstname:userDetailData?.firstname,
         familyname:userDetailData?.familyname,
         email:userDetailData?.email,
         pin:userDetailData?.pin,
         active:userDetailData && userDetailData.activeBlocked? true: false,
-        receiveEmailNotifications: userDetailData && userDetailData.sendNotifications?true: false
+        receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
       }
       loader.value = true;
        store
