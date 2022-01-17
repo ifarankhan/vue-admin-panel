@@ -157,7 +157,10 @@ export default {
     utility,
   },
   setup() {
+    console.log("Called")
     const store = useStore();
+    store.commit("clientControl/setIndividualClientUserDetail", null);
+    
     const userDetailRef = ref('');
     const assessmentsRef = ref(''); 
     const creditControlRef = ref(''); 
@@ -260,7 +263,6 @@ export default {
     const addAccountUserMethod =  () => {
       creditControlRef?.value?.creditControlMethod()
       const data = _.cloneDeep(userDetailData)
-      console.log("userDetailData",data)
       data.userType = Number(userDetailData.userType);
 
       if(!userDetailData.supervisor){
@@ -272,14 +274,11 @@ export default {
       }
 
       if(+userDetailData.userType === 1 || +userDetailData.userType === 4){
-        console.log("entered...")
         data.traininglevel = [];
         data.trainingprovider = "";
         data.trainingyear = "";
         data.trainingdetails = "";
       }
-
-      console.log("now data is...",data)
 
       data.sendNotifications =
         userDetailData.sendNotifications == 1 ? true : false;

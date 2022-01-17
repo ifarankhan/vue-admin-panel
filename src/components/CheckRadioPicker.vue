@@ -46,7 +46,6 @@ export default {
     const computedValue = computed({
       get: () => props.modelValue,
       set: value => {
-        console.log("vlaue iskkk", value)
         emit('update:modelValue', value)
       }
     })
