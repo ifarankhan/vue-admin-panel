@@ -1,10 +1,10 @@
 <template>
- <confirmDeleteDialog 
+ <confirmDeleteDialog
   v-if="showDialog"
   @closeDialog="showDialog = false"
   :accountName="accountDetail && accountDetail.accountName"
   @dialogConfirmed="deleteUserMethod()" />
-  
+
   <Loader v-if="loader" :toBeBigger="true" />
 
   <sticky-header>
@@ -323,12 +323,57 @@
                </div>
              </div>
            </div>
-
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <div class="w-11/12 view-assessments">
+              <!-- Tests -->
+              <assessment-collapsable
+                :user-data="userTests"
+                :collapsable="collapsable.tests"
+                divider-label="Tests"
+                ></assessment-collapsable>
+               <!-- Batteries -->
+              <assessment-collapsable
+                :user-data="userBatteries"
+                :collapsable="collapsable.batteries"
+                divider-label="Batteries"
+                isBatteries="true"
+                ></assessment-collapsable>
+              <!-- Solutions -->
+              <assessment-collapsable
+                  :user-data="userSolutions"
+                  :collapsable="collapsable.solutions"
+                  divider-label="Solutions"
+                  isBatteries="true"
+              ></assessment-collapsable>
 
             </div>
           </TabPanel>
-          <TabPanel>Content 3</TabPanel>
-          <TabPanel>Content 4</TabPanel>
+          <TabPanel>
+            <div class="w-11/12 credit-control">
+              <div class="grid w-6/12 grid-cols-2 gap-4">
+                <div class="col-span-2 font-bold" >
+                  Credit Control:
+                </div>
+                <div class="col-span-2" >
+                  <div class="w-full">
+                    <field label="Available Credit" labelFor="credit">
+                      <control
+                          :disabled="true"
+                          v-model="creditControl.credits"
+                          placeholder=" "
+                      />
+                    </field>
+                  </div>
+                </div>
+                <div class="font-bold">Allowed to Update Credits:</div>
+                <div>{{creditControl.allowUpdateCredits?"Yes":"No"}}</div>
+                <div class="font-bold">Monthly Update Limit:</div>
+                <div>{{creditControl.updateLimit}}</div>
+              </div>
+            </div>
+          </TabPanel>
         </TabPanels>
       </div>
     </TabGroup>
@@ -336,7 +381,7 @@
 
 </template>
 <script>
-import { onMounted, ref, computed} from "vue";
+import { onMounted, ref, computed,reactive} from "vue";
 import store from "@/store/index";
 import {useStore} from "vuex";
 import StickyHeader from "@/components/StickyHeader";
@@ -347,6 +392,9 @@ import Loader from "@/components/Loader.vue";
 import {colorsBorders, colorsText} from "@/colors";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
+import AssessmentCollapsable from "@/components/AssessmentCollapsable";
+import Control from "@/components/Control";
+import Field from "@/components/Field";
 import utility from "@/components/composition/utility";
 
 export default {
@@ -359,8 +407,11 @@ export default {
     TabPanel,
     Button,
     Loader,
-    confirmDeleteDialog,
-    CheckRadioPicker
+    CheckRadioPicker,
+    AssessmentCollapsable,
+    Control,
+    Field,
+    confirmDeleteDialog
   },
   name: "client-control-view-user",
   beforeRouteEnter(to, from, next) {
@@ -379,8 +430,21 @@ export default {
     const user = ref();
     const userDetailsList = ref();
     const trannings = ref();
+    const userTests = ref();
+    const userBatteries = ref();
+    const userSolutions = ref();
+    const creditControl = reactive({
+      credits: 0,
+      allowedToUpdateCredit: false,
+      updateLimit: 0,
+    });
     const store = useStore();
     let loading = ref();
+    const collapsable = reactive({
+      tests: true,
+      batteries: true,
+      solutions: true,
+    });
     let showDialog = ref(false);
 
     const accountDetail = computed(() => {
@@ -395,11 +459,18 @@ export default {
             user.value = responseArray;
             userDetailsList.value =  responseArray?.userDetails;
             trannings.value = responseArray?.userDetails?.trainingLevel;
+            userTests.value = responseArray?.tests;
+            userBatteries.value = [ ...responseArray?.defaultBatteries, ...responseArray?.customBatteries ];
+            userSolutions.value = responseArray?.solutions;
+            creditControl.credits = responseArray?.userDetails?.credits;
+            creditControl.allowedToUpdateCredit = responseArray?.userDetails?.allowUpdateCredits;
+            creditControl.updateLimit = responseArray?.userDetails?.creditLimit;
             loading.value = false;
           })
           .catch((error) => {
             console.log("error is...", error.message);
           });
+
     });
 
     const selectedTrannings = computed(() => {
@@ -410,10 +481,9 @@ export default {
     const sendNotification = computed(()=>{
       return userDetailsList && userDetailsList.value.receiveSystemEmailNotifications?1:0
     })
-
     const deleteUserMethod = ()=>{
       loading.value = true;
-       store 
+      store
           .dispatch("clientControl/deleteUserAccount")
           .then((res) => {
             if(res?.data?.data?.deleted){
@@ -426,22 +496,26 @@ export default {
           .catch((error) => {
             console.log("error is...", error);
           }).finally(()=>{
-             loading.value = false;
-          });
+        loading.value = false;
+      });
     }
-
     return {
-      accountDetail, 
-      userTypes, 
+      accountDetail,
+      userTypes,
       formatDate,
       loading,
       user,
       userDetailsList,
-      deleteUserMethod,
       selectedTrannings,
       sendNotification,
-      showDialog
-      }
+      userTests,
+      userBatteries,
+      userSolutions,
+      collapsable,
+      creditControl,
+      deleteUserMethod
+    }
+
   }
 }
 </script>
