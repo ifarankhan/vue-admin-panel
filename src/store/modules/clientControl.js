@@ -120,6 +120,15 @@ const actions = {
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload)
+    }, 
+    async deleteUserAccount({state}){
+      console.log("individualClientUserDetail",state.individualClientUserDetail)
+      return private_url.delete('account-users', {
+          params: {
+            accountId: userData.accountID,
+            userId: state.clientDetail.userID
+          }
+      })
     },
     async deleteClientAccount({}){
       const userData = await JSON.parse(localStorage.getItem("userData"));

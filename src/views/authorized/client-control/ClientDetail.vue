@@ -1,40 +1,12 @@
 <template>
   <!-- <sticky-header> -->
-        <Dialog v-model:visible="displayBasic" :style="{width: '25vw'}" :modal="true">
-          <template #header>
-              <h3 class="text-lg font-medium">Delete Account</h3>
-            </template>
-            <p class="text-sm font-semibold text-black w-80">Are you sure you want to delete the following Account?</p>
-            <div class="flex mt-1">
-              <div class="flex items-center justify-center w-10 h-10 text-white rounded-full" style="background-color: rgba(0, 0, 0, 0.4);">
-               {{ accountDetail && accountDetail.accountName.split(" ").map(item=>item[0].toUpperCase()).join("") }}
-              </div>
-              <div>
-                <span class="mt-1 ml-1 text-sm font-medium text-black">{{ accountDetail && accountDetail.accountName }}</span>
-              </div>
-            </div>
-            <template #footer>
-               <div class="flex justify-between">
-                  <div>
-                   <psytech-button
-                    label="NO"
-                    type="outline"
-                    :extraClasses="'text-sm font-medium text-psytechBlue px-10  border-psytechBlue'"
-                    @buttonWasClicked="displayBasic=false"
-                  ></psytech-button>
-                </div>
-                 <div>
-                   <psytech-button
-                    label="YES"
-                    type="danger"
-                    @buttonWasClicked="deleteAccountMethod()"
-                  ></psytech-button>
-                </div>
-               </div>
-            </template>
-        </Dialog>
-
-
+  <confirmDeleteDialog 
+  v-if="showDialog"
+  @closeDialog="showDialog = false"
+  :name="accountDetail && accountDetail.accountName"
+  @dialogConfirmed="deleteAccountMethod()" />
+  
+  <Loader v-if="loader" :toBeBigger="true" />
 
 <div class="pt-10">
       <div class="grid grid-cols-2 md:px-2">
@@ -254,7 +226,7 @@
 
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
-              @click="openBasic"
+              @click="showDialog = true"
             >
               <span class="p-0.5">
                 <svg
@@ -665,9 +637,10 @@ import utility from "@/components/composition/utility";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
 import IconSVG from "@/components/IconSVG.vue";
-import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
+import Loader from "@/components/Loader.vue";
+import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 
@@ -682,11 +655,12 @@ export default {
   components: {
     StickyHeader,
     PsytechButton,
+    confirmDeleteDialog,
     DataTable,
     Field,
     Control,
-    Dialog,
     Calendar,
+    Loader,
     Button,
     SelectOption,
     IconSVG,
@@ -699,14 +673,9 @@ export default {
   setup() {
     const router = useRouter();
     const { formatDate } = useClientUser();
-    const displayBasic = ref(false);
     const scrollPosition = ref(null);
-    const openBasic = () => {
-            displayBasic.value = true;
-        };
-    const closeBasic = () => {
-        displayBasic.value = false;
-    };
+    let showDialog = ref(false);
+    let loader = ref(false);
 
     let cf = ref()
     const openCalender = ()=>{
@@ -1011,11 +980,12 @@ export default {
     };
 
     const deleteAccountMethod = ()=>{
+      loader.value = true;
        store
           .dispatch("clientControl/deleteClientAccount")
           .then((res) => {
             if(res?.data?.data?.deleted){
-              displayBasic.value=false
+              showDialog.value = false
               const { navigateTo } = utility("list-page");
               navigateTo();
               // console.log("response is...",res.data.data)
@@ -1023,21 +993,28 @@ export default {
           })
           .catch((error) => {
             console.log("error is...", error);
+          }).finally(()=>{
+             loader.value = false;
           });
     }
 
 
 
-    return { showFilters, accountDetail, scrollPosition, formatDate, masterUser, userArray,
+    return { 
+      showFilters, 
+      accountDetail, 
+      scrollPosition, 
+      formatDate, 
+      masterUser, 
+      userArray,
       searchText,
-      displayBasic,
-      openBasic,
-      closeBasic,
       filteredMainMethod,
       applyFilter,
       clearFilter,
       openCalender,
       cf,
+      loader,
+      showDialog,
       redirectToDetail,
       showCalender,
       closeCalender,
@@ -1059,9 +1036,6 @@ export default {
 };
 </script>
 <style>
-.p-dialog{
-  border-radius: 16px !important;
-}
 .header-footer{
   position: fixed !important;
   width: calc(100% - 315px)  !important;

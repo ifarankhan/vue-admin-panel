@@ -1,4 +1,12 @@
 <template>
+ <confirmDeleteDialog 
+  v-if="showDialog"
+  @closeDialog="showDialog = false"
+  :accountName="accountDetail && accountDetail.accountName"
+  @dialogConfirmed="deleteUserMethod()" />
+  
+  <Loader v-if="loader" :toBeBigger="true" />
+
   <sticky-header>
     <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
@@ -151,6 +159,7 @@
             </div>
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
+              @click="showDialog = true"
             >
               <span class="p-0.5">
                 <svg
@@ -335,7 +344,9 @@ import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import Loader from "@/components/Loader.vue";
 import {colorsBorders, colorsText} from "@/colors";
+import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
+import utility from "@/components/composition/utility";
 
 export default {
   components:{
@@ -347,6 +358,7 @@ export default {
     TabPanel,
     Button,
     Loader,
+    confirmDeleteDialog,
     CheckRadioPicker
   },
   name: "client-control-view-user",
@@ -368,7 +380,7 @@ export default {
     const trannings = ref();
     const store = useStore();
     let loading = ref();
-    let sendNotifications= ref();
+    let showDialog = ref(false);
 
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
@@ -398,7 +410,37 @@ export default {
       return userDetailsList && userDetailsList.value.receiveSystemEmailNotifications?1:0
     })
 
-    return {accountDetail, userTypes, formatDate,loading,user,userDetailsList,selectedTrannings,sendNotification}
+    const deleteUserMethod = ()=>{
+      loading.value = true;
+       store 
+          .dispatch("clientControl/deleteUserAccount")
+          .then((res) => {
+            if(res?.data?.data?.deleted){
+              showDialog.value = false
+              const { navigateTo } = utility("client-control-view-user");
+              navigateTo();
+              // console.log("response is...",res.data.data)
+            }
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+             loading.value = false;
+          });
+    }
+
+    return {
+      accountDetail, 
+      userTypes, 
+      formatDate,
+      loading,
+      user,
+      userDetailsList,
+      deleteUserMethod,
+      selectedTrannings,
+      sendNotification,
+      showDialog
+      }
   }
 }
 </script>
