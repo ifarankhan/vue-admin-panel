@@ -25,7 +25,7 @@
             <div v-for="(item, index) in testsArray" :key="index">
               <check-radio-picker
                 name="tests-checkbox"
-                v-model="item.isDefaultTest"
+                v-model="testsArray[testsArray.indexOf(item)].isDefaultTest"
                 setValue="another"
                 :options="{ [item.testID]: item.testID }"
               />
@@ -64,7 +64,7 @@
             <div v-for="(item, index) in battriesArray" :key="index">
               <check-radio-picker
                 name="batteries-checkbox"
-                v-model="item.isDefaultBattery"
+                v-model="battriesArray[battriesArray.indexOf(item)].isDefaultBattery"
                 setValue="another"
                 :options="{ [item.batteryID]: item.batteryTitle }"
               />
@@ -102,7 +102,7 @@
             <div v-for="(item, index) in solutionsArray" :key="index">
               <check-radio-picker
                 name="solution-checkbox"
-                v-model="item.isDefaultBattery"
+                v-model="solutionsArray[solutionsArray.indexOf(item)].isDefaultBattery"
                 setValue="another"
                 :options="{ [item.batteryID]: item.batteryTitle }"
               />
@@ -195,13 +195,34 @@ export default {
     
     const assessmentDetailMethod = ()=>{
         const tests = testsArray.value
-        .map((item) => item.isDefaultTest && item.testID)
+        .map((item) => {
+          if(item.isDefaultTest && item.testID){
+            return {
+              testid: item.testID,
+              allowunsupervised: item.allowedUnsupervised
+            }
+          }
+        })
         .filter((item) => item);
       const solution = solutionsArray.value
-        .map((item) => item.isDefaultBattery && item.batteryID)
+        .map((item) => {
+          if(item.isDefaultBattery && item.batteryID){
+            return {
+              batteryid: item.batteryID,
+              allowunsupervised: true
+            }
+          }
+        })
         .filter((item) => item);
       const batteries = battriesArray.value
-        .map((item) => item.isDefaultBattery && item.batteryID)
+        .map((item) => {
+          if(item.isDefaultBattery && item.batteryID){
+            return {
+              batteryid: item.batteryID,
+              allowunsupervised: true
+            }
+          }
+        })
         .filter((item) => item);
         const data = {
             tests,

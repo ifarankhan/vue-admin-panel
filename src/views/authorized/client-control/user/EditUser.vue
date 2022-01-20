@@ -263,9 +263,11 @@ export default {
         familyname:userDetailData?.familyname,
         email:userDetailData?.email,
         pin:userDetailData?.pin,
-        active:userDetailData && userDetailData.activeBlocked? true: false,
+        active:userDetailData && +userDetailData.activeBlocked? true: false,
         receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
       }
+
+      console.log("datadata",userDetailData)
       loader.value = true;
        store
         .dispatch("clientControl/updateIndUserDetail", data)

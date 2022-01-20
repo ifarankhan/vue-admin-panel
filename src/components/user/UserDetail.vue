@@ -368,6 +368,7 @@ export default {
         return true;
       }
       emit("valid", { done: ()=> {
+        // console.log("activeBlocked",activeBlocked.value)
         const data = {...userDetail,activeBlocked: activeBlocked.value}
         emit("userDetail",data)
       } })
