@@ -1,6 +1,7 @@
 <template>
      <div class="w-2/3">
         <!--  -->
+        <!-- {{ trainingArray }} -->
         <div class="pl-4">
           <p class="mb-2 text-sm font-semibold">
             Select Training / Qualification Type:
@@ -116,7 +117,25 @@ export default {
   },
    setup (props, { emit }) {
      const store = useStore();
-     const { trainingArray } = useClientUser();
+     let { trainingArray } = useClientUser();
+
+     const indUserDetail = store.getters['clientControl/getIndClientUser'];
+    //  if(indUserDetail && indUserDetail.trainingLevel){
+    //   const result = indUserDetail?.trainingLevel.split(",")
+    //   if(result.length)
+    //     trainingArray = trainingArray.map(item=> {
+    //       if(result.includes(item.text)){
+    //         return {
+    //           ...item,
+    //           selected: true
+    //         }
+    //       }
+    //       return item
+    //     })
+    //   //  trainingArray = 
+    //  }
+
+
      const trainingProvidersArray = ref([]);
      const trainingDetail = reactive({
       traininglevel: [],
@@ -221,6 +240,7 @@ export default {
         yearsArray,
         trainingDetailMethod,
         trainingArray,
+        indUserDetail,
         trainingProvidersArray,
         v$
      }  

@@ -1,4 +1,12 @@
 <template>
+ <confirmDeleteDialog
+  v-if="showDialog"
+  @closeDialog="showDialog = false"
+  :accountName="accountDetail && accountDetail.accountName"
+  @dialogConfirmed="deleteUserMethod()" />
+
+  <Loader v-if="loader" :toBeBigger="true" />
+
   <sticky-header>
     <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
@@ -152,6 +160,7 @@
             </div>
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
+              @click="showDialog = true"
             >
               <span class="p-0.5">
                 <svg
@@ -380,10 +389,13 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import Loader from "@/components/Loader.vue";
+import {colorsBorders, colorsText} from "@/colors";
+import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
 import AssessmentCollapsable from "@/components/AssessmentCollapsable";
 import Control from "@/components/Control";
 import Field from "@/components/Field";
+import utility from "@/components/composition/utility";
 
 export default {
   components:{
@@ -398,7 +410,8 @@ export default {
     CheckRadioPicker,
     AssessmentCollapsable,
     Control,
-    Field
+    Field,
+    confirmDeleteDialog
   },
   name: "client-control-view-user",
   beforeRouteEnter(to, from, next) {
@@ -432,6 +445,7 @@ export default {
       batteries: true,
       solutions: true,
     });
+    let showDialog = ref(false);
 
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
@@ -467,7 +481,24 @@ export default {
     const sendNotification = computed(()=>{
       return userDetailsList && userDetailsList.value.receiveSystemEmailNotifications?1:0
     })
-
+    const deleteUserMethod = ()=>{
+      loading.value = true;
+      store
+          .dispatch("clientControl/deleteUserAccount")
+          .then((res) => {
+            if(res?.data?.data?.deleted){
+              showDialog.value = false
+              const { navigateTo } = utility("client-control-view-user");
+              navigateTo();
+              // console.log("response is...",res.data.data)
+            }
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+        loading.value = false;
+      });
+    }
     return {
       accountDetail,
       userTypes,
@@ -481,8 +512,10 @@ export default {
       userBatteries,
       userSolutions,
       collapsable,
-      creditControl
+      creditControl,
+      deleteUserMethod
     }
+
   }
 }
 </script>
