@@ -122,7 +122,6 @@ const actions = {
         return private_url.post('add-account', payload)
     }, 
     async deleteUserAccount({state}){
-      console.log("individualClientUserDetail",state.individualClientUserDetail)
       return private_url.delete('account-users', {
           params: {
             accountId: userData.accountID,
