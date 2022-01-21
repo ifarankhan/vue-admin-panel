@@ -46,31 +46,31 @@
     <TabGroup>
       <div class="box-border flex border-b-2 md:pr-12 lg:pr-0 tab-headers">
         <div class="flex-shrink-0" id="export_account">
-          <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
+          <TabList class="flex bg-blue-900/20 rounded-xl">
             <Tab as="template" v-slot="{ selected }">
               <button
                   :class="[
-                    'block sm:text-sm sm:py-3 md:py-4 font-bold text-black active mr-8 hover:text-psytechBlueBtHover focus:outline-none sm:px-3 sm:py-2',
+                    'block text-lg sm:py-3 md:py-4 font-bold text-black active mr-3 hover:text-psytechBlueBtHover focus:outline-none sm:px-2.5 sm:py-2',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
               >
                 {{ $t('User Details') }}
               </button>
             </Tab>
-            <Tab as="template" v-slot="{ selected }">
+            <Tab as="template" v-slot="{ selected }" v-if="userTyp != 1 && userTyp != 4">
               <button
                   :class="[
-                    'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
+                    'block px-6 py-4 sm:px-4 sm:py-3 font-bold text-lg text-black mr-3 active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
               >
-                {{ $t('Trainings') }}
+                {{ $t('Trainings')}}
               </button>
             </Tab>
             <Tab as="template" v-slot="{ selected }">
               <button
                   :class="[
-                    'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
+                    'block px-6 py-4 sm:px-4 sm:py-3 font-bold text-lg mr-3 text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
               >
@@ -80,7 +80,7 @@
             <Tab as="template" v-slot="{ selected }">
               <button
                   :class="[
-                    'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
+                    'block px-6 py-4 sm:px-4  sm:py-3 font-bold text-lg mr-3 text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
               >
@@ -91,7 +91,7 @@
         </div>
 
          <div
-            class="flex items-center justify-center w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-28"
+            class="flex items-center justify-center w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-16"
           >
             <div
               class="flex items-center mr-10 cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
@@ -237,7 +237,7 @@
         <TabPanels>
           <TabPanel>
             <div class="user-details-listing" v-if="userDetailsList">
-              <div class="grid w-6/12 grid-cols-2 gap-4">
+              <div class="grid w-6/12 grid-cols-2 gap-8">
                 <div class="font-bold">User type:</div>
                 <div>{{userTypes[userDetailsList.userType]}}</div>
                 <div class="font-bold">User Status:</div>
@@ -352,7 +352,7 @@
           </TabPanel>
           <TabPanel>
             <div class="w-11/12 credit-control">
-              <div class="grid w-6/12 grid-cols-2 gap-4">
+              <div class="grid w-6/12 grid-cols-2 gap-8">
                 <div class="col-span-2 font-bold" >
                   Credit Control:
                 </div>
@@ -429,6 +429,7 @@ export default {
     const { userTypes, formatDate, trainingArray } = useClientUser();
     const user = ref();
     const userDetailsList = ref();
+    const userTyp = ref(0);
     const trannings = ref();
     const userTests = ref();
     const userBatteries = ref();
@@ -458,6 +459,7 @@ export default {
             let responseArray = res?.data?.data;
             user.value = responseArray;
             userDetailsList.value =  responseArray?.userDetails;
+            userTyp.value = responseArray?.userDetails?.userType;
             trannings.value = responseArray?.userDetails?.trainingLevel;
             userTests.value = responseArray?.tests;
             userBatteries.value = [ ...responseArray?.defaultBatteries, ...responseArray?.customBatteries ];
@@ -506,6 +508,7 @@ export default {
       loading,
       user,
       userDetailsList,
+      userTyp,
       selectedTrannings,
       sendNotification,
       userTests,
