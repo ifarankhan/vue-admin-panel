@@ -6,6 +6,11 @@
   :name="accountDetail && accountDetail.accountName"
   @dialogConfirmed="deleteAccountMethod()" />
 
+  <change-master-dialog
+      v-if="showMasterDialog"
+      @closeDialog="showMasterDialog = false"
+      topHeaderText="Change Master User"
+  />
   <Loader v-if="loader" :toBeBigger="true" />
 
 <div class="pt-10">
@@ -353,6 +358,26 @@
               />
             </svg>
           </psytech-button>
+            <psytech-button
+                @click="showMasterDialog = true"
+                label="Change Master User"
+                type="outline"
+            >
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+              >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </psytech-button>
           <!-- Create New Client Account -->
         </div>
         <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" -->
@@ -642,8 +667,10 @@ import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
+import changeMasterUser from '@/components/ChangeMasterDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import ChangeMasterDialog from "@/components/ChangeMasterDialog";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -654,9 +681,11 @@ export default {
     next();
   },
   components: {
+    ChangeMasterDialog,
     StickyHeader,
     PsytechButton,
     confirmDeleteDialog,
+    changeMasterUser,
     DataTable,
     Field,
     Control,
@@ -679,6 +708,7 @@ export default {
     const { formatDate } = useClientUser();
     const scrollPosition = ref(null);
     let showDialog = ref(false);
+    let showMasterDialog = ref(false);
     let loader = ref(false);
 
     let cf = ref()
@@ -704,7 +734,7 @@ export default {
     const closeCalender = ()=>{
       cf.value.overlayVisible = false;
     }
-    
+
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
@@ -1023,6 +1053,7 @@ export default {
       loader,
       loading,
       showDialog,
+      showMasterDialog,
       redirectToDetail,
       showCalender,
       closeCalender,
