@@ -2,6 +2,8 @@ import { private_url, public_url } from "../../axios";
 const namespaced = true;
 const state = {
     clientDetail: null,
+    usersTablePag: null,
+    setActiveTabeForEdit: 0,
     clientUserDetail:null,
     individualClientUserDetail: null
 }
@@ -15,6 +17,9 @@ const getters = {
   },
   getIndClientUser: state=>{
     return state.individualClientUserDetail
+  },
+  getUsersTablePag: state=>{
+    return state.usersTablePag
   }
 
 }
@@ -37,8 +42,13 @@ const mutations = {
       state.clientUserDetail = updatedClientUser;
   },
   setIndividualClientUserDetail(state, payload){
-    console.log("called kk",payload)
     state.individualClientUserDetail = payload;
+  },
+  setActiveTabeForEdit(state,payload){
+    state.individualClientUserDetail = { ...state.individualClientUserDetail, activateTab: payload}
+  },
+  setUsersTablePag(state, payload){
+    state.usersTablePag = payload;
   }
 }
 
