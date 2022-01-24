@@ -49,6 +49,7 @@
           <TabList class="flex bg-blue-900/20 rounded-xl">
             <Tab as="template" v-slot="{ selected }">
               <button
+                  @click="$store.commit('clientControl/setActiveTabeForEdit',0)"
                   :class="[
                     'block text-lg sm:py-3 md:py-4 font-bold text-black active mr-3 hover:text-psytechBlueBtHover focus:outline-none sm:px-2.5 sm:py-2',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -60,6 +61,7 @@
             <template v-if="!ismasterUser">
               <Tab as="template" v-slot="{ selected }" v-if="userTyp != 1 && userTyp != 4">
                 <button
+                    @click="$store.commit('clientControl/setActiveTabeForEdit',1)"
                     :class="[
                     'block px-6 py-4 sm:px-4 sm:py-3 font-bold text-lg text-black mr-3 active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -70,6 +72,7 @@
               </Tab>
               <Tab as="template" v-slot="{ selected }">
                 <button
+                    @click="$store.commit('clientControl/setActiveTabeForEdit',2)"
                     :class="[
                     'block px-6 py-4 sm:px-4 sm:py-3 font-bold text-lg mr-3 text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -80,6 +83,7 @@
               </Tab>
               <Tab as="template" v-slot="{ selected }">
                 <button
+                    @click="$store.commit('clientControl/setActiveTabeForEdit',3)"
                     :class="[
                     'block px-6 py-4 sm:px-4  sm:py-3 font-bold text-lg mr-3 text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -168,7 +172,7 @@
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="17"
-                  height="16.427"
+                  height="18.427"
                   viewBox="0 0 19 18.427"
                 >
                   <g
@@ -250,7 +254,7 @@
                 <div>{{userDetailsList.username}}</div>
                 <div class="font-bold">Pin:</div>
                 <div>{{userDetailsList.pin}}</div>
-                <div class="col-span-2 font-bold">Receive Email Notifications</div>
+                <div class="col-span-2 font-bold mb-0.5">Receive Email Notifications</div>
                 <div class="col-span-2" >
                   <div class="flex justify-between w-4/12 pl-2">
                     <check-radio-picker
