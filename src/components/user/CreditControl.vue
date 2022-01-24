@@ -8,7 +8,7 @@
               <field label="Available Credit" labelFor="credit">
                 <control
                   :disabled="true"
-                  v-model="updateCredit.availableCredit"
+                  v-model="creditControl.currentCredits"
                   placeholder=" "
                 />
               </field>
@@ -41,44 +41,21 @@
         <!--  -->
 
         <div
-          class="w-9/12 p-2 mt-4 ml-6 rounded-md bg-psytechLightGray"
+          class="w-6/12 p-2 mt-4 ml-6 rounded-md bg-psytechLightGray"
           v-if="toggleCredits"
         >
-          <div class="flex w-full">
-            <div class="w-80">
-              <field label="Update Amount" labelFor="update-amount">
-                <control v-model="updateCredit.updateAmount" placeholder=" " maxlength="4" />
-              </field>
-            </div>
-            <div class="w-80">
-              <field label="Purchase ID" labelFor="purchase-id">
-                <control v-model="updateCredit.purchaseId" placeholder=" " />
-              </field>
-            </div>
-            <!-- <div class="flex w-1/5"> -->
-            <div class="mt-1 ml-6">
-              <psytech-button
-                label="Cancel"
-                type="dark"
-                @buttonWasClicked="
-                  (toggleCredits = false),
-                    (updateCredit.availableCredit = updateCredit.updateAmount =
-                      0)
-                "
-              ></psytech-button>
-            </div>
-            <div class="mt-1">
-              <psytech-button
-                label="Update"
-                type="black"
-                extraClasses="pl-6 pr-6"
-                @buttonWasClicked="
-                  updateCredit.availableCredit = updateCredit.updateAmount
-                "
-              ></psytech-button>
-            </div>
-            <!-- </div> -->
-          </div>
+            <field label="Update Amount" labelFor="update-amount">
+              <control v-model="updateCredit.credits" placeholder=" " maxlength="4" />
+            </field>
+
+            <field label="Purchase Note" labelFor="purchaseNote">
+              <control
+                type="textarea"
+                v-model="updateCredit.purchaseId"
+                placeholder=" "
+              />
+            </field> 
+            
           <div class="ml-3">
             <error-span :error="v$.credits"></error-span>
           </div>
@@ -157,6 +134,7 @@ import ErrorSpan from "@/components/ErrorSpan";
 import PsytechButton from "@/components/PsytechButton";
 import CheckRadioPicker from "@/components/CheckRadioPicker";
 import Field from "@/components/Field";
+import { useStore } from "vuex";
 import Control from "@/components/Control";
 import SelectOption from "@/components/SelectOption.vue";
 import { useClientUser } from "@/components/composition/clientHelper.js";
@@ -177,23 +155,20 @@ export default {
     ErrorSpan,
   },
    setup (props, { emit }) {
+     const store = useStore();
+     const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
      const { notifications } = useClientUser();
      const creditControl = reactive({
-      credits: 0,
+      currentCredits: indUserDetail?.credits??0,
       allowedToUpdateCredit: +props.shareAndAlowCreditVal,
       sharedCredit: +props.shareAndAlowCreditVal,
     });
-    const updateCredit = reactive({
-      availableCredit: 0,
-      updateAmount: "",
+    const updateCredit = reactive({ 
+      currentCredits: indUserDetail?.credits??0,
+      credits: "",
       purchaseId: "",
     });
-    watch(
-      () => _.cloneDeep(updateCredit),
-      (currentValue, _) => {
-        creditControl.credits = +currentValue.updateAmount;
-      }
-    );
+
      watch(
       () => props.shareAndAlowCreditVal,
       (currentValue, _) => {
@@ -226,7 +201,7 @@ export default {
       }
     });
 
-   const v$ = useVuelidate(rules, creditControl);
+   const v$ = useVuelidate(rules, updateCredit);
 
    const creditControlMethod = ()=>{
       v$.value.$validate();
@@ -236,7 +211,7 @@ export default {
         return true;
       }
        emit("valid", { done: ()=> {
-        emit("creditControlDetail",creditControl)
+        emit("creditControlDetail",updateCredit)
       } })
     }
 

@@ -190,6 +190,7 @@ export default {
     }
         
     const setUserDetail = (e)=>{
+      console.log("E isisis", e)
       const data = _.cloneDeep(e)
       const prevData = _.cloneDeep(userDetailData) 
       userDetailData = {
@@ -282,7 +283,7 @@ export default {
 
       data.sendNotifications =
         userDetailData.sendNotifications == 1 ? true : false;
-      
+      data.credits = +data?.credits;
       errorText.value = "";
       loader.value = true;
       store
