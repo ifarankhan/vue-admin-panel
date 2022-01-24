@@ -57,41 +57,43 @@
                 {{ $t('User Details') }}
               </button>
             </Tab>
-            <Tab as="template" v-slot="{ selected }" v-if="userTyp != 1 && userTyp != 4">
-              <button
-                  :class="[
+            <template v-if="!ismasterUser">
+              <Tab as="template" v-slot="{ selected }" v-if="userTyp != 1 && userTyp != 4">
+                <button
+                    :class="[
                     'block px-6 py-4 sm:px-4 sm:py-3 font-bold text-lg text-black mr-3 active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
-              >
-                {{ $t('Trainings')}}
-              </button>
-            </Tab>
-            <Tab as="template" v-slot="{ selected }">
-              <button
-                  :class="[
+                >
+                  {{ $t('Trainings')}}
+                </button>
+              </Tab>
+              <Tab as="template" v-slot="{ selected }">
+                <button
+                    :class="[
                     'block px-6 py-4 sm:px-4 sm:py-3 font-bold text-lg mr-3 text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
-              >
-                {{ $t('Assessments') }}
-              </button>
-            </Tab>
-            <Tab as="template" v-slot="{ selected }">
-              <button
-                  :class="[
+                >
+                  {{ $t('Assessments') }}
+                </button>
+              </Tab>
+              <Tab as="template" v-slot="{ selected }">
+                <button
+                    :class="[
                     'block px-6 py-4 sm:px-4  sm:py-3 font-bold text-lg mr-3 text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
-              >
-                {{ $t('Credit Control') }}
-              </button>
-            </Tab>
+                >
+                  {{ $t('Credit Control') }}
+                </button>
+              </Tab>
+            </template>
           </TabList>
         </div>
 
          <div
-            class="flex items-center justify-center w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-16"
+            class="flex items-center justify-center w-1/2 ml-3 calender sm:ml-3 flex-shrink-1 lg:ml-1"
           >
             <div
               class="flex items-center mr-10 cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
@@ -434,6 +436,7 @@ export default {
     const userTests = ref();
     const userBatteries = ref();
     const userSolutions = ref();
+    const ismasterUser = ref(false);
     const creditControl = reactive({
       credits: 0,
       allowedToUpdateCredit: false,
@@ -467,6 +470,7 @@ export default {
             creditControl.credits = responseArray?.userDetails?.credits;
             creditControl.allowedToUpdateCredit = responseArray?.userDetails?.allowUpdateCredits;
             creditControl.updateLimit = responseArray?.userDetails?.creditLimit;
+            ismasterUser.value = responseArray?.userDetails?.isMasterUser;
             loading.value = false;
           })
           .catch((error) => {
@@ -520,6 +524,7 @@ export default {
       userSolutions,
       collapsable,
       creditControl,
+      ismasterUser,
       deleteUserMethod
     }
 
