@@ -245,13 +245,14 @@ export default {
     const { userTypes, notifications } = useClientUser();
     let supervisorsArray = ref([]);
     const emailIsTaken = ref(false);
-    const indUserDetail = store.getters['clientControl/getIndClientUser']
+    const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
     const userDetail = reactive({
       userType: indUserDetail?.userType??"",
       firstname:indUserDetail?.firstName??"",
       familyname: indUserDetail?.familyName??"",
       email: indUserDetail?.username??"",
       pin: indUserDetail?.pin??"",
+      supervisor: indUserDetail?.sharedCreditUserID??"",
       sendNotifications: indUserDetail && indUserDetail.receiveSystemEmailNotifications?1:0,
     });
 
@@ -284,7 +285,7 @@ export default {
     const activeBlockList = reactive(["Active", "Blocked"]);
     let emailNotValue = 1;
     if(indUserDetail){
-      emailNotValue = indUserDetail.activated ? 1: 0;
+      emailNotValue = indUserDetail.activated ? 0: 1;
     }
     
     const activeBlocked = ref(emailNotValue);

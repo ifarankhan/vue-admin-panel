@@ -2,11 +2,11 @@
  <confirmDeleteDialog
   v-if="showDialog"
   @closeDialog="showDialog = false"
-  :accountName="accountDetail && accountDetail.accountName"
+  topHeaderText="User"
+  :name="userDetailsList && userDetailsList.firstName"
   @dialogConfirmed="deleteUserMethod()" />
 
   <Loader v-if="loader" :toBeBigger="true" />
-
   <sticky-header>
     <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
@@ -477,20 +477,23 @@ export default {
 
     const selectedTrannings = computed(() => {
        trannings.value = trannings.value.split(',');
-      return trainingArray.filter(val => trannings.value.includes(val.value));
+      return trainingArray.trainingObj.filter(val => trannings.value.includes(val.value));
     });
 
     const sendNotification = computed(()=>{
       return userDetailsList && userDetailsList.value.receiveSystemEmailNotifications?1:0
     })
     const deleteUserMethod = ()=>{
+      showDialog.value = false
       loading.value = true;
       store
-          .dispatch("clientControl/deleteUserAccount")
+          .dispatch("clientControl/deleteUserAccount",{ accountId: userDetailsList.value.accountID, userId: userDetailsList.value.userID })
           .then((res) => {
             if(res?.data?.data?.deleted){
-              showDialog.value = false
-              const { navigateTo } = utility("client-control-view-user");
+              store.commit("clientControl/setClientDetail", {
+                decrementAccUser: true,
+              });
+              const { navigateTo } = utility("client-control-list-detail");
               navigateTo();
               // console.log("response is...",res.data.data)
             }
@@ -498,7 +501,7 @@ export default {
           .catch((error) => {
             console.log("error is...", error);
           }).finally(()=>{
-        loading.value = false;
+             loading.value = false;
       });
     }
     return {
@@ -507,6 +510,7 @@ export default {
       formatDate,
       loading,
       user,
+      showDialog,
       userDetailsList,
       userTyp,
       selectedTrannings,

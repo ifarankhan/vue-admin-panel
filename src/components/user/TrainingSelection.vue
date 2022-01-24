@@ -6,10 +6,10 @@
           <p class="mb-2 text-sm font-semibold">
             Select Training / Qualification Type:
           </p>
-          <div v-for="(item, index) in trainingArray" :key="index" class="mb-4 ml-1.5">
+          <div v-for="(item, index) in trainingArray.trainingObj" :key="index" class="mb-4 ml-1.5">
             <check-radio-picker
               name="sample-checkbox"
-              v-model="item.selected"
+              v-model="trainingArray.trainingObj[trainingArray.trainingObj.indexOf(item)].selected"
               setValue="another"
               :options="{ another: item.text }"
             />
@@ -107,6 +107,12 @@ import {
 } from "@vuelidate/validators";
 export default {
  name: "client-control-user-detail",
+ props:{
+   onEditUser: {
+     type: Boolean,
+     default: false
+   }
+ },
  components: {
     CheckRadioPicker,
     SelectOption,
@@ -119,38 +125,40 @@ export default {
      const store = useStore();
      let { trainingArray } = useClientUser();
 
-     const indUserDetail = store.getters['clientControl/getIndClientUser'];
-    //  if(indUserDetail && indUserDetail.trainingLevel){
-    //   const result = indUserDetail?.trainingLevel.split(",")
-    //   if(result.length)
-    //     trainingArray = trainingArray.map(item=> {
-    //       if(result.includes(item.text)){
-    //         return {
-    //           ...item,
-    //           selected: true
-    //         }
-    //       }
-    //       return item
-    //     })
-    //   //  trainingArray = 
-    //  }
+     const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
+     
+     if(indUserDetail && indUserDetail.trainingLevel){
+      const result = indUserDetail?.trainingLevel.split(",")
+      if(result.length)
+        trainingArray.trainingObj = trainingArray.trainingObj.map(item=> {
+          if(result.includes(item.value)){
+            return {
+              ...item,
+              selected: true
+            }
+          }
+          return item
+        })
+     }
 
 
      const trainingProvidersArray = ref([]);
      const trainingDetail = reactive({
       traininglevel: [],
-      trainingprovider: "",
-      trainingyear: "",
-      trainingdetails: "",
+      trainingprovider: indUserDetail?.trainingProvider??"",
+      trainingyear: indUserDetail?.trainingYear??"",
+      trainingdetails: indUserDetail?.trainingNotes??"",
     });
     
     watch(
       () => _.cloneDeep(trainingArray),
       (currentValue, _) => {
-        trainingDetail.traininglevel = currentValue
+        console.log(currentValue)
+        trainingDetail.traininglevel = currentValue.trainingObj
           .map((item) => item.selected && item.value)
           .filter((item) => item);
-      }
+      },
+      {immediate:true}
     );
    const yearsArray = ref([]);
    const rangeOfYears = (start, end) =>
@@ -222,7 +230,7 @@ export default {
     const trainingDetailMethod = ()=>{
       v$.value.$validate();
       if (
-        (v$.value.traininglevel.$invalid ||
+        ( v$.value.traininglevel.$invalid ||
           v$.value.trainingprovider.$invalid ||
           v$.value.trainingyear.$invalid ||
           v$.value.trainingdetails.$invalid)
@@ -231,7 +239,20 @@ export default {
         return true;
       }
       emit("valid", { done: ()=> {
-        emit("trainingSelectionDetail",trainingDetail)
+        if(props.onEditUser){
+          const data = {
+           accountid: indUserDetail.accountID,
+           userid: indUserDetail.userID,
+           traininglevel: trainingDetail.traininglevel.filter(()=> true),
+           trainingprovider: trainingDetail.trainingprovider,
+           trainingyear: trainingDetail.trainingyear,
+           trainingdetails: trainingDetail.trainingdetails
+         }
+         emit("trainingSelectionDetail",data)
+        } else{
+          emit("trainingSelectionDetail",trainingDetail)
+        }
+
       } })
     }
 
