@@ -134,8 +134,16 @@ export default {
     IconSVG,
     ErrorSpan,
   },
+  props:{
+    editUser:{
+      type: Boolean,
+      default: false
+    }
+  },
    setup (props, { emit }) {
     const store = useStore();
+    const indUserDetail = store.getters['clientControl/getIndClientUser'];
+    console.log("indUserDetail klmdlkasdmla",indUserDetail)
     const collapsable = reactive({
       tests: true,
       batteries: true,
@@ -151,7 +159,24 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200) {
-            testsArray.value = RESPONSE_DATA.data;
+            if(props.editUser){
+              testsArray.value = RESPONSE_DATA.data.map(item=> {
+                if(indUserDetail.tests.find(x=>x.testID == item.testID )){
+                   return {
+                    ...item,
+                    isDefaultTest: true
+                  }
+                } else{
+                   return {
+                    ...item,
+                    isDefaultTest: false
+                  }
+                }
+               
+              });
+            } else{
+               testsArray.value = RESPONSE_DATA.data;
+            }
           }
         })
         .catch((error) => {
@@ -165,7 +190,23 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200) {
-            solutionsArray.value = RESPONSE_DATA.data;
+            if(props.editUser){ 
+              solutionsArray.value = RESPONSE_DATA.data.map(item=>{
+                if(indUserDetail.solutions.find(x=>x.batteryID == item.batteryID )){
+                   return {
+                    ...item,
+                    isDefaultBattery: true
+                  }
+                } else{
+                   return {
+                    ...item,
+                    isDefaultBattery: false
+                  }
+                }
+              });
+            }else{
+              solutionsArray.value = RESPONSE_DATA.data;
+            }
           }
         })
         .catch((error) => {
@@ -179,7 +220,23 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200) {
-            battriesArray.value = RESPONSE_DATA.data;
+            if(props.editUser){ 
+              battriesArray.value = RESPONSE_DATA.data.map(item=>{
+                if(indUserDetail.defaultBatteries.find(x=>x.batteryID == item.batteryID )){
+                   return {
+                    ...item,
+                    isDefaultBattery: true
+                  }
+                } else{
+                   return {
+                    ...item,
+                    isDefaultBattery: false
+                  }
+                }
+              });
+            } else{
+              battriesArray.value = RESPONSE_DATA.data;
+            }
           }
         })
         .catch((error) => {

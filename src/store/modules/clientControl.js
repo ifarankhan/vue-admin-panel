@@ -24,7 +24,11 @@ const mutations = {
     if(payload.incrementAccUser){
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
       state.clientDetail = updatedClientDtail;
-    } else{
+    } else if(payload.decrementAccUser){
+      const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)-1}
+      state.clientDetail = updatedClientDtail;
+    } 
+    else{
       state.clientDetail = payload;
     }
   },
@@ -33,7 +37,7 @@ const mutations = {
       state.clientUserDetail = updatedClientUser;
   },
   setIndividualClientUserDetail(state, payload){
-    console.log("called kk")
+    console.log("called kk",payload)
     state.individualClientUserDetail = payload;
   }
 }
@@ -59,7 +63,7 @@ const actions = {
           userId: state.clientUserDetail.userId
       }
       }).then(res=>{ 
-        let data = res.data?.data?.userDetails;
+        let data = res.data?.data;
         if(data){
           commit("setIndividualClientUserDetail", data)
         }
@@ -121,12 +125,9 @@ const actions = {
         payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload)
     }, 
-    async deleteUserAccount({state}){
+    async deleteUserAccount({}, payload){
       return private_url.delete('account-users', {
-          params: {
-            accountId: userData.accountID,
-            userId: state.clientDetail.userID
-          }
+          params: payload
       })
     },
     async deleteClientAccount({}){
@@ -147,15 +148,28 @@ const actions = {
           }
           return new Promise((resolve,_)=> resolve(res))
         }).catch(error=> new Promise((_,reject)=> reject(error)))
-    },
+    }, 
     async updateIndUserDetail({state},payload){
       const DATA = payload;
-      DATA.accountid = state.individualClientUserDetail.accountID,
-      DATA.userid = state.individualClientUserDetail.userID
-      return private_url.patch('user-details', null,{
-        params: DATA
-      })
-  },
+      DATA.accountid = state.individualClientUserDetail.userDetails.accountID,
+      DATA.userid = state.individualClientUserDetail.userDetails.userID
+      return private_url.patch('user-details', DATA)
+    }, 
+    async updateIndCredit({state},payload){
+      const DATA = payload;
+      DATA.accountid = state.individualClientUserDetail.userDetails.accountID,
+      DATA.userid = state.individualClientUserDetail.userDetails.userID
+      return private_url.post('update-user-credits', DATA)
+    },
+    async updateIndUserTraining({},payload){
+      return private_url.post('user-training', payload)
+    },
+    async updateIndUserAssessment({state},payload){
+      const DATA = payload;
+      DATA.userid = state.individualClientUserDetail.userDetails.userID;
+      DATA.accountid = state.individualClientUserDetail.userDetails.accountID;
+      return private_url.post('user-assessments', DATA)
+    },
     async postAddAccountUser({state},payload){
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;

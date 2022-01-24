@@ -44,6 +44,7 @@
     <div class="flex p-4 ml-2 md:mt-6" v-show="showStep ==1">
      <training-selection 
       ref="trainingDetailRef"
+      :onEditUser="true"
       @valid="checkForValidity($event)"
       @trainingSelectionDetail="setUserDetail($event)" />
     </div>
@@ -52,6 +53,7 @@
     <div class="flex p-4 md:mt-10" v-show="showStep ==2">
       <Assessments
        ref="assessmentsRef"
+       :editUser="true"
        @valid="checkForValidity($event)"
        @assessmentsDetail="setUserDetail($event)" />
     </div>
@@ -154,6 +156,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
     let userDetaialTabData = ref("");
     const trainingSelectionTabData = ref(null);
     const assessmentsTabData = ref(null);
@@ -170,7 +173,7 @@ export default {
     const emailIsTaken = ref(false);
     let viewUserDetail = ref(null);
     const userDetail = reactive({
-      userType: "",
+      userType: indUserDetail?.userType??'',
       allowedToUpdateCredit: 0,
       sharedCredit: 0,
     });
@@ -251,41 +254,162 @@ export default {
             navigateTo();
     }
 
+  const updateMethodAction = (actionName, data)=>{ 
+     loader.value = true;
+     store
+      .dispatch(`clientControl/${actionName}`, data)
+      .then((res) => {
+        const RESPONSE_DATA = res.data;
+        if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+          loader.value = false;
+          store.commit("clientControl/setIndividualClientUserDetail", null);
+          const { navigateTo } = utility("client-control-list-detail");
+          navigateTo();
+        } else {
+          throw new Error(RESPONSE_DATA.data.message);
+        }
+      })
+      .catch((error) => {
+        loader.value = false;
+        errorText.value = error?.message ?? "";
+      });
+  }
+
     const updateAccountUserMethod =  async() => {
+
       if(showStep.value ==0){
         await userDetailRef?.value?.userDetailMethod()
+
+        if(!isInvalid.value || emailIsTaken.value){
+          return
+        }
+
+        const data = {
+          firstname:userDetailData?.firstname,
+          familyname:userDetailData?.familyname,
+          username:userDetailData?.email,
+          pin:userDetailData?.pin,
+          allowUpdateCredits: false,
+          sharedCreditsUserID: userDetailData?.supervisor??'', 
+          active:userDetailData && +userDetailData.activeBlocked? false: true,
+          receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
+        }
+
+      updateMethodAction('updateIndUserDetail',data)
+      return true
       }
-      if(!isInvalid.value || emailIsTaken.value){
+      // if(showStep.value ==0){
+      //   await userDetailRef?.value?.userDetailMethod()
+      // }
+      // if(!isInvalid.value || emailIsTaken.value){
+      //   return
+      // }
+      // const data = {
+      //   firstname:userDetailData?.firstname,
+      //   familyname:userDetailData?.familyname,
+      //   email:userDetailData?.email,
+      //   pin:userDetailData?.pin,
+      //   active:userDetailData && +userDetailData.activeBlocked? false: true,
+      //   receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
+      // }
+
+      // updateMethodAction('updateIndUserDetail',data)
+      // loader.value = true;
+      //  store
+      //   .dispatch("clientControl/updateIndUserDetail", data)
+      //   .then((res) => {
+      //     const RESPONSE_DATA = res.data;
+      //     if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+      //       loader.value = false;
+      //       store.commit("clientControl/setIndividualClientUserDetail", null);
+      //       const { navigateTo } = utility("client-control-list-detail");
+      //       navigateTo();
+      //     } else {
+      //       throw new Error(RESPONSE_DATA.data.message);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     loader.value = false;
+      //     errorText.value = error?.message ?? "";
+      //   });
+
+      if(showStep.value ==1){
+        await trainingDetailRef?.value?.trainingDetailMethod()
+
+        updateMethodAction('updateIndUserTraining',userDetailData)
+
         return
       }
-      const data = {
-        firstname:userDetailData?.firstname,
-        familyname:userDetailData?.familyname,
-        email:userDetailData?.email,
-        pin:userDetailData?.pin,
-        active:userDetailData && +userDetailData.activeBlocked? true: false,
-        receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
+
+      //  loader.value = true;
+      //  store
+      //   .dispatch("clientControl/updateIndUserTraining", userDetailData)
+      //   .then((res) => {
+      //     const RESPONSE_DATA = res.data;
+      //     if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+      //       loader.value = false;
+      //       store.commit("clientControl/setIndividualClientUserDetail", null);
+      //       const { navigateTo } = utility("client-control-list-detail");
+      //       navigateTo();
+      //     } else {
+      //       throw new Error(RESPONSE_DATA.data.message);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     loader.value = false;
+      //     errorText.value = error?.message ?? "";
+      //   });
+
+      if(showStep.value ==2){
+        await assessmentsRef?.value?.assessmentDetailMethod()
+        const data = {
+          tests: userDetailData.tests,
+          solution: userDetailData.solution,
+          batteries: userDetailData.batteries,
+        }
+
+        updateMethodAction('updateIndUserAssessment',data)
+
+        return
       }
 
-      console.log("datadata",userDetailData)
-      loader.value = true;
-       store
-        .dispatch("clientControl/updateIndUserDetail", data)
-        .then((res) => {
-          const RESPONSE_DATA = res.data;
-          if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
-            loader.value = false;
-            store.commit("clientControl/setIndividualClientUserDetail", null);
-            const { navigateTo } = utility("client-control-list-detail");
-            navigateTo();
-          } else {
-            throw new Error(RESPONSE_DATA.data.message);
-          }
-        })
-        .catch((error) => {
-          loader.value = false;
-          errorText.value = error?.message ?? "";
-        });
+      if(showStep.value ==3){
+        await creditControlRef?.value?.creditControlMethod()
+
+        const data = {
+          amount: +userDetailData.credits,
+          currentCredits: userDetailData.currentCredits,
+          updater: '',
+          reference: userDetailData.purchaseId
+        }
+
+        updateMethodAction('updateIndCredit',data)
+
+        return
+      }
+      // const data = {
+      //   tests: userDetailData.tests,
+      //   solution: userDetailData.solution,
+      //   batteries: userDetailData.batteries,
+      // }
+      //  loader.value = true;
+      //  store
+      //   .dispatch("clientControl/updateIndUserAssessment", data)
+      //   .then((res) => {
+      //     const RESPONSE_DATA = res.data;
+      //     if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+      //       loader.value = false;
+      //       store.commit("clientControl/setIndividualClientUserDetail", null);
+      //       const { navigateTo } = utility("client-control-list-detail");
+      //       navigateTo();
+      //     } else {
+      //       throw new Error(RESPONSE_DATA.data.message);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     loader.value = false;
+      //     errorText.value = error?.message ?? "";
+      //   });
     };
     return {
       checkForValidity,
@@ -308,6 +432,7 @@ export default {
       gotoNextHandler,
       userDetail,
       updateAccountUserMethod,
+      updateMethodAction,
       setUserDetail,
       loader,
       errorText,
