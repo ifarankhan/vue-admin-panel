@@ -1,11 +1,11 @@
 <template>
   <!-- <sticky-header> -->
-  <confirmDeleteDialog 
+  <confirmDeleteDialog
   v-if="showDialog"
   @closeDialog="showDialog = false"
   :name="accountDetail && accountDetail.accountName"
   @dialogConfirmed="deleteAccountMethod()" />
-  
+
   <Loader v-if="loader" :toBeBigger="true" />
 
 <div class="pt-10">
@@ -362,7 +362,7 @@
             <DataTable
                 :customers="masterUser"
                 :loading="loading"
-                @rowClicked="''"
+                @rowClicked="redirectToDetail($event)"
                 :sortTable="false"
                 tableType="accountUsers"
               />
@@ -1000,12 +1000,12 @@ export default {
 
 
 
-    return { 
-      showFilters, 
-      accountDetail, 
-      scrollPosition, 
-      formatDate, 
-      masterUser, 
+    return {
+      showFilters,
+      accountDetail,
+      scrollPosition,
+      formatDate,
+      masterUser,
       userArray,
       searchText,
       filteredMainMethod,
