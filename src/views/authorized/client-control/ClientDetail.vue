@@ -1,11 +1,11 @@
 <template>
   <!-- <sticky-header> -->
-  <confirmDeleteDialog 
+  <confirmDeleteDialog
   v-if="showDialog"
   @closeDialog="showDialog = false"
   :name="accountDetail && accountDetail.accountName"
   @dialogConfirmed="deleteAccountMethod()" />
-  
+
   <Loader v-if="loader" :toBeBigger="true" />
 
 <div class="pt-10">
@@ -13,7 +13,7 @@
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer "
-          @click="$router.push({ name: 'list-page' })"
+          @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'list-page' })"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@
 
     <!-- <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0"> -->
     <div class="ml-4">
-      <TabGroup>
+      <TabGroup :defaultIndex="($store.getters['clientControl/getUsersTablePag'])?1:0">
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
           <div class="flex-shrink-0 w-1/2" id="export_account">
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
@@ -81,7 +81,7 @@
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20.307"
-                  height="16.816"
+                  height="18.816"
                   viewBox="0 0 21.307 17.816"
                 >
                   <g
@@ -362,7 +362,7 @@
             <DataTable
                 :customers="masterUser"
                 :loading="loading"
-                @rowClicked="''"
+                @rowClicked="redirectToDetail($event)"
                 :sortTable="false"
                 tableType="accountUsers"
               />
@@ -606,6 +606,7 @@
              <DataTable
                 :customers="userArray"
                 :rowHover="true"
+                :first="userTablePagination && userTablePagination.first"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
@@ -672,6 +673,9 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const store = useStore();
+    const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
+
     const { formatDate } = useClientUser();
     const scrollPosition = ref(null);
     let showDialog = ref(false);
@@ -700,8 +704,7 @@ export default {
     const closeCalender = ()=>{
       cf.value.overlayVisible = false;
     }
-
-    const store = useStore();
+    
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
@@ -749,6 +752,8 @@ export default {
 
     onMounted(() => {
       window.addEventListener('scroll', updateScroll);
+
+      loading.value = true;
       store
           .dispatch("clientControl/getAccountUsers",{
             accountId: accountDetail.value?.accountId??''
@@ -759,11 +764,12 @@ export default {
             masterUser.value = userArray.value.filter(item => item.isMasterAccount)
             userArray.value = userArray.value.filter(item => !item.isMasterAccount)
             prevCustomers.value = userArray.value;
-            loading.value = false;
           })
           .catch((error) => {
             console.log("error is...", error);
-          });
+          }).finally(()=>{
+             loading.value = false;
+          })
     });
 
     onUnmounted(()=>{
@@ -1000,20 +1006,22 @@ export default {
 
 
 
-    return { 
-      showFilters, 
-      accountDetail, 
-      scrollPosition, 
-      formatDate, 
-      masterUser, 
+    return {
+      showFilters,
+      accountDetail,
+      scrollPosition,
+      formatDate,
+      masterUser,
       userArray,
       searchText,
       filteredMainMethod,
       applyFilter,
       clearFilter,
       openCalender,
+      userTablePagination,
       cf,
       loader,
+      loading,
       showDialog,
       redirectToDetail,
       showCalender,

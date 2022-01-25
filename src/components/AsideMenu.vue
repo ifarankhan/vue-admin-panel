@@ -28,10 +28,10 @@
       </template>
     </div>
     <div class="absolute w-11/12 p-4 border-2 rounded-md right-2.5 bottom-12 credits border-psytechBorderColor bg-psytechBlueHover h-30">
-      <p class="text-base text-white"> Credits balance: </p>
+      <p class="text-base text-white"> Transferable Credits: </p>
       <p class="flex justify-between -mt-1 text-base text-lg text-white">
         <span>
-          {{ credits }} 
+          {{ credits }}
         </span>
          <span class="plus-icon">
           <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block" color="red">
@@ -65,7 +65,7 @@ export default {
   },
   setup () {
     const store = useStore()
-    
+
     const isFullScreen = computed(() => store.state.isFullScreen)
     const isAsideMobileExpanded = computed(() => store.state.isAsideMobileExpanded)
 

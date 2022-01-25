@@ -1,11 +1,13 @@
-<template>
+ <template>
      <DataTable :value="customers" :paginator="paginator" class="p-datatable-customers" :rows="rows"
+            @page="paginationChanged($event)"
             dataKey="id" :rowHover="rowHover" :loading="loading"
             :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions"
+            :first="first"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             responsiveLayout="scroll" :scrollable="true"
-            @row-click="$emit('rowClicked', $event)">
+            @row-click="paginatorUser,$emit('rowClicked', $event)">
             <template #empty>
                 No {{ defaultText }} found.
             </template>
@@ -98,6 +100,7 @@
 <script>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import { useStore } from "vuex";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 
 export default {
@@ -107,6 +110,10 @@ export default {
     },
     emits:['rowClicked'],
     props:{
+        first:{
+          type: Number,
+          default: 0
+        },
         customers:{
             type: Array,
             default: []
@@ -153,14 +160,27 @@ export default {
 
     },
     setup() {
+       const store = useStore();
        const { userTypes, formatDate } = useClientUser();
 
        const showConsole = (e)=>{
             // console.log("clicked",e.data)
         }
+      
+      const paginationChanged = (event)=>{
+        const data = {
+          page: event.page,
+          pageCount: event.pageCount,
+          first: event.first
+        }
+        
+        store.commit("clientControl/setUsersTablePag",data)
+        
+      }
 
         return {
             showConsole,
+            paginationChanged,
             formatDate,
             userTypes
         }

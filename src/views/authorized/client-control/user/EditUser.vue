@@ -156,7 +156,7 @@ export default {
   },
   setup() {
     const store = useStore();
-    const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
+    const indUserDetail = (store.getters['clientControl/getIndClientUser']);
     let userDetaialTabData = ref("");
     const trainingSelectionTabData = ref(null);
     const assessmentsTabData = ref(null);
@@ -200,7 +200,13 @@ export default {
       }
     }
 
-    const showStep = ref(0);
+    // const activeTabUser = 0;
+    let showStep = ref(0);
+
+    if(indUserDetail?.activateTab){
+      showStep.value = +indUserDetail.activateTab;
+      console.log("showStep.value",showStep.value)
+    } 
    
     const goToBackHandler = () => {
       if (showStep.value <= 0) {
