@@ -112,6 +112,23 @@ const router = createRouter({
   routes
 })
 
+/* Default title tag */
+const defaultDocumentTitle = 'Psytech Distributor panel'
+router.afterEach(to => {
+    /* Set document title from route meta */
+    if (to.meta && to.meta.title) {
+      document.title = `${to.meta.title} — ${defaultDocumentTitle}`
+    } else {
+      document.title = defaultDocumentTitle
+    }
+  
+      /* Full screen mode */
+  // store.dispatch('fullScreenToggle', !!to.meta.fullScreen)
+
+    /* Dark mode */
+    // store.dispatch('darkMode')
+  })
+
 // Meta Handling
 router.beforeEach((to, from, next) => {
   const USER_DATA = JSON.parse(localStorage.getItem('userData'))

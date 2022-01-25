@@ -22,24 +22,6 @@ router.beforeEach(to => {
 })
 
 
-/* Default title tag */
-const defaultDocumentTitle = 'Psytech Distributor panel'
-
-router.afterEach(to => {
-    /* Set document title from route meta */
-    if (to.meta && to.meta.title) {
-      document.title = `${to.meta.title} — ${defaultDocumentTitle}`
-    } else {
-      document.title = defaultDocumentTitle
-    }
-  
-      /* Full screen mode */
-  // store.dispatch('fullScreenToggle', !!to.meta.fullScreen)
-
-    /* Dark mode */
-    // store.dispatch('darkMode')
-  })
-
 const app = createApp(App)
 app.use(i18n)
 app.use(PrimeVue)
