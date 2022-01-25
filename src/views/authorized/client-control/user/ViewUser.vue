@@ -244,8 +244,10 @@
           <TabPanel>
             <div class="user-details-listing" v-if="userDetailsList">
               <div class="grid w-6/12 grid-cols-2 gap-8">
-                <div class="font-bold">User type:</div>
-                <div>{{userTypes[userDetailsList.userType]}}</div>
+               <template v-if="!ismasterUser">
+                 <div class="font-bold">User type:</div>
+                 <div>{{userTypes[userDetailsList.userType]}}</div>
+               </template>
                 <div class="font-bold">User Status:</div>
                 <div>{{ userDetailsList.activated?"Active":"In-Active" }}</div>
                 <div class="font-bold">Name:</div>
