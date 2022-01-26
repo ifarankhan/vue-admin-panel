@@ -252,7 +252,6 @@ import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
-import Datepicker from "vue3-datepicker";
 import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
@@ -268,7 +267,6 @@ export default {
     Control,
     IconSVG,
     Calendar,
-    Datepicker,
     Field,
     PsytechButton,
     StickyHeader,

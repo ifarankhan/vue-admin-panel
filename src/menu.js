@@ -20,7 +20,7 @@ export default [
       label: 'Client Control'
     },
     {
-      to: '/credits',
+      to: '/credit-control/credits',
       icon: mdiCurrencyUsd ,
       label: 'Credit Control'
     },
