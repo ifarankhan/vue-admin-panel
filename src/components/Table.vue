@@ -33,7 +33,7 @@
                       <div class="truncate">{{data.email}}</div>
                   </template>
               </Column>
-              <Column header="User Type" sortField="usertype" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="userType" header="User Type" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text"> {{userTypes[data.userType]}}</span>
                   </template>
@@ -166,16 +166,16 @@ export default {
        const showConsole = (e)=>{
             // console.log("clicked",e.data)
         }
-      
+
       const paginationChanged = (event)=>{
         const data = {
           page: event.page,
           pageCount: event.pageCount,
           first: event.first
         }
-        
+
         store.commit("clientControl/setUsersTablePag",data)
-        
+
       }
 
         return {
