@@ -1082,6 +1082,7 @@ export default {
 <style>
 .header-footer{
   position: fixed !important;
+  top: 80px;
   width: calc(100% - 315px)  !important;
 }
 .div-hover:hover *{

@@ -10,9 +10,12 @@
                     :filterDropdown="userArray"
                     labelText="User Name / Email address"
                     :customeWidth="true"
-                    v-model="changedMasterUser"
+                    v-model="form.changedMasterUser"
                 ></select-option>
             </div>
+            <p>
+              <error-span :error="v$.changedMasterUser"></error-span>
+            </p>
             <div class="mt-3 ml-1" v-if="masterArray">
               <p class="text-sm font-semibold text-black w-80">Current Master User</p>
               <p>{{masterArray[0].name}}</p>
@@ -43,13 +46,16 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, computed,reactive } from 'vue';
 import PsytechButton from "@/components/PsytechButton";
 import Dialog from 'primevue/dialog';
 import SelectOption from "@/components/SelectOption";
 import store from "../store/index";
 import Loader from "@/components/Loader.vue";
 import {useStore} from "vuex";
+import useVuelidate from "@vuelidate/core";
+import ErrorSpan from "@/components/ErrorSpan";
+import {email, helpers, maxLength, minLength, numeric, required} from "@vuelidate/validators";
 
 export default {
     props:{
@@ -78,13 +84,16 @@ export default {
         Dialog,
         PsytechButton,
         SelectOption,
-        Loader
+        Loader,
+        ErrorSpan
     },
     setup(props, { emit }) {
        const showDialog = ref(true);
        const userArray = ref();
        const masterArray = ref();
-       const changedMasterUser = ref();
+      const form = reactive({
+        changedMasterUser: "",
+      });
       const store = useStore();
       const loading= ref();
        const openDialog = () => {
@@ -94,14 +103,28 @@ export default {
            showDialog.value = false;
         };
 
+      const rules = computed(() => {
+        return {
+          changedMasterUser: {
+            required: helpers.withMessage(
+                "One user must be selected",
+                required
+            ),
+          },
+        };
+      });
+      const v$ = useVuelidate(rules, form);
        const changeMaster = ()=>{
+         if (v$.value.$validate() && v$.value.$error) {
+           return true;
+         }
          loading.value = true;
          //console.log(props.accountId);
          //console.log(changedMasterUser.value);
          store
              .dispatch("clientControl/changeMasterUser",{
                accountId: props.accountId,
-               userId: changedMasterUser.value,
+               userId: form.changedMasterUser,
 
              })
              .then((res) => {
@@ -135,10 +158,11 @@ export default {
         showDialog,
         userArray,
         masterArray,
-        changedMasterUser,
+        form,
         openDialog,
         closeDialog,
-        changeMaster
+        changeMaster,
+        v$,
       }
     },
 }
