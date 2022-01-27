@@ -32,7 +32,7 @@ const mutations = {
     } else if(payload.decrementAccUser){
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)-1}
       state.clientDetail = updatedClientDtail;
-    } 
+    }
     else{
       state.clientDetail = payload;
     }
@@ -72,7 +72,7 @@ const actions = {
           accountId: state.clientUserDetail.accountId,
           userId: state.clientUserDetail.userId
       }
-      }).then(res=>{ 
+      }).then(res=>{
         let data = res.data?.data;
         if(data){
           commit("setIndividualClientUserDetail", data)
@@ -134,7 +134,7 @@ const actions = {
         const userData = await JSON.parse(localStorage.getItem("userData"));
         payload.distributorId = userData.distributorId;
         return private_url.post('add-account', payload)
-    }, 
+    },
     async deleteUserAccount({}, payload){
       return private_url.delete('account-users', {
           params: payload
@@ -158,13 +158,21 @@ const actions = {
           }
           return new Promise((resolve,_)=> resolve(res))
         }).catch(error=> new Promise((_,reject)=> reject(error)))
-    }, 
+    },
+    async changeMasterUser({},payload){
+        return private_url.post('change-master-user', null,{
+            params: {
+                accountId: payload.accountId,
+                userId: payload.userId,
+            }
+        })
+    },
     async updateIndUserDetail({state},payload){
       const DATA = payload;
       DATA.accountid = state.individualClientUserDetail.userDetails.accountID,
       DATA.userid = state.individualClientUserDetail.userDetails.userID
       return private_url.patch('user-details', DATA)
-    }, 
+    },
     async updateIndCredit({state},payload){
       const DATA = payload;
       DATA.accountid = state.individualClientUserDetail.userDetails.accountID,

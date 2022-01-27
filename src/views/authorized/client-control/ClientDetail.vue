@@ -9,6 +9,10 @@
   <change-master-dialog
       v-if="showMasterDialog"
       @closeDialog="showMasterDialog = false"
+      :providers-array="userArray"
+      :currentMaster="masterUser"
+      :account-id="accountDetail.accountId"
+      @refreshUserList="fetchListOfUsers()"
       topHeaderText="Change Master User"
   />
   <Loader v-if="loader" :toBeBigger="true" />
@@ -338,45 +342,42 @@
 
         <TabPanel>
             <div class="mt-4 ml-5">
-          <psytech-button
-            @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
-            label="Add User"
-            type="outline"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-          </psytech-button>
             <psytech-button
-                @click="showMasterDialog = true"
-                label="Change Master User"
-                type="outline"
+              @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
+              label="Add User"
+              type="outline"
             >
               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="w-5 h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
                 <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 />
               </svg>
+            </psytech-button>
+            <psytech-button
+                @click="showMasterDialog = true"
+                label=" Change Master User"
+                type="outline"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 pr-1" viewBox="0 0 18.139 14.272">
+                <g id="Group_36612" data-name="Group 36612" transform="translate(0 0.309)">
+                  <g id="Group_36613" data-name="Group 36613" transform="translate(0 0)">
+                    <path id="Path_13504" data-name="Path 13504" d="M2.628,6.837A6.637,6.637,0,0,1,15.1,3.674" transform="translate(-0.126 -0.01)" fill="none" stroke="#353535" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
+                    <path id="Path_13505" data-name="Path 13505" d="M15.933,7.17A6.637,6.637,0,0,1,3.324,10.065" transform="translate(-0.159 -0.343)" fill="none" stroke="#353535" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
+                    <path id="Path_13506" data-name="Path 13506" d="M5,5.857l-2.5,2.5L0,5.857Z" transform="translate(0 -0.28)" fill="#353535"/>
+                    <path id="Path_13507" data-name="Path 13507" d="M13.795,8.359l2.5-2.5,2.5,2.5Z" transform="translate(-0.659 -0.28)" fill="#353535"/>
+                  </g>
+                </g>
+              </svg>
+
             </psytech-button>
           <!-- Create New Client Account -->
         </div>
@@ -667,7 +668,6 @@ import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
-import changeMasterUser from '@/components/ChangeMasterDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import ChangeMasterDialog from "@/components/ChangeMasterDialog";
@@ -685,7 +685,6 @@ export default {
     StickyHeader,
     PsytechButton,
     confirmDeleteDialog,
-    changeMasterUser,
     DataTable,
     Field,
     Control,
@@ -782,24 +781,7 @@ export default {
 
     onMounted(() => {
       window.addEventListener('scroll', updateScroll);
-
-      loading.value = true;
-      store
-          .dispatch("clientControl/getAccountUsers",{
-            accountId: accountDetail.value?.accountId??''
-          })
-          .then((res) => {
-            let responseArray = res?.data?.data;
-            userArray.value = responseArray;
-            masterUser.value = userArray.value.filter(item => item.isMasterAccount)
-            userArray.value = userArray.value.filter(item => !item.isMasterAccount)
-            prevCustomers.value = userArray.value;
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-             loading.value = false;
-          })
+      fetchListOfUsers();
     });
 
     onUnmounted(()=>{
@@ -1034,6 +1016,26 @@ export default {
           });
     }
 
+    const fetchListOfUsers = ()=>{
+      loading.value = true;
+      store
+          .dispatch("clientControl/getAccountUsers",{
+            accountId: accountDetail.value?.accountId??''
+          })
+          .then((res) => {
+            let responseArray = res?.data?.data;
+            userArray.value = responseArray;
+            masterUser.value = userArray.value.filter(item => item.isMasterAccount)
+            userArray.value = userArray.value.filter(item => !item.isMasterAccount)
+            prevCustomers.value = userArray.value;
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+        loading.value = false;
+      })
+    }
+
 
 
     return {
@@ -1069,7 +1071,8 @@ export default {
       searchFamilyName,
       selectedFamilyNameFilter,
       searchedCredits,
-      selectedCreditsFilter
+      selectedCreditsFilter,
+      fetchListOfUsers
     };
   },
 };
@@ -1077,6 +1080,7 @@ export default {
 <style>
 .header-footer{
   position: fixed !important;
+  top: 80px;
   width: calc(100% - 315px)  !important;
 }
 .div-hover:hover *{
