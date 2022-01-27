@@ -1,6 +1,7 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
-          <Dialog v-model:visible="showDialog" :style="{width: '35vw',height:'auto'}" :modal="true" @hide="$emit('closeDialog')">
+  <div class="change-master-user">
+  <Dialog v-model:visible="showDialog" :style="{width: '35vw',height:'auto'}" class="change-master-user" :modal="true" @hide="$emit('closeDialog')">
           <template #header>
               <h3 class="text-lg font-medium">{{ topHeaderText }}</h3>
             </template>
@@ -50,6 +51,7 @@
                </div>
             </template>
         </Dialog>
+  </div>
 </template>
 
 <script>
@@ -180,7 +182,7 @@ export default {
 }
 </script>
 <style>
-.p-dialog-content{
+.change-master-user .p-dialog-content{
   height:50vh;
 }
 </style>
