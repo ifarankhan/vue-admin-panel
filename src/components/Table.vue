@@ -27,7 +27,7 @@
                 <template #body="{data}">
                    <span>{{data.familyName}} </span>
                 </template>
-              </Column>
+              </Column> 
               <Column field="email" header="User Name" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
                   <template #body="{data}">
                       <div class="truncate">{{data.email}}</div>
@@ -59,7 +59,171 @@
               </template>
             </Column>
             </span>
-            <span v-else>
+            <span v-if="tableType=='creditTableFirst'">
+              <Column field="transferDate" header="Date" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data?.transferDate?.split("T")[0] }}</span>
+                </template>
+              </Column>
+              <Column field="transferDate" header="Time" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data?.transferDate?.split("T")[1]?.split("Z")[0]}} </span>
+                </template>
+              </Column>
+              <Column field="amount" header="Credit Requested" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <span>{{ data.amount }}</span>
+                  </template>
+              </Column>
+              <Column header="Email" sortField="email" :sortable="sortTable" style="min-width: 20rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.email }}</span>
+                  </template>
+              </Column>
+                <Column field="accountName" header="Account Name" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div>{{data.accountName}}</div>
+                  </template>
+              </Column>
+               <Column header="firstName" sortField="First Name" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.firstName }}</span>
+                  </template>
+              </Column>
+              <Column header="familyName" sortField="Family Name" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.familyName }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
+             <span v-if="tableType=='creditTableSecond'">
+              <Column field="email" header="Email" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data?.email }}</span>
+                </template>
+              </Column>
+              <Column field="purchaseID" header="purchase ID" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data?.purchaseID}} </span>
+                </template>
+              </Column>
+              <Column field="currentCredits" header="Current Credits" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <span>{{ data.currentCredits }}</span>
+                  </template>
+              </Column>
+              <Column field="requestAmount" header="Requested Amount" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.requestAmount }}</span>
+                  </template>
+              </Column>
+               <Column field="updateDate" header="Update Date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.updateDate.split(" ")[0] }}</span>
+                  </template>
+              </Column>
+              <Column field="dateOfUpdate" header="Date Of Update" :sortable="sortTable" style="min-width: 13rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.dateOfUpdate.split("T")[0] }}</span>
+                  </template>
+              </Column>
+              <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.firstName }}</span>
+                  </template>
+              </Column>
+                <Column field="Family Name" header="familyName" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.familyName }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 5rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
+             <span v-if="tableType=='creditTableThird'">
+              <Column field="email kkk" header="Email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data?.email }}</span>
+                </template>
+              </Column>
+              <Column field="purchaseID" header="purchase ID" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data?.purchaseID}} </span>
+                </template>
+              </Column>
+              <Column field="accountName" header="Account Name" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <span>{{ data.accountName }}</span>
+                  </template>
+              </Column>
+              <Column header="psytechComment" sortField="Psytech Comment" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.psytechComment }}</span>
+                  </template>
+              </Column>
+               <Column header="amount" sortField="Amount" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.amount }}</span>
+                  </template>
+              </Column>
+              <Column header="amount" sortField="Amount" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.amount }}</span>
+                  </template>
+              </Column>
+              <Column header="creditsBefore" sortField="Credits Before" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.creditsBefore }}</span>
+                  </template>
+              </Column>
+              <Column header="firstName" sortField="First Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.firstName }}</span>
+                  </template>
+              </Column>
+                <Column header="Family Name" sortField="familyName" :sortable="sortTable" style="min-width: 12rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.familyName }}</span>
+                  </template>
+              </Column>
+               <Column header="Operator" sortField="operator" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.operator }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 5rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
+            <span v-if="tableType =='users'">
               <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div class="truncate custome-width">
