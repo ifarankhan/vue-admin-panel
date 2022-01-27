@@ -152,6 +152,7 @@ export default {
       if(!e.startDate || !e.endDate){
         return
       }
+      
       const startDate = new Date(e.startDate)
       const endDate = new Date(e.endDate)
       const payload = {
