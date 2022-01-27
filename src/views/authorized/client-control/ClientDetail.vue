@@ -342,32 +342,32 @@
 
         <TabPanel>
             <div class="mt-4 ml-5">
-          <psytech-button
-            @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
-            label="Add User"
-            type="outline"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <psytech-button
+              @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
+              label="Add User"
+              type="outline"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-          </psytech-button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </psytech-button>
             <psytech-button
                 @click="showMasterDialog = true"
                 label=" Change Master User"
                 type="outline"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="17.139" height="12.272" viewBox="0 0 18.139 14.272">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 pr-1" viewBox="0 0 18.139 14.272">
                 <g id="Group_36612" data-name="Group 36612" transform="translate(0 0.309)">
                   <g id="Group_36613" data-name="Group 36613" transform="translate(0 0)">
                     <path id="Path_13504" data-name="Path 13504" d="M2.628,6.837A6.637,6.637,0,0,1,15.1,3.674" transform="translate(-0.126 -0.01)" fill="none" stroke="#353535" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
@@ -668,7 +668,6 @@ import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
-import changeMasterUser from '@/components/ChangeMasterDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import ChangeMasterDialog from "@/components/ChangeMasterDialog";
@@ -686,7 +685,6 @@ export default {
     StickyHeader,
     PsytechButton,
     confirmDeleteDialog,
-    changeMasterUser,
     DataTable,
     Field,
     Control,
