@@ -9,7 +9,7 @@
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
               <Tab as="template" v-slot="{ selected }">
                 <button
-                  @click="loadTransferedToMe(0)"
+                  @click="(tableData = [], tabIndex =0)"
                   :class="[
                     'block md:px-6 sm:px-4 sm:text-sm sm:py-3 md:py-4 font-bold text-black active mr-8 hover:text-psytechBlueBtHover focus:outline-none sm:px-3 sm:py-2',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -20,7 +20,7 @@
               </Tab>
               <Tab as="template" v-slot="{ selected }">
                 <button
-                  @click="loadTransferedToMe(1)"
+                  @click="(tableData = [], tabIndex =1)"
                   :class="[
                     'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -31,7 +31,7 @@
               </Tab>
               <Tab as="template" v-slot="{ selected }">
                 <button
-                  @click="loadTransferedToMe(2)"
+                  @click="(tableData = [], tabIndex =2)"
                   :class="[
                     'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -45,7 +45,10 @@
         </div>
 
      <TabPanel>
-         <CreditTopBar />
+         <CreditTopBar
+         @datePicked="loadTransferedToMe($event)"
+         @valuedChanged="''"
+        />
           <div>
               <DataTable
                 :customers="tableData"
@@ -61,10 +64,11 @@
       </TabPanel>
 
       <TabPanel>
-         <CreditTopBar />
+         <CreditTopBar
+         @datePicked="loadTransferedToMe($event)" />
           <div>
               <DataTable
-                :customers="tableData"
+                :customers="tableData[0]?.userUpdates"
                 :rowHover="true"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
@@ -77,7 +81,8 @@
       </TabPanel>
 
       <TabPanel>
-         <CreditTopBar />
+         <CreditTopBar 
+         @datePicked="loadTransferedToMe($event)" />
           <div>
               <DataTable
                 :customers="tableData"
@@ -99,7 +104,7 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, computed } from "vue";
 import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
@@ -124,16 +129,17 @@ export default {
     let tableData = ref([])
     let error = ref(null)
     let loading = ref(false)
+    let tabIndex = ref(0)
+    let searchedText= ref("");
 
     const getData = (url, payload)=>{
-      loading.value = true;
+      error.value = null
       store
         .dispatch(`creditControl/${url}`,payload)
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status ==200){
             tableData.value = RESPONSE_DATA.data;
-            console.log("tableData", tableData)
           }
         })
         .catch((error) => { })
@@ -142,29 +148,48 @@ export default {
         })
     }
 
-    const loadTransferedToMe = (index)=>{
-      if(index === 0){
-        getData('transferedToMeAction', null)
+    const loadTransferedToMe = (e)=>{
+      if(!e.startDate || !e.endDate){
+        return
+      }
+      const startDate = new Date(e.startDate)
+      const endDate = new Date(e.endDate)
+      const payload = {
+        startDate : `${startDate.getFullYear()}-${ String(startDate.getMonth() +1).padStart(2, '0') }-${ String(startDate.getDate()).padStart(2, '0') }`,
+        endDate : `${endDate.getFullYear()}-${ String(endDate.getMonth() +1).padStart(2, '0') }-${ String(endDate.getDate()).padStart(2, '0') }`,
+      }
+        console.log(payload);
+      tableData.value = []
+      loading.value = true;
+      if(tabIndex.value === 0){
+        getData('transferedToMeAction', payload)
         return true
       }
-      if(index === 1){
-         getData('distributorCreditHistoryAction', null)
+      if(tabIndex.value === 1){
+         getData('distributorCreditHistoryAction', payload)
         return true
       }
-      if(index == 2){
-         getData('transferedToMeAction', null)
+      if(tabIndex.value == 2){
+         getData('transferedClientToUserAction', payload)
         return true
       }
     }
 
-   onMounted(() => {
-      loadTransferedToMe();
-    });
+  //  onMounted(() => {
+  //     loadTransferedToMe(0);
+  //   });
+
+    const test = (e)=>{
+      console.log("fslkjlksfd", e)
+    }
 
     return {
       loadTransferedToMe,
       tableData,
+      searchedText,
       getData,
+      test,
+      tabIndex,
       loading,
       error
     };

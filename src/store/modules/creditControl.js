@@ -13,7 +13,8 @@ const actions = {
         const userData = await JSON.parse(localStorage.getItem("userData"));
         return private_url.get('distributor-credit-transfers', {
             params:{
-                distributorId : userData.distributorId
+                distributorId : userData.distributorId,
+                ...payload
             }
         })
     },
@@ -22,16 +23,16 @@ const actions = {
         return private_url.get('distributor-credit-history', {
             params:{
                 distributorId : userData.distributorId,
-                startDate: "2022-01-01",
-                endDate: "2022-01-26"
+                ...payload
             }
         })
     },
-    async transferedToMeAction({},payload){
+    async transferedClientToUserAction({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
-        return private_url.get('distributor-credit-transfers', {
+        return private_url.get('user-credit-updates', {
             params:{
-                distributorId : userData.distributorId
+                distributorId : userData.distributorId,
+                ...payload
             }
         })
     },

@@ -4,29 +4,32 @@
                 <p class="text-sm font-bold text-black">Select Date Range:</p>
                 <div class="w-56 ml-3 mr-6">
                   <Datepicker 
-                    v-model="transferedToMe.startDate"
+                    v-model="transferredObj.startDate"
                     autoApply 
                     :closeOnAutoApply="true"
                     :enableTimePicker="false"
-                    placeholder="Start Date"></Datepicker>
+                    placeholder="From Date"
+                    @closed="$emit('datePicked',transferredObj)"></Datepicker>
                 </div>
                 <div class="w-56">
                   <Datepicker 
-                    v-model="transferedToMe.endDate"
+                    v-model="transferredObj.endDate"
                     autoApply 
                     :closeOnAutoApply="true"
                     :enableTimePicker="false"
-                    placeholder="End Date"></Datepicker>
+                    placeholder="To Date"
+                    @closed="$emit('datePicked',transferredObj)"></Datepicker>
                 </div>
               </div>
 
           <!-- search -->
-          <div class="relative flex justify-end pt-2 mt-10 mr-10 text-gray-600 ">
+          <div class="relative flex justify-end pt-2 mt-8 mr-10 text-gray-600 ">
             <input
               class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-gray-300 rounded-full border-1 focus:outline-none focus:ring-psytechBlueBtHover"
               type="search"
               name="search"
-              v-model="transferedToMe.search"
+              v-model="searchedText"
+              @input="$emit('valuedChanged', searchedText)"
               placeholder="Search..."
             />
             <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
@@ -55,18 +58,17 @@
 </template>
 <script>
 import IconSVG from "@/components/IconSVG.vue";
-import { ref, reactive } from "vue";
+import { reactive } from "vue";
 export default {
     components:{
         IconSVG
     },
     setup() {
-        const transferedToMe = reactive({
+        const transferredObj = reactive({
         startDate:"",
         endDate:"",
-        search:""
+        searched: "",
         })
-
     // const filterMethod = (data, value) => {
     //   return data.filter(function (customer) {
     //     return (
@@ -76,9 +78,9 @@ export default {
     //     );
     //   });
     // };
-
+    
         return {
-            transferedToMe 
+            transferredObj,
         }
     },
 }
