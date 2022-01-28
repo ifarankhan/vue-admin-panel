@@ -47,7 +47,7 @@
      <TabPanel>
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
-         @valuedChanged="''"
+         @valuedChanged="searchedDataTransferedToMe($event)"
         />
           <div>
               <DataTable
@@ -65,10 +65,12 @@
 
       <TabPanel>
          <CreditTopBar
-         @datePicked="loadTransferedToMe($event)" />
+         @datePicked="loadTransferedToMe($event)"
+         @valuedChanged="searchedDataTransferedToClient($event)" />
           <div>
               <DataTable
                 :customers="tableData[0]?.userUpdates"
+                :clientName="tableData[0]?.accountName"
                 :rowHover="true"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
@@ -82,7 +84,8 @@
 
       <TabPanel>
          <CreditTopBar 
-         @datePicked="loadTransferedToMe($event)" />
+         @datePicked="loadTransferedToMe($event)" 
+         @valuedChanged="searchedDataTransferedClientToUser($event)" />
           <div>
               <DataTable
                 :customers="tableData"
@@ -108,6 +111,7 @@ import { ref, onMounted, computed } from "vue";
 import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
+import _ from "lodash";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
@@ -127,10 +131,10 @@ export default {
   setup() {  
     const store = useStore();
     let tableData = ref([])
+    let persistedData = ref([]);
     let error = ref(null)
     let loading = ref(false)
     let tabIndex = ref(0)
-    let searchedText= ref("");
 
     const getData = (url, payload)=>{
       error.value = null
@@ -140,6 +144,7 @@ export default {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status ==200){
             tableData.value = RESPONSE_DATA.data;
+            persistedData.value = RESPONSE_DATA.data;
           }
         })
         .catch((error) => { })
@@ -159,8 +164,8 @@ export default {
         startDate : `${startDate.getFullYear()}-${ String(startDate.getMonth() +1).padStart(2, '0') }-${ String(startDate.getDate()).padStart(2, '0') }`,
         endDate : `${endDate.getFullYear()}-${ String(endDate.getMonth() +1).padStart(2, '0') }-${ String(endDate.getDate()).padStart(2, '0') }`,
       }
-        console.log(payload);
-      tableData.value = []
+      tableData.value = [];
+      persistedData.value = [];
       loading.value = true;
       if(tabIndex.value === 0){
         getData('transferedToMeAction', payload)
@@ -176,20 +181,61 @@ export default {
       }
     }
 
-  //  onMounted(() => {
-  //     loadTransferedToMe(0);
-  //   });
-
-    const test = (e)=>{
-      console.log("fslkjlksfd", e)
+  const searchedDataTransferedToMe = (e)=>{
+      const prevResult = _.cloneDeep(persistedData?.value);
+      if(!e){
+        tableData.value =  _.cloneDeep(persistedData?.value);
+        return
+      }
+      const searchableFields = ["transferDate number", "amount number"]
+      const result = filterMethod(prevResult,searchableFields,e)
+      tableData.value = result;
     }
+    
+
+    const searchedDataTransferedToClient = (e)=>{
+      const prevResult = _.cloneDeep(persistedData?.value);
+      if(!e){
+        tableData.value =  _.cloneDeep(persistedData?.value);
+        return
+      }
+      const searchableFields = ["email string", "firstName string","familyName string", "dateOfUpdate number", "requestAmount number"]
+      const result = filterMethod(prevResult[0].userUpdates,searchableFields,e)
+      tableData.value = [
+                      {
+                        accountName: persistedData?.value[0].accountName,
+                        userUpdates:result
+                      }];
+    }
+
+  const searchedDataTransferedClientToUser = (e)=>{
+      const prevResult = _.cloneDeep(persistedData?.value);
+      if(!e){
+        tableData.value =  _.cloneDeep(persistedData?.value);
+        return
+      }
+      const searchableFields = ["email string", "accountName string", "firstName string", "dateOfUpdate number", "amount number"]
+      const result = filterMethod(prevResult,searchableFields,e)
+      tableData.value = result;
+    }
+
+  const filterMethod = (data, searchableFields, value) => {
+      const matchedArray = searchableFields.map(item=> {
+        return data.filter(customer=>(item.split(" ")[1] == "string"? customer[item.split(" ")[0]].toLowerCase().indexOf(value) > -1: String(customer[item.split(" ")[0]]).indexOf(value) > -1))
+      }).flat()
+      return _.uniqWith(matchedArray, _.isEqual)
+    }
+   
 
     return {
       loadTransferedToMe,
       tableData,
-      searchedText,
+      persistedData,
+      searchedDataTransferedToMe,
+      searchedDataTransferedToClient,
+      searchedDataTransferedClientToUser,
+      filterMethod,
       getData,
-      test,
       tabIndex,
       loading,
       error
