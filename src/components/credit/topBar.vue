@@ -23,13 +23,13 @@
               </div>
 
           <!-- search -->
-          <div class="relative flex justify-end pt-2 mt-8 mr-10 text-gray-600 ">
+          <div class="relative flex justify-end pt-2 mt-8 text-gray-600 ">
             <input
               class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-gray-300 rounded-full border-1 focus:outline-none focus:ring-psytechBlueBtHover"
               type="search"
               name="search"
-              v-model="searchedText"
-              @input="$emit('valuedChanged', searchedText)"
+              v-model="transferredObj.searchedText"
+              @input="$emit('valuedChanged', transferredObj.searchedText)"
               placeholder="Search..."
             />
             <button type="submit" class="absolute top-0 right-0 mt-5 mr-4">
@@ -69,16 +69,7 @@ export default {
         endDate:"",
         searched: "",
         })
-    // const filterMethod = (data, value) => {
-    //   return data.filter(function (customer) {
-    //     return (
-    //       customer.name.toLowerCase().indexOf(value) > -1 ||
-    //       customer.address.toLowerCase().indexOf(value) > -1 ||
-    //       customer.users == value
-    //     );
-    //   });
-    // };
-    
+        
         return {
             transferredObj,
         }

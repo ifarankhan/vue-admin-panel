@@ -14,7 +14,8 @@ const actions = {
         return private_url.get('distributor-credit-transfers', {
             params:{
                 distributorId : userData.distributorId,
-                ...payload
+                startDate: "2015-12-03",
+                endDate: "2022-01-28"
             }
         })
     },
