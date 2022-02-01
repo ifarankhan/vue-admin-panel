@@ -76,12 +76,19 @@
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
-              <template #body>
-                  <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <template #body="{data}">
+                  <div class="my-center-text" @click="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
+                  </div>
+                  <div>
+                    <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p> 
+                    </template>
+                    </Menu>
                   </div>
               </template>
             </Column>
@@ -104,8 +111,8 @@
                   </template>
               </Column>
               <Column :field="clientName" header="Client" :sortable="sortTable" style="min-width: 5rem;cursor: pointer">
-                <template #body="{}">
-                    <span>{{ clientName }}</span>
+                <template #body="{data}">
+                    <span>{{ data.accountName }}</span>
                 </template>
               </Column>
               <Column field="email" header="Email" :sortable="sortTable" style="min-width: 5rem;cursor: pointer">
@@ -123,13 +130,20 @@
                       <span>{{ data.familyName }}</span>
                   </template>
               </Column>
-              <Column style="min-width: 5rem; cursor: pointer" bodyStyle="text-align:right">
-              <template #body>
-                  <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body="{data}">
+                  <div class="my-center-text" @click.stop="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
+                  </div>
+                  <div>
+                    <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p> 
+                    </template>
+                    </Menu>
                   </div>
               </template>
             </Column>
@@ -166,13 +180,20 @@
                     <span>{{ data?.accountName }}</span>
                 </template>
               </Column>
-              <Column style="min-width: 5rem; cursor: pointer" bodyStyle="text-align:right">
-              <template #body>
-                  <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body="{data}">
+                  <div class="my-center-text" @click.stop="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
+                  </div>
+                  <div>
+                    <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p> 
+                    </template>
+                    </Menu>
                   </div>
               </template>
             </Column>
@@ -217,17 +238,38 @@
     </DataTable>
 </template>
 <script>
+import { ref } from "vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { useStore } from "vuex";
+import Menu from 'primevue/menu';
+import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
+
+import NavBarItem from "@/components/NavBarItem";
+import NavBarItemLabel from "@/components/NavBarItemLabel";
+import NavBarMenu from "@/components/NavBarMenu";
+import NavBarMenuDivider from "@/components/NavBarMenuDivider";
+import UserAvatar from "@/components/UserAvatar";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Icon from "@/components/Icon";
 
 export default {
     components:{
         DataTable,
-        Column
+        Menu,
+        Column,
+        Button,
+    UserAvatar,
+    NavBarMenu,
+    NavBarItem,
+    NavBarItemLabel,
+    NavBarMenuDivider,
+    LanguageSwitcher,
+    Icon,
     },
     emits:['rowClicked'],
+
     props:{
         first:{
           type: Number,
@@ -282,13 +324,11 @@ export default {
         }
 
     },
-    setup() {
+    setup(props, {emit}) {
        const store = useStore();
        const { userTypes, formatDate } = useClientUser();
 
-       const showConsole = (e)=>{
-            // console.log("clicked",e.data)
-        }
+       const menu = ref();
 
       const paginationChanged = (event)=>{
         const data = {
@@ -301,8 +341,29 @@ export default {
 
       }
 
+      const items = ref([
+				{
+					label: 'Request to Correct Credit Update'
+				}
+			])
+
+       const toggle = (event, data) => {
+            emit("rowData", data)
+            menu.value.toggle(event);
+        };
+        const save = () => {
+            // toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
+        };
+
+        const showConsole = ()=>{
+          
+        }
         return {
             showConsole,
+            toggle,
+            save,
+            menu,
+            items,
             paginationChanged,
             formatDate,
             userTypes
@@ -382,5 +443,15 @@ export default {
 .truncate > div {
     white-space:pre-wrap;
     word-wrap:break-word;
+}
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+.menu-position {
+  position: absolute;
+  top: -64px;
+  left: 122px;
+  max-height: 100;
+  overflow: auto;
 }
 </style>
