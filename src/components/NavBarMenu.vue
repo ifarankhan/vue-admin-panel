@@ -10,10 +10,10 @@
   >
     <a class="flex items-center px-3 py-2 bg-gray-100 dark:bg-gray-800 lg:bg-transparent lg:dark:bg-transparent">
       <slot />
-       <span class="block ml-1 mt-0.5" v-if="hasCustomIcon">
+       <span class="block ml-1 mt-0.5" v-if="hasCustomIcon && showIcon">
         <LanguageIcon width="9" height="8" />
       </span>
-      <icon v-if="!hasCustomIcon" :path="toggleDropdownIcon" class="hidden transition-colors lg:inline-flex" />
+      <icon v-if="!hasCustomIcon && showIcon" :path="toggleDropdownIcon" class="hidden transition-colors lg:inline-flex" />
     </a>
     <div
       class="text-sm border-b border-gray-100 lg:border-b-0 lg:border-gray-200 lg:border-t lg:bg-white lg:absolute lg:top-full lg:left-0 lg:min-w-full lg:z-20 lg:shadow-md lg:rounded-b lg:dark:bg-gray-800 dark:border-gray-700"
@@ -38,6 +38,10 @@ export default {
     hasDivider: {
       type: Boolean,
       default: false
+    },
+    showIcon:{
+      type: Boolean,
+      default: true
     },
     hasCustomIcon:{
       type: Boolean,

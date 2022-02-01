@@ -1,12 +1,12 @@
 <template>
-          <Dialog v-model:visible="showDialog" :style="{width: '25vw'}" :modal="true" @hide="$emit('closeDialog')">
+          <Dialog v-model:visible="showDialog" :style="{width: '30vw'}" :modal="true" @hide="$emit('closeDialog')">
           <template #header>
               <h3 class="text-lg font-medium">Delete {{ topHeaderText }}</h3>
             </template>
             <p class="text-sm font-semibold text-black w-80">Are you sure you want to delete the following {{ topHeaderText }}?</p>
             <div class="flex mt-1">
               <div class="flex items-center justify-center w-10 h-10 text-white rounded-full" style="background-color: rgba(0, 0, 0, 0.4);">
-               {{ name && name.split(" ").map(item=>item[0].toUpperCase()).join("") }}
+               {{ name && name[0].toUpperCase() }}
               </div>
               <div>
                 <span class="mt-1 ml-1 text-sm font-medium text-black">{{ name && name }}</span>
@@ -25,7 +25,7 @@
                  <div>
                    <psytech-button
                     label="YES"
-                    type="danger" 
+                    type="danger"
                     @buttonWasClicked="$emit('dialogConfirmed'), (showDialog= false)"
                   ></psytech-button>
                 </div>
@@ -55,7 +55,7 @@ export default {
         PsytechButton
     },
     setup() {
-       const showDialog = ref(true); 
+       const showDialog = ref(true);
        const openDialog = () => {
             showDialog.value = true;
         };

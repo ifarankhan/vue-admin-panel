@@ -11,7 +11,7 @@
       <nav-bar-item type="hidden lg:flex xl:hidden" @click.prevent="menuOpenLg">
         <icon :path="mdiMenu" size="24" />
       </nav-bar-item>
-      <div class="font-semibold place-self-center ml-6">
+      <div class="ml-6 font-semibold place-self-center">
         {{ $t("GeneSys Online Partner Control") }}
       </div>
     </div>

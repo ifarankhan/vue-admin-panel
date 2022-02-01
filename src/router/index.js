@@ -97,6 +97,36 @@ const routes = [
     ]
   },
   {
+    path: '/credit-control',
+    name: 'credit-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'credit-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/credit-control/CreditControl.vue'),
+    children: [
+        {
+          path: 'credits',
+          name: 'credit-control-list',
+          // layout: 'mainLayout',
+          component: () => import('../views/authorized/client-control/mainList.vue'),
+          requiresAuth: true,
+          children: [
+            {
+              path: '',
+              name: 'credit-list-page',
+              requiresAuth: true,
+              // layout: 'mainLayout',
+              component: () => import('../views/authorized/credit-control/List.vue'),
+            }
+          ]
+        },
+    ]
+  },
+  {
     // path: "*",
     path: "/:catchAll(.*)",
     name: "notFound",
