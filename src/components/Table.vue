@@ -115,19 +115,14 @@
                     <span>{{ data.accountName }}</span>
                 </template>
               </Column>
-              <Column field="email" header="Email" :sortable="sortTable" style="min-width: 5rem;cursor: pointer">
+              <Column field="email" header="Admin Email Address" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.email }}</span>
+                    <span>{{ data?.masterUserEmail }}</span>
                 </template>
               </Column>
-              <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="masterUserFirstName" header="Admin Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
-                      <span>{{ data.firstName }}</span>
-                  </template>
-              </Column>
-                <Column field="Family Name" header="familyName" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                   <template #body="{data}">
-                      <span>{{ data.familyName }}</span>
+                      <span class="ml-6">{{ `${data.adminFirstName} ${data.adminLastName}` }}</span>
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">

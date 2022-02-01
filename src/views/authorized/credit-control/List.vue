@@ -118,6 +118,7 @@
 
     <view-credit-dialog 
     v-if="showViewDialog"
+    topHeaderText="Credit Details"
     :data="dialogData"
     @openCreditDialog="(showDialog=true),(showViewDialog = false)"
     @closeDialog="showViewDialog = false" /> 
@@ -177,6 +178,9 @@ export default {
                   updatedData.push({
                     accountName:record.accountName,
                     accountID: record.accountID,
+                    masterUserEmail: record.masterUserEmail,
+                    adminFirstName: record.masterUserFirstName,
+                    adminLastName: record.masterUserLastName,
                     ...item,
                   })
                   return data
@@ -273,10 +277,10 @@ export default {
   
   const clientToUsersDetailDialog = ({data})=>{
     dialogData.value = {
-        userType: data.userType,
+        clientType: "User Account",
         clientName: data.accountName,
-        accountAdmin: data.firstName,
-        email: data.email,
+        accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
+        email: data.masterUserEmail,
         creditRequested: data.amount,
         creditLimit: data.creditLimit,
         purchaseNote: data.purchaseID,
@@ -289,10 +293,10 @@ export default {
 
     const updateDialogData = ({data})=>{
       dialogData.value = {
-        userType: data.userType,
+        clientType: "",
         clientName: data.accountName,
-        accountAdmin: data.firstName,
-        email: data.email,
+        accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
+        email: data.masterUserEmail,
         creditRequested: data.amount,
         creditLimit: data.creditLimit,
         maxCreditLimit: data.maxCreditUpdate,
@@ -304,10 +308,10 @@ export default {
   const clientDetailDialog = ({data})=>{
     console.log("data",data)
     dialogData.value = { 
-        userType: data.userType,
+        clientType: "Client Account",
         clientName: data.accountName,
-        accountAdmin: data.firstName,
-        email: data.email,
+        accountAdmin: `${data.adminFirstName} ${data.adminLastName}`,
+        email: data.masterUserEmail,
         creditsBefore: data?.currentCredits??'',
         creditRequested: data.requestAmount,
         creditLimit: data.creditLimit,
