@@ -80,7 +80,7 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableSecond"
-                @rowData="clientDetailDialog($event)"
+                @rowData="clientDetailDialog({data: $event})"
                 @rowClicked="(clientDetailDialog($event)), (showViewDialog=true)"
                 @correctCreditUpdate="showDialog = true"
               />
@@ -101,7 +101,7 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableThird"
-                @rowData="(dialogData=$event)"
+                @rowData="(clientToUsersDetailDialog({data:$event}))"
                 @rowClicked="(clientToUsersDetailDialog($event)),((showViewDialog=true))"
                 @correctCreditUpdate="showDialog = true"
               />
@@ -118,6 +118,7 @@
 
     <view-credit-dialog 
     v-if="showViewDialog"
+    topHeaderText="Credit Details"
     :data="dialogData"
     @openCreditDialog="(showDialog=true),(showViewDialog = false)"
     @closeDialog="showViewDialog = false" /> 
@@ -177,6 +178,9 @@ export default {
                   updatedData.push({
                     accountName:record.accountName,
                     accountID: record.accountID,
+                    masterUserEmail: record.masterUserEmail,
+                    adminFirstName: record.masterUserFirstName,
+                    adminLastName: record.masterUserLastName,
                     ...item,
                   })
                   return data
@@ -273,10 +277,10 @@ export default {
   
   const clientToUsersDetailDialog = ({data})=>{
     dialogData.value = {
-        userType: data.userType,
+        clientType: "User Account",
         clientName: data.accountName,
-        accountAdmin: data.firstName,
-        email: data.email,
+        accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
+        email: data.masterUserEmail,
         creditRequested: data.amount,
         creditLimit: data.creditLimit,
         purchaseNote: data.purchaseID,
@@ -289,29 +293,30 @@ export default {
 
     const updateDialogData = ({data})=>{
       dialogData.value = {
-        userType: data.userType,
+        clientType: "",
         clientName: data.accountName,
-        accountAdmin: data.firstName,
-        email: data.email,
+        accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
+        email: data.masterUserEmail,
         creditRequested: data.amount,
         creditLimit: data.creditLimit,
         maxCreditLimit: data.maxCreditUpdate,
         sharedCredit: data.sharedCredit,
-        updateDate: data.transferDate
+        updateDateAndTime: data.transferDate
       }
     }
 
   const clientDetailDialog = ({data})=>{
+    console.log("data",data)
     dialogData.value = { 
-        // userType: data.userType,
+        clientType: "Client Account",
         clientName: data.accountName,
-        accountAdmin: data.firstName,
-        email: data.email,
+        accountAdmin: `${data.adminFirstName} ${data.adminLastName}`,
+        email: data.masterUserEmail,
         creditsBefore: data?.currentCredits??'',
         creditRequested: data.requestAmount,
-        // creditLimit: data.creditLimit,
-        // maxCreditLimit: data.maxCreditUpdate,
-        // sharedCredit: data.sharedCredit,
+        creditLimit: data.creditLimit,
+        maxCreditLimit: data.maxCreditUpdate,
+        sharedCredit: data.sharedCredit,
         purchaseNote: data.purchaseID,
         updateDateAndTime: data.dateOfUpdate
       }

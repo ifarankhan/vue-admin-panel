@@ -25,9 +25,9 @@
             <div class="flex-auto ml-1 border-t-2 border-gray-300"></div>
           </div>
           <div class="pl-2 ml-6 border-l-4 border-psytechBlueBtHover" v-if="collapsable.accountDetail">
-              <div class="flex mt-2">
-                  <p class="text-xs font-bold text-black w-52">User Type:</p>
-                  <p> {{ data?.userType }} </p>
+              <div class="flex mt-2 mb-2">
+                  <p class="text-xs font-bold text-black w-52">Client Type:</p>
+                  <p> {{ data?.clientType }} </p>
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Client Name:</p>
@@ -35,7 +35,10 @@
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Account Admin:</p>
-                  <p> {{ dta?.accountAdmin }} </p>
+                  <div class="flex items-center justify-center mr-1 text-xs text-white rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
+                    {{ data?.accountAdmin.split(" ").map(item=> item[0].toUpperCase()).join("") }}
+                    </div>
+                  <p> {{ data?.accountAdmin }} </p>
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Email:</p>
@@ -123,7 +126,7 @@
            </div>
             <template #footer>
                <div class="flex mb-6">
-                  <div>
+                  <div class="ml-4">
                    <psytech-button
                     label="UPDATE CREDIT"
                     type="outline"
