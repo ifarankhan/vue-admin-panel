@@ -112,7 +112,7 @@
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Date of Update:</p>
-                  <p> {{ data?.updateDate.split("T")[0] }} </p>
+                  <p> {{ data?.updateDateAndTime.split("T")[0] }} </p>
               </div>
           </div>
         </div>

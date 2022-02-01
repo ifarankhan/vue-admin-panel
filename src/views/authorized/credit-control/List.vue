@@ -80,7 +80,7 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableSecond"
-                @rowData="clientDetailDialog($event)"
+                @rowData="clientDetailDialog({data: $event})"
                 @rowClicked="(clientDetailDialog($event)), (showViewDialog=true)"
                 @correctCreditUpdate="showDialog = true"
               />
@@ -101,7 +101,7 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableThird"
-                @rowData="(dialogData=$event)"
+                @rowData="(clientToUsersDetailDialog({data:$event}))"
                 @rowClicked="(clientToUsersDetailDialog($event)),((showViewDialog=true))"
                 @correctCreditUpdate="showDialog = true"
               />
@@ -297,21 +297,22 @@ export default {
         creditLimit: data.creditLimit,
         maxCreditLimit: data.maxCreditUpdate,
         sharedCredit: data.sharedCredit,
-        updateDate: data.transferDate
+        updateDateAndTime: data.transferDate
       }
     }
 
   const clientDetailDialog = ({data})=>{
+    console.log("data",data)
     dialogData.value = { 
-        // userType: data.userType,
+        userType: data.userType,
         clientName: data.accountName,
         accountAdmin: data.firstName,
         email: data.email,
         creditsBefore: data?.currentCredits??'',
         creditRequested: data.requestAmount,
-        // creditLimit: data.creditLimit,
-        // maxCreditLimit: data.maxCreditUpdate,
-        // sharedCredit: data.sharedCredit,
+        creditLimit: data.creditLimit,
+        maxCreditLimit: data.maxCreditUpdate,
+        sharedCredit: data.sharedCredit,
         purchaseNote: data.purchaseID,
         updateDateAndTime: data.dateOfUpdate
       }
