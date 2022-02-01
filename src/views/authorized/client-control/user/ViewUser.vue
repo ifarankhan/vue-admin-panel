@@ -254,6 +254,10 @@
                 <div>{{userDetailsList.firstName}}</div>
                 <div class="font-bold">User Name/ Email Address:</div>
                 <div>{{userDetailsList.username}}</div>
+                <template v-if="userDetailsList.sharedCreditUserEmail">
+                  <div class="font-bold">Supervisor:</div>
+                  <div>{{userDetailsList.sharedCreditUserEmail}}</div>
+                </template>
                 <div class="font-bold">Pin:</div>
                 <div>{{userDetailsList.pin}}</div>
                 <div class="col-span-2 font-bold mb-0.5">Receive Email Notifications</div>

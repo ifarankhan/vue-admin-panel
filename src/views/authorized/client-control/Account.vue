@@ -1,5 +1,12 @@
 <template>
-  <sticky-header :icon="mdiPlus" title="Create Client"></sticky-header>
+  <sticky-header :icon="mdiPlus" title="Create Client">
+<!--    <Tabs-->
+<!--        :showStep="showStep"-->
+<!--        :enabledClick="false"-->
+<!--        :userType="0"-->
+<!--        tabType="ClientAccount"-->
+<!--    />-->
+  </sticky-header>
   <Loader v-if="form.loader" :toBeBigger="true" />
   <main-section class="grid grid-cols-3 gap-4">
     <div class="col-span-2 form">
@@ -133,6 +140,7 @@ import { minLength, helpers, required, maxLength } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
 import ErrorAlert from "@/components/ErrorAlert.vue";
+import Tabs from '@/components/user/Tabs.vue';
 import { useStore } from "vuex";
 
 export default {
@@ -149,12 +157,13 @@ export default {
     StickyFooter,
     ErrorSpan,
     ErrorAlert,
+    Tabs,
     utility,
     useStore,
   },
   setup() {
     let store = useStore();
-   
+
     const form = reactive({
       companyName: "",
       accountDetails: "",
