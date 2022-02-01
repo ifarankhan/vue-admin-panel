@@ -169,8 +169,7 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status ==200){
-            const responseURL = "https://api-v2-genesys2020-staging.genesysonline.net/api/v2/partner/distributor-credit-history";
-            if(res?.request?.responseURL.split("?")[0] == responseURL){
+            if(res?.request?.responseURL.includes("distributor-credit-history")){
               const formatedData = []
               const arrayData = RESPONSE_DATA.data.map(record=> {
                 const updatedData = []
