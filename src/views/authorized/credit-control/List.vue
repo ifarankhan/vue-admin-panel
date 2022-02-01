@@ -59,6 +59,8 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableFirst"
+                @rowClicked="updateDialogData($event)"
+                @correctCreditUpdate="showDialog = true"
               />
           </div>
       </TabPanel>
@@ -69,8 +71,8 @@
          @valuedChanged="searchedDataTransferedToClient($event)" />
           <div>
               <DataTable
-                :customers="tableData[0]?.userUpdates"
-                :clientName="tableData[0]?.accountName"
+                :customers="tableData"
+                :clientName="''"
                 :rowHover="true"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
@@ -78,6 +80,9 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableSecond"
+                @rowData="clientDetailDialog($event)"
+                @rowClicked="(clientDetailDialog($event)), (showViewDialog=true)"
+                @correctCreditUpdate="showDialog = true"
               />
           </div>
       </TabPanel>
@@ -96,6 +101,9 @@
                 :loading="loading"
                 :image='true'
                 tableType="creditTableThird"
+                @rowData="(dialogData=$event)"
+                @rowClicked="(clientToUsersDetailDialog($event)),((showViewDialog=true))"
+                @correctCreditUpdate="showDialog = true"
               />
           </div>
       </TabPanel>
@@ -103,6 +111,16 @@
       </TabGroup>
     </div>
     </sticky-header>
+    <credit-update-dialog
+    v-if="showDialog"
+    :data="dialogData"
+    @closeDialog="showDialog = false" />
+
+    <view-credit-dialog 
+    v-if="showViewDialog"
+    :data="dialogData"
+    @openCreditDialog="(showDialog=true),(showViewDialog = false)"
+    @closeDialog="showViewDialog = false" /> 
   </div>
 </template>
 
@@ -112,6 +130,8 @@ import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
 import _ from "lodash";
+import CreditUpdateDialog from "@/components/credit/UpdateCreditDialog.vue";
+import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
@@ -122,6 +142,8 @@ export default {
     DataTable,
     StickyHeader,
     CreditTopBar,
+    CreditUpdateDialog,
+    ViewCreditDialog,
     TabGroup,
     TabList,
     Tab,
@@ -130,6 +152,9 @@ export default {
   },
   setup() {  
     const store = useStore();
+    const showDialog = ref(false);
+    const showViewDialog = ref(false);
+    const dialogData = ref('');
     let tableData = ref([])
     let persistedData = ref([]);
     let error = ref(null)
@@ -143,8 +168,28 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status ==200){
-            tableData.value = RESPONSE_DATA.data;
-            persistedData.value = RESPONSE_DATA.data;
+            const responseURL = "https://api-v2-genesys2020-staging.genesysonline.net/api/v2/partner/distributor-credit-history";
+            if(res?.request?.responseURL.split("?")[0] == responseURL){
+              const formatedData = []
+              const arrayData = RESPONSE_DATA.data.map(record=> {
+                const updatedData = []
+                const data = record.userUpdates.map(item=> {
+                  updatedData.push({
+                    accountName:record.accountName,
+                    accountID: record.accountID,
+                    ...item,
+                  })
+                  return data
+                })
+                formatedData.push(...updatedData)
+                return record 
+              })
+              tableData.value = formatedData;
+              persistedData.value = formatedData;
+            } else {
+              tableData.value = RESPONSE_DATA.data;
+              persistedData.value = RESPONSE_DATA.data;
+            }
           }
         })
         .catch((error) => { })
@@ -225,12 +270,61 @@ export default {
       }).flat()
       return _.uniqWith(matchedArray, _.isEqual)
     }
+  
+  const clientToUsersDetailDialog = ({data})=>{
+    dialogData.value = {
+        userType: data.userType,
+        clientName: data.accountName,
+        accountAdmin: data.firstName,
+        email: data.email,
+        creditRequested: data.amount,
+        creditLimit: data.creditLimit,
+        purchaseNote: data.purchaseID,
+        creditsBefore: data?.creditsBefore??'',
+        maxCreditLimit: data.maxCreditUpdate??'',
+        sharedCredit: data.sharedCredit,
+        updateDateAndTime: data.dateOfUpdate
+      }
+  }
+
+    const updateDialogData = ({data})=>{
+      dialogData.value = {
+        userType: data.userType,
+        clientName: data.accountName,
+        accountAdmin: data.firstName,
+        email: data.email,
+        creditRequested: data.amount,
+        creditLimit: data.creditLimit,
+        maxCreditLimit: data.maxCreditUpdate,
+        sharedCredit: data.sharedCredit,
+        updateDate: data.transferDate
+      }
+    }
+
+  const clientDetailDialog = ({data})=>{
+    dialogData.value = { 
+        // userType: data.userType,
+        clientName: data.accountName,
+        accountAdmin: data.firstName,
+        email: data.email,
+        creditsBefore: data?.currentCredits??'',
+        creditRequested: data.requestAmount,
+        // creditLimit: data.creditLimit,
+        // maxCreditLimit: data.maxCreditUpdate,
+        // sharedCredit: data.sharedCredit,
+        purchaseNote: data.purchaseID,
+        updateDateAndTime: data.dateOfUpdate
+      }
+  }
    
 
     return {
       loadTransferedToMe,
       tableData,
       persistedData,
+      updateDialogData,
+      clientDetailDialog,
+      clientToUsersDetailDialog,
       searchedDataTransferedToMe,
       searchedDataTransferedToClient,
       searchedDataTransferedClientToUser,
@@ -238,6 +332,9 @@ export default {
       getData,
       tabIndex,
       loading,
+      showDialog,
+      showViewDialog,
+      dialogData,
       error
     };
   },
