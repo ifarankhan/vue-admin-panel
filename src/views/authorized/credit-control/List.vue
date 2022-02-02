@@ -169,7 +169,8 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status ==200){
-            if(res?.request?.responseURL.includes("distributor-credit-history")){
+            if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
+              console.log("if cond")
               const formatedData = []
               const arrayData = RESPONSE_DATA.data.map(record=> {
                 const updatedData = []
