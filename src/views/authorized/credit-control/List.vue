@@ -168,30 +168,70 @@ export default {
         .dispatch(`creditControl/${url}`,payload)
         .then((res) => {
           const RESPONSE_DATA = res.data;
+          let updatedData = []
           if(RESPONSE_DATA.status ==200){
+            
             if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
               // const formatedData = []
-               console.log("up if")
-              const arrayData = RESPONSE_DATA.data.map(record=> {
-                console.log("up")
-                const updatedData = []
-                const data = record.userUpdates.map(item=> {
-                  updatedData.push({
-                    accountName:record.accountName,
-                    accountID: record.accountID,
-                    masterUserEmail: record.masterUserEmail,
-                    adminFirstName: record.masterUserFirstName,
-                    adminLastName: record.masterUserLastName,
-                    ...item,
+              //  console.log("up if")
+              // const arrayData = RESPONSE_DATA.data.map(record=> {
+              //   console.log("up")
+              //   const data = record.userUpdates.map(item=> {
+                  // updatedData.push({
+                  //   accountName:record.accountName,
+                  //   accountID: record.accountID,
+                  //   masterUserEmail: record.masterUserEmail,
+                  //   adminFirstName: record.masterUserFirstName,
+                  //   adminLastName: record.masterUserLastName,
+                  //   ...item,
+                  // })
+              //     return data
+              //   })
+              //   formatedData.push(...updatedData)
+              //   return updatedData 
+              // }).flat()
+              for (let index = 0; index < RESPONSE_DATA.data.length; index++) {
+                // const element = array[index];
+                // console.log("first...",RESPONSE_DATA.data[0].userUpdates)
+                for (let j = 0; j < RESPONSE_DATA.data[index].userUpdates.length; j++) {
+                  // console.log("RESPONSE_DATA.data[i].userUpdates",RESPONSE_DATA.data[index].userUpdates[j])
+                  // // const userUpdate = RESPONSE_DATA.data[index].userUpdates;
+                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
+                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
+                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
+                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
+                    updatedData.push({
+                    accountName:RESPONSE_DATA.data[index].accountName,
+                    accountID: RESPONSE_DATA.data[index].accountID,
+                    masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail,
+                    adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName,
+                    adminLastName: RESPONSE_DATA.data[index].masterUserLastName,
+                    creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
+                    currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
+                    dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate, 
+                    requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount, 
+                    // dongleID: RESPONSE_DATA.data[index].userUpdates[j].dongleID,
+                    email: RESPONSE_DATA.data[index].userUpdates[j].email,
+                    familyName: RESPONSE_DATA.data[index].userUpdates[j].familyName,
+                    firstName: RESPONSE_DATA.data[index].userUpdates[j].firstName,
+                    // issueID: RESPONSE_DATA.data[index].userUpdates[j].issueID,
+                    maxCreditUpdate: RESPONSE_DATA.data[index].userUpdates[j].maxCreditUpdate,
+                    newUpdate: RESPONSE_DATA.data[index].userUpdates[j].newUpdate,
+                    // potentialFailedUpdate: RESPONSE_DATA.data[index].userUpdates[j].potentialFailedUpdate,
+                    purchaseID: RESPONSE_DATA.data[index].userUpdates[j].purchaseID,
+                    // requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmountt,
+                    sharedCredit: RESPONSE_DATA.data[index].userUpdates[j].sharedCredit,
+                    updateDate: RESPONSE_DATA.data[index].userUpdates[j].updateDate,
+                    updateID: RESPONSE_DATA.data[index].userUpdates[j].updateID,
+                    userID: RESPONSE_DATA.data[index].userUpdates[j].userID,
+                    userType: RESPONSE_DATA.data[index].userUpdates[j].userType
                   })
-                  return data
-                })
-                // formatedData.push(...updatedData)
-                return updatedData 
-              }).flat()
-              console.log("arrayData",arrayData)
-              tableData.value = arrayData;
-              persistedData.value = arrayData;
+                }
+                
+              }
+              console.log("arrayData")
+              tableData.value = updatedData;
+              persistedData.value = updatedData;
             } else {
               tableData.value = RESPONSE_DATA.data;
               persistedData.value = RESPONSE_DATA.data;
