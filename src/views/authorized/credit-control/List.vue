@@ -170,9 +170,10 @@ export default {
           const RESPONSE_DATA = res.data;
           if(RESPONSE_DATA.status ==200){
             if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
-              console.log("if cond")
-              const formatedData = []
+              // const formatedData = []
+               console.log("up if")
               const arrayData = RESPONSE_DATA.data.map(record=> {
+                console.log("up")
                 const updatedData = []
                 const data = record.userUpdates.map(item=> {
                   updatedData.push({
@@ -185,11 +186,12 @@ export default {
                   })
                   return data
                 })
-                formatedData.push(...updatedData)
-                return record 
-              })
-              tableData.value = formatedData;
-              persistedData.value = formatedData;
+                // formatedData.push(...updatedData)
+                return updatedData 
+              }).flat()
+              console.log("arrayData",arrayData)
+              tableData.value = arrayData;
+              persistedData.value = arrayData;
             } else {
               tableData.value = RESPONSE_DATA.data;
               persistedData.value = RESPONSE_DATA.data;
@@ -248,13 +250,9 @@ export default {
         tableData.value =  _.cloneDeep(persistedData?.value);
         return
       }
-      const searchableFields = ["email string", "firstName string","familyName string", "dateOfUpdate number", "requestAmount number"]
-      const result = filterMethod(prevResult[0].userUpdates,searchableFields,e)
-      tableData.value = [
-                      {
-                        accountName: persistedData?.value[0].accountName,
-                        userUpdates:result
-                      }];
+      const searchableFields = ["accountName string","masterUserEmail string", "masterUserEmail string","adminFirstName string","adminLastName string" , "dateOfUpdate number", "requestAmount number"]
+      const result = filterMethod(prevResult,searchableFields,e)
+      tableData.value = result;
     }
 
   const searchedDataTransferedClientToUser = (e)=>{
