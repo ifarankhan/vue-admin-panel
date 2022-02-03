@@ -287,7 +287,7 @@
             </div>
 
           </TabPanel>
-          <TabPanel>
+          <TabPanel v-if="userTyp != 1 && userTyp != 4">
             <div class="w-2/3">
            <div class="flex flex-col space-y-8">
              <div class="user-details-trainings" v-if="selectedTrannings">
