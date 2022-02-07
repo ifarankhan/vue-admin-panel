@@ -12,6 +12,7 @@
                   v-model="updateCredit.correctCredit"
                   placeholder=" "
                 />
+                <error-span :error="v$.correctCredit"></error-span>
               </field>
             </div>
             <!--  -->
@@ -136,7 +137,7 @@
                     label="SUBMIT"
                     type="primary"
                     :extraClasses="'text-sm font-medium px-10  border-psytechBlue'"
-                    @buttonWasClicked="$emit('correctCreditUpdate',updateCredit)"
+                    @buttonWasClicked="creditCorrectionMethod"
                   ></psytech-button>
                 </div>
                </div>
@@ -158,7 +159,7 @@ import ErrorSpan from "@/components/ErrorSpan";
 import Field from "@/components/Field";
 import Control from "@/components/Control";
 
-import {email, helpers, maxLength, minLength, numeric, required} from "@vuelidate/validators";
+import {helpers, required, numeric} from "@vuelidate/validators";
 
 export default {
     props:{
@@ -197,12 +198,27 @@ export default {
        const closeDialog = () => {
            showDialog.value = false;
         };
+        
+    const rules = computed(() => {
+      return {
+        correctCredit: {
+          required: helpers.withMessage("This field is required", required),
+          numeric: helpers.withMessage("Only numeric values are allowed", numeric),
+        }
+      };
+    });
 
-    //   const v$ = useVuelidate(rules, form);
-    //    if (v$.value.$validate() && v$.value.$error) {
-    //        return true;
-    //      }
-
+    const v$ = useVuelidate(rules, updateCredit);
+    const creditCorrectionMethod = ()=>{
+      v$.value.$validate();
+      if (
+        v$.value.correctCredit.$invalid
+      ) {
+        return true;
+      }
+      emit("correctCreditUpdate",updateCredit)
+        // console.log("activeBlocked",activeBlocked.value)  
+    }
 
     return {
         showDialog,
@@ -211,9 +227,10 @@ export default {
         closeDialog,
         collapsable,
         mdiFileChartOutline,
+        creditCorrectionMethod,
         mdiChevronUp,
         mdiChevronDown,
-        // v$,
+        v$,
         showMsg
       }
     },
