@@ -27,6 +27,12 @@ const actions = {
             }
         })
     },
+    async creditCorrectionAction({state},payload){
+        const DATA = payload;
+        DATA.accountid = state.individualClientUserDetail.userDetails.accountID;
+        // DATA.userid = state.individualClientUserDetail.userDetails.userID
+        return private_url.post('distributor-credit-correction', DATA)
+    },
     async transferedClientToUserAction({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         return private_url.get('user-credit-updates', {

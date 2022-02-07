@@ -136,7 +136,7 @@
                     label="SUBMIT"
                     type="primary"
                     :extraClasses="'text-sm font-medium px-10  border-psytechBlue'"
-                    @buttonWasClicked="changeMaster()"
+                    @buttonWasClicked="$emit('correctCreditUpdate',updateCredit)"
                   ></psytech-button>
                 </div>
                </div>
