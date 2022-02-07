@@ -1,5 +1,6 @@
 <template>
   <div class="px-8">
+    <Loader v-if="loader" :toBeBigger="true" />
     <sticky-header>
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="ml-4">
@@ -135,7 +136,7 @@
     <credit-update-dialog
     v-if="showDialog"
     :data="dialogData"
-    @correctCreditUpdate="creditCorrection($event,'distributor')"
+    @correctCreditUpdate="creditCorrection($event)"
     @closeDialog="showDialog = false" />
 
     <view-credit-dialog 
@@ -148,7 +149,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+import { ref } from "vue";
 import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
@@ -156,10 +157,10 @@ import _ from "lodash";
 import CreditUpdateDialog from "@/components/credit/UpdateCreditDialog.vue";
 import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
 import PsytechButton from "@/components/PsytechButton";
+import Loader from "@/components/Loader.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
 export default {
   name: "demoTable",
   components: {
@@ -171,6 +172,7 @@ export default {
     PsytechButton,
     TabGroup,
     TabList,
+    Loader,
     Tab,
     TabPanels,
     TabPanel,
@@ -185,6 +187,7 @@ export default {
     let persistedData = ref([]);
     let error = ref(null)
     let loading = ref(false)
+    let loader = ref(false);
     let tabIndex = ref(0)
 
     const getData = (url, payload)=>{
@@ -202,9 +205,9 @@ export default {
                     updatedData.push({
                     accountName:RESPONSE_DATA.data[index].accountName,
                     accountID: RESPONSE_DATA.data[index].accountID,
-                    masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail,
-                    adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName,
-                    adminLastName: RESPONSE_DATA.data[index].masterUserLastName,
+                    masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail??'',
+                    adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName??'',
+                    adminLastName: RESPONSE_DATA.data[index].masterUserLastName??'',
                     creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
                     currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
                     dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate, 
@@ -310,6 +313,8 @@ export default {
   const clientToUsersDetailDialog = ({data})=>{
     dialogData.value = {
         clientType: "User Account",
+        userID: data.userID,
+        updaterId:data.updateID, 
         clientName: data.accountName,
         accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
         email: data.masterUserEmail,
@@ -325,8 +330,9 @@ export default {
 
     const updateDialogData = ({data})=>{
       dialogData.value = {
-        updaterId: "",
+        updaterId: data.creditTransferId,
         clientType: "",
+        userID: "",
         clientName: data.accountName,
         accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
         email: data.masterUserEmail,
@@ -341,8 +347,10 @@ export default {
   const clientDetailDialog = ({data})=>{
     dialogData.value = { 
         clientType: "Client Account",
+        userID: data.userID,
+        updaterId:data.updateID, 
         clientName: data.accountName,
-        accountAdmin: `${data.adminFirstName} ${data.adminLastName}`,
+        accountAdmin: `${data?.adminFirstName??' '} ${data?.adminLastName??' '}`,
         email: data.masterUserEmail,
         creditsBefore: data?.currentCredits??'',
         creditRequested: data.requestAmount,
@@ -355,15 +363,24 @@ export default {
   }
 
 
-  const creditCorrection = (data, tab)=>{
-    console.log(data, " and tab is...", tab, dialogData)
+  const creditCorrection = (e)=>{
+      const data = {
+        amount: +e.correctCredit,
+        reason: e.correctionReason,
+        userid: dialogData.value?.userID,
+        updateid: dialogData.value.updaterId
+      }
+      loader.value = true;
        store
-        .dispatch(`creditControl/creditCorrectionAction`,payload)
+        .dispatch(`creditControl/creditCorrectionAction`,data)
         .then((res) => {
+          if(res.data.data.distributorCreditCorrectionSubmitted){
+            showDialog.value = false;
+          }
         })
         .catch((error) => { })
         .finally(()=>{
-          loading.value = false;
+          loader.value = false;
         })
   } 
 
@@ -389,6 +406,7 @@ export default {
       getData,
       tabIndex,
       loading,
+      loader,
       showDialog,
       showViewDialog,
       dialogData,

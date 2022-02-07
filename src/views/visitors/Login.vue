@@ -140,9 +140,9 @@ import ErrorAlert from "@/components/ErrorAlert.vue";
 import LogoBlue from "@/components/LogoBlue.vue";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import utility from "@/components/composition/utility";
-import useVuelidate from "@vuelidate/core";
 import Loader from "@/components/Loader.vue";
 import LanguageIcon from "@/components/LanguageIcon.vue";
+import useVuelidate from "@vuelidate/core";
 import { required, email, helpers } from "@vuelidate/validators";
 
 export default {
@@ -205,6 +205,7 @@ export default {
               refreshToken: info?.refreshToken,
               userName: info?.user?.userName,
               accountId: info?.user?.accountId,
+              userId: info?.user?.userId,
               distributorId: info?.user?.distributorId,
               distributorUserName: info?.user?.distributorUserName,
               credits: info?.user?.credits,
