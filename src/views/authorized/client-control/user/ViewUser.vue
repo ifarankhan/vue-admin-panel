@@ -58,7 +58,6 @@
                 {{ $t('User Details') }}
               </button>
             </Tab>
-            <template v-if="!ismasterUser">
               <Tab as="template" v-slot="{ selected }" v-if="userTyp != 1 && userTyp != 4">
                 <button
                     @click="$store.commit('clientControl/setActiveTabeForEdit',1)"
@@ -92,7 +91,6 @@
                   {{ $t('Credit Control') }}
                 </button>
               </Tab>
-            </template>
           </TabList>
         </div>
 
@@ -164,6 +162,7 @@
               </span>
               <span> Edit User </span>
             </div>
+           <template v-if="!ismasterUser">
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
               @click="showDialog = true"
@@ -235,7 +234,7 @@
               </span>
               <span> Delete User </span>
             </div>
-
+           </template>
 
           </div>
       </div>
