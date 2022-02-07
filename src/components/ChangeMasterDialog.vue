@@ -26,8 +26,14 @@
             </p>
             <div class="mt-3 ml-1" v-if="masterArray">
               <p class="text-sm font-semibold text-black w-80">Current Master User</p>
-              <p>{{masterArray[0].name}}</p>
-              <p>{{masterArray[0].email}}</p>
+              <div class="flex items-center">
+                <span><img class="inline-block w-12 h-12 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
+                <div>
+                  <p>{{masterArray[0].name}}</p>
+                  <p>{{masterArray[0].email}}</p>
+                </div>
+              </div>
+
             </div>
 
             <template #footer>
