@@ -13,7 +13,6 @@ public_url.defaults.baseURL = BASE_URL
 
 
 private_url.defaults.headers.common["Content-Type"] = 'application/json';
-// instance.defaults.headers.common["Access-Control-Allow-Origin"] = '*';
 
 //define request interceptors
 private_url.interceptors.request.use(request => {

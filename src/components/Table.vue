@@ -5,6 +5,7 @@
             :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions"
             :first="first"
+            ref="dt"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             responsiveLayout="scroll" :scrollable="true"
             @row-click="paginatorUser,$emit('rowClicked', $event)">
@@ -14,6 +15,13 @@
             <template #loading>
                 Loading {{ defaultText }} data. Please wait.
             </template>
+
+            <!-- <template #header>
+                <div style="text-align: left">
+                    <Button icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
+                </div>
+            </template> -->
+
             <span v-if="tableType=='accountUsers'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
@@ -370,12 +378,21 @@ export default {
         const showConsole = ()=>{
 
         }
+
+        const dt = ref();
+        const exportCSV = () => {
+            dt.value.exportCSV();
+        };
+
+
         return {
             showConsole,
             toggle,
             save,
             menu,
+            dt,
             items,
+            exportCSV,
             paginationChanged,
             formatDate,
             userTypes

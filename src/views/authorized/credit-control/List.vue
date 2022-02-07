@@ -49,10 +49,31 @@
          @datePicked="loadTransferedToMe($event)"
          @valuedChanged="searchedDataTransferedToMe($event)"
         />
+        <!-- <psytech-button
+              @buttonWasClicked="downloadExportFile"
+              label="Export CSV"
+              type="outline"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </psytech-button> -->
           <div>
               <DataTable
                 :customers="tableData"
                 :rowHover="true"
+                ref="exportRef"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
@@ -60,7 +81,7 @@
                 :image='true'
                 tableType="creditTableFirst"
                 @rowClicked="updateDialogData($event)"
-                @correctCreditUpdate="showDialog = true"
+                @correctCreditUpdate="(showDialog = true)"
               />
           </div>
       </TabPanel>
@@ -114,6 +135,7 @@
     <credit-update-dialog
     v-if="showDialog"
     :data="dialogData"
+    @correctCreditUpdate="creditCorrection($event,'distributor')"
     @closeDialog="showDialog = false" />
 
     <view-credit-dialog 
@@ -133,6 +155,7 @@ import StickyHeader from "@/components/StickyHeader";
 import _ from "lodash";
 import CreditUpdateDialog from "@/components/credit/UpdateCreditDialog.vue";
 import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
+import PsytechButton from "@/components/PsytechButton";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
@@ -145,6 +168,7 @@ export default {
     CreditTopBar,
     CreditUpdateDialog,
     ViewCreditDialog,
+    PsytechButton,
     TabGroup,
     TabList,
     Tab,
@@ -155,6 +179,7 @@ export default {
     const store = useStore();
     const showDialog = ref(false);
     const showViewDialog = ref(false);
+    const exportRef = ref("");
     const dialogData = ref('');
     let tableData = ref([])
     let persistedData = ref([]);
@@ -172,34 +197,8 @@ export default {
           if(RESPONSE_DATA.status ==200){
             
             if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
-              // const formatedData = []
-              //  console.log("up if")
-              // const arrayData = RESPONSE_DATA.data.map(record=> {
-              //   console.log("up")
-              //   const data = record.userUpdates.map(item=> {
-                  // updatedData.push({
-                  //   accountName:record.accountName,
-                  //   accountID: record.accountID,
-                  //   masterUserEmail: record.masterUserEmail,
-                  //   adminFirstName: record.masterUserFirstName,
-                  //   adminLastName: record.masterUserLastName,
-                  //   ...item,
-                  // })
-              //     return data
-              //   })
-              //   formatedData.push(...updatedData)
-              //   return updatedData 
-              // }).flat()
               for (let index = 0; index < RESPONSE_DATA.data.length; index++) {
-                // const element = array[index];
-                // console.log("first...",RESPONSE_DATA.data[0].userUpdates)
                 for (let j = 0; j < RESPONSE_DATA.data[index].userUpdates.length; j++) {
-                  // console.log("RESPONSE_DATA.data[i].userUpdates",RESPONSE_DATA.data[index].userUpdates[j])
-                  // // const userUpdate = RESPONSE_DATA.data[index].userUpdates;
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
                     updatedData.push({
                     accountName:RESPONSE_DATA.data[index].accountName,
                     accountID: RESPONSE_DATA.data[index].accountID,
@@ -210,16 +209,12 @@ export default {
                     currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
                     dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate, 
                     requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount, 
-                    // dongleID: RESPONSE_DATA.data[index].userUpdates[j].dongleID,
                     email: RESPONSE_DATA.data[index].userUpdates[j].email,
                     familyName: RESPONSE_DATA.data[index].userUpdates[j].familyName,
                     firstName: RESPONSE_DATA.data[index].userUpdates[j].firstName,
-                    // issueID: RESPONSE_DATA.data[index].userUpdates[j].issueID,
                     maxCreditUpdate: RESPONSE_DATA.data[index].userUpdates[j].maxCreditUpdate,
                     newUpdate: RESPONSE_DATA.data[index].userUpdates[j].newUpdate,
-                    // potentialFailedUpdate: RESPONSE_DATA.data[index].userUpdates[j].potentialFailedUpdate,
                     purchaseID: RESPONSE_DATA.data[index].userUpdates[j].purchaseID,
-                    // requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmountt,
                     sharedCredit: RESPONSE_DATA.data[index].userUpdates[j].sharedCredit,
                     updateDate: RESPONSE_DATA.data[index].userUpdates[j].updateDate,
                     updateID: RESPONSE_DATA.data[index].userUpdates[j].updateID,
@@ -229,7 +224,6 @@ export default {
                 }
                 
               }
-              console.log("arrayData")
               tableData.value = updatedData;
               persistedData.value = updatedData;
             } else {
@@ -331,6 +325,7 @@ export default {
 
     const updateDialogData = ({data})=>{
       dialogData.value = {
+        updaterId: "",
         clientType: "",
         clientName: data.accountName,
         accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
@@ -344,7 +339,6 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
-    console.log("data",data)
     dialogData.value = { 
         clientType: "Client Account",
         clientName: data.accountName,
@@ -359,11 +353,29 @@ export default {
         updateDateAndTime: data.dateOfUpdate
       }
   }
+
+
+  const creditCorrection = (data, tab)=>{
+    console.log(data, " and tab is...", tab, dialogData)
+       store
+        .dispatch(`creditControl/creditCorrectionAction`,payload)
+        .then((res) => {
+        })
+        .catch((error) => { })
+        .finally(()=>{
+          loading.value = false;
+        })
+  } 
+
+  const downloadExportFile = ()=>{
+    exportRef.value.exportCSV()
+  }
    
 
     return {
       loadTransferedToMe,
       tableData,
+      creditCorrection,
       persistedData,
       updateDialogData,
       clientDetailDialog,
@@ -372,6 +384,8 @@ export default {
       searchedDataTransferedToClient,
       searchedDataTransferedClientToUser,
       filterMethod,
+      exportRef,
+      downloadExportFile,
       getData,
       tabIndex,
       loading,
