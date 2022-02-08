@@ -1,15 +1,15 @@
 <template>
-          <Dialog v-model:visible="showDialog" :style="{width: '30vw'}" :modal="true" @hide="$emit('closeDialog')">
+          <Dialog v-model:visible="showDialog" :style="{width: 'auto', maxWidth:'35%'}" :modal="true" @hide="$emit('closeDialog')">
           <template #header>
               <h3 class="text-lg font-medium">Delete {{ topHeaderText }}</h3>
             </template>
-            <p class="text-sm font-semibold text-black w-80">Are you sure you want to delete the following {{ topHeaderText }}?</p>
+            <p class="text-sm font-semibold text-black w-100 pb-5">Are you sure you want to delete the following {{ topHeaderText }}?</p>
             <div class="flex mt-1">
               <div class="flex items-center justify-center w-10 h-10 text-white rounded-full" style="background-color: rgba(0, 0, 0, 0.4);">
                {{ name && name[0].toUpperCase() }}
               </div>
-              <div>
-                <span class="mt-1 ml-1 text-sm font-medium text-black">{{ name && name }}</span>
+              <div class="pl-2 pt-2">
+                <div class="mt-1 ml-1 text-sm font-medium text-black truncate w-80">{{ name && name }}</div>
               </div>
             </div>
             <template #footer>

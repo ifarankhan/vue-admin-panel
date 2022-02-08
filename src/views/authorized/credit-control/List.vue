@@ -16,7 +16,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  <span class="-ml-6"> Transfered to Me </span>
+                  <span class="-ml-6"> Transferable credits </span>
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
@@ -110,8 +110,8 @@
       </TabPanel>
 
       <TabPanel>
-         <CreditTopBar 
-         @datePicked="loadTransferedToMe($event)" 
+         <CreditTopBar
+         @datePicked="loadTransferedToMe($event)"
          @valuedChanged="searchedDataTransferedClientToUser($event)" />
           <div>
               <DataTable
@@ -139,12 +139,12 @@
     @correctCreditUpdate="creditCorrection($event)"
     @closeDialog="showDialog = false" />
 
-    <view-credit-dialog 
+    <view-credit-dialog
     v-if="showViewDialog"
     topHeaderText="Credit Details"
     :data="dialogData"
     @openCreditDialog="(showDialog=true),(showViewDialog = false)"
-    @closeDialog="showViewDialog = false" /> 
+    @closeDialog="showViewDialog = false" />
   </div>
 </template>
 
@@ -177,7 +177,7 @@ export default {
     TabPanels,
     TabPanel,
   },
-  setup() {  
+  setup() {
     const store = useStore();
     const showDialog = ref(false);
     const showViewDialog = ref(false);
@@ -198,7 +198,7 @@ export default {
           const RESPONSE_DATA = res.data;
           let updatedData = []
           if(RESPONSE_DATA.status ==200){
-            
+
             if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
               for (let index = 0; index < RESPONSE_DATA.data.length; index++) {
                 for (let j = 0; j < RESPONSE_DATA.data[index].userUpdates.length; j++) {
@@ -210,8 +210,8 @@ export default {
                     adminLastName: RESPONSE_DATA.data[index].masterUserLastName??'',
                     creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
                     currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
-                    dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate, 
-                    requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount, 
+                    dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate,
+                    requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount,
                     email: RESPONSE_DATA.data[index].userUpdates[j].email,
                     familyName: RESPONSE_DATA.data[index].userUpdates[j].familyName,
                     firstName: RESPONSE_DATA.data[index].userUpdates[j].firstName,
@@ -225,7 +225,7 @@ export default {
                     userType: RESPONSE_DATA.data[index].userUpdates[j].userType
                   })
                 }
-                
+
               }
               tableData.value = updatedData;
               persistedData.value = updatedData;
@@ -245,7 +245,7 @@ export default {
       if(!e.startDate || !e.endDate){
         return
       }
-      
+
       const startDate = new Date(e.startDate)
       const endDate = new Date(e.endDate)
       const payload = {
@@ -279,7 +279,7 @@ export default {
       const result = filterMethod(prevResult,searchableFields,e)
       tableData.value = result;
     }
-    
+
 
     const searchedDataTransferedToClient = (e)=>{
       const prevResult = _.cloneDeep(persistedData?.value);
@@ -309,12 +309,12 @@ export default {
       }).flat()
       return _.uniqWith(matchedArray, _.isEqual)
     }
-  
+
   const clientToUsersDetailDialog = ({data})=>{
     dialogData.value = {
         clientType: "User Account",
         userID: data.userID,
-        updaterId:data.updateID, 
+        updaterId:data.updateID,
         clientName: data.accountName,
         accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
         email: data.masterUserEmail,
@@ -345,10 +345,10 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
-    dialogData.value = { 
+    dialogData.value = {
         clientType: "Client Account",
         userID: data.userID,
-        updaterId:data.updateID, 
+        updaterId:data.updateID,
         clientName: data.accountName,
         accountAdmin: `${data?.adminFirstName??' '} ${data?.adminLastName??' '}`,
         email: data.masterUserEmail,
@@ -375,18 +375,18 @@ export default {
         .then((res) => {
           if(res.data.data.distributorCreditCorrectionSubmitted){
             showDialog.value = false;
-          } 
+          }
         })
         .catch((error) => { })
         .finally(()=>{
           loader.value = false;
         })
-  } 
+  }
 
   const downloadExportFile = ()=>{
     exportRef.value.exportCSV()
   }
-   
+
 
     return {
       loadTransferedToMe,
@@ -413,7 +413,7 @@ export default {
     };
   },
 };
-</script>   
+</script>
 
 <style scoped>
 
