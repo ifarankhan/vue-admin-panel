@@ -58,7 +58,6 @@
                 {{ $t('User Details') }}
               </button>
             </Tab>
-            <template v-if="!ismasterUser">
               <Tab as="template" v-slot="{ selected }" v-if="userTyp != 1 && userTyp != 4">
                 <button
                     @click="$store.commit('clientControl/setActiveTabeForEdit',1)"
@@ -92,7 +91,6 @@
                   {{ $t('Credit Control') }}
                 </button>
               </Tab>
-            </template>
           </TabList>
         </div>
 
@@ -164,6 +162,7 @@
               </span>
               <span> Edit User </span>
             </div>
+           <template v-if="!ismasterUser">
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
               @click="showDialog = true"
@@ -235,7 +234,7 @@
               </span>
               <span> Delete User </span>
             </div>
-
+           </template>
 
           </div>
       </div>
@@ -287,7 +286,7 @@
             </div>
 
           </TabPanel>
-          <TabPanel>
+          <TabPanel v-if="userTyp != 1 && userTyp != 4">
             <div class="w-2/3">
            <div class="flex flex-col space-y-8">
              <div class="user-details-trainings" v-if="selectedTrannings">
@@ -481,11 +480,13 @@ export default {
             creditControl.allowedToUpdateCredit = responseArray?.userDetails?.allowUpdateCredits;
             creditControl.updateLimit = responseArray?.userDetails?.creditLimit;
             ismasterUser.value = responseArray?.userDetails?.isMasterUser;
-            loading.value = false;
           })
           .catch((error) => {
-            console.log("error is...", error.message);
-          });
+            console.log("error is...");
+          })
+          .finally(()=>{
+             loading.value = false;
+      });
 
     });
 
@@ -513,7 +514,6 @@ export default {
             }
           })
           .catch((error) => {
-            console.log("error is...", error);
           }).finally(()=>{
              loading.value = false;
       });

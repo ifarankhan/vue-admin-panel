@@ -1,5 +1,6 @@
 <template>
   <div class="px-8">
+    <Loader v-if="loader" :toBeBigger="true" />
     <sticky-header>
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="ml-4">
@@ -49,10 +50,31 @@
          @datePicked="loadTransferedToMe($event)"
          @valuedChanged="searchedDataTransferedToMe($event)"
         />
+        <!-- <psytech-button
+              @buttonWasClicked="downloadExportFile"
+              label="Export CSV"
+              type="outline"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+            </psytech-button> -->
           <div>
               <DataTable
                 :customers="tableData"
                 :rowHover="true"
+                ref="exportRef"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
@@ -60,7 +82,7 @@
                 :image='true'
                 tableType="creditTableFirst"
                 @rowClicked="updateDialogData($event)"
-                @correctCreditUpdate="showDialog = true"
+                @correctCreditUpdate="(showDialog = true)"
               />
           </div>
       </TabPanel>
@@ -114,6 +136,7 @@
     <credit-update-dialog
     v-if="showDialog"
     :data="dialogData"
+    @correctCreditUpdate="creditCorrection($event)"
     @closeDialog="showDialog = false" />
 
     <view-credit-dialog 
@@ -126,17 +149,18 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from "vue";
+import { ref } from "vue";
 import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
 import _ from "lodash";
 import CreditUpdateDialog from "@/components/credit/UpdateCreditDialog.vue";
 import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
+import PsytechButton from "@/components/PsytechButton";
+import Loader from "@/components/Loader.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
-import { useRouter } from "vue-router";
 export default {
   name: "demoTable",
   components: {
@@ -145,8 +169,10 @@ export default {
     CreditTopBar,
     CreditUpdateDialog,
     ViewCreditDialog,
+    PsytechButton,
     TabGroup,
     TabList,
+    Loader,
     Tab,
     TabPanels,
     TabPanel,
@@ -155,11 +181,13 @@ export default {
     const store = useStore();
     const showDialog = ref(false);
     const showViewDialog = ref(false);
+    const exportRef = ref("");
     const dialogData = ref('');
     let tableData = ref([])
     let persistedData = ref([]);
     let error = ref(null)
     let loading = ref(false)
+    let loader = ref(false);
     let tabIndex = ref(0)
 
     const getData = (url, payload)=>{
@@ -172,54 +200,24 @@ export default {
           if(RESPONSE_DATA.status ==200){
             
             if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
-              // const formatedData = []
-              //  console.log("up if")
-              // const arrayData = RESPONSE_DATA.data.map(record=> {
-              //   console.log("up")
-              //   const data = record.userUpdates.map(item=> {
-                  // updatedData.push({
-                  //   accountName:record.accountName,
-                  //   accountID: record.accountID,
-                  //   masterUserEmail: record.masterUserEmail,
-                  //   adminFirstName: record.masterUserFirstName,
-                  //   adminLastName: record.masterUserLastName,
-                  //   ...item,
-                  // })
-              //     return data
-              //   })
-              //   formatedData.push(...updatedData)
-              //   return updatedData 
-              // }).flat()
               for (let index = 0; index < RESPONSE_DATA.data.length; index++) {
-                // const element = array[index];
-                // console.log("first...",RESPONSE_DATA.data[0].userUpdates)
                 for (let j = 0; j < RESPONSE_DATA.data[index].userUpdates.length; j++) {
-                  // console.log("RESPONSE_DATA.data[i].userUpdates",RESPONSE_DATA.data[index].userUpdates[j])
-                  // // const userUpdate = RESPONSE_DATA.data[index].userUpdates;
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
-                  // console.log("...RESPONSE_DATA.data[index].userUpdates[j]",RESPONSE_DATA.data[index].accountName)
                     updatedData.push({
                     accountName:RESPONSE_DATA.data[index].accountName,
                     accountID: RESPONSE_DATA.data[index].accountID,
-                    masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail,
-                    adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName,
-                    adminLastName: RESPONSE_DATA.data[index].masterUserLastName,
+                    masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail??'',
+                    adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName??'',
+                    adminLastName: RESPONSE_DATA.data[index].masterUserLastName??'',
                     creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
                     currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
                     dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate, 
                     requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount, 
-                    // dongleID: RESPONSE_DATA.data[index].userUpdates[j].dongleID,
                     email: RESPONSE_DATA.data[index].userUpdates[j].email,
                     familyName: RESPONSE_DATA.data[index].userUpdates[j].familyName,
                     firstName: RESPONSE_DATA.data[index].userUpdates[j].firstName,
-                    // issueID: RESPONSE_DATA.data[index].userUpdates[j].issueID,
                     maxCreditUpdate: RESPONSE_DATA.data[index].userUpdates[j].maxCreditUpdate,
                     newUpdate: RESPONSE_DATA.data[index].userUpdates[j].newUpdate,
-                    // potentialFailedUpdate: RESPONSE_DATA.data[index].userUpdates[j].potentialFailedUpdate,
                     purchaseID: RESPONSE_DATA.data[index].userUpdates[j].purchaseID,
-                    // requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmountt,
                     sharedCredit: RESPONSE_DATA.data[index].userUpdates[j].sharedCredit,
                     updateDate: RESPONSE_DATA.data[index].userUpdates[j].updateDate,
                     updateID: RESPONSE_DATA.data[index].userUpdates[j].updateID,
@@ -229,7 +227,6 @@ export default {
                 }
                 
               }
-              console.log("arrayData")
               tableData.value = updatedData;
               persistedData.value = updatedData;
             } else {
@@ -316,6 +313,8 @@ export default {
   const clientToUsersDetailDialog = ({data})=>{
     dialogData.value = {
         clientType: "User Account",
+        userID: data.userID,
+        updaterId:data.updateID, 
         clientName: data.accountName,
         accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
         email: data.masterUserEmail,
@@ -331,7 +330,9 @@ export default {
 
     const updateDialogData = ({data})=>{
       dialogData.value = {
+        updaterId: data.creditTransferId,
         clientType: "",
+        userID: "",
         clientName: data.accountName,
         accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
         email: data.masterUserEmail,
@@ -344,11 +345,12 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
-    console.log("data",data)
     dialogData.value = { 
         clientType: "Client Account",
+        userID: data.userID,
+        updaterId:data.updateID, 
         clientName: data.accountName,
-        accountAdmin: `${data.adminFirstName} ${data.adminLastName}`,
+        accountAdmin: `${data?.adminFirstName??' '} ${data?.adminLastName??' '}`,
         email: data.masterUserEmail,
         creditsBefore: data?.currentCredits??'',
         creditRequested: data.requestAmount,
@@ -359,11 +361,38 @@ export default {
         updateDateAndTime: data.dateOfUpdate
       }
   }
+
+
+  const creditCorrection = (e)=>{
+      const data = {
+        amount: +e.correctCredit,
+        reason: e.correctionReason,
+        userid: dialogData.value?.userID,
+        updateid: dialogData.value.updaterId
+      }
+      loader.value = true;
+       store
+        .dispatch(`creditControl/creditCorrectionAction`,data)
+        .then((res) => {
+          if(res.data.data.distributorCreditCorrectionSubmitted){
+            showDialog.value = false;
+          } 
+        })
+        .catch((error) => { })
+        .finally(()=>{
+          loader.value = false;
+        })
+  } 
+
+  const downloadExportFile = ()=>{
+    exportRef.value.exportCSV()
+  }
    
 
     return {
       loadTransferedToMe,
       tableData,
+      creditCorrection,
       persistedData,
       updateDialogData,
       clientDetailDialog,
@@ -372,9 +401,12 @@ export default {
       searchedDataTransferedToClient,
       searchedDataTransferedClientToUser,
       filterMethod,
+      exportRef,
+      downloadExportFile,
       getData,
       tabIndex,
       loading,
+      loader,
       showDialog,
       showViewDialog,
       dialogData,

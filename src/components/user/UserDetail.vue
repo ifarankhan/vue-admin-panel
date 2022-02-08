@@ -21,13 +21,15 @@
 
         <!--  -->
           <div class="mt-2 ml-1" v-if="userDetail.userType == 3">
-          <p class="pl-2 text-sm font-semibold">Add a Supervisor</p>
+          <p class="pl-2 text-sm font-semibold">{{ onUserEdit? "Update": "Add" }} a Supervisor</p>
           <div class="flex w-9/12 pl-1">
             <div class="w-full pl-1">
               <select-option
                 :filterDropdown="supervisorsArray"
                 labelText="Supervisors"
+                :disabled="onUserEdit?ture:false"
                 :customeWidth="true"
+                :openSlectList="!onUserEdit"
                 v-model="userDetail.supervisor"
               ></select-option>
             </div>

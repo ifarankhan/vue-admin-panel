@@ -27,6 +27,15 @@ const actions = {
             }
         })
     },
+    async creditCorrectionAction({},payload){
+        const DATA = payload;
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        DATA.distributorid = userData.distributorId;
+        if(!DATA.userid){
+            DATA.userid = userData.userId;
+        }
+        return private_url.post('distributor-credit-correction', DATA)
+    },
     async transferedClientToUserAction({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         return private_url.get('user-credit-updates', {

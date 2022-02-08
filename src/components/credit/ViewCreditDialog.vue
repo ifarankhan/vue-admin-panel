@@ -36,9 +36,9 @@
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Account Admin:</p>
                   <div class="flex items-center justify-center mr-1 text-xs text-white rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
-                    {{ data?.accountAdmin.split(" ").map(item=> item[0].toUpperCase()).join("") }}
+                    {{ data.accountAdmin && data.accountAdmin.split(" ").map(item=> item[0]?.toUpperCase()).join("") }}
                     </div>
-                  <p> {{ data?.accountAdmin }} </p>
+                  <p> {{ data?.accountAdmin && data.accountAdmin }} </p>
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Email:</p>

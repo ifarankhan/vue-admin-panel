@@ -363,6 +363,7 @@
               </svg>
             </psytech-button>
             <psytech-button
+                v-if="userArray?.length"
                 @click="showMasterDialog = true"
                 label=" Change Master User"
                 type="outline"
@@ -391,6 +392,7 @@
                 @rowClicked="redirectToDetail($event)"
                 :sortTable="false"
                 tableType="accountUsers"
+                :image='true'
               />
             </div>
           <!-- <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
