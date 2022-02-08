@@ -6,7 +6,7 @@
               <h3 class="text-lg font-medium">{{ topHeaderText }}</h3>
             </template>
     <div>
-             
+
       <!--  -->
       <div class="mb-4">
           <div class="flex items-center cursor-pointer" @click="collapsable.accountDetail = !collapsable.accountDetail">
@@ -120,7 +120,7 @@
                     </p>
                 </div>
             </div>
-            
+
         </div>
         <!--  -->
            </div>
@@ -128,7 +128,7 @@
                <div class="flex mb-6">
                   <div class="ml-4">
                    <psytech-button
-                    label="UPDATE CREDIT"
+                    label="CORRECT CREDIT"
                     type="outline"
                     :extraClasses="'text-sm font-medium text-psytechBlue px-10  border-psytechBlue'"
                     @buttonWasClicked="$emit('openCreditDialog'),(showDialog=false)"
