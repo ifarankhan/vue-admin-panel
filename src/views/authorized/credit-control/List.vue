@@ -362,7 +362,6 @@ export default {
       }
   }
 
-
   const creditCorrection = (e)=>{
       const data = {
         amount: +e.correctCredit,

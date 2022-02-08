@@ -10,7 +10,7 @@
               :error="errorText"
               :showTranslatedError="false"
             />
-            <div class="ml-2.5 font-bold text-medium">Account Name</div>
+            <div class="ml-2.5 font-bold text-medium">Client Name</div>
               <div
                 class="p-3 mt-1 mb-4 ml-2 text-justify bg-gray-200"
                 style="word-wrap: break-word; width: 98.3%;"
@@ -19,11 +19,11 @@
                  form.companyName
                 }}
               </div>
-         <field label="Account Detail" labelFor="accountDetails">
+         <field label="Client Detail" labelFor="accountDetails">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
            <error-span :error="v$.accountDetails"></error-span>
          </field>
-         <field label="Account Address" labelFor="accountAddress">
+         <field label="Client Address" labelFor="accountAddress">
            <control type="textarea" v-model="form.accountAddress" placeholder="Account Address"/>
            <error-span :error="v$.accountAddress"></error-span>
          </field>
