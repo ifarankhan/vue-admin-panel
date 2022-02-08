@@ -263,12 +263,17 @@ export default {
 
     const addAccountUserMethod =  () => {
       creditControlRef?.value?.creditControlMethod()
+      if(!isInvalid.value){
+        return
+      }
       const data = _.cloneDeep(userDetailData)
       data.userType = Number(userDetailData.userType);
 
       if(!userDetailData.supervisor){
         delete data.supervisor;
       }
+
+      delete data.currentCredits;
 
       if(userDetailData.userType !=3){
         data.supervisor = 0

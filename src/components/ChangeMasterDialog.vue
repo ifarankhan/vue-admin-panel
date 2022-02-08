@@ -24,7 +24,7 @@
             <p>
               <error-span :error="v$.changedMasterUser"></error-span>
             </p>
-            <div class="mt-3 ml-1" v-if="masterArray">
+            <div class="mt-3 ml-1" v-if="masterArray.length">
               <p class="text-sm font-semibold text-black w-80">Current Master User</p>
               <div class="flex items-center">
                 <span><img class="inline-block w-12 h-12 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
@@ -33,7 +33,6 @@
                   <p>{{masterArray[0].email}}</p>
                 </div>
               </div>
-
             </div>
 
             <template #footer>

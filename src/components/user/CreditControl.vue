@@ -208,6 +208,7 @@ export default {
       if ( 
         (v$.value.credits.$invalid)
       ) {
+        emit("valid", { notDone: ()=> {} })
         return true;
       }
        emit("valid", { done: ()=> {

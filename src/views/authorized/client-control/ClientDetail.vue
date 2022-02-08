@@ -363,6 +363,7 @@
               </svg>
             </psytech-button>
             <psytech-button
+                v-if="userArray?.length"
                 @click="showMasterDialog = true"
                 label=" Change Master User"
                 type="outline"

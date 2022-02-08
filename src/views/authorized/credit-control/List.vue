@@ -376,7 +376,7 @@ export default {
         .then((res) => {
           if(res.data.data.distributorCreditCorrectionSubmitted){
             showDialog.value = false;
-          }
+          } 
         })
         .catch((error) => { })
         .finally(()=>{

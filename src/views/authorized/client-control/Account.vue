@@ -79,11 +79,11 @@
       </div>
 
       <form action="#" @submit.prevent="submit">
-        <field label="Company Name" labelFor="email">
+        <field label="Client Name" labelFor="email">
           <control type="text" v-model="form.companyName" placeholder="Email" />
           <error-span :error="v$.companyName"></error-span>
         </field>
-        <field label="Account Detail" labelFor="accountDetails">
+        <field label="Client Detail" labelFor="accountDetails">
           <control
             type="textarea"
             v-model="form.accountDetails"
@@ -91,7 +91,7 @@
           />
           <error-span :error="v$.accountDetails"></error-span>
         </field>
-        <field label="Account Address" labelFor="accountAddress">
+        <field label="Client Address" labelFor="accountAddress">
           <control
             type="textarea"
             v-model="form.accountAddress"
@@ -226,7 +226,17 @@ export default {
               accountName: form.companyName,
               accountDescription: form.accountDetails,
               accountAddress: form.accountAddress,
+              numberOfUsers: 0,
+              accountId: RESPONSE.data.accountId,
               creationDate: new Date()
+            });
+            store.commit("clientControl/setClientDetail", {
+              accountId: RESPONSE.data.accountId,
+              accountName: form.companyName,
+              accountDescription: form.accountDetails,
+              accountAddress: form.accountAddress,
+              creationDate: new Date(),
+              numberOfUsers: 0,
             });
             const { navigateTo } = utility("client-control-list-detail");
             navigateTo();
