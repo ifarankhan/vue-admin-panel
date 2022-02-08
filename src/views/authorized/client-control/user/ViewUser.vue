@@ -480,11 +480,13 @@ export default {
             creditControl.allowedToUpdateCredit = responseArray?.userDetails?.allowUpdateCredits;
             creditControl.updateLimit = responseArray?.userDetails?.creditLimit;
             ismasterUser.value = responseArray?.userDetails?.isMasterUser;
-            loading.value = false;
           })
           .catch((error) => {
-            console.log("error is...", error.message);
-          });
+            console.log("error is...");
+          })
+          .finally(()=>{
+             loading.value = false;
+      });
 
     });
 
@@ -512,7 +514,6 @@ export default {
             }
           })
           .catch((error) => {
-            console.log("error is...", error);
           }).finally(()=>{
              loading.value = false;
       });
