@@ -21,7 +21,7 @@
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
-          class="flex items-center justify-center w-8 h-8 text-white bg-black rounded rounded-full cursor-pointer "
+          class="flex items-center justify-center w-9 h-9 text-white bg-black rounded rounded-full cursor-pointer "
           @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'list-page' })"
         >
           <svg
