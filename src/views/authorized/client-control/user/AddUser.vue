@@ -157,7 +157,6 @@ export default {
     utility,
   },
   setup() {
-    console.log("Called")
     const store = useStore();
     store.commit("clientControl/setIndividualClientUserDetail", null);
     

@@ -63,7 +63,7 @@
             <span class="text-sm font-semibold">Credit Details :</span>
             <div class="flex-auto ml-1 border-t-2 border-gray-300"></div>
             <span class="px-2 text-xs font-semibold">Available Credit: </span>
-            <span class="inline-block px-2 text-xs font-semibold text-white rounded-full bg-psytechBlue"> {{ data?.creditRequested }} </span>
+            <span class="inline-block px-2 text-xs font-semibold text-white rounded-full bg-psytechBlue"> {{ data?.currentCredits }} </span>
             <span></span>
           </div>
           <div class="pl-2 ml-6 border-l-4 border-psytechBlueBtHover" v-if="collapsable.creditDetail">
