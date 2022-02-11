@@ -241,7 +241,7 @@
       <div class="p-2 mt-20">
         <TabPanels>
           <TabPanel>
-            <div class="user-details-listing" v-if="userDetailsList">
+            <div class="user-details-listing flex" v-if="userDetailsList">
               <div class="grid w-6/12 grid-cols-2 gap-8">
                <template v-if="!ismasterUser">
                  <div class="font-bold">User type:</div>
@@ -279,6 +279,21 @@
                   </div>
 
                  </div>
+              </div>
+              <div class=" w-6/12" style="text-align: -webkit-center;">
+                <span class="">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" viewBox="0 0 36 36">
+                    <g id="Group_36687" data-name="Group 36687" transform="translate(-1443 -5)">
+                      <path id="Path_145" data-name="Path 145" d="M18,0A18,18,0,1,1,0,18,18,18,0,0,1,18,0Z" transform="translate(1443 5)" fill="#f2f2f2"/>
+                      <g id="Group_512" data-name="Group 512" transform="translate(1452.474 12.579)">
+                        <g id="Group_511" data-name="Group 511" transform="translate(0)">
+                          <circle id="Ellipse_23" data-name="Ellipse 23" cx="4.093" cy="4.093" r="4.093" transform="translate(4.436)" fill="#ddd"/>
+                          <path id="Path_146" data-name="Path 146" d="M447.424,2826.3c0,2.872-3.818,4-8.528,4s-8.529-1.125-8.529-4,3.818-8.031,8.529-8.031S447.424,2823.434,447.424,2826.3Z" transform="translate(-430.367 -2809.458)" fill="#ddd"/>
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </span>
               </div>
             </div>
             <div class="user-details-listing" v-else>
