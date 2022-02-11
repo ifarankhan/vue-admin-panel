@@ -306,7 +306,9 @@ export default {
 
       if(showStep.value ==1){
         await trainingDetailRef?.value?.trainingDetailMethod()
-
+        if(!isInvalid.value){
+          return
+        }
         updateMethodAction('updateIndUserTraining',userDetailData)
         return
       }
@@ -325,7 +327,10 @@ export default {
 
       if(showStep.value ==3){
         await creditControlRef?.value?.creditControlMethod()
-
+        if(!isInvalid.value){
+          return
+        }
+        
         const data = {
           amount: +userDetailData.credits,
           currentCredits: userDetailData.currentCredits,
