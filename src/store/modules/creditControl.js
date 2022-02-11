@@ -11,7 +11,7 @@ const mutations = {
 const actions = {
     async transferedToMeAction({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
-        return private_url.get('distributor-credit-transfers', {
+        return private_url.get('distributor-credit-updates', {
             params:{
                 distributorId : userData.distributorId,
                 ...payload

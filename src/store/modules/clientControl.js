@@ -5,7 +5,8 @@ const state = {
     usersTablePag: null,
     setActiveTabeForEdit: 0,
     clientUserDetail:null,
-    individualClientUserDetail: null
+    individualClientUserDetail: null,
+    newUserAdded: false
 }
 
 const getters = {
@@ -20,6 +21,9 @@ const getters = {
   },
   getUsersTablePag: state=>{
     return state.usersTablePag
+  },
+  getIsNewUser: state=>{
+    return state.newUserAdded
   }
 
 }
@@ -29,6 +33,7 @@ const mutations = {
     if(payload.incrementAccUser){
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)+1}
       state.clientDetail = updatedClientDtail;
+      state.newUserAdded = true;
     } else if(payload.decrementAccUser){
       const updatedClientDtail = {...state.clientDetail, numberOfUsers: (state.clientDetail.numberOfUsers)-1}
       state.clientDetail = updatedClientDtail;
@@ -37,9 +42,18 @@ const mutations = {
       state.clientDetail = payload;
     }
   },
+  setNewUser(state, payload){
+    state.newUserAdded = payload;
+  },
   setClientUserDetails(state, payload){
       const updatedClientUser = {...payload}
       state.clientUserDetail = updatedClientUser;
+
+      if(!state.usersTablePag){ // when click on user from first 10 rows
+        state.usersTablePag = {
+          first: 0
+        }
+      }
   },
   setIndividualClientUserDetail(state, payload){
     state.individualClientUserDetail = payload;
@@ -174,9 +188,11 @@ const actions = {
       return private_url.patch('user-details', DATA)
     },
     async updateIndCredit({state},payload){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
       const DATA = payload;
-      DATA.accountid = state.individualClientUserDetail.userDetails.accountID,
+      DATA.accountid = state.individualClientUserDetail.userDetails.accountID
       DATA.userid = state.individualClientUserDetail.userDetails.userID
+      DATA.distributorid = userData.distributorId;
       return private_url.post('update-user-credits', DATA)
     },
     async updateIndUserTraining({},payload){

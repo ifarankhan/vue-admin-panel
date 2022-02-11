@@ -1,5 +1,7 @@
 import { reactive } from "vue";
+import { useStore } from "vuex";
 export function useClientUser() {
+  const store = useStore();
    const userTypes = reactive([
       "Professional",
       "Solution",
@@ -15,6 +17,16 @@ export function useClientUser() {
         month: "2-digit",
         year: "numeric",
       })
+    }
+  
+  const tableStatePersistence = (event)=>{
+      const data = {
+        page: event.page,
+        pageCount: event.pageCount,
+        first: event.first
+      }
+      // console.log("event.firstevent.first",event.first)
+      store.commit("clientControl/setUsersTablePag",data)
     }
 
   const trainingArray = reactive({trainingObj: [
@@ -51,6 +63,7 @@ export function useClientUser() {
     userTypes,
     trainingArray,
     notifications,
+    tableStatePersistence,
     formatDate
   };
 }

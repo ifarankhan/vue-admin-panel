@@ -21,7 +21,7 @@
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
-          class="flex items-center justify-center w-9 h-9 text-white bg-black rounded rounded-full cursor-pointer "
+          class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-9 h-9 "
           @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'list-page' })"
         >
           <svg
@@ -52,7 +52,7 @@
 
     <!-- <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0"> -->
     <div class="ml-4">
-      <TabGroup :defaultIndex="($store.getters['clientControl/getUsersTablePag'])?1:0">
+      <TabGroup :defaultIndex="($store.getters['clientControl/getUsersTablePag']) || ($store.getters['clientControl/getIsNewUser'])?1:0">
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
           <div class="flex-shrink-0 w-1/2" id="export_account">
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
@@ -651,7 +651,7 @@
              <DataTable
                 :customers="userArray"
                 :rowHover="true"
-                :first="userTablePagination && userTablePagination.first"
+                :first="($store.getters['clientControl/getIsNewUser'])?userArray?.length-1:userTablePagination && userTablePagination.first"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
@@ -804,6 +804,7 @@ export default {
     });
 
     onUnmounted(()=>{
+      store.commit("clientControl/setNewUser", false)
       window.removeEventListener('scroll', updateScroll);
     })
 
@@ -1055,7 +1056,15 @@ export default {
       })
     }
 
-
+    const startTableFrom = ref('');
+    const isNewUserAdded = computed(()=>{
+      if(store.getters['clientControl/getIsNewUser']){
+        const pageCal = (userArray?.value?.length / 10)
+        startTableFrom.value = pageCal < 0? 0 : Math.floor(pageCal);
+        userTablePagination.first = startTableFrom.value
+        return startTableFrom.value
+      }
+    })
 
     return {
       showFilters,
@@ -1066,6 +1075,8 @@ export default {
       userArray,
       searchText,
       filteredMainMethod,
+      isNewUserAdded,
+      startTableFrom,
       applyFilter,
       clearFilter,
       openCalender,
