@@ -143,7 +143,6 @@ export default {
    setup (props, { emit }) {
     const store = useStore();
     const indUserDetail = store.getters['clientControl/getIndClientUser'];
-    console.log("indUserDetail klmdlkasdmla",indUserDetail)
     const collapsable = reactive({
       tests: true,
       batteries: true,

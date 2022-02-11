@@ -205,7 +205,6 @@ export default {
 
     if(indUserDetail?.activateTab){
       showStep.value = +indUserDetail.activateTab;
-      console.log("showStep.value",showStep.value)
     } 
    
     const goToBackHandler = () => {
@@ -304,67 +303,13 @@ export default {
       updateMethodAction('updateIndUserDetail',data)
       return true
       }
-      // if(showStep.value ==0){
-      //   await userDetailRef?.value?.userDetailMethod()
-      // }
-      // if(!isInvalid.value || emailIsTaken.value){
-      //   return
-      // }
-      // const data = {
-      //   firstname:userDetailData?.firstname,
-      //   familyname:userDetailData?.familyname,
-      //   email:userDetailData?.email,
-      //   pin:userDetailData?.pin,
-      //   active:userDetailData && +userDetailData.activeBlocked? false: true,
-      //   receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
-      // }
-
-      // updateMethodAction('updateIndUserDetail',data)
-      // loader.value = true;
-      //  store
-      //   .dispatch("clientControl/updateIndUserDetail", data)
-      //   .then((res) => {
-      //     const RESPONSE_DATA = res.data;
-      //     if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
-      //       loader.value = false;
-      //       store.commit("clientControl/setIndividualClientUserDetail", null);
-      //       const { navigateTo } = utility("client-control-list-detail");
-      //       navigateTo();
-      //     } else {
-      //       throw new Error(RESPONSE_DATA.data.message);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     loader.value = false;
-      //     errorText.value = error?.message ?? "";
-      //   });
 
       if(showStep.value ==1){
         await trainingDetailRef?.value?.trainingDetailMethod()
 
         updateMethodAction('updateIndUserTraining',userDetailData)
-
         return
       }
-
-      //  loader.value = true;
-      //  store
-      //   .dispatch("clientControl/updateIndUserTraining", userDetailData)
-      //   .then((res) => {
-      //     const RESPONSE_DATA = res.data;
-      //     if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
-      //       loader.value = false;
-      //       store.commit("clientControl/setIndividualClientUserDetail", null);
-      //       const { navigateTo } = utility("client-control-list-detail");
-      //       navigateTo();
-      //     } else {
-      //       throw new Error(RESPONSE_DATA.data.message);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     loader.value = false;
-      //     errorText.value = error?.message ?? "";
-      //   });
 
       if(showStep.value ==2){
         await assessmentsRef?.value?.assessmentDetailMethod()
@@ -375,7 +320,6 @@ export default {
         }
 
         updateMethodAction('updateIndUserAssessment',data)
-
         return
       }
 
@@ -393,29 +337,7 @@ export default {
 
         return
       }
-      // const data = {
-      //   tests: userDetailData.tests,
-      //   solution: userDetailData.solution,
-      //   batteries: userDetailData.batteries,
-      // }
-      //  loader.value = true;
-      //  store
-      //   .dispatch("clientControl/updateIndUserAssessment", data)
-      //   .then((res) => {
-      //     const RESPONSE_DATA = res.data;
-      //     if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
-      //       loader.value = false;
-      //       store.commit("clientControl/setIndividualClientUserDetail", null);
-      //       const { navigateTo } = utility("client-control-list-detail");
-      //       navigateTo();
-      //     } else {
-      //       throw new Error(RESPONSE_DATA.data.message);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     loader.value = false;
-      //     errorText.value = error?.message ?? "";
-      //   });
+      
     };
     return {
       checkForValidity,

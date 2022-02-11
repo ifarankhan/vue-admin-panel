@@ -1,6 +1,6 @@
  <template>
      <DataTable :value="customers" :paginator="paginator" class="p-datatable-customers" :rows="rows"
-            @page="paginationChanged($event)"
+            @page="tableStatePersistence($event)"
             dataKey="id" :rowHover="rowHover" :loading="loading"
             :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions"
@@ -27,7 +27,7 @@
                 <template #body="{data}">
                     <div>
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
-                         <span>{{data.firstName}} </span>
+                         <span> {{data.firstName}} </span>
                  </div>
                 </template>
               </Column>
@@ -68,14 +68,14 @@
             </Column>
             </span>
             <span v-if="tableType=='creditTableFirst'">
-              <Column field="transferDate" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.transferDate?.split("T")[0] }}</span>
+                    <span>{{ data?.date }}</span>
                 </template>
               </Column>
-              <Column field="transferDate" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.transferDate?.split("T")[1]?.split("Z")[0]}} </span>
+                   <span>{{data?.time }} </span>
                 </template>
               </Column>
               <Column field="amount" header="Credit Requested" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
@@ -91,26 +91,26 @@
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
-                  <div>
+                  <!-- <div>
                     <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
                        <template #item="{item}">
                             <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
                     </template>
                     </Menu>
-                  </div>
+                  </div> -->
               </template>
             </Column>
             </span>
 
              <span v-if="tableType=='creditTableSecond'">
-              <Column field="dateOfUpdate" header="Date of Update" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
+              <Column field="date" header="Date of Update" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.dateOfUpdate?.split("T")[0] }}</span>
+                    <span>{{ data?.date }}</span>
                 </template>
               </Column>
-              <Column field="dateOfUpdate" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.dateOfUpdate?.split("T")[1]?.split("Z")[0]}} </span>
+                   <span>{{data?.time }} </span>
                 </template>
               </Column>
               <Column field="requestAmount" header="Credit Requested" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -118,7 +118,7 @@
                       <span>{{ data.requestAmount }}</span>
                   </template>
               </Column>
-              <Column :field="clientName" header="Client" :sortable="sortTable" style="min-width: 5rem;cursor: pointer">
+              <Column field="accountName" header="Client" :sortable="sortTable" style="min-width: 5rem;cursor: pointer">
                 <template #body="{data}">
                     <span>{{ data.accountName }}</span>
                 </template>
@@ -128,9 +128,9 @@
                     <span>{{ data?.masterUserEmail }}</span>
                 </template>
               </Column>
-              <Column field="masterUserFirstName" header="Admin Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="adminFullName" header="Admin Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
-                      <span class="ml-6">{{ `${data.adminFirstName} ${data.adminLastName}` }}</span>
+                      <span class="ml-6">{{ data.adminFullName }}</span>
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
@@ -153,34 +153,34 @@
             </span>
 
              <span v-if="tableType=='creditTableThird'">
-              <Column field="dateOfUpdate" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.dateOfUpdate?.split("T")[0] }}</span>
+                    <span>{{ data?.date }}</span>
                 </template>
               </Column>
-              <Column field="dateOfUpdate" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.dateOfUpdate?.split("T")[1]?.split("Z")[0]}} </span>
+                   <span>{{data?.time }} </span>
                 </template>
               </Column>
-              <Column header="Credit Requested" sortField="amount" :sortable="sortTable" style="min-width:13rem; cursor: pointer">
+              <Column field="amount" header="Credit Requested" sortField="amount" :sortable="sortTable" style="min-width:13rem; cursor: pointer">
                    <template #body="{data}">
                       <span>{{ data.amount }}</span>
                   </template>
               </Column>
-              <Column header="End User Name" sortField="firstName" :sortable="sortTable" style="min-width: 13rem; cursor: pointer">
+              <Column field="firstName" header="End User Name" sortField="firstName" :sortable="sortTable" style="min-width: 13rem; cursor: pointer">
                    <template #body="{data}">
-                      <span>{{ data.firstName }}</span>
+                      <span>{{ data.firstName?data.firstName:'--' }}</span>
                   </template>
               </Column>
-               <Column header="End User Email Address" sortField="email" :sortable="sortTable" style="min-width: 18rem;cursor: pointer">
+               <Column field="email" header="End User Email Address" sortField="email" :sortable="sortTable" style="min-width: 18rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.email }}</span>
+                    <span>{{ data?.email?data?.email:'--' }}</span>
                 </template>
               </Column>
-              <Column sortField="Client" header="Client" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="accountName" sortField="Client" header="Client" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.accountName }}</span>
+                    <span>{{ data?.accountName?data?.accountName:'--' }}</span>
                 </template>
               </Column>
             <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
@@ -205,7 +205,7 @@
             <span v-if="tableType =='users'">
               <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <div class="truncate custome-width flex space-x-4">
+                    <div class="flex space-x-4 truncate custome-width">
                          <span>
                              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36.136" viewBox="0 0 36 36.136">
                               <defs>
@@ -346,20 +346,19 @@ export default {
     },
     setup(props, {emit}) {
        const store = useStore();
-       const { userTypes, formatDate } = useClientUser();
+       const { userTypes, formatDate, tableStatePersistence } = useClientUser();
 
        const menu = ref();
 
-      const paginationChanged = (event)=>{
-        const data = {
-          page: event.page,
-          pageCount: event.pageCount,
-          first: event.first
-        }
+      // const paginationChanged = (event)=>{
+      //   const data = {
+      //     page: event.page,
+      //     pageCount: event.pageCount,
+      //     first: event.first
+      //   }
 
-        store.commit("clientControl/setUsersTablePag",data)
-
-      }
+      //   store.commit("clientControl/setUsersTablePag",data)
+      // }
 
       const items = ref([
 				{
@@ -393,7 +392,7 @@ export default {
             dt,
             items,
             exportCSV,
-            paginationChanged,
+            tableStatePersistence,
             formatDate,
             userTypes
         }

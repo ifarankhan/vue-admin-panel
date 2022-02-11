@@ -137,7 +137,7 @@
             <span class="inline-block w-full -ml-2" v-if="emailIsTaken">
               <error-span customeError="That email is already taken"></error-span>
             </span>
-            <span class="inline-block w-full -ml-2" v-if="v$.email.$dirty && v$.email.$invalid">
+            <span class="inline-block w-full" v-if="v$.email.$dirty && v$.email.$invalid">
               <error-span :error="v$.email"></error-span>
             </span>
 

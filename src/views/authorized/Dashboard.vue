@@ -6,68 +6,48 @@
   <main-section>
     <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-4">
       <card-widget
-        trend="12%"
-        trend-type="up"
-        color="text-green-500"
+        trend="Total"
+        color="text-psytechBlue"
         :icon="mdiAccountMultiple"
-        :number="67876"
-        label="Credit Update"
+        :number="widgetData?.activeUsers"
+        label="Active Users"
       />
       <card-widget
-        trend="12%"
-        trend-type="down"
-        color="text-blue-500"
-        :icon="mdiCartOutline"
-        :number="200"
-        prefix=""
-        label="No of tests"
+          trend="Total"
+          color="text-psytechRed"
+          :icon="mdiAccountLock"
+          :number="widgetData?.dormantUsers"
+          label="Dormant Accounts"
       />
       <card-widget
-        trend="Overflow"
-        trend-type="alert"
-        color="text-red-500"
-        :icon="mdiChartTimelineVariant"
-        :number="125"
-        suffix=""
-        label="Reports Generated"
+          trend="Total"
+          color="text-blue-500"
+          :icon="mdiFinance"
+          :number="widgetData?.reportsGenerated"
+          label="Reports Generated"
       />
       <card-widget
-          trend="up"
-          trend-type="alert"
-          color="text-red-500"
+          trend="Total"
+          color="text-red-400"
+          :icon="mdiRefresh"
+          :number="widgetData?.creditUpdates"
+          label="Credit Updates"
+      />
+      <card-widget
+          trend="Total"
+          color="text-green-500"
+          :icon="mdiCurrencyUsd"
+          :number="widgetData?.creditsSold"
+          label="Credit Sold"
+      />
+      <card-widget
+          trend="Total"
+          color="text-yellow-500"
           :icon="mdiChartTimelineVariant"
-          :number="256"
-          suffix=""
-          label="Active Users"
-      />
-      <card-widget
-          trend="up"
-          trend-type="alert"
-          color="text-red-500"
-          :icon="mdiChartTimelineVariant"
-          :number="80000"
-          suffix=""
-          label="Total Credit Sold"
-      />
-      <card-widget
-          trend="up"
-          trend-type="alert"
-          color="text-red-500"
-          :icon="mdiChartTimelineVariant"
-          :number="5200"
-          suffix=""
-          label="Avialable transferable credits"
+          :number="widgetData?.transferableCredits"
+          label="Transferable Credits"
       />
 
-      <card-widget
-          trend="up"
-          trend-type="alert"
-          color="text-red-500"
-          :icon="mdiChartTimelineVariant"
-          :number="21"
-          suffix=""
-          label="Dormant accounts"
-      />
     </div>
     <div class="grid grid-cols-2 gap-6 mb-6 lg:grid-cols-2">
       <table-list title="Low Credit Clients" />
@@ -77,7 +57,7 @@
   </main-section>
 </template>
 <script>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, reactive } from 'vue'
 import utility from "../../components/composition/utility";
 import MainSection from "@/components/MainSection";
 import TitleBar from "@/components/TitleBar";
@@ -86,9 +66,13 @@ import CardComponent from "@/components/CardComponent";
 import TitleSubBar from "@/components/TitleSubBar";
 import JbButton from "@/components/JbButton";
 import TableList from "@/components/TableList";
+import { useStore } from "vuex";
+
 
 import {
   mdiAccountMultiple,
+  mdiAccountLock,
+  mdiRefresh,
   mdiCartOutline,
   mdiChartTimelineVariant,
   mdiFinance,
@@ -96,6 +80,7 @@ import {
   mdiReload,
   mdiGithub,
   mdiChartPie,
+  mdiCurrencyUsd
 } from "@mdi/js";
 
 export default {
@@ -110,22 +95,49 @@ export default {
     JbButton
   },
   setup() {
+    const store = useStore();
+    const darkMode = computed(() => store.state.darkMode);
+    const widgetData = ref();
+
+    onMounted(() => {
+      fetchWidgetsData();
+    });
+
     const logoutHanlder = async () => {
        store.dispatch("auth/logoutAction", 'login')
     };
 
-    const titleStack = ref(["Admin", "Dashboard"]);
-    const darkMode = computed(() => store.state.darkMode);
+
+    const fetchWidgetsData = ()=>{
+      //loading.value = true;
+      store
+          .dispatch("auth/getWidgetData")
+          .then((res) => {
+            let responseArray = res?.data?.data;
+            widgetData.value = responseArray;
+            console.log(widgetData);
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+        //loading.value = false;
+      })
+    }
     return {
       logoutHanlder,
+      fetchWidgetsData,
       darkMode,
+      widgetData,
       mdiAccountMultiple,
+      mdiAccountLock,
+      mdiCurrencyUsd,
       mdiCartOutline,
       mdiChartTimelineVariant,
       mdiFinance,
       mdiMonitorCellphone,
       mdiReload,
       mdiGithub,
+      mdiRefresh,
       mdiChartPie,
     };
   },

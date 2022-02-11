@@ -21,7 +21,7 @@
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
-          class="flex items-center justify-center w-9 h-9 text-white bg-black rounded rounded-full cursor-pointer "
+          class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-9 h-9 "
           @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'list-page' })"
         >
           <svg
@@ -52,7 +52,7 @@
 
     <!-- <div class="w-full px-2 pt-4 pb-16 ml-8 sm:px-0"> -->
     <div class="ml-4">
-      <TabGroup :defaultIndex="($store.getters['clientControl/getUsersTablePag'])?1:0">
+      <TabGroup :defaultIndex="($store.getters['clientControl/getUsersTablePag']) || ($store.getters['clientControl/getIsNewUser'])?1:0">
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
           <div class="flex-shrink-0 w-1/2" id="export_account">
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
@@ -335,7 +335,24 @@
               </div>
             </div>
             <div class="w-1/3">
-              <!-- IMAGE WILL COME HERE -->
+              <span>
+                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="250" height="250" viewBox="0 0 36 36.136">
+                              <defs>
+                                <linearGradient id="linear-gradient" x1="0.5" x2="0.514" y2="0.628" gradientUnits="objectBoundingBox">
+                                  <stop offset="0" stop-color="#103c58"/>
+                                  <stop offset="1" stop-color="#455080"/>
+                                </linearGradient>
+                              </defs>
+                              <g id="Group_36418" data-name="Group 36418" transform="translate(-1418.376 -241.376)">
+                                <g id="Group_872" data-name="Group 872" transform="translate(1418 241)" opacity="0.114">
+                                  <rect id="Rectangle_3484" data-name="Rectangle 3484" width="36" height="36" rx="5" transform="translate(0.376 0.376)" fill="url(#linear-gradient)"/>
+                                  <path id="Path_12665" data-name="Path 12665" d="M230.322,838.457l2.2-2.2a2.7,2.7,0,0,1,4.1,0c2.149,2.195,9.61,9.029,9.61,9.029s0,6.022,0,6.028a2.37,2.37,0,0,1-.857,1.891Z" transform="translate(-209.857 -817.853)" fill="#7a8aaf"/>
+                                  <path id="Path_12664" data-name="Path 12664" d="M200.984,838.69l9.634-9.107s2.331-2.5,4.527,0c.949,1.08,16.107,16.029,21.153,20.976a2.9,2.9,0,0,1-1.619.755H203.261a2.722,2.722,0,0,1-2.235-2.362Z" transform="translate(-200.608 -814.802)" fill="#cdd5e0"/>
+                                  <ellipse id="Ellipse_595" data-name="Ellipse 595" cx="2.991" cy="2.778" rx="2.991" ry="2.778" transform="translate(23.932 5.556)" fill="#fff"/>
+                                </g>
+                              </g>
+                            </svg>
+                         </span>
             </div>
           </div>
         </TabPanel>
@@ -634,7 +651,7 @@
              <DataTable
                 :customers="userArray"
                 :rowHover="true"
-                :first="userTablePagination && userTablePagination.first"
+                :first="($store.getters['clientControl/getIsNewUser'])?userArray?.length-1:userTablePagination && userTablePagination.first"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
@@ -787,6 +804,7 @@ export default {
     });
 
     onUnmounted(()=>{
+      store.commit("clientControl/setNewUser", false)
       window.removeEventListener('scroll', updateScroll);
     })
 
@@ -1038,7 +1056,15 @@ export default {
       })
     }
 
-
+    const startTableFrom = ref('');
+    const isNewUserAdded = computed(()=>{
+      if(store.getters['clientControl/getIsNewUser']){
+        const pageCal = (userArray?.value?.length / 10)
+        startTableFrom.value = pageCal < 0? 0 : Math.floor(pageCal);
+        userTablePagination.first = startTableFrom.value
+        return startTableFrom.value
+      }
+    })
 
     return {
       showFilters,
@@ -1049,6 +1075,8 @@ export default {
       userArray,
       searchText,
       filteredMainMethod,
+      isNewUserAdded,
+      startTableFrom,
       applyFilter,
       clearFilter,
       openCalender,

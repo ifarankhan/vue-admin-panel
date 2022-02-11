@@ -25,7 +25,16 @@ const actions = {
         await localStorage.removeItem("userData");
         const { navigateTo } = utility(payload);
         navigateTo();
-    }
+    },
+    async getWidgetData({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('widget-data', {
+            params: {
+                distributorId: userData.distributorId
+            }
+        })
+    },
+
 }
 
 export default {

@@ -153,7 +153,6 @@ export default {
     watch(
       () => _.cloneDeep(trainingArray),
       (currentValue, _) => {
-        console.log(currentValue)
         trainingDetail.traininglevel = currentValue.trainingObj
           .map((item) => item.selected && item.value)
           .filter((item) => item);
