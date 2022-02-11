@@ -367,8 +367,8 @@
                 <div class="col-span-2 font-bold" >
                   Credit Control:
                 </div>
-                <div class="col-span-2" >
-                  <div class="w-full">
+                <div class="flex col-span-2">
+                  <div class="w-full -ml-2">
                     <field label="Available Credit" labelFor="credit">
                       <control
                           :disabled="true"
@@ -377,7 +377,60 @@
                       />
                     </field>
                   </div>
+                  <div class="w-full">
+                  <psytech-button
+                    @buttonWasClicked="toggleCredits = true"
+                    :smallText="true"
+                    label="Edit Credits"
+                    type="outline"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-6 h-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                  </psytech-button>
+            </div>
                 </div>
+
+                
+        <div
+          class="w-8/12 col-span-2 rounded-md bg-psytechLightGray"
+          v-if="toggleCredits"
+        >
+            <field label="Update Amount" labelFor="update-amount">
+              <control v-model="updateCredit.credits" placeholder=" " maxlength="4" />
+            </field>
+
+            <field label="Purchase Note" labelFor="purchaseNote">
+              <control
+                type="textarea"
+                v-model="updateCredit.purchaseId"
+                placeholder=" "
+              />
+            </field> 
+            
+          <div class="mb-2 ml-3">
+            <error-span :error="v$.credits"></error-span>
+          </div>
+        </div>
+       <div class="w-8/12 col-span-2 -mt-6" v-if="toggleCredits">
+        <psytech-button
+          label="Update"
+          type="black"
+          @buttonWasClicked="updateCreditMethod"
+        ></psytech-button>
+      </div>
+                
                 <div class="font-bold">Allowed to Update Credits:</div>
                 <div>{{creditControl.allowUpdateCredits?"Yes":"No"}}</div>
                 <div class="font-bold">Monthly Update Limit:</div>
@@ -401,12 +454,20 @@ import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import Loader from "@/components/Loader.vue";
 import {colorsBorders, colorsText} from "@/colors";
+import useVuelidate from "@vuelidate/core";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
 import AssessmentCollapsable from "@/components/AssessmentCollapsable";
 import Control from "@/components/Control";
 import Field from "@/components/Field";
+import ErrorSpan from "@/components/ErrorSpan";
+import PsytechButton from "@/components/PsytechButton";
 import utility from "@/components/composition/utility";
+import {
+  numeric,
+  helpers,
+  maxValue
+} from "@vuelidate/validators";
 
 export default {
   components:{
@@ -419,6 +480,8 @@ export default {
     Button,
     Loader,
     CheckRadioPicker,
+    PsytechButton,
+    ErrorSpan,
     AssessmentCollapsable,
     Control,
     Field,
@@ -446,6 +509,37 @@ export default {
     const userBatteries = ref();
     const userSolutions = ref();
     const ismasterUser = ref(false);
+
+    const updateCredit = reactive({ 
+      credits: "",
+      purchaseId: "",
+    });
+
+    const rules = computed(() => {
+      return {
+         credits: {
+          numeric: helpers.withMessage("Numeric values are allowed", numeric),
+          minValue: helpers.withMessage(
+            "Update Amount should be between 20 to 1000",
+            (val)=>{
+              if(val ==0 || val  >=20){
+                return true
+              } else{
+                return false
+              }
+            }
+          ),
+          maxValue: helpers.withMessage(
+            "Update Amount should be between 20 to 1000",
+            maxValue(1000)
+          ),
+        },
+      }
+    });
+
+    const v$ = useVuelidate(rules, updateCredit);
+
+    const toggleCredits = ref(false);
     const creditControl = reactive({
       credits: 0,
       allowedToUpdateCredit: false,
@@ -463,8 +557,7 @@ export default {
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
-    onMounted(() => {
-      loading.value = true;
+    const loadUserDetail = ()=>{
       store
           .dispatch("clientControl/getClientUserDetails")
           .then((res) => {
@@ -487,7 +580,11 @@ export default {
           .finally(()=>{
              loading.value = false;
       });
+    }
 
+    onMounted(() => {
+      loading.value = true;
+      loadUserDetail()
     });
 
     const selectedTrannings = computed(() => {
@@ -518,12 +615,48 @@ export default {
              loading.value = false;
       });
     }
+
+  const updateCreditMethod = ()=>{
+  
+    if (v$.value.$validate() && v$.value.$error) {
+        return true;
+      }
+      const data = {
+        amount: +updateCredit.credits,
+        currentCredits: creditControl.credits,
+        updater: '',
+        reference: updateCredit.purchaseId
+      }
+      loading.value = true
+       store
+          .dispatch("clientControl/updateIndCredit",data)
+          .then((res) => {
+            if(res?.data?.data?.updatedCredits){
+              toggleCredits.value = false;
+                updateCredit.credits = ""; 
+                updateCredit.purchaseId = ""; 
+            }
+            loadUserDetail()
+          })
+          .catch((error) => {
+          }).finally(()=>{
+             loading.value = false;
+      });
+
+      // console.log("updateCredit", data)
+      
+      }
+
     return {
       accountDetail,
       userTypes,
       formatDate,
       loading,
       user,
+      updateCredit,
+      toggleCredits,
+      updateCreditMethod,
+      v$,
       showDialog,
       userDetailsList,
       userTyp,

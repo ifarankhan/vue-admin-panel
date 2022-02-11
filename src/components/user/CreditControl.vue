@@ -179,7 +179,7 @@ export default {
 
     const toggleCredits = ref(false);
    
-     const rules = computed(() => {
+    const rules = computed(() => {
       return {
          credits: {
           numeric: helpers.withMessage("Numeric values are allowed", numeric),

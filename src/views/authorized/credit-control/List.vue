@@ -50,26 +50,14 @@
          @datePicked="loadTransferedToMe($event)"
          @valuedChanged="searchedDataTransferedToMe($event)"
         />
-        <!-- <psytech-button
+        <psytech-button
               @buttonWasClicked="downloadExportFile"
               label="Export CSV"
               type="outline"
+              v-if="tableData.length"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </psytech-button> -->
+              <icon :path="mdiFileDelimitedOutline" />
+            </psytech-button>
           <div>
               <DataTable
                 :customers="tableData"
@@ -91,12 +79,21 @@
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
          @valuedChanged="searchedDataTransferedToClient($event)" />
+        <psytech-button
+              @buttonWasClicked="downloadExportFile"
+              label="Export CSV"
+              type="outline"
+              v-if="tableData.length"
+            >
+            <icon :path="mdiFileDelimitedOutline" />
+          </psytech-button>
           <div>
               <DataTable
                 :customers="tableData"
                 :clientName="''"
                 :rowHover="true"
                 :paginator="true"
+                ref="exportRef"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
                 :loading="loading"
@@ -113,11 +110,20 @@
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
          @valuedChanged="searchedDataTransferedClientToUser($event)" />
+          <psytech-button
+              @buttonWasClicked="downloadExportFile"
+              label="Export CSV"
+              type="outline"
+              v-if="tableData.length"
+            >
+            <icon :path="mdiFileDelimitedOutline" />
+          </psytech-button>
           <div>
               <DataTable
                 :customers="tableData"
                 :rowHover="true"
                 :paginator="true"
+                ref="exportRef"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
                 :loading="loading"
@@ -158,6 +164,8 @@ import CreditUpdateDialog from "@/components/credit/UpdateCreditDialog.vue";
 import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
 import PsytechButton from "@/components/PsytechButton";
 import Loader from "@/components/Loader.vue";
+import { mdiFileDelimitedOutline } from '@mdi/js';
+import Icon from '@/components/Icon'
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
@@ -173,6 +181,7 @@ export default {
     TabGroup,
     TabList,
     Loader,
+    Icon,
     Tab,
     TabPanels,
     TabPanel,
@@ -208,9 +217,12 @@ export default {
                     masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail??'',
                     adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName??'',
                     adminLastName: RESPONSE_DATA.data[index].masterUserLastName??'',
+                    adminFullName: RESPONSE_DATA.data[index].masterUserFirstName + " "+ RESPONSE_DATA.data[index].masterUserLastName,
                     creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
                     currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
                     dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate,
+                    date: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate?.split("T")[0],
+                    time: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate?.split("T")[1]?.split("Z")[0],
                     requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount,
                     email: RESPONSE_DATA.data[index].userUpdates[j].email,
                     familyName: RESPONSE_DATA.data[index].userUpdates[j].familyName,
@@ -230,8 +242,16 @@ export default {
               tableData.value = updatedData;
               persistedData.value = updatedData;
             } else {
-              tableData.value = RESPONSE_DATA.data;
-              persistedData.value = RESPONSE_DATA.data;
+              // tableData.value = RESPONSE_DATA.data;
+              const formattedDate = RESPONSE_DATA.data.map(item=>{
+                return {
+                  ...item,
+                  date: item.dateOfUpdate?.split("T")[0],
+                  time: item.dateOfUpdate?.split("T")[1]?.split("Z")[0]
+                }
+              })
+              tableData.value = formattedDate;
+              persistedData.value = formattedDate;
             }
           }
         })
@@ -275,7 +295,7 @@ export default {
         tableData.value =  _.cloneDeep(persistedData?.value);
         return
       }
-      const searchableFields = ["transferDate number", "amount number"]
+      const searchableFields = ["date number", "time number", "amount number"]
       const result = filterMethod(prevResult,searchableFields,e)
       tableData.value = result;
     }
@@ -287,7 +307,7 @@ export default {
         tableData.value =  _.cloneDeep(persistedData?.value);
         return
       }
-      const searchableFields = ["accountName string","masterUserEmail string", "masterUserEmail string","adminFirstName string","adminLastName string" , "dateOfUpdate number", "requestAmount number"]
+      const searchableFields = ["accountName string","masterUserEmail string","adminFullName string" , "date number", "time number", "requestAmount number"]
       const result = filterMethod(prevResult,searchableFields,e)
       tableData.value = result;
     }
@@ -399,6 +419,7 @@ export default {
       searchedDataTransferedToMe,
       searchedDataTransferedToClient,
       searchedDataTransferedClientToUser,
+      mdiFileDelimitedOutline,
       filterMethod,
       exportRef,
       downloadExportFile,

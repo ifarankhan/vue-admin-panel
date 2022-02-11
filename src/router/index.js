@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import store from "../store/index";
 
 const routes = [
   {
@@ -161,6 +162,8 @@ router.afterEach(to => {
 
 // Meta Handling
 router.beforeEach((to, from, next) => {
+  // console.log("prev page url", from)
+  // store.commit("setPrevRoute", from)
   const USER_DATA = JSON.parse(localStorage.getItem('userData'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!USER_DATA?.authToken) {
