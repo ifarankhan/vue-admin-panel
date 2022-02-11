@@ -16,7 +16,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  <span class="-ml-6"> Transferable credits </span>
+                  <span class="-ml-6"> Top Up credits </span>
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
@@ -38,7 +38,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Transfered by Client to Users
+                  Users Credit Update
                 </button>
               </Tab>
             </TabList>
