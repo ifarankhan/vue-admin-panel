@@ -48,16 +48,10 @@
      <TabPanel>
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
+         @exportCSV="downloadExportFile"
+         :data="tableData.length"
          @valuedChanged="searchedDataTransferedToMe($event)"
         />
-        <psytech-button
-              @buttonWasClicked="downloadExportFile"
-              label="Export CSV"
-              type="outline"
-              v-if="tableData.length"
-            >
-              <icon :path="mdiFileDelimitedOutline" />
-            </psytech-button>
           <div>
               <DataTable
                 :customers="tableData"
@@ -78,15 +72,17 @@
       <TabPanel>
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
-         @valuedChanged="searchedDataTransferedToClient($event)" />
-        <psytech-button
+         @valuedChanged="searchedDataTransferedToClient($event)"
+         @exportCSV="downloadExportFile"
+         :data="tableData.length" />
+        <!-- <psytech-button
               @buttonWasClicked="downloadExportFile"
               label="Export CSV"
               type="outline"
               v-if="tableData.length"
             >
             <icon :path="mdiFileDelimitedOutline" />
-          </psytech-button>
+          </psytech-button> -->
           <div>
               <DataTable
                 :customers="tableData"
@@ -109,15 +105,17 @@
       <TabPanel>
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
+         @exportCSV="downloadExportFile"
+         :data="tableData.length"
          @valuedChanged="searchedDataTransferedClientToUser($event)" />
-          <psytech-button
+          <!-- <psytech-button
               @buttonWasClicked="downloadExportFile"
               label="Export CSV"
               type="outline"
               v-if="tableData.length"
             >
             <icon :path="mdiFileDelimitedOutline" />
-          </psytech-button>
+          </psytech-button> -->
           <div>
               <DataTable
                 :customers="tableData"
@@ -217,7 +215,7 @@ export default {
                     masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail??'',
                     adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName??'',
                     adminLastName: RESPONSE_DATA.data[index].masterUserLastName??'',
-                    adminFullName: RESPONSE_DATA.data[index].masterUserFirstName + " "+ RESPONSE_DATA.data[index].masterUserLastName,
+                    adminFullName: `${RESPONSE_DATA.data[index].masterUserFirstName?RESPONSE_DATA.data[index].masterUserFirstName:' '} ${RESPONSE_DATA.data[index].masterUserLastName?RESPONSE_DATA.data[index].masterUserLastName:' '}`,
                     creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
                     currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
                     dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate,
@@ -336,12 +334,13 @@ export default {
         userID: data.userID,
         updaterId:data.updateID,
         clientName: data.accountName,
-        accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
+        accountAdmin: `${data.masterUserFirstName?data.masterUserFirstName:' '} ${data.masterUserLastName?data.masterUserLastName:' '}`,
         email: data.masterUserEmail,
         creditRequested: data.amount,
         creditLimit: data.creditLimit,
         purchaseNote: data.purchaseID,
         creditsBefore: data?.creditsBefore??'',
+        currentCredits: data.amount,
         maxCreditLimit: data.maxCreditUpdate??'',
         sharedCredit: data.sharedCredit,
         updateDateAndTime: data.dateOfUpdate
@@ -353,9 +352,9 @@ export default {
         updaterId: data.creditTransferId,
         clientType: "",
         userID: "",
-        clientName: data.accountName,
-        accountAdmin: `${data.masterUserFirstName} ${data.masterUserLastName}`,
-        email: data.masterUserEmail,
+        clientName: data.accountName??'',
+        accountAdmin: `${data.masterUserFirstName?data.masterUserFirstName:' '} ${data.masterUserLastName?data.masterUserLastName:' '}`,
+        email: data.masterUserEmail??'',
         creditRequested: data.amount,
         creditLimit: data.creditLimit,
         maxCreditLimit: data.maxCreditUpdate,
@@ -365,14 +364,15 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
-    dialogData.value = {
+    dialogData.value = { 
         clientType: "Client Account",
         userID: data.userID,
         updaterId:data.updateID,
         clientName: data.accountName,
-        accountAdmin: `${data?.adminFirstName??' '} ${data?.adminLastName??' '}`,
+        accountAdmin: `${data.adminFirstName?data.adminFirstName:' '} ${data.adminLastName?data.adminLastName:' '}`,
         email: data.masterUserEmail,
         creditsBefore: data?.currentCredits??'',
+        currentCredits: data.currentCredits,
         creditRequested: data.requestAmount,
         creditLimit: data.creditLimit,
         maxCreditLimit: data.maxCreditUpdate,

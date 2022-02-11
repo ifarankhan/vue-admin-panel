@@ -6,7 +6,6 @@
               <h3 class="text-lg font-medium">{{ topHeaderText }}</h3>
             </template>
     <div>
-
       <!--  -->
       <div class="mb-4">
           <div class="flex items-center cursor-pointer" @click="collapsable.accountDetail = !collapsable.accountDetail">
@@ -31,18 +30,21 @@
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Client Name:</p>
-                  <p> {{ data?.clientName }}</p>
+                  <p> {{ data?.clientName?data?.clientName:'--' }}</p>
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Account Admin:</p>
-                  <div class="flex items-center justify-center mr-1 text-xs text-white rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
+                  <div v-if="data.accountAdmin !='   '" class="flex items-center justify-center mr-1 text-xs text-white rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
                     {{ data.accountAdmin && data.accountAdmin.split(" ").map(item=> item[0]?.toUpperCase()).join("") }}
+                    </div>
+                    <div v-else class="flex items-center justify-center mr-1 text-xs text-black rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
+                      --
                     </div>
                   <p> {{ data?.accountAdmin && data.accountAdmin }} </p>
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Email:</p>
-                  <p> {{ data?.email }}</p>
+                  <p> {{ data?.email?data.email:'--' }}</p>
               </div>
           </div>
         </div>
