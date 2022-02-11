@@ -24,6 +24,16 @@
 
           <!-- search -->
           <div class="relative flex justify-end pt-2 mt-8 text-gray-600 ">
+            <div class="-mt-2.5">
+              <psytech-button
+              @buttonWasClicked="$emit('exportCSV')"
+              label="Export CSV"
+              type="outline"
+              v-if="data"
+            >
+              <icon :path="mdiFileDelimitedOutline" />
+            </psytech-button>
+            </div>
             <input
               class="h-10 px-5 pr-16 font-bold text-gray-700 bg-white border-gray-300 rounded-full border-1 focus:outline-none focus:ring-psytechBlueBtHover"
               type="search"
@@ -58,10 +68,13 @@
 </template>
 <script>
 import IconSVG from "@/components/IconSVG.vue";
+import PsytechButton from "@/components/PsytechButton";
 import { reactive } from "vue";
 export default {
+    props:["data"],
     components:{
-        IconSVG
+        IconSVG,
+        PsytechButton
     },
     setup() {
         const transferredObj = reactive({

@@ -120,17 +120,17 @@
               </Column>
               <Column field="accountName" header="Client" :sortable="sortTable" style="min-width: 5rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data.accountName }}</span>
+                    <span>{{ data.accountName?data.accountName:'--' }}</span>
                 </template>
               </Column>
               <Column field="email" header="Admin Email Address" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.masterUserEmail }}</span>
+                    <span>{{ data?.masterUserEmail?data?.masterUserEmail:'--' }}</span>
                 </template>
               </Column>
               <Column field="adminFullName" header="Admin Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
-                      <span class="ml-6">{{ data.adminFullName }}</span>
+                      <span class="ml-6">{{ data.adminFullName =="   "?'--':data.adminFullName }}</span>
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
