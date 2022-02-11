@@ -305,6 +305,10 @@
                  </div>
                </div>
              </div>
+             <div class="pt-2 training-provider" v-if="userDetailsList.trainingLevelOther">
+               <h3 class="font-bold">Other:</h3>
+               <p>{{userDetailsList.trainingLevelOther}}</p>
+             </div>
              <div class="pt-2 training-provider">
                <h3 class="font-bold">Training Provider:</h3>
                <div class="flex image">

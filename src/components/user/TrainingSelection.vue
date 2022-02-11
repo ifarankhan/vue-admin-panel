@@ -15,7 +15,25 @@
             />
             <span class="ml-6 text-sm">{{ item.description }}</span>
           </div>
-          <div class="mt-5">
+          <div class="ml-2">
+             <check-radio-picker
+              name="sample-checkbox"
+              v-model="otherCheckbox"
+              setValue="another"
+              :options="{ another: 'Other' }"
+            />
+          </div>
+        <div class="w-6/12 mt-4 other-detail" v-if="otherCheckbox">
+          <field label="Other Detail" labelFor="otherDetail">
+          <control
+            type="input"
+            v-model="trainingDetail.trainingLevelOther"
+            placeholder="other"
+          />
+          <error-span :error="v$.trainingLevelOther"></error-span>
+        </field>
+        </div>
+          <div class="mt-5" v-if="v$.traininglevel && !otherCheckbox">
             <error-span :error="v$.traininglevel"></error-span>
           </div>
         </div>
@@ -126,6 +144,8 @@ export default {
      let { trainingArray } = useClientUser();
 
      const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
+
+     const otherCheckbox = ref( indUserDetail?.trainingLevelOther? true:false);
      
      if(indUserDetail && indUserDetail.trainingLevel){
       const result = indUserDetail?.trainingLevel.split(",")
@@ -148,16 +168,26 @@ export default {
       trainingprovider: indUserDetail?.trainingProvider??"",
       trainingyear: indUserDetail?.trainingYear??"",
       trainingdetails: indUserDetail?.trainingNotes??"",
+      trainingLevelOther: indUserDetail?.trainingLevelOther??""
     });
     
     watch(
+      () => otherCheckbox.value,
+      (currentValue, _) => {
+        if(!currentValue){
+          trainingDetail.trainingLevelOther = ""
+        }
+      },
+      {immediate:true}
+    );
+
+   watch(
       () => _.cloneDeep(trainingArray),
       (currentValue, _) => {
         trainingDetail.traininglevel = currentValue.trainingObj
           .map((item) => item.selected && item.value)
           .filter((item) => item);
       },
-      {immediate:true}
     );
    const yearsArray = ref([]);
    const rangeOfYears = (start, end) =>
@@ -200,7 +230,13 @@ export default {
      const rules = computed(() => {
       return {
        traininglevel: {
-          required: helpers.withMessage("One type must be selected", required),
+          required: helpers.withMessage("One type must be selected", ()=>{
+             if(!otherCheckbox.value && !trainingDetail.trainingLevelOther && trainingDetail.traininglevel.length ==0){
+              return false
+            } else {
+              return true
+            }
+          }),
         },
         trainingprovider: {
           required: helpers.withMessage(
@@ -213,6 +249,15 @@ export default {
             "Year of training is required",
             required
           ),
+        },
+        trainingLevelOther:{
+           required: helpers.withMessage("This field is required", ()=>{
+            if(otherCheckbox.value && !trainingDetail.trainingLevelOther && trainingDetail.traininglevel.length ==0){
+              return false
+            } else {
+              return true
+            }
+          }),
         },
         trainingdetails: {
           required: helpers.withMessage("Detail is required", required),
@@ -229,10 +274,11 @@ export default {
     const trainingDetailMethod = ()=>{
       v$.value.$validate();
       if (
-        ( v$.value.traininglevel.$invalid ||
+        ( (v$.value.traininglevel.$invalid ||
           v$.value.trainingprovider.$invalid ||
           v$.value.trainingyear.$invalid ||
-          v$.value.trainingdetails.$invalid)
+          v$.value.trainingdetails.$invalid) ||
+          (otherCheckbox.value && v$.value.trainingLevelOther.$invalid))
       ) {
         emit("valid", { notDone: ()=> {} })
         return true;
@@ -245,10 +291,11 @@ export default {
            traininglevel: trainingDetail.traininglevel.filter(()=> true),
            trainingprovider: trainingDetail.trainingprovider,
            trainingyear: trainingDetail.trainingyear,
-           trainingdetails: trainingDetail.trainingdetails
+           trainingdetails: trainingDetail.trainingdetails,
+           traininglevelother: trainingDetail.trainingLevelOther
          }
          emit("trainingSelectionDetail",data)
-        } else{
+        } else{ 
           emit("trainingSelectionDetail",trainingDetail)
         }
 
@@ -261,6 +308,7 @@ export default {
         trainingDetailMethod,
         trainingArray,
         indUserDetail,
+        otherCheckbox,
         trainingProvidersArray,
         v$
      }  
@@ -268,6 +316,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+  .other-detail input{
+    padding-left: 10px !important;
+  }
 </style>
