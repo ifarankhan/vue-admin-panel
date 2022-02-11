@@ -241,7 +241,7 @@
       <div class="p-2 mt-20">
         <TabPanels>
           <TabPanel>
-            <div class="user-details-listing flex" v-if="userDetailsList">
+            <div class="flex user-details-listing" v-if="userDetailsList">
               <div class="grid w-6/12 grid-cols-2 gap-8">
                <template v-if="!ismasterUser">
                  <div class="font-bold">User type:</div>
@@ -280,7 +280,7 @@
 
                  </div>
               </div>
-              <div class=" w-6/12" style="text-align: -webkit-center;">
+              <div class="w-6/12 " style="text-align: -webkit-center;">
                 <span class="">
                   <svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" viewBox="0 0 36 36">
                     <g id="Group_36687" data-name="Group 36687" transform="translate(-1443 -5)">
@@ -320,9 +320,12 @@
                  </div>
                </div>
              </div>
-             <div class="pt-2 training-provider" v-if="userDetailsList.trainingLevelOther">
+              <div class="user-details-listing" v-else>
+              <p>No data available for this user</p>
+            </div>
+             <div class="pt-2 training-provider" v-if="userDetailsList?.trainingLevelOther">
                <h3 class="font-bold">Other:</h3>
-               <p>{{userDetailsList.trainingLevelOther}}</p>
+               <p>{{userDetailsList?.trainingLevelOther}}</p>
              </div>
              <div class="pt-2 training-provider">
                <h3 class="font-bold">Training Provider:</h3>
@@ -331,12 +334,12 @@
                   <img class="inline-block w-10 h-10 mr-1 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
                 </div>
                  <div class="pl-3">
-                   <div class="font-semibold">{{ userDetailsList.trainingProvider?userDetailsList.trainingProvider:"No Data"}}</div>
+                   <div class="font-semibold">{{ userDetailsList?.trainingProvider?userDetailsList?.trainingProvider:"No Data"}}</div>
                    <div class="text-gray-500">Training Title</div>
                  </div>
                </div>
              </div>
-             <div class="pt-2 training-provider" v-if="userDetailsList.trainingYear">
+             <div class="pt-2 training-provider" v-if="userDetailsList?.trainingYear">
                <h3 class="font-bold">Year of Training:</h3>
                <div class="year">
                  <span class="flex items-center justify-center h-8 p-2 text-white bg-black rounded rounded-full w-36">
@@ -344,7 +347,7 @@
                  </span>
                </div>
              </div>
-             <div class="pt-2 training-provider" v-if="userDetailsList.trainingNotes">
+             <div class="pt-2 training-provider" v-if="userDetailsList?.trainingNotes">
                <h3 class="font-bold">Details of the Training:</h3>
                <div class="details-of-training">
                  <div class="w-11/12 h-24 p-4 mt-2 mb-4 text-justify bg-gray-200 border border-gray-400 rounded-md" style="overflow-wrap: break-word;">
@@ -356,7 +359,8 @@
             </div>
           </TabPanel>
           <TabPanel>
-            <div class="w-11/12 view-assessments">
+            <!-- {{ userTests.length }} {{ userBatteries.length }} {{ userSolutions.length }} -->
+            <div class="w-11/12 view-assessments" v-if="userTests?.length || userBatteries?.length || userSolutions?.length">
               <!-- Tests -->
               <assessment-collapsable
                 :user-data="userTests"
@@ -378,6 +382,9 @@
                   isBatteries="true"
               ></assessment-collapsable>
 
+            </div>
+             <div class="user-details-listing" v-else>
+              <p>No data available for this user</p>
             </div>
           </TabPanel>
           <TabPanel>
@@ -607,8 +614,8 @@ export default {
     });
 
     const selectedTrannings = computed(() => {
-       trannings.value = trannings.value.split(',');
-      return trainingArray.trainingObj.filter(val => trannings.value.includes(val.value));
+       trannings.value = trannings?.value?.split(',');
+      return trainingArray.trainingObj.filter(val => trannings?.value?.includes(val.value));
     });
 
     const sendNotification = computed(()=>{
