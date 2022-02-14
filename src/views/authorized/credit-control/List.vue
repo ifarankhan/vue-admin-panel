@@ -329,6 +329,7 @@ export default {
     }
 
   const clientToUsersDetailDialog = ({data})=>{
+    console.log("data is jjjj", data)
     dialogData.value = {
         clientType: "User Account",
         userID: data.userID,
@@ -348,6 +349,7 @@ export default {
   }
 
     const updateDialogData = ({data})=>{
+
       dialogData.value = {
         updaterId: data.creditTransferId,
         clientType: "",
@@ -364,6 +366,7 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
+    console.log("data is jjjj jjj", data)
     dialogData.value = { 
         clientType: "Client Account",
         userID: data.userID,

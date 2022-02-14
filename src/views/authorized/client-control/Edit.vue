@@ -131,6 +131,7 @@ export default {
       .dispatch("clientControl/updateClientDetail", DATA).then(res=>{
         const RESPONSE_DATA = res.data;
        if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+         store.commit('clientControl/setUsersTablePag',null)
          const { navigateTo } = utility('client-control-list-detail'); navigateTo();
        }
       else{
