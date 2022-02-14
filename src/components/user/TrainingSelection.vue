@@ -188,6 +188,7 @@ export default {
           .map((item) => item.selected && item.value)
           .filter((item) => item);
       },
+      {immediate:true}
     );
    const yearsArray = ref([]);
    const rangeOfYears = (start, end) =>
@@ -252,7 +253,7 @@ export default {
         },
         trainingLevelOther:{
            required: helpers.withMessage("This field is required", ()=>{
-            if(otherCheckbox.value && !trainingDetail.trainingLevelOther && trainingDetail.traininglevel.length ==0){
+            if(otherCheckbox.value && !trainingDetail.trainingLevelOther){
               return false
             } else {
               return true

@@ -31,7 +31,7 @@
           color="text-red-400"
           :icon="mdiRefresh"
           :number="widgetData?.creditUpdates"
-          label="Credit Updates"
+          label="Distributor Credit Updates"
       />
       <card-widget
           trend="Total"
