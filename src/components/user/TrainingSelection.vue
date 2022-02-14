@@ -188,6 +188,7 @@ export default {
           .map((item) => item.selected && item.value)
           .filter((item) => item);
       },
+      {immediate:true}
     );
    const yearsArray = ref([]);
    const rangeOfYears = (start, end) =>
