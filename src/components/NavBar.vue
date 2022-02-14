@@ -47,7 +47,6 @@
           <template #dropdown>
             <language-switcher v-slot="{ data, setLocale }">
               <nav-bar-item
-                to="/profile"
                 v-for="item in data"
                 :key="item.text"
                 @click.prevent="setLocale(item.value)"
