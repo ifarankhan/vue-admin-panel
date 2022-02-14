@@ -84,8 +84,8 @@
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
-              <template #body="{data}">
-                  <div class="my-center-text" @click="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu">
+              <template #body>
+                  <div class="my-center-text" aria-haspopup="true" aria-controls="overlay_menu">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
@@ -128,9 +128,9 @@
                     <span>{{ data?.masterUserEmail?data?.masterUserEmail:'--' }}</span>
                 </template>
               </Column>
-              <Column field="adminFullName" header="Admin Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="adminFullName" header="Admin Name" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
                    <template #body="{data}">
-                      <span class="ml-6">{{ data.adminFullName =="   "?'--':data.adminFullName }}</span>
+                      <span class="">{{ data.adminFullName =="   "?'--':data.adminFullName }}</span>
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
