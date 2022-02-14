@@ -164,6 +164,8 @@ export default {
           text: item.email,
           value: item.userId
         }
+      }).sort(function(a, b) {
+        return a.text.toLowerCase() === b.text.toLowerCase() ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1;
       });
       masterArray.value = props.currentMaster.map(item=> {
         return {
