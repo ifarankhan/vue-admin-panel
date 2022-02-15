@@ -1,19 +1,36 @@
 import axios from 'axios';
 import AppConfig from "@/config/AppConfig";
+import store from '../store/index';
 const BASE_URL = AppConfig.BASE_URL;
 
-const instance = axios.create({
-    baseURL: BASE_URL
-  });
+// creating custom instances
+export const public_url = axios.create()
+export const private_url = axios.create()
 
-  instance.defaults.headers.common["Content-Type"] = 'application/json';
-  // instance.defaults.headers.common["Access-Control-Allow-Origin"] = '*';
+// configure baseURL
+private_url.defaults.baseURL = BASE_URL
+public_url.defaults.baseURL = BASE_URL
 
-  instance.interceptors.response.use(response => {
-    return response;
-   }, error => {
 
-    return Promise.reject(error)
-   });
+private_url.defaults.headers.common["Content-Type"] = 'application/json';
 
-   export default instance;
+//define request interceptors
+private_url.interceptors.request.use(request => {
+  const USER_DATA = JSON.parse(localStorage.getItem('userData'))
+  const ACCESS_TOKEN = USER_DATA?.authToken; 
+  request.headers['Authorization'] = 'Bearer'.concat(' ', ACCESS_TOKEN);
+  return request;
+})
+
+
+private_url.interceptors.response.use(response => {
+  return Promise.resolve(response);
+}, (error) => {
+  let res = error.response;
+  if (res) {
+      if(res?.status === 401){
+          store.dispatch('auth/logoutAction','login');
+      }
+  } 
+  return Promise.reject(error);
+})

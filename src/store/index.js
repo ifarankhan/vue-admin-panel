@@ -1,8 +1,11 @@
-import { createStore } from 'vuex'
-import auth from './modules/auth'
+import { createStore } from 'vuex';
+import auth from './modules/auth';
+import clientControl from './modules/clientControl';
+import creditControl from './modules/creditControl';
 
 export default createStore({
   state: {
+    prevRouteState: null,
     /* User */
     userName: null,
     userEmail: null,
@@ -27,6 +30,11 @@ export default createStore({
   },
   mutations: {
     /* A fit-them-all commit */
+
+    setPrevRoute (state, payload){
+      state.prevRouteState = payload;
+    },
+
     basic (state, payload) {
       state[payload.key] = payload.value
     },
@@ -80,6 +88,8 @@ export default createStore({
     },
   },
   modules: {
-    auth
+    auth,
+    clientControl,
+    creditControl
   },
 })

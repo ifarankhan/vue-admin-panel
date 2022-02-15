@@ -1,22 +1,21 @@
 <template>
   <nav
     v-show="isNavBarVisible"
-    class="fixed top-0 left-0 right-0 z-30 flex w-screen h-20 bg-white border-b border-gray-100 transition-position xl:pl-60 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-900"
+    class="fixed top-0 left-0 right-0 z-40 flex w-screen h-20 bg-white border-b border-gray-100 transition-position xl:pl-60 lg:w-auto lg:items-stretch dark:bg-gray-900 dark:border-gray-900"
     :class="{ 'ml-60': isAsideMobileExpanded }"
   >
-    <div class="flex items-stretch flex-1 h-14">
+    <div class="flex items-stretch flex-1">
       <nav-bar-item type="flex lg:hidden" @click.prevent="menuToggleMobile">
         <icon :path="menuToggleMobileIcon" size="24" />
       </nav-bar-item>
       <nav-bar-item type="hidden lg:flex xl:hidden" @click.prevent="menuOpenLg">
         <icon :path="mdiMenu" size="24" />
       </nav-bar-item>
-    </div>
-    <div class="flex">
-      <div class="font-semibold place-self-center">
+      <div class="ml-6 font-semibold place-self-center">
         {{ $t("GeneSys Online Partner Control") }}
       </div>
     </div>
+
     <div class="flex items-stretch flex-none h-14 lg:hidden">
       <nav-bar-item class="flex items-center" @click.prevent="menuNavBarToggle">
         <icon :path="menuNavBarToggleIcon" size="24" />
@@ -29,12 +28,12 @@
       <div
         class="overflow-y-auto max-h-screen-menu lg:overflow-visible lg:flex lg:items-stretch lg:justify-end lg:ml-auto"
       >
-        <nav-bar-item is-desktop-icon-only has-divider> </nav-bar-item>
+
 
         <nav-bar-item is-desktop-icon-only has-divider>
           <nav-bar-item-label
             :icon="mdiBell"
-            label="Log out"
+            label="Notifications"
             is-desktop-icon-only
           />
         </nav-bar-item>
@@ -48,11 +47,11 @@
           <template #dropdown>
             <language-switcher v-slot="{ data, setLocale }">
               <nav-bar-item
-                to="/profile"
                 v-for="item in data"
                 :key="item.text"
                 @click.prevent="setLocale(item.value)"
                 class="font-semibold"
+
               >
                 <nav-bar-item-label :label="item.text" icon='' />
               </nav-bar-item>
@@ -81,13 +80,15 @@
             </nav-bar-item>
           </template>
         </nav-bar-menu>
-        <nav-bar-item is-desktop-icon-only @click="logoutHanlder">
+
+
+        <!-- <nav-bar-item is-desktop-icon-only @click="logoutHanlder">
           <nav-bar-item-label
             :icon="mdiLogout"
             label="Log out"
             is-desktop-icon-only
           />
-        </nav-bar-item>
+        </nav-bar-item> -->
       </div>
     </div>
   </nav>

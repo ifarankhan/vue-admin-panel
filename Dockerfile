@@ -1,5 +1,5 @@
 #Build stage
-FROM node:current-slim as build
+FROM node:14 as build
 WORKDIR /app
 COPY package.json /app/package.json
 RUN npm install --legacy-peer-deps

@@ -1,5 +1,5 @@
 <template>
-  <span :class="spanClass">
+  <span :class="spanClass" @click="$emit('iconWasClicked')">
     <svg viewBox="0 0 24 24" :width="size" :height="size" class="inline-block">
       <path :d="path" />
     </svg>
@@ -10,6 +10,7 @@
 import { computed } from 'vue'
 
 export default {
+  emits:['iconWasClicked'],
   name: 'Icon',
   props: {
     path: {

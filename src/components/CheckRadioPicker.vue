@@ -1,15 +1,19 @@
 <template>
-  <div class="flex justify-start flex-wrap -mb-3" :class="{'flex-col':column}">
-    <label v-for="(value, key) in options" :key="key" :class="type" class="mr-6 mb-3 last:mr-0">
+  <div class="flex flex-wrap justify-start -mb-3" :class="{'flex-col':column}">
+    <label v-for="(value, key) in options" :key="key" class="block pl-4 mb-3 mr-6 last:mr-0 label"> 
       <input
+        :disabled="disabled"
         :type="inputType"
         :name="name"
         v-model="computedValue"
-        :value="key">
+        :aria-labelledby="disabled ?'option-disabled':''" 
+        :aria-describedby="option-disabled?'option-disabled':''"
+        :value="key" class="w-4 h-4 border-gray-200 text-psytechBlueBtHover form-checkbox focus:ring-transparent">
       <span class="check"></span>
-      <span class="control-label">{{ value }}</span>
+      <span class="ml-1.5 text-sm font-semibold control-label mr-1.5" :class="[disabled?'text-gray-400':'']"> {{ value }} </span>
     </label>
   </div>
+  
 </template>
 
 <script>
@@ -25,6 +29,10 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    disabled:{
+      type: Boolean,
+      default: false
     },
     type: {
       type: String,
@@ -51,3 +59,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.label {
+    /* display: block; */
+    /* padding-left: 15px; */
+    text-indent: -21px;
+}
+</style>

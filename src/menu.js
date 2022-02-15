@@ -15,12 +15,12 @@ export default [
       label: 'Dashboard'
     },
     {
-      to: '/clients',
+      to: '/client-control/list',
       icon: mdiAccountConvert ,
       label: 'Client Control'
     },
     {
-      to: '/credits',
+      to: '/credit-control/credits',
       icon: mdiCurrencyUsd ,
       label: 'Credit Control'
     },

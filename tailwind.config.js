@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
-        'montserrat': "'Montserrat','serif'", 
+        'montserrat': "'Montserrat','serif'",
       },
       zIndex: {
         '-1': '-1'
@@ -39,7 +39,14 @@ module.exports = {
       },
       colors: {
         psytechBlue: '#1baae1',
+        psytechBlueBtHover: '#008ac0',
         psytechGrey: '#a2abab',
+        psytechDark: "#7E7E7E",
+        psytechLight: "#E5E5E5",
+        psytechBlack: "#000000",
+        psytechLightGray:'#0000001A',
+        psytechRed:'#BC2A2A',
+        psytechBorderColor: '#ffffff4d',
         psytechBlueDark: "#17a9e1",
         psytechBlueActive: '#008ac0',
         psytechBlueHover: '#3db7e6',
@@ -54,7 +61,7 @@ module.exports = {
       fontWeight: ['last'],
       textColor: ['last']
     },
-    scrollbar: ['dark', 'rounded']
+    scrollbar: ['dark', 'rounded'],
   },
   plugins: [
     require('@tailwindcss/forms'),
