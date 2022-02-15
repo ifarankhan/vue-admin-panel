@@ -651,7 +651,7 @@
              <DataTable
                 :customers="userArray"
                 :rowHover="true"
-                :first="($store.getters['clientControl/getIsNewUser'])?userArray?.length-1:userTablePagination && userTablePagination.first"
+                :first="($store.getters['clientControl/getIsNewUser'])? 0 : userTablePagination && userTablePagination.first"
                 :paginator="true"
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
@@ -1044,7 +1044,9 @@ export default {
           })
           .then((res) => {
             let responseArray = res?.data?.data;
-            userArray.value = responseArray;
+            userArray.value = responseArray.sort(function(a, b) {
+                return (b.userId - a.userId);
+              });
             masterUser.value = userArray.value.filter(item => item.isMasterAccount)
             userArray.value = userArray.value.filter(item => !item.isMasterAccount)
             prevCustomers.value = userArray.value;
