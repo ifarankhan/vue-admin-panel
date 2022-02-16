@@ -3,7 +3,11 @@
     <Loader v-if="loader" :toBeBigger="true" />
     <sticky-header>
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
-      <div class="ml-4">
+      <div class="flex mb-2 ml-4">
+         <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md mr-10 cursor-pointer" @click="showSection = 1">My Credit </div>
+         <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md ml-6 cursor-pointer" @click="showSection = 2">Credit History</div>
+      </div>
+      <div class="ml-4" v-if="showSection == 2">
       <TabGroup>
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
           <div class="flex-shrink-0 w-1/2" id="export_account">
@@ -75,14 +79,6 @@
          @valuedChanged="searchedDataTransferedToClient($event)"
          @exportCSV="downloadExportFile"
          :data="tableData.length" />
-        <!-- <psytech-button
-              @buttonWasClicked="downloadExportFile"
-              label="Export CSV"
-              type="outline"
-              v-if="tableData.length"
-            >
-            <icon :path="mdiFileDelimitedOutline" />
-          </psytech-button> -->
           <div>
               <DataTable
                 :customers="tableData"
@@ -108,14 +104,6 @@
          @exportCSV="downloadExportFile"
          :data="tableData.length"
          @valuedChanged="searchedDataTransferedClientToUser($event)" />
-          <!-- <psytech-button
-              @buttonWasClicked="downloadExportFile"
-              label="Export CSV"
-              type="outline"
-              v-if="tableData.length"
-            >
-            <icon :path="mdiFileDelimitedOutline" />
-          </psytech-button> -->
           <div>
               <DataTable
                 :customers="tableData"
@@ -186,6 +174,7 @@ export default {
   },
   setup() {
     const store = useStore();
+    const showSection = ref(2);
     const showDialog = ref(false);
     const showViewDialog = ref(false);
     const exportRef = ref("");
@@ -298,7 +287,6 @@ export default {
       tableData.value = result;
     }
 
-
     const searchedDataTransferedToClient = (e)=>{
       const prevResult = _.cloneDeep(persistedData?.value);
       if(!e){
@@ -329,7 +317,6 @@ export default {
     }
 
   const clientToUsersDetailDialog = ({data})=>{
-    console.log("data is jjjj", data)
     dialogData.value = {
         clientType: "User Account",
         userID: data.userID,
@@ -366,7 +353,6 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
-    console.log("data is jjjj jjj", data)
     dialogData.value = { 
         clientType: "Client Account",
         userID: data.userID,
@@ -425,6 +411,7 @@ export default {
       mdiFileDelimitedOutline,
       filterMethod,
       exportRef,
+      showSection,
       downloadExportFile,
       getData,
       tabIndex,
