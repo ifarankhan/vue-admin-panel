@@ -282,6 +282,7 @@ export default {
         data.trainingprovider = "";
         data.trainingyear = "";
         data.trainingdetails = "";
+        data.traininglevelother = "";
       }
 
       data.sendNotifications =

@@ -27,6 +27,15 @@ const actions = {
             }
         })
     },
+    async topUpCreditAction({},payload){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.put('distributor-credits-request', {
+            distributorid : userData.distributorId,
+            userid: userData.userId,
+            username: userData.userName,
+            ...payload
+        })
+    },
     async creditCorrectionAction({},payload){
         const DATA = payload;
         const userData = await JSON.parse(localStorage.getItem("userData"));

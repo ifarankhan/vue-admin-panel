@@ -2,11 +2,13 @@ import { private_url, public_url } from "../../axios";
 import utility from "../../components/composition/utility";
 const namespaced = true;
 const state = {
-
+    userDataSavedInLocalStorage : null
 }
 
 const mutations = {
-
+    setUserDataSavedInLocalStorage(state, payload){
+        state.userDataSavedInLocalStorage =  payload
+    }
 }
 
 const actions = {
@@ -25,6 +27,11 @@ const actions = {
         await localStorage.removeItem("userData");
         const { navigateTo } = utility(payload);
         navigateTo();
+    },
+    localStorageData({},payload){
+        // const userData = JSON.parse(localStorage.getItem("userData"));
+        // userData.credits = +userData.credits + +e.amount
+        // localStorage.setItem("userData", JSON.stringify(userData));
     },
     async getWidgetData({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
