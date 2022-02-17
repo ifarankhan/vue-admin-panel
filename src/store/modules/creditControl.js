@@ -20,7 +20,7 @@ const actions = {
     },
     async distributorCreditHistoryAction({},payload){
         const userData = await JSON.parse(localStorage.getItem("userData"));
-        return private_url.get('distributor-credit-history', {
+        return private_url.get('distributor-credit-transfers', {
             params:{
                 distributorId : userData.distributorId,
                 ...payload

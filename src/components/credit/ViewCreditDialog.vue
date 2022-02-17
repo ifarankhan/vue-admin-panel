@@ -95,7 +95,8 @@
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Time of Update:</p>
-                  <p> {{ data?.updateDateAndTime.split("T")[1].split("Z")[0] }} </p>
+                  <p v-if="data && String(data.updateDateAndTime).includes('T')"> {{ data?.updateDateAndTime.split("T")[1].split("Z")[0] }} </p>
+                  <p v-else> {{ data?.updateDateAndTime.split(" ")[1] }} </p>
               </div>
           </div>
 

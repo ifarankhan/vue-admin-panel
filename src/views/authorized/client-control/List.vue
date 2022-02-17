@@ -212,36 +212,6 @@
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       />
     </div>
-
-
-    <!-- <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
-            dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" :loading="loading"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            responsiveLayout="scroll" :scrollable="true">
-            <template #empty>
-                No customers found.
-            </template>
-            <template #loading>
-                Loading customers data. Please wait.
-            </template>
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="name" header="Account Name" sortable style="min-width: 14rem">
-                <template #body="{data}">
-                    {{data.name}}
-                </template>
-            </Column>
-            <Column field="address" header="address Address" sortable style="min-width: 14rem">
-                <template #body="{data}">
-                    <span class="image-text">{{data.address}}</span>
-                </template>
-            </Column>
-            <Column header="No. of Users" sortable sortField="users" style="min-width: 14rem">
-                 <template #body="{data}">
-                    <span class="image-text">{{data.users}}</span>
-                </template>
-            </Column>
-    </DataTable> -->
   </div>
 </template>
 
