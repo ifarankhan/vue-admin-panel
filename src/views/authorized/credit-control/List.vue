@@ -7,6 +7,37 @@
          <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md mr-10 cursor-pointer" @click="showSection = 1">My Credit </div>
          <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md ml-6 cursor-pointer" @click="showSection = 2">Credit History</div>
       </div>
+      
+      <div class="flex" v-if="showSection == 1">
+         <div class="relative p-4 mt-10 ml-4 mr-12 border-2 border-gray-300 rounded-md w-72">
+            <div class="flex">
+              <div>
+                <p class="text-sm font-semibold"> Transferable Credit </p>
+                <p class="mb-2 text-lg font-bold text-black"> 300 </p>
+              </div>
+              <div></div>
+            </div>
+            <!--  -->
+            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-10 ml-6" @click="topUpCreditDialog = true"> Top Up credit </div>
+          </div>
+
+          <div class="relative p-4 mt-10 ml-4 border-2 border-gray-300 rounded-md w-72">
+            <div class="flex">
+              <div>
+                <p class="text-sm font-semibold"> My Clients </p>
+                <p class="mb-2 text-lg font-bold text-black"> 400 </p>
+              </div>
+              <div></div>
+            </div>
+            <!--  -->
+            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3"> Transfer Credit to clients </div>
+          </div>
+      
+      </div>
+      <topUpCreditDialog
+      v-if="topUpCreditDialog"
+      @closeDialog="topUpCreditDialog = false" />
+
       <div class="ml-4" v-if="showSection == 2">
       <TabGroup>
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
@@ -141,7 +172,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
@@ -151,7 +182,9 @@ import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
 import PsytechButton from "@/components/PsytechButton";
 import Loader from "@/components/Loader.vue";
 import { mdiFileDelimitedOutline } from '@mdi/js';
+import CardWidget from "@/components/CardWidget";
 import Icon from '@/components/Icon'
+import topUpCreditDialog from "@/components/topUpCreditDialog.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
@@ -161,7 +194,9 @@ export default {
     DataTable,
     StickyHeader,
     CreditTopBar,
+    CardWidget,
     CreditUpdateDialog,
+    topUpCreditDialog,
     ViewCreditDialog,
     PsytechButton,
     TabGroup,
@@ -174,8 +209,9 @@ export default {
   },
   setup() {
     const store = useStore();
-    const showSection = ref(2);
+    const showSection = ref(1);
     const showDialog = ref(false);
+    const topUpCreditDialog = ref(false);
     const showViewDialog = ref(false);
     const exportRef = ref("");
     const dialogData = ref('');
@@ -195,46 +231,25 @@ export default {
           let updatedData = []
           if(RESPONSE_DATA.status ==200){
 
-            if(RESPONSE_DATA.data.length && RESPONSE_DATA.data[0]?.userUpdates){
-              for (let index = 0; index < RESPONSE_DATA.data.length; index++) {
-                for (let j = 0; j < RESPONSE_DATA.data[index].userUpdates.length; j++) {
-                    updatedData.push({
-                    accountName:RESPONSE_DATA.data[index].accountName,
-                    accountID: RESPONSE_DATA.data[index].accountID,
-                    masterUserEmail: RESPONSE_DATA.data[index].masterUserEmail??'',
-                    adminFirstName: RESPONSE_DATA.data[index].masterUserFirstName??'',
-                    adminLastName: RESPONSE_DATA.data[index].masterUserLastName??'',
-                    adminFullName: `${RESPONSE_DATA.data[index].masterUserFirstName?RESPONSE_DATA.data[index].masterUserFirstName:' '} ${RESPONSE_DATA.data[index].masterUserLastName?RESPONSE_DATA.data[index].masterUserLastName:' '}`,
-                    creditLimit: RESPONSE_DATA.data[index].userUpdates[j].creditLimit,
-                    currentCredits: RESPONSE_DATA.data[index].userUpdates[j].currentCredits,
-                    dateOfUpdate: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate,
-                    date: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate?.split("T")[0],
-                    time: RESPONSE_DATA.data[index].userUpdates[j].dateOfUpdate?.split("T")[1]?.split("Z")[0],
-                    requestAmount: RESPONSE_DATA.data[index].userUpdates[j].requestAmount,
-                    email: RESPONSE_DATA.data[index].userUpdates[j].email,
-                    familyName: RESPONSE_DATA.data[index].userUpdates[j].familyName,
-                    firstName: RESPONSE_DATA.data[index].userUpdates[j].firstName,
-                    maxCreditUpdate: RESPONSE_DATA.data[index].userUpdates[j].maxCreditUpdate,
-                    newUpdate: RESPONSE_DATA.data[index].userUpdates[j].newUpdate,
-                    purchaseID: RESPONSE_DATA.data[index].userUpdates[j].purchaseID,
-                    sharedCredit: RESPONSE_DATA.data[index].userUpdates[j].sharedCredit,
-                    updateDate: RESPONSE_DATA.data[index].userUpdates[j].updateDate,
-                    updateID: RESPONSE_DATA.data[index].userUpdates[j].updateID,
-                    userID: RESPONSE_DATA.data[index].userUpdates[j].userID,
-                    userType: RESPONSE_DATA.data[index].userUpdates[j].userType
-                  })
+            if(RESPONSE_DATA.data.length && tabIndex.value ==1){
+              const formattedData = RESPONSE_DATA.data.map(item=>{
+                return {
+                  ...item,
+                  date: item.dateOfUpdate?.split(" ")[0],
+                  time: item.dateOfUpdate?.split(" ")[1],
+                  adminFullName: `${item.masterUserFirstName?item.masterUserFirstName:' '} ${item.masterUserLastName?item.masterUserLastName:' '}`,
                 }
+              })
 
-              }
-              tableData.value = updatedData;
-              persistedData.value = updatedData;
+              tableData.value = formattedData;
+              persistedData.value = formattedData;
             } else {
-              // tableData.value = RESPONSE_DATA.data;
+              tableData.value = RESPONSE_DATA.data;
               const formattedDate = RESPONSE_DATA.data.map(item=>{
                 return {
                   ...item,
                   date: item.dateOfUpdate?.split("T")[0],
-                  time: item.dateOfUpdate?.split("T")[1]?.split("Z")[0]
+                  time: item.dateOfUpdate?.split("T")[1]?.split("Z")[0],
                 }
               })
               tableData.value = formattedDate;
@@ -311,7 +326,7 @@ export default {
 
   const filterMethod = (data, searchableFields, value) => {
       const matchedArray = searchableFields.map(item=> {
-        return data.filter(customer=>(item.split(" ")[1] == "string"? customer[item.split(" ")[0]].toLowerCase().indexOf(value) > -1: String(customer[item.split(" ")[0]]).indexOf(value) > -1))
+        return data.filter(customer=>(item.split(" ")[1] == "string"? customer[item.split(" ")[0]]?.toLowerCase().indexOf(value) > -1: String(customer[item.split(" ")[0]]).indexOf(value) > -1))
       }).flat()
       return _.uniqWith(matchedArray, _.isEqual)
     }
@@ -358,7 +373,7 @@ export default {
         userID: data.userID,
         updaterId:data.updateID,
         clientName: data.accountName,
-        accountAdmin: `${data.adminFirstName?data.adminFirstName:' '} ${data.adminLastName?data.adminLastName:' '}`,
+        accountAdmin: `${data.masterUserFirstName?data.masterUserFirstName:' '} ${data.masterUserLastName?data.masterUserLastName:' '}`,
         email: data.masterUserEmail,
         creditsBefore: data?.currentCredits??'',
         currentCredits: data.currentCredits,
@@ -409,6 +424,7 @@ export default {
       searchedDataTransferedToClient,
       searchedDataTransferedClientToUser,
       mdiFileDelimitedOutline,
+      topUpCreditDialog,
       filterMethod,
       exportRef,
       showSection,
