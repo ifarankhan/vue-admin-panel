@@ -7,7 +7,7 @@
          <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md mr-10 cursor-pointer" @click="showSection = 1">My Credit </div>
          <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md ml-6 cursor-pointer" @click="showSection = 2">Credit History</div>
       </div>
-      
+
       <div class="flex" v-if="showSection == 1">
          <div class="relative p-4 mt-10 ml-4 mr-12 border-2 border-gray-300 rounded-md w-72">
             <div class="flex">
@@ -32,7 +32,7 @@
             <!--  -->
             <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3"> Transfer Credit to clients </div>
           </div>
-      
+
       </div>
       <topUpCreditDialog
       v-if="topUpCreditDialog"
@@ -45,9 +45,21 @@
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
               <Tab as="template" v-slot="{ selected }">
                 <button
+                    @click="(tableData = [], tabIndex =2)"
+                    :class="[
+                    'block py-4 pr-3 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none sm:py-2',
+                    selected ? 'border-b-2 border-gray-400' : 'border-0',
+                  ]"
+                >
+                  Users Credit Update
+                </button>
+              </Tab>
+              <Tab as="template" v-slot="{ selected }">
+                <button
+                    style="padding-left:25px"
                   @click="(tableData = [], tabIndex =0)"
                   :class="[
-                    'block md:px-6 sm:px-4 sm:text-sm sm:py-3 md:py-4 font-bold text-black active mr-8 hover:text-psytechBlueBtHover focus:outline-none sm:px-3 sm:py-2',
+                    'block px-6 sm:px-4 sm:text-sm sm:py-3 md:py-4 font-bold text-black active mr-8 hover:text-psytechBlueBtHover focus:outline-none ',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
@@ -65,21 +77,33 @@
                   Transfered to Client
                 </button>
               </Tab>
-              <Tab as="template" v-slot="{ selected }">
-                <button
-                  @click="(tableData = [], tabIndex =2)"
-                  :class="[
-                    'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
-                    selected ? 'border-b-2 border-gray-400' : 'border-0',
-                  ]"
-                >
-                  Users Credit Update
-                </button>
-              </Tab>
+
             </TabList>
           </div>
         </div>
-
+      <TabPanel>
+        <CreditTopBar
+            @datePicked="loadTransferedToMe($event)"
+            @exportCSV="downloadExportFile"
+            :data="tableData.length"
+            @valuedChanged="searchedDataTransferedClientToUser($event)" />
+        <div>
+          <DataTable
+              :customers="tableData"
+              :rowHover="true"
+              :paginator="true"
+              ref="exportRef"
+              :rowsPerPageOptions="[10, 20, 30]"
+              :rows="10"
+              :loading="loading"
+              :image='true'
+              tableType="creditTableThird"
+              @rowData="(clientToUsersDetailDialog({data:$event}))"
+              @rowClicked="(clientToUsersDetailDialog($event)),((showViewDialog=true))"
+              @correctCreditUpdate="showDialog = true"
+          />
+        </div>
+      </TabPanel>
      <TabPanel>
          <CreditTopBar
          @datePicked="loadTransferedToMe($event)"
@@ -129,29 +153,7 @@
           </div>
       </TabPanel>
 
-      <TabPanel>
-         <CreditTopBar
-         @datePicked="loadTransferedToMe($event)"
-         @exportCSV="downloadExportFile"
-         :data="tableData.length"
-         @valuedChanged="searchedDataTransferedClientToUser($event)" />
-          <div>
-              <DataTable
-                :customers="tableData"
-                :rowHover="true"
-                :paginator="true"
-                ref="exportRef"
-                :rowsPerPageOptions="[10, 20, 30]"
-                :rows="10"
-                :loading="loading"
-                :image='true'
-                tableType="creditTableThird"
-                @rowData="(clientToUsersDetailDialog({data:$event}))"
-                @rowClicked="(clientToUsersDetailDialog($event)),((showViewDialog=true))"
-                @correctCreditUpdate="showDialog = true"
-              />
-          </div>
-      </TabPanel>
+
 
       </TabGroup>
     </div>
@@ -368,7 +370,7 @@ export default {
     }
 
   const clientDetailDialog = ({data})=>{
-    dialogData.value = { 
+    dialogData.value = {
         clientType: "Client Account",
         userID: data.userID,
         updaterId:data.updateID,
