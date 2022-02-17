@@ -189,7 +189,6 @@ export default {
     }
         
     const setUserDetail = (e)=>{
-      console.log("E isisis", e)
       const data = _.cloneDeep(e)
       const prevData = _.cloneDeep(userDetailData) 
       userDetailData = {
