@@ -163,6 +163,12 @@ const actions = {
           }
       })
     },
+    async exportAccountActivity({}, payload){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      const DATA = payload;
+      DATA.distributorId = userData.distributorId;
+      return private_url.post('export-account-activity',DATA)
+    },
     async updateClientDetail({state, commit},payload){
         const DATA = payload;
         return private_url.put('account', payload).then(res=>{
