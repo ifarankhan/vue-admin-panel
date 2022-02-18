@@ -307,7 +307,7 @@
           </div>
         </div>
 
-        <a v-show="true" :href="exportFileUrl" target="_self" @click="click" ref="exportFileRef">Download File</a>
+        <!-- <a v-show="true" :href="exportFileUrl" target="_self" @click="click" ref="exportFileRef">Download File</a> -->
         <TabPanel>
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
@@ -692,6 +692,7 @@ import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import ChangeMasterDialog from "@/components/ChangeMasterDialog";
+import { saveAs } from 'file-saver';
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -772,8 +773,12 @@ export default {
           .then(async (res) => {
             const URL = res?.data?.data?.activityReportUrl?.url;
             await (exportFileUrl.value = URL)
-            exportFileRef?.value?.click()
-            window.location.href= URL;
+            console.log("updated....")
+            // exportFileRef?.value?.click()
+            // window.location.href= URL;
+
+            // var file = new File(URL, {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(URL)
             
           })
           .catch((error) => {
