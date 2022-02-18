@@ -13,7 +13,7 @@
             <div class="flex">
               <div>
                 <p class="text-sm font-semibold"> Transferable Credit </p>
-                <p class="mb-2 text-lg font-bold text-black"> 300 </p>
+                <p class="mb-2 text-lg font-bold text-black"> {{ ($store.getters['auth/getUserDataSavedInLocalStorage'])?.credits  }} </p>
               </div>
               <div></div>
             </div>
@@ -36,7 +36,8 @@
       </div>
       <topUpCreditDialog
       v-if="topUpCreditDialog"
-      @closeDialog="topUpCreditDialog = false" />
+      @closeDialog="topUpCreditDialog = false"
+      @toUpCreditData="topUpCreditMethod($event)" />
 
       <div class="ml-4" v-if="showSection == 2">
       <TabGroup>
@@ -174,7 +175,7 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { reactive, computed , ref } from "vue";
 import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
@@ -408,11 +409,38 @@ export default {
           loader.value = false;
         })
   }
-
   const downloadExportFile = ()=>{
     exportRef.value.exportCSV()
   }
 
+  const topUpCreditMethod = (e)=>{
+     loader.value = true;
+       store
+        .dispatch("creditControl/topUpCreditAction",{
+          amount: +e.amount,
+          purchaseNote: e.purchaseNotes
+        })
+        .then(async (res) => {
+          if(res.data.status == 200){
+            if(res.data.data){
+              const DATA = JSON.parse(localStorage.getItem("userData"))
+              const NEW_DATA = {
+                ...DATA,
+                credits: res.data.data.newTransferableCreditsAmount
+              }
+              await localStorage.setItem("userData", JSON.stringify(NEW_DATA))
+              store.dispatch("auth/localStorageDataAction")
+            }
+            topUpCreditDialog.value = false;
+          }
+        })
+        .catch((error) => { 
+          console.log("errror", error)
+        })
+        .finally(()=>{
+          loader.value = false;
+        })
+  }
 
     return {
       loadTransferedToMe,
@@ -420,6 +448,7 @@ export default {
       creditCorrection,
       persistedData,
       updateDialogData,
+      topUpCreditMethod,
       clientDetailDialog,
       clientToUsersDetailDialog,
       searchedDataTransferedToMe,

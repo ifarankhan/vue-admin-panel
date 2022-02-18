@@ -25,7 +25,6 @@ const getters = {
   getIsNewUser: state=>{
     return state.newUserAdded
   }
-
 }
 
 const mutations = {
@@ -162,6 +161,12 @@ const actions = {
             accountId: state.clientDetail.accountId
           }
       })
+    },
+    async exportAccountActivity({}, payload){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      const DATA = payload;
+      DATA.distributorId = userData.distributorId;
+      return private_url.post('export-account-activity',DATA)
     },
     async updateClientDetail({state, commit},payload){
         const DATA = payload;

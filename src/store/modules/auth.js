@@ -2,11 +2,19 @@ import { private_url, public_url } from "../../axios";
 import utility from "../../components/composition/utility";
 const namespaced = true;
 const state = {
-
+    userDataSavedInLocalStorage : null
 }
 
-const mutations = {
+const getters = {
+    getUserDataSavedInLocalStorage: state=>{
+      return state.userDataSavedInLocalStorage
+    },
+  }
 
+const mutations = {
+    setUserDataSavedInLocalStorage(state, payload){
+        state.userDataSavedInLocalStorage =  payload
+    }
 }
 
 const actions = {
@@ -26,6 +34,10 @@ const actions = {
         const { navigateTo } = utility(payload);
         navigateTo();
     },
+   async localStorageDataAction({commit},payload){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        commit("setUserDataSavedInLocalStorage", userData);
+    },
     async getWidgetData({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         return private_url.get('widget-data', {
@@ -40,6 +52,7 @@ const actions = {
 export default {
     namespaced,
     state,
+    getters,
     mutations,
     actions
 }

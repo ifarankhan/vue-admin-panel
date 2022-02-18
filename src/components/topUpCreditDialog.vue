@@ -56,7 +56,7 @@
                     label="SUBMIT"
                     type="primary"
                     :extraClasses="'text-sm font-medium px-10  border-psytechBlue'"
-                    @buttonWasClicked="toUpCreditMethod"
+                    @buttonWasClicked="toUpCreditMethod()"
                   ></psytech-button>
                 </div>
                </div>
@@ -104,7 +104,6 @@ export default {
         };
 
     const userData = computed(()=>{
-      
       return JSON.parse(localStorage.getItem("userData"))
     }) 
     
@@ -121,11 +120,11 @@ export default {
     const toUpCreditMethod = ()=>{
       v$.value.$validate();
       if (
-        v$.value.correctCredit.$invalid
+        v$.value.amount.$invalid
       ) {
         return true;
       }
-      emit("correctCreditUpdate",updateCredit)
+      emit("toUpCreditData",transferrable)
         // console.log("activeBlocked",activeBlocked.value)  
     }
 
