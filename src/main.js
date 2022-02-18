@@ -16,6 +16,7 @@ import 'vue3-date-time-picker/dist/main.css'
 
 import './css/main.css'
 import i18n from './i18n'
+store.dispatch("auth/localStorageDataAction")
 
 
 /* Collapse mobile aside menu on route change */
