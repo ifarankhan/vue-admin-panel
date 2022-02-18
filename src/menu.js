@@ -27,12 +27,14 @@ export default [
     {
       to: '/tranings',
       icon: mdiBookOpenVariant ,
-      label: 'Trainings'
+      label: 'Trainings',
+      class:"disabled-link"
     },
     {
       to: '/support',
       icon: mdiHandExtendedOutline  ,
-      label: 'Support'
+      label: 'Support',
+      class:"disabled-link"
     }
   ],
 ]
