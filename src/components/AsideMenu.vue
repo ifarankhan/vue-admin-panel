@@ -31,7 +31,7 @@
       <p class="text-base text-white"> Transferable Credits: </p>
       <p class="flex justify-between -mt-1 text-base text-lg text-white">
         <span>
-          {{ credits }}
+          {{ ($store.getters['auth/getUserDataSavedInLocalStorage'])?.credits  }}
         </span>
          <span class="plus-icon">
           <svg viewBox="0 0 24 24" width="30" height="30" class="inline-block" color="red">
@@ -69,11 +69,6 @@ export default {
     const isFullScreen = computed(() => store.state.isFullScreen)
     const isAsideMobileExpanded = computed(() => store.state.isAsideMobileExpanded)
 
-    let credits = computed(() => {
-      const USER_DATA = JSON.parse(localStorage.getItem("userData"));
-      return USER_DATA?.credits;
-    });
-
     const isAsideLgActive = computed(() => store.state.isAsideLgActive)
 
     const asideLgClose = () => {
@@ -89,7 +84,6 @@ export default {
       isAsideMobileExpanded,
       isAsideLgActive,
       asideLgClose,
-      credits,
       mdiPlus,
       menuClick,
       mdiMenu
