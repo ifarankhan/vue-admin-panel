@@ -306,6 +306,8 @@
             </div>
           </div>
         </div>
+
+        <a v-show="false" :href="exportFileUrl" ref="exportFileRef">Download File</a>
         <TabPanel>
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
@@ -402,7 +404,6 @@
         <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" -->
         <div class="mt-4 mb-2 ml-5">
           <p class="pl-2 text-sm font-semibold">Master User:</p>
-          <a href="http://invoice.genesysonline.net/201/AccountActivity/8723/20220218-074236.xls">Download File</a>
           <div class="mr-10 md:pr-12 lg:pr-0">
             <DataTable
                 :customers="masterUser"
@@ -724,6 +725,8 @@ export default {
     const store = useStore();
     const calenderValue = ref(false);
     const prevMonth = ref(-1);
+    const exportFileUrl = ref("");
+    const exportFileRef = ref("");
     const exportAccountData = ref(null);
     const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
 
@@ -762,9 +765,11 @@ export default {
       loader.value = true;
        store
           .dispatch("clientControl/exportAccountActivity",exportAccountData.value)
-          .then((res) => {
+          .then(async (res) => {
             const URL = res?.data?.data?.activityReportUrl?.url;
-            window.location.href= URL;
+            await (exportFileUrl.value = URL)
+            exportFileRef?.value?.click()
+            // window.location.href= URL;
           })
           .catch((error) => {
             console.log("error is...", error);
@@ -1126,6 +1131,8 @@ export default {
       exportAccountMethod,
       exportAccountData,
       openCalender,
+      exportFileUrl,
+      exportFileRef,
       userTablePagination,
       cf,
       loader,
