@@ -25,7 +25,6 @@ const getters = {
   getIsNewUser: state=>{
     return state.newUserAdded
   }
-
 }
 
 const mutations = {

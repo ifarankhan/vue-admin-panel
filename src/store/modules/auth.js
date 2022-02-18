@@ -5,6 +5,12 @@ const state = {
     userDataSavedInLocalStorage : null
 }
 
+const getters = {
+    getUserDataSavedInLocalStorage: state=>{
+      return state.userDataSavedInLocalStorage
+    },
+  }
+
 const mutations = {
     setUserDataSavedInLocalStorage(state, payload){
         state.userDataSavedInLocalStorage =  payload
@@ -28,10 +34,9 @@ const actions = {
         const { navigateTo } = utility(payload);
         navigateTo();
     },
-    localStorageData({},payload){
-        // const userData = JSON.parse(localStorage.getItem("userData"));
-        // userData.credits = +userData.credits + +e.amount
-        // localStorage.setItem("userData", JSON.stringify(userData));
+   async localStorageDataAction({commit},payload){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        commit("setUserDataSavedInLocalStorage", userData);
     },
     async getWidgetData({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
@@ -47,6 +52,7 @@ const actions = {
 export default {
     namespaced,
     state,
+    getters,
     mutations,
     actions
 }
