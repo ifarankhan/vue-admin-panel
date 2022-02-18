@@ -307,7 +307,7 @@
           </div>
         </div>
 
-        <a v-show="false" :href="exportFileUrl" ref="exportFileRef">Download File</a>
+        <a v-show="true" :href="exportFileUrl" target="_self" @click="click" ref="exportFileRef">Download File</a>
         <TabPanel>
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
@@ -736,6 +736,10 @@ export default {
     let showMasterDialog = ref(false);
     let loader = ref(false);
 
+    const click = (e)=>{
+      e.stopPropagation()
+    }
+
     let cf = ref()
     const openCalender = ()=>{
       const date = new Date();
@@ -769,7 +773,8 @@ export default {
             const URL = res?.data?.data?.activityReportUrl?.url;
             await (exportFileUrl.value = URL)
             exportFileRef?.value?.click()
-            // window.location.href= URL;
+            window.location.href= URL;
+            
           })
           .catch((error) => {
             console.log("error is...", error);
@@ -1135,6 +1140,7 @@ export default {
       exportFileRef,
       userTablePagination,
       cf,
+      click,
       loader,
       loading,
       showDialog,
