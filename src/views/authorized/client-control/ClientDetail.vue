@@ -402,6 +402,7 @@
         <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" -->
         <div class="mt-4 mb-2 ml-5">
           <p class="pl-2 text-sm font-semibold">Master User:</p>
+          <a href="http://invoice.genesysonline.net/201/AccountActivity/8723/20220218-074236.xls">Download File</a>
           <div class="mr-10 md:pr-12 lg:pr-0">
             <DataTable
                 :customers="masterUser"
@@ -763,7 +764,7 @@ export default {
           .dispatch("clientControl/exportAccountActivity",exportAccountData.value)
           .then((res) => {
             const URL = res?.data?.data?.activityReportUrl?.url;
-            window.open( URL, "_blank");
+            window.location.href= URL;
           })
           .catch((error) => {
             console.log("error is...", error);
