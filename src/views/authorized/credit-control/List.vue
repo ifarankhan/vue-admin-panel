@@ -422,7 +422,7 @@ export default {
           purchaseNote: e.purchaseNotes
         })
         .then((res) => {
-          if(res.data.data.transferredCreditsToClient){
+          if(res.data.status == 200){
             topUpCreditDialog.value = false;
           }
         })
