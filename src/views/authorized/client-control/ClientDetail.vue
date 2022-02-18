@@ -159,12 +159,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 10 6">
                   <path id="Polygon_11" data-name="Polygon 11" d="M5,0l5,6H0Z" transform="translate(10 6) rotate(180)" fill="#707070"/>
                 </svg>
-              </span>
-              <Calendar ref="cf" @show="openCalender" :hideOnDateTimeSelect="false" view="month" dateFormat="mm/yy" @date-select="exportAccountMethod">
-                <template #footer>
-                  <div @click="closeCalender" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
-                </template>
-              </Calendar>
+              </span> 
+                <Calendar v-if="calenderValue" selectionMode="multiple"  ref="cf" @hide="hideCalendar" @show="openCalender" :hideOnDateTimeSelect="false" view="month" dateFormat="mm/yy" @date-select="exportAccountMethod">
+                  <template #footer>
+                    <div @click="closeCalendar" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
+                  </template>
+                </Calendar>
             </div>
 
             <div
@@ -721,6 +721,9 @@ export default {
   setup() {
     const router = useRouter();
     const store = useStore();
+    const calenderValue = ref(false);
+    const prevMonth = ref(-1);
+    const exportAccountData = ref(null);
     const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
 
     const { formatDate } = useClientUser();
@@ -741,29 +744,23 @@ export default {
       datePicker.style.marginTop = "24px";
       datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
 
-      calendar[month].style.backgroundColor = "#000";
-      calendar[month].style.color = "#fff";
+      calendar[month].style.backgroundColor = "lightgray";
+      // calendar[month].style.color = "#fff";
       calendar[month].style.boxShadow = "none";
     }
-
-    const showCalender = ()=>{
+    
+    const showCalender = async ()=>{
+      await (calenderValue.value = true);
       cf.value.overlayVisible = true;
     }
-    const closeCalender = ()=>{
-      console.log("mine called")
-      cf.value.overlayVisible = false;
+    const hideCalendar = ()=>{
+      calenderValue.value = false;
     }
-  
-    const exportAccountMethod = (e)=>{
-      const date = new Date(e)
-      const data = {
-        month: String(date.getMonth() + 1),
-        year: String(date.getFullYear()),
-        accountId: accountDetail.value?.accountId
-      }
+    const closeCalendar = ()=>{
+      cf.value.overlayVisible = false;
       loader.value = true;
        store
-          .dispatch("clientControl/exportAccountActivity",data)
+          .dispatch("clientControl/exportAccountActivity",exportAccountData.value)
           .then((res) => {
             const URL = res?.data?.data?.activityReportUrl?.url;
             window.open( URL, "_blank");
@@ -773,8 +770,25 @@ export default {
           }).finally(()=>{
              loader.value = false;
           });
+    }
+    const exportAccountMethod = (e)=>{
+      const date = new Date(e);
+      const month = date.getMonth();
+      const data = {
+        month: String(month + 1),
+        year: String(date.getFullYear()),
+        accountId: accountDetail.value?.accountId
+      }
+      exportAccountData.value = data;
+      const calendar = document.getElementsByClassName("p-monthpicker")[0].children;
+      calendar[month].style.backgroundColor = "lightgrey";
+      
+      if(prevMonth.value != -1){
+        calendar[+prevMonth.value].style.backgroundColor = "transparent";
+      }
 
-      console.log("dslfjjlsd",date.getFullYear())
+      prevMonth.value = month;
+
     }
 
     const accountDetail = computed(() => {
@@ -1096,16 +1110,20 @@ export default {
       showFilters,
       accountDetail,
       scrollPosition,
+      calenderValue,
       formatDate,
       masterUser,
       userArray,
       searchText,
+      hideCalendar,
       filteredMainMethod,
       isNewUserAdded,
       startTableFrom,
       applyFilter,
       clearFilter,
+      prevMonth,
       exportAccountMethod,
+      exportAccountData,
       openCalender,
       userTablePagination,
       cf,
@@ -1115,7 +1133,7 @@ export default {
       showMasterDialog,
       redirectToDetail,
       showCalender,
-      closeCalender,
+      closeCalendar,
       prevMainSearchHistry,
       deleteAccountMethod,
       prevSearched,
@@ -1169,6 +1187,9 @@ export default {
   color: #000;
   border: none;
   width: 1.5rem !important;
+}
+.p-datepicker:not(.p-disabled) .p-monthpicker .p-monthpicker-month:not(.p-disabled):focus {
+  box-shadow: none !important;
 }
 .calender .p-button:enabled:active, .calender .p-button:enabled:hover{
   background: #fff;
