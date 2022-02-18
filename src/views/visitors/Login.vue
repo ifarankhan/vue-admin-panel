@@ -212,6 +212,7 @@ export default {
               rememberMe: form.rememberMe,
             };
             await localStorage.setItem("userData", JSON.stringify(USER_DATA));
+            store.dispatch("auth/localStorageDataAction")
             const { navigateTo } = utility("dashboard");
             navigateTo();
           } else {

@@ -13,7 +13,7 @@
             <div class="flex">
               <div>
                 <p class="text-sm font-semibold"> Transferable Credit </p>
-                <p class="mb-2 text-lg font-bold text-black"> {{ userData?.credits  }} </p>
+                <p class="mb-2 text-lg font-bold text-black"> {{ ($store.getters['auth/getUserDataSavedInLocalStorage'])?.credits  }} </p>
               </div>
               <div></div>
             </div>
@@ -410,9 +410,6 @@ export default {
   const downloadExportFile = ()=>{
     exportRef.value.exportCSV()
   }
-  const userData = computed(()=>{
-      return JSON.parse(localStorage.getItem("userData"))
-    })
 
   const topUpCreditMethod = (e)=>{
      loader.value = true;
@@ -421,8 +418,17 @@ export default {
           amount: +e.amount,
           purchaseNote: e.purchaseNotes
         })
-        .then((res) => {
+        .then(async (res) => {
           if(res.data.status == 200){
+            if(res.data.data){
+              const DATA = JSON.parse(localStorage.getItem("userData"))
+              const NEW_DATA = {
+                ...DATA,
+                credits: res.data.data.newTransferableCreditsAmount
+              }
+              await localStorage.setItem("userData", JSON.stringify(NEW_DATA))
+              store.dispatch("auth/localStorageDataAction")
+            }
             topUpCreditDialog.value = false;
           }
         })
@@ -450,7 +456,6 @@ export default {
       topUpCreditDialog,
       filterMethod,
       exportRef,
-      userData,
       showSection,
       downloadExportFile,
       getData,

@@ -306,6 +306,8 @@
             </div>
           </div>
         </div>
+
+        <!-- <a v-show="true" :href="exportFileUrl" target="_self" @click="click" ref="exportFileRef">Download File</a> -->
         <TabPanel>
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
@@ -690,6 +692,7 @@ import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import ChangeMasterDialog from "@/components/ChangeMasterDialog";
+import { saveAs } from 'file-saver';
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -723,6 +726,8 @@ export default {
     const store = useStore();
     const calenderValue = ref(false);
     const prevMonth = ref(-1);
+    const exportFileUrl = ref("");
+    const exportFileRef = ref("");
     const exportAccountData = ref(null);
     const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
 
@@ -731,6 +736,10 @@ export default {
     let showDialog = ref(false);
     let showMasterDialog = ref(false);
     let loader = ref(false);
+
+    const click = (e)=>{
+      e.stopPropagation()
+    }
 
     let cf = ref()
     const openCalender = ()=>{
@@ -761,9 +770,11 @@ export default {
       loader.value = true;
        store
           .dispatch("clientControl/exportAccountActivity",exportAccountData.value)
-          .then((res) => {
+          .then(async (res) => {
             const URL = res?.data?.data?.activityReportUrl?.url;
-            window.open( URL, "_blank");
+            await (exportFileUrl.value = URL)
+            saveAs(URL)
+            
           })
           .catch((error) => {
             console.log("error is...", error);
@@ -1125,8 +1136,11 @@ export default {
       exportAccountMethod,
       exportAccountData,
       openCalender,
+      exportFileUrl,
+      exportFileRef,
       userTablePagination,
       cf,
+      click,
       loader,
       loading,
       showDialog,
