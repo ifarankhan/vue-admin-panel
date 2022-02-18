@@ -189,7 +189,6 @@ export default {
     }
         
     const setUserDetail = (e)=>{
-      console.log("E isisis", e)
       const data = _.cloneDeep(e)
       const prevData = _.cloneDeep(userDetailData) 
       userDetailData = {
@@ -283,6 +282,7 @@ export default {
         data.trainingprovider = "";
         data.trainingyear = "";
         data.trainingdetails = "";
+        data.traininglevelother = "";
       }
 
       data.sendNotifications =

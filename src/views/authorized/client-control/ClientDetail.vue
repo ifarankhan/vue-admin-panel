@@ -160,7 +160,7 @@
                   <path id="Polygon_11" data-name="Polygon 11" d="M5,0l5,6H0Z" transform="translate(10 6) rotate(180)" fill="#707070"/>
                 </svg>
               </span>
-              <Calendar ref="cf" @show="openCalender" :showOnFocus="false" view="month" dateFormat="mm/yy" @date-select="costomeMethod">
+              <Calendar ref="cf" @show="openCalender" :hideOnDateTimeSelect="false" view="month" dateFormat="mm/yy" @date-select="exportAccountMethod">
                 <template #footer>
                   <div @click="closeCalender" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
                 </template>
@@ -750,7 +750,31 @@ export default {
       cf.value.overlayVisible = true;
     }
     const closeCalender = ()=>{
+      console.log("mine called")
       cf.value.overlayVisible = false;
+    }
+  
+    const exportAccountMethod = (e)=>{
+      const date = new Date(e)
+      const data = {
+        month: String(date.getMonth() + 1),
+        year: String(date.getFullYear()),
+        accountId: accountDetail.value?.accountId
+      }
+      loader.value = true;
+       store
+          .dispatch("clientControl/exportAccountActivity",data)
+          .then((res) => {
+            const URL = res?.data?.data?.activityReportUrl?.url;
+            window.open( URL, "_blank");
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+             loader.value = false;
+          });
+
+      console.log("dslfjjlsd",date.getFullYear())
     }
 
     const accountDetail = computed(() => {
@@ -1081,6 +1105,7 @@ export default {
       startTableFrom,
       applyFilter,
       clearFilter,
+      exportAccountMethod,
       openCalender,
       userTablePagination,
       cf,
