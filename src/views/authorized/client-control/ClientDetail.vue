@@ -773,11 +773,6 @@ export default {
           .then(async (res) => {
             const URL = res?.data?.data?.activityReportUrl?.url;
             await (exportFileUrl.value = URL)
-            console.log("updated....")
-            // exportFileRef?.value?.click()
-            // window.location.href= URL;
-
-            // var file = new File(URL, {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             saveAs(URL)
             
           })
