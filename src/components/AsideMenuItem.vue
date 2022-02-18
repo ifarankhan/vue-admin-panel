@@ -10,7 +10,7 @@
       :class="[isSubmenuList ? 'p-3 text-sm' : 'py-2']"
       @click="menuClick"
     >
-      <div class="flex cursor-pointer hover:bg-psytechBlueHover dark:hover:bg-psytechBlueHover rounded-md py-2" :class="[vSlot && vSlot.isExactActive ? 'bg-psytechBlueActive':'']">
+      <div class="flex cursor-pointer hover:bg-psytechBlueHover dark:hover:bg-psytechBlueHover rounded-md py-2" :class="[(vSlot && vSlot.isExactActive ? 'bg-psytechBlueActive':''),(item.class ? item.class :'')]">
         <icon
             v-if="item.icon"
             :path="item.icon"
@@ -98,3 +98,9 @@ export default {
   }
 }
 </script>
+<style>
+.disabled-link span {
+  color: #bfc3cd !important;
+  cursor: not-allowed !important;
+}
+</style>
