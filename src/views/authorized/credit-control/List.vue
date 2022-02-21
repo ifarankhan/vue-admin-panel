@@ -4,8 +4,8 @@
     <sticky-header>
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="flex mb-2 ml-4">
-         <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md mr-10 cursor-pointer" @click="showSection = 1">My Credit </div>
-         <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md ml-6 cursor-pointer" @click="showSection = 2,getData('transferedClientToUserAction')">Credit History</div>
+         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md mr-10 cursor-pointer font-semibold" :class="[showSection == 1?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 1">My Credit </div>
+         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2,getData('transferedClientToUserAction')">Credit History</div>
       </div>
 
       <div class="flex" v-if="showSection == 1">
@@ -25,12 +25,12 @@
             <div class="flex">
               <div>
                 <p class="text-sm font-semibold"> My Clients </p>
-                <p class="mb-2 text-lg font-bold text-black"> 400 </p>
+                <p class="mb-2 text-lg font-bold text-black"> {{ '--' }} </p>
               </div>
               <div></div>
             </div>
             <!--  -->
-            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3"> Transfer Credit to clients </div>
+            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showCreditToClientDialog = true"> Transfer Credit to clients </div>
           </div>
 
       </div>
@@ -78,7 +78,6 @@
                   Transfered to Client
                 </button>
               </Tab>
-
             </TabList>
           </div>
         </div>
@@ -170,7 +169,12 @@
     topHeaderText="Credit Details"
     :data="dialogData"
     @openCreditDialog="(showDialog=true),(showViewDialog = false)"
-    @closeDialog="showViewDialog = false" />
+    @closeDialog="showViewDialog = false" /> 
+
+    <credit-to-clientDialog 
+    v-if="showCreditToClientDialog"
+    @closeDialog="showCreditToClientDialog = false"
+    @transferCreditClientData="sendCallCreditToClient($event)" />
   </div>
 </template>
 
@@ -188,6 +192,7 @@ import { mdiFileDelimitedOutline } from '@mdi/js';
 import CardWidget from "@/components/CardWidget";
 import Icon from '@/components/Icon'
 import topUpCreditDialog from "@/components/topUpCreditDialog.vue";
+import creditToClientDialog from "@/components/transferredCreditToClientDialog.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
@@ -200,6 +205,7 @@ export default {
     CardWidget,
     CreditUpdateDialog,
     topUpCreditDialog,
+    creditToClientDialog,
     ViewCreditDialog,
     PsytechButton,
     TabGroup,
@@ -214,6 +220,7 @@ export default {
     const store = useStore();
     const showSection = ref(1);
     const showDialog = ref(false);
+    const showCreditToClientDialog = ref(false);
     const topUpCreditDialog = ref(false);
     const showViewDialog = ref(false);
     const exportRef = ref("");
@@ -436,6 +443,31 @@ export default {
         })
   }
 
+  const sendCallCreditToClient = (e)=>{
+    const DATA = {
+          accountId: e.client,
+          userId: e.user,
+          amount: +e.amount,
+      }
+    loader.value = true;
+       store
+        .dispatch("creditControl/transferCreditClientAction",DATA)
+        .then(async (res) => {
+          if(res.data.status == 200){
+            if(res.data.data){
+              console.log("response is....", res)
+            }
+            showCreditToClientDialog.value = false;
+          }
+        })
+        .catch((error) => { 
+          console.log("errror", error)
+        })
+        .finally(()=>{
+          loader.value = false;
+        })
+  }
+
     return {
       loadTransferedToMe,
       tableData,
@@ -445,9 +477,11 @@ export default {
       topUpCreditMethod,
       clientDetailDialog,
       clientToUsersDetailDialog,
+      sendCallCreditToClient,
       searchedDataTransferedToMe,
       searchedDataTransferedToClient,
       searchedDataTransferedClientToUser,
+      showCreditToClientDialog,
       mdiFileDelimitedOutline,
       topUpCreditDialog,
       filterMethod,
