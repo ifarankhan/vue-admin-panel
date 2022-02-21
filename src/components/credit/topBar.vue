@@ -1,24 +1,24 @@
 <template>
-      <div class="flex items-center justify-between"> 
+      <div class="flex items-center justify-between">
               <div class="flex items-center mt-8">
                 <p class="text-sm font-bold text-black">Select Date Range:</p>
                 <div class="w-56 ml-3 mr-6">
-                  <Datepicker 
+                  <Datepicker
                     v-model="transferredObj.startDate"
-                    autoApply 
+                    autoApply
                     :closeOnAutoApply="true"
                     :enableTimePicker="false"
                     placeholder="From Date"
-                    @closed="$emit('datePicked',transferredObj)"></Datepicker>
+                    @closed="$emit('datePicked',transferredObj),datePicked(transferredObj)"></Datepicker>
                 </div>
                 <div class="w-56">
-                  <Datepicker 
+                  <Datepicker
                     v-model="transferredObj.endDate"
-                    autoApply 
+                    autoApply
                     :closeOnAutoApply="true"
                     :enableTimePicker="false"
                     placeholder="To Date"
-                    @closed="$emit('datePicked',transferredObj)"></Datepicker>
+                    @closed="$emit('datePicked',transferredObj),datePicked(transferredObj)"></Datepicker>
                 </div>
               </div>
 
@@ -70,6 +70,7 @@
 import IconSVG from "@/components/IconSVG.vue";
 import PsytechButton from "@/components/PsytechButton";
 import { reactive } from "vue";
+import { useStore } from "vuex";
 export default {
     props:["data"],
     components:{
@@ -77,14 +78,25 @@ export default {
         PsytechButton
     },
     setup() {
+      const store = useStore();
+      const startDate = store.getters["creditControl/getCreditStartDate"];
+      const EndDate = store.getters["creditControl/getCreditEndDate"];
+
         const transferredObj = reactive({
-        startDate:"",
-        endDate:"",
+        startDate:startDate,
+        endDate:EndDate,
         searched: "",
         })
-        
+        const datePicked = (e)=>{
+            if(!e.startDate || !e.endDate){
+              return
+            }
+          store.commit("creditControl/setCreditStartDate",e.startDate);
+          store.commit("creditControl/setCreditEndDate",e.endDate);
+        }
         return {
             transferredObj,
+            datePicked,
         }
     },
 }

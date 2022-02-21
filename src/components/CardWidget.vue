@@ -13,7 +13,7 @@
     </level>
     <level mobile>
       <div>
-        <h3 class="text-lg leading-tight text-gray-500 dark:text-gray-400">
+        <h3 class="text-lg leading-tight text-gray-500 dark:text-gray-400 w-48 break-words">
           {{ $t(label) }}
         </h3>
         <h1 class="text-3xl leading-tight font-semibold">
