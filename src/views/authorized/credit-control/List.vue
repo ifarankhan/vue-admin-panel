@@ -5,7 +5,7 @@
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="flex mb-2 ml-4">
          <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md mr-10 cursor-pointer" @click="showSection = 1">My Credit </div>
-         <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md ml-6 cursor-pointer" @click="showSection = 2">Credit History</div>
+         <div class="inline-block px-10 py-1.5 border-2 border-black rounded-md ml-6 cursor-pointer" @click="showSection = 2,getData('transferedClientToUserAction')">Credit History</div>
       </div>
 
       <div class="flex" v-if="showSection == 1">
@@ -46,7 +46,7 @@
             <TabList class="flex space-x-1 bg-blue-900/20 rounded-xl">
               <Tab as="template" v-slot="{ selected }">
                 <button
-                    @click="(tableData = [], tabIndex =2)"
+                    @click="(tableData = [], tabIndex =2,getData('transferedClientToUserAction'))"
                     :class="[
                     'block py-4 pr-3 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none sm:py-2',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -58,7 +58,7 @@
               <Tab as="template" v-slot="{ selected }">
                 <button
                     style="padding-left:25px"
-                  @click="(tableData = [], tabIndex =0)"
+                  @click="(tableData = [], tabIndex =0,getData('transferedToMeAction'))"
                   :class="[
                     'block px-6 sm:px-4 sm:text-sm sm:py-3 md:py-4 font-bold text-black active mr-8 hover:text-psytechBlueBtHover focus:outline-none ',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -69,7 +69,7 @@
               </Tab>
               <Tab as="template" v-slot="{ selected }">
                 <button
-                  @click="(tableData = [], tabIndex =1)"
+                  @click="(tableData = [], tabIndex =1,getData('distributorCreditHistoryAction'))"
                   :class="[
                     'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
@@ -223,9 +223,9 @@ export default {
     let error = ref(null)
     let loading = ref(false)
     let loader = ref(false);
-    let tabIndex = ref(0)
-
+    let tabIndex = ref(2)
     const getData = (url, payload)=>{
+      loading.value = true;
       error.value = null
       store
         .dispatch(`creditControl/${url}`,payload)
@@ -271,25 +271,19 @@ export default {
         return
       }
 
-      const startDate = new Date(e.startDate)
-      const endDate = new Date(e.endDate)
-      const payload = {
-        startDate : `${startDate.getFullYear()}-${ String(startDate.getMonth() +1).padStart(2, '0') }-${ String(startDate.getDate()).padStart(2, '0') }`,
-        endDate : `${endDate.getFullYear()}-${ String(endDate.getMonth() +1).padStart(2, '0') }-${ String(endDate.getDate()).padStart(2, '0') }`,
-      }
       tableData.value = [];
       persistedData.value = [];
       loading.value = true;
       if(tabIndex.value === 0){
-        getData('transferedToMeAction', payload)
+        getData('transferedToMeAction')
         return true
       }
       if(tabIndex.value === 1){
-         getData('distributorCreditHistoryAction', payload)
+         getData('distributorCreditHistoryAction')
         return true
       }
       if(tabIndex.value == 2){
-         getData('transferedClientToUserAction', payload)
+         getData('transferedClientToUserAction')
         return true
       }
     }
@@ -434,7 +428,7 @@ export default {
             topUpCreditDialog.value = false;
           }
         })
-        .catch((error) => { 
+        .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
