@@ -10,42 +10,42 @@
         color="text-psytechBlue"
         :icon="mdiAccountMultiple"
         :number="widgetData?.activeUsers"
-        label="Active Users"
+        label="Lifetime Active Users"
       />
       <card-widget
           trend="Total"
           color="text-psytechRed"
           :icon="mdiAccountLock"
           :number="widgetData?.dormantUsers"
-          label="Dormant Accounts"
+          label="Total Dormant Accounts"
       />
       <card-widget
           trend="Total"
           color="text-blue-500"
           :icon="mdiFinance"
           :number="widgetData?.reportsGenerated"
-          label="Reports Generated"
+          label="Reports Generated Until Today"
       />
       <card-widget
           trend="Total"
           color="text-red-400"
           :icon="mdiRefresh"
           :number="widgetData?.creditUpdates"
-          label="Distributor Credit Updates"
+          label="Total Distributor Credit Updates"
       />
       <card-widget
           trend="Total"
           color="text-green-500"
           :icon="mdiCurrencyUsd"
           :number="widgetData?.creditsSold"
-          label="Credit Sold"
+          label="Lifetime Credit Sold"
       />
       <card-widget
           trend="Total"
           color="text-yellow-500"
           :icon="mdiChartTimelineVariant"
           :number="widgetData?.transferableCredits"
-          label="Transferable Credits"
+          label="Total Transferable Credits"
       />
 
     </div>

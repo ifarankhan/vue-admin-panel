@@ -1,4 +1,5 @@
 <template>
+  <Loader v-if="loader" />
   <Listbox as="div" v-model="computedValue" :class="[customeWidth?'extra-select-class-width' : 'extra-select-class', allyMarginRight?'margin-right':'width-full']" style="margin-top: 0.55rem">
     <div class="relative">
       <ListboxButton
@@ -21,9 +22,9 @@
         <ListboxOptions v-if="openSlectList" class="absolute z-10 w-full py-1 mt-2 overflow-auto text-base bg-white rounded-md shadow-lg style-2 max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
           <ListboxOption as="template" v-for="item in filterDropdown" :key="item.value" :value="item.value" v-slot="{ active, selected }">
             <li :class="[active ? 'text-psytechBlue' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9']">
-              <div class="flex items-center">
+              <div class="flex items-center" @click="itemClicked(item)">
                 <span :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">
-                  {{ item.text }}
+                  {{ item.text }} {{ item?.email ? ` (${item.email})`: '' }}
                 </span>
               </div>
 
@@ -41,6 +42,7 @@
 import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue';
 import IconSVG from "@/components/IconSVG.vue";
 import { computed } from 'vue';
+import Loader from "@/components/Loader.vue";
 
 export default {
   emits: ["update:modelValue", "right-icon-click"],
@@ -49,9 +51,17 @@ export default {
       type: Boolean,
       default: true
     },
+    loader:{
+      type: Boolean,
+      default: false
+    },
     type: {
       type: String,
       default: "text",
+    },
+    emitCustomEvent:{
+      type: Boolean,
+      default: false
     },
     openSlectList:{
       type: Boolean,
@@ -74,6 +84,7 @@ export default {
   components: {
     Listbox,
     IconSVG,
+    Loader,
     ListboxButton,
     ListboxLabel,
     ListboxOption,
@@ -86,8 +97,14 @@ export default {
         emit("update:modelValue", value);
       },
     });
+    const itemClicked = (item)=>{
+      if(props.emitCustomEvent){
+        emit("itemWasSelected", item)
+      }
+    }
     return {
-        computedValue
+        computedValue,
+        itemClicked
     }
   },
 }
