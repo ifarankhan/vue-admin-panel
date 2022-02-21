@@ -36,6 +36,13 @@ const actions = {
             ...payload
         })
     },
+    async transferCreditClientAction({},payload){
+        const DATA = payload;
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        DATA.distributorId = userData.distributorId;
+        DATA.distributorUsername = userData.distributorUserName;
+        return private_url.put('transfer-credits-client', DATA)
+    },
     async creditCorrectionAction({},payload){
         const DATA = payload;
         const userData = await JSON.parse(localStorage.getItem("userData"));
