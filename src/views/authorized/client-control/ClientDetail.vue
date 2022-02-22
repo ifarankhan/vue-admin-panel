@@ -461,6 +461,7 @@
         <!-- left section -->
         <div class="flex items-end mb-5 ml-4">
          <p class="pl-2 text-sm font-semibold">Other Users:</p>
+         <a href="https://d25skit2l41vkl.cloudfront.net/wp-content/uploads/2016/12/Salary-Calculation-Sheet-and-Salary-Slip-Template-in-Excel.xlsm">Download File</a>
         </div>
 
         <!-- Right Section -->
