@@ -8,6 +8,53 @@
          <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2,getData('transferedClientToUserAction')">Credit History</div>
       </div>
 
+    <div
+        v-if="showSuccessAlert"
+        class="flex items-center justify-center w-2/5 px-2 py-1 m-1 mt-10 font-medium text-green-700 bg-white bg-green-100 border border-green-300 rounded-md"
+      >
+        <div slot="avatar">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="100%"
+            height="100%"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="w-5 h-5 mx-2 feather feather-check-circle"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <div
+          class="items-center flex-initial max-w-full font-normal text-large"
+        >
+          {{ successMessage }}
+        </div>
+        <div class="flex flex-row-reverse flex-auto">
+          <div @click="showSuccessAlert = false">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="100%"
+              height="100%"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-5 h-5 ml-2 rounded-full cursor-pointer feather feather-x hover:text-green-400"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </div>
+        </div>
+      </div>
+
       <div class="flex" v-if="showSection == 1">
          <div class="relative p-4 mt-10 ml-4 mr-12 border-2 border-gray-300 rounded-md w-72">
             <div class="flex">
@@ -18,7 +65,7 @@
               <div></div>
             </div>
             <!--  -->
-            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-10 ml-6" @click="topUpCreditDialog = true"> Top Up credit </div>
+            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-10 ml-6" @click="(topUpCreditDialog = true,  showSuccessAlert = false)"> Top Up credit </div>
           </div>
 
           <div class="relative p-4 mt-10 ml-4 border-2 border-gray-300 rounded-md w-72">
@@ -30,7 +77,7 @@
               <div></div>
             </div>
             <!--  -->
-            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showCreditToClientDialog = true"> Transfer Credit to clients </div>
+            <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="(showCreditToClientDialog = true,  showSuccessAlert = false)"> Transfer Credit to clients </div>
           </div>
 
       </div>
@@ -223,8 +270,10 @@ export default {
     const showCreditToClientDialog = ref(false);
     const topUpCreditDialog = ref(false);
     const showViewDialog = ref(false);
+    let successMessage = ref(null);
     const exportRef = ref("");
     const dialogData = ref('');
+    const showSuccessAlert = ref(false);
     let tableData = ref([])
     let persistedData = ref([]);
     let error = ref(null)
@@ -432,7 +481,9 @@ export default {
               await localStorage.setItem("userData", JSON.stringify(NEW_DATA))
               store.dispatch("auth/localStorageDataAction")
             }
+            successMessage.value = "Top-up Credit Added Successfully."
             topUpCreditDialog.value = false;
+            showSuccessAlert.value = true;
           }
         })
         .catch((error) => {
@@ -457,7 +508,9 @@ export default {
             if(res.data.data){
               console.log("response is....", res)
             }
+            successMessage.value = "Credit Transferred Successfully.";
             showCreditToClientDialog.value = false;
+            showSuccessAlert.value = true;
           }
         })
         .catch((error) => { 
@@ -475,6 +528,7 @@ export default {
       persistedData,
       updateDialogData,
       topUpCreditMethod,
+      successMessage,
       clientDetailDialog,
       clientToUsersDetailDialog,
       sendCallCreditToClient,
@@ -485,6 +539,7 @@ export default {
       mdiFileDelimitedOutline,
       topUpCreditDialog,
       filterMethod,
+      showSuccessAlert,
       exportRef,
       showSection,
       downloadExportFile,
