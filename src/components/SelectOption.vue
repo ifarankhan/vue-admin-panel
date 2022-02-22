@@ -1,5 +1,6 @@
 <template>
-  <Loader v-if="loader" />
+ <div>
+    <Loader v-if="loader" />
   <Listbox as="div" v-model="computedValue" :class="[customeWidth?'extra-select-class-width' : 'extra-select-class', allyMarginRight?'margin-right':'width-full']" style="margin-top: 0.55rem">
     <div class="relative">
       <ListboxButton
@@ -36,6 +37,7 @@
       </transition>
     </div>
   </Listbox>
+ </div>
 </template>
 
 <script>
