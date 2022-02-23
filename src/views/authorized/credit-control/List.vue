@@ -499,6 +499,7 @@ export default {
           accountId: e.client,
           userId: e.user,
           amount: +e.amount,
+          purchaseNote: e.purchaseNote
       }
     loader.value = true;
        store
