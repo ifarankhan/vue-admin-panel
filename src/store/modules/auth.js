@@ -29,6 +29,30 @@ const actions = {
        }
       return private_url.post('refresh-token', DATA)
     },
+    async getWidgetTopClients({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('widget-list-top-clients', {
+            params: {
+                distributorId: userData.distributorId
+            }
+        })
+    },
+    async getWidgetListLowCreditClients({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('widget-list-low-credit-clients', {
+            params: {
+                distributorId: userData.distributorId
+            }
+        })
+    },
+    async getWidgetMostUsedReports({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('widget-list-most-used-reports', {
+            params: {
+                distributorId: userData.distributorId
+            }
+        })
+    },
     async logoutAction({},payload){
         await localStorage.removeItem("userData");
         const { navigateTo } = utility(payload);

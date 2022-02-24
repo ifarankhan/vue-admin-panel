@@ -785,6 +785,12 @@ export default {
     const exportAccountMethod = (e)=>{
       const date = new Date(e);
       const month = date.getMonth();
+
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth()
+      const currentCalendar = document.getElementsByClassName("p-monthpicker")[0].children;
+      currentCalendar[currentMonth].style.backgroundColor = "transparent";
+
       const data = {
         month: String(month + 1),
         year: String(date.getFullYear()),
@@ -794,7 +800,7 @@ export default {
       const calendar = document.getElementsByClassName("p-monthpicker")[0].children;
       calendar[month].style.backgroundColor = "lightgrey";
       
-      if(prevMonth.value != -1){
+      if( (prevMonth.value != -1 && prevMonth.value != month) ){
         calendar[+prevMonth.value].style.backgroundColor = "transparent";
       }
 
