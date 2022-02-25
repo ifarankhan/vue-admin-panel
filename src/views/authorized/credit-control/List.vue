@@ -4,8 +4,8 @@
     <sticky-header>
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="flex mb-2 ml-4">
-         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md mr-10 cursor-pointer font-semibold" :class="[showSection == 1?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 1">My Credit </div>
-         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2,getData('transferedClientToUserAction')">Credit History</div>
+         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md  mr-10 cursor-pointer font-semibold" :class="[showSection == 1?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 1">Credit History</div>
+         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2">My Credit </div>
       </div>
 
     <div
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div class="flex" v-if="showSection == 1">
+      <div class="flex" v-if="showSection == 2">
          <div class="relative p-4 mt-10 ml-4 mr-12 border-2 border-gray-300 rounded-md w-72">
             <div class="flex">
               <div>
@@ -86,7 +86,7 @@
       @closeDialog="topUpCreditDialog = false"
       @toUpCreditData="topUpCreditMethod($event)" />
 
-      <div class="ml-4" v-if="showSection == 2">
+      <div class="ml-4" v-if="showSection == 1">
       <TabGroup>
         <div class="box-border flex border-b-2 md:pr-12 lg:pr-0">
           <div class="flex-shrink-0 w-1/2" id="export_account">
@@ -321,6 +321,9 @@ export default {
           loading.value = false;
         })
     }
+
+    // for first time API Call
+    getData('transferedClientToUserAction')
 
     const loadTransferedToMe = (e)=>{
       if(!e.startDate || !e.endDate){
