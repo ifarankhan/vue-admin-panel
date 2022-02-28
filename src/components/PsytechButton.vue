@@ -46,6 +46,11 @@ export default {
           "m-2 bg-transparent hover:bg-psytechBlueBtHover text-psytechBlue hover:text-white border-psytechBlue hover:border-transparent"
         );
       }
+      if(props.type == "black-small"){
+         base.push(
+          "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechBlack text-white"
+        );
+      }
       if (props.type == "dark") {
         base.push(
           "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechDark text-white"

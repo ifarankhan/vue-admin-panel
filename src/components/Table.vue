@@ -274,7 +274,7 @@
                       <span> {{data.email}}</span>
                   </template>
               </Column>
-               <Column header="Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+               <!-- <Column header="Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span>{{ data.dateOfUpdate.split("T")[0] }}</span>
                   </template>
@@ -283,7 +283,7 @@
                    <template #body="{data}">
                       <span>{{ data.dateOfUpdate.split("T")[1].split("Z")[0] }}</span>
                   </template>
-              </Column>
+              </Column> -->
             </span>
              <span v-if="tableType =='lowCreditCLients'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
