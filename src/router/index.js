@@ -128,6 +128,27 @@ const routes = [
     ]
   },
   {
+    path: '/support',
+    name: 'support-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'support-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/support-control/SupportControl.vue'),
+    children: [
+      {
+        path: '',
+        name: 'support-control-list',
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/support-control/List.vue'),
+        requiresAuth: true,
+      },
+    ]
+  },
+  {
     // path: "*",
     path: "/:catchAll(.*)",
     name: "notFound",
@@ -152,7 +173,7 @@ router.afterEach(to => {
     } else {
       document.title = defaultDocumentTitle
     }
-  
+
       /* Full screen mode */
   // store.dispatch('fullScreenToggle', !!to.meta.fullScreen)
 
