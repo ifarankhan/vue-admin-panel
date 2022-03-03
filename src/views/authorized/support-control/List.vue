@@ -110,6 +110,19 @@
         </div>
       </div>
     </sticky-header>
+        <div>
+          <DataTable
+              :customers="allTickets"
+              :rowHover="true"
+              :paginator="true"
+              ref="exportRef"
+              :rowsPerPageOptions="[10, 20, 30]"
+              :rows="10"
+              :loading="loading"
+              :image='true'
+              tableType="tickets"
+          />
+        </div>
   <CreateTicket v-if="showCreateTicketDialog">
 
   </CreateTicket>
@@ -138,10 +151,35 @@ export default {
     Icon,
   },
   setup() {
-    console.log(btoa("oWa2VnIEYgRheSotZXLq"))
     const store = useStore();
-    let alreadyMember = ref(false);
+    const allTickets = ref([]);
+
+    onMounted(()=>{
+      getAllTicketsByCompId()
+    })
+
+    const loading = ref(false);
+    const getAllTicketsByCompId = () => {
+      loading.value = true;
+      store.dispatch("freshDesk/getAllTicketsByCompany").then(res => {
+        allTickets.value = res.data.map(item=>{
+          return {
+            subject: item.subject,
+            createDate: item.created_at.split("T")[0],
+            CreatedTime: item.created_at.split("T")[1].split("Z")[0]
+          }
+        })
+        })
+        .catch((error) => { 
+          console.log("errror", error)
+        })
+        .finally(()=>{
+          loading.value = false;
+        })
+    };
+
     let showCreateTicketDialog = ref(false);
+    let alreadyMember = ref(true);
     const createNewCompany = () => {
       store.dispatch("freshDesk/createCompany").then(res => {
           alreadyMember.value = true;
@@ -155,8 +193,11 @@ export default {
     };
     return {
       alreadyMember,
+      allTickets,
+      loading,
       createNewCompany,
-      showCreateTicketDialog
+      showCreateTicketDialog,
+      getAllTicketsByCompId
     };
   },
 };

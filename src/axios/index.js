@@ -4,8 +4,6 @@ import store from '../store/index';
 const BASE_URL = AppConfig.BASE_URL;
 const FRESH_DESK_URL = AppConfig.FRESH_DESK_URL;
 
-console.log("FRESH_DESK_URL",FRESH_DESK_URL)
-
 // creating custom instances
 export const public_url = axios.create()
 export const private_url = axios.create()
