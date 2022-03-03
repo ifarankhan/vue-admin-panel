@@ -34,6 +34,13 @@ const actions = {
             company_id: payload.companyId
         })
     },
+    async getAllTicketsByCompany({ },payload){
+        return fresh_desk_url.get('/tickets', {
+            params:{
+                company_id :101000416173
+            }
+        })
+    },
 }
 
 export default {
