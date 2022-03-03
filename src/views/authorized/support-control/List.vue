@@ -166,7 +166,9 @@ export default {
           return {
             subject: item.subject,
             createDate: item.created_at.split("T")[0],
-            CreatedTime: item.created_at.split("T")[1].split("Z")[0]
+            CreatedTime: item.created_at.split("T")[1].split("Z")[0],
+            status: item.status,
+            priority: item.priority
           }
         })
         })
