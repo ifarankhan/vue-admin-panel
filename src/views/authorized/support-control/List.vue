@@ -26,9 +26,7 @@
         <!-- left section -->
         <div class="mb-2">
           <psytech-button
-            @buttonWasClicked="
-              $router.push({ name: 'client-control-create-client' })
-            "
+            @buttonWasClicked="showCreateTicketDialog = true"
             label="Create Ticket"
             type="outline"
           >
@@ -112,6 +110,9 @@
         </div>
       </div>
     </sticky-header>
+  <CreateTicket v-if="showCreateTicketDialog">
+
+  </CreateTicket>
   </div>
 </template>
 <script>
@@ -120,6 +121,7 @@ import Loader from "@/components/Loader.vue";
 import DataTable from "@/components/Table";
 import StickyHeader from "@/components/StickyHeader";
 import PsytechButton from "@/components/PsytechButton";
+import CreateTicket from "@/components/CreateTicket";
 import { TabGroup, TabList } from "@headlessui/vue";
 import Icon from "@/components/Icon";
 import { useStore } from "vuex";
@@ -132,18 +134,20 @@ export default {
     TabGroup,
     TabList,
     Loader,
+    CreateTicket,
     Icon,
   },
   setup() {
     console.log(btoa("oWa2VnIEYgRheSotZXLq"))
     const store = useStore();
     let alreadyMember = ref(false);
+    let showCreateTicketDialog = ref(false);
     const createNewCompany = () => {
       store.dispatch("freshDesk/createCompany").then(res => {
           alreadyMember.value = true;
           console.log("response is....", res.data.data.id)
         })
-        .catch((error) => { 
+        .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
@@ -151,7 +155,8 @@ export default {
     };
     return {
       alreadyMember,
-      createNewCompany
+      createNewCompany,
+      showCreateTicketDialog
     };
   },
 };
