@@ -39,6 +39,16 @@
                       <div class="truncate">{{data.subject}}</div>
                   </template>
               </Column>
+               <Column field="Priority" header="priority" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}"> 
+                      <div>{{ data.status && fresDeskPriorities.find(item=> item.value == +data.status).text  }}</div>
+                  </template>
+              </Column>
+               <Column field="status" header="Status" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div>{{ data.status && fresDeskStatuses.find(item=> item.value == +data.status).text  }}</div>
+                  </template>
+              </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body>
                   <div class="my-center-text">
@@ -460,16 +470,6 @@ export default {
 
        const menu = ref();
 
-      // const paginationChanged = (event)=>{
-      //   const data = {
-      //     page: event.page,
-      //     pageCount: event.pageCount,
-      //     first: event.first
-      //   }
-
-      //   store.commit("clientControl/setUsersTablePag",data)
-      // }
-
       const items = ref([
 				{
 					label: 'Request to Correct Credit Update'
@@ -488,6 +488,44 @@ export default {
 
         }
 
+        const fresDeskStatuses = ref([
+          {
+            text: "Open",
+            value: 2
+          },
+          {
+            text: "Pending",
+            value: 3
+          },
+          {
+            text: "Resolved",
+            value: 4
+          },
+          {
+            text: "Closed",
+            value: 5
+          }
+        ])
+
+        const fresDeskPriorities = ref([
+          {
+            text: "Low",
+            value: 1
+          },
+          {
+            text: "Medium",
+            value: 2
+          },
+          {
+            text: "High",
+            value: 3
+          },
+          {
+            text: "Urgent",
+            value: 4
+          }
+        ])
+
         const dt = ref();
         const exportCSV = () => {
             dt.value.exportCSV();
@@ -502,6 +540,8 @@ export default {
             dt,
             items,
             exportCSV,
+            fresDeskStatuses,
+            fresDeskPriorities,
             tableStatePersistence,
             formatDate,
             userTypes
