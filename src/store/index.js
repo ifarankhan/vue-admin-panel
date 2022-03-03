@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import auth from './modules/auth';
+import freshDesk from './modules/freshDesk';
 import clientControl from './modules/clientControl';
 import creditControl from './modules/creditControl';
 
@@ -89,6 +90,7 @@ export default createStore({
   },
   modules: {
     auth,
+    freshDesk,
     clientControl,
     creditControl
   },
