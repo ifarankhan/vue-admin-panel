@@ -1,13 +1,21 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
   <div>
-  <Dialog v-model:visible="showDialog" :style="{width: '30vw',height:'auto'}" :modal="true" @hide="$emit('closeDialog')">
+  <Dialog v-model:visible="showDialog" :style="{width: '40vw',height:'auto'}" :modal="true" @hide="$emit('closeDialog')">
           <template #header>
               <h3 class="text-lg font-medium text-black"> Create a Ticket</h3>
             </template>
            <div>
         <!--  -->
-
+           <div class="mt-6">
+             <field label="Subject" labelFor="subject">
+               <control
+                   v-model="ticket.subject"
+                   placeholder=" "
+               />
+               <error-span :error="v$.amount"></error-span>
+             </field>
+           </div>
            <div class="mt-6 ml-2">
             <select-option
                 :filterDropdown="clients"
@@ -16,7 +24,7 @@
                 :emitCustomEvent="true"
                 :loader="!clients.length"
                 @itemWasSelected="fetchListOfUsers($event)"
-                v-model="transferredCreditToClient.client"
+                v-model="ticket.client"
                 :labelText="'Please Select Client'"
                 ></select-option>
             </div>
@@ -32,7 +40,7 @@
                 :allyMarginRight="false"
                 :loader="userLoader"
                 :openSlectList="(!userLoader && !clientUsers.length) ? false: true"
-                v-model="transferredCreditToClient.user"
+                v-model="ticket.user"
                 :labelText="'Please Select User'"
                 ></select-option>
             </div>
@@ -41,25 +49,24 @@
                 <error-span :error="v$.user"></error-span>
             </p>
 
-           <div class="mt-6">
-               <field label="Credit Amount" labelFor="creditNumber">
-                <control
-                  v-model="transferredCreditToClient.amount"
-                  placeholder=" "
-                />
-                <error-span :error="v$.amount"></error-span>
-              </field>
-            </div>
-
           <div>
-             <field label="Purchase Notes" labelFor="purchaseNotes">
+             <field label="Ticket Details" labelFor="ticketDetails">
               <control
                 type="textarea"
-                v-model="transferredCreditToClient.purchaseNote"
-                placeholder="Purchase Notes"
+                v-model="ticket.details"
+                placeholder="Ticket Details"
               />
             </field>
           </div>
+           <div class="m-2">
+
+               <control
+                   type="imageupload"
+                   v-model="ticket.subject"
+                   placeholder=" "
+               />
+               <error-span :error="v$.amount"></error-span>
+           </div>
 
            </div>
             <template #footer>
@@ -128,11 +135,11 @@ export default {
            showDialog.value = false;
         };
 
-    const transferredCreditToClient = reactive({
-        client: "",
+    const ticket = reactive({
+        subject: "",
         user:"",
         amount: "",
-        purchaseNote: ""
+        details: ""
     })
 
     const userData = computed(()=>{
@@ -179,7 +186,7 @@ export default {
         clientUsers.value = [];
         userLoader.value = true;
         showDefaultUsertext.value = false;
-        transferredCreditToClient.user = "";
+        ticket.user = "";
       store
           .dispatch("clientControl/getAccountUsers",{
             accountId: event.value
@@ -192,7 +199,7 @@ export default {
 
              clientUsers.value = responseArray.map(item=>{
                  if(item.isMasterAccount){
-                    transferredCreditToClient.user = item.userId;
+                   ticket.user = item.userId;
                  }
               return {
                   value: item.userId,
@@ -209,7 +216,7 @@ export default {
       })
     }
 
-    const v$ = useVuelidate(rules, transferredCreditToClient);
+    const v$ = useVuelidate(rules, ticket);
     const toUpCreditMethod = ()=>{
       v$.value.$validate();
       if (
@@ -219,7 +226,7 @@ export default {
       ) {
         return true;
       }
-      emit("transferCreditClientData",transferredCreditToClient)
+      emit("ticket",ticket)
     }
 
     return {
@@ -234,7 +241,7 @@ export default {
         showDefaultUsertext,
         mdiFileChartOutline,
         fetchListOfUsers,
-        transferredCreditToClient,
+        ticket,
         toUpCreditMethod,
         mdiChevronUp,
         mdiChevronDown,
@@ -249,4 +256,28 @@ export default {
 .floating-input>textarea:not(:placeholder-shown)~label{
   width: 100% !important;
 }
+.p-fileupload-buttonbar > :nth-child(2) {
+  display: none !important;
+}
+.p-fileupload-choose:not(.p-disabled):active,
+.p-fileupload-choose:not(.p-disabled):hover{
+  background: #008ac0;
+  color: #ffffff;
+  border-color: #1baae1;
+}
+.p-button {
+  color: #ffffff;
+  background: #1baae1;
+  border: 1px solid #1baae1;
+  padding: 4px 20px;
+  font-size: 1rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  border-radius: 25px;
+}
+.p-button:enabled:hover {
+  background: #008ac0;
+  color: #ffffff;
+  border-color: #1baae1;
+}
+
 </style>
