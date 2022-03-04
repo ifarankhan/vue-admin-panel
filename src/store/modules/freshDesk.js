@@ -34,6 +34,14 @@ const actions = {
             company_id: payload.companyId
         })
     },
+    addTikcetWithAttachments({ }, payload) {
+        const headers = {
+            'Content-Type': 'multipart/form-data',
+          }
+        return fresh_desk_url.post('/tickets', payload, {
+            headers: headers
+          });
+    },
     async getAllTicketsByCompany({ },payload){
         return fresh_desk_url.get('/tickets', {
             params:{

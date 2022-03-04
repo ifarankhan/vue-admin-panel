@@ -123,7 +123,9 @@
               tableType="tickets"
           />
         </div>
-  <CreateTicket v-if="showCreateTicketDialog">
+  <CreateTicket 
+  v-if="showCreateTicketDialog"
+  @ticketData="createTicketWithAttachemnts($event)">
 
   </CreateTicket>
   </div>
@@ -180,6 +182,30 @@ export default {
         })
     };
 
+    const createTicketWithAttachemnts = (data)=>{
+      console.log("datadata",data)
+        const FORM_DATA = new FormData();
+        FORM_DATA.append('description', data.details);
+        FORM_DATA.append('subject', data.subject);
+        FORM_DATA.append('email', 'test73@gmail.com');
+        FORM_DATA.append('custom_fields[cf_client]', String(data.client));
+        FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
+        FORM_DATA.append('status', 2); // open
+        FORM_DATA.append('priority', 1); // low
+        for(let i=0; i< data.attachments.length; i++){
+            FORM_DATA.append("attachments[]", data.attachments[i])
+          }
+        store.dispatch("freshDesk/addTikcetWithAttachments", FORM_DATA).then(res => {
+          console.log("response is....", res)
+        })
+        .catch((error) => {
+          console.log("errror", error)
+        })
+        .finally(()=>{
+        })
+    }
+
+
     let showCreateTicketDialog = ref(false);
     let alreadyMember = ref(true);
     const createNewCompany = () => {
@@ -198,6 +224,7 @@ export default {
       allTickets,
       loading,
       createNewCompany,
+      createTicketWithAttachemnts,
       showCreateTicketDialog,
       getAllTicketsByCompId
     };

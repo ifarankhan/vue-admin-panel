@@ -62,10 +62,10 @@
 
                <control
                    type="imageupload"
-                   v-model="ticket.subject"
+                   @imagesUploaded="(ticket.attachments = $event)"
                    placeholder=" "
                />
-               <error-span :error="v$.amount"></error-span>
+               <!-- <error-span :error="v$.amount"></error-span> -->
            </div>
 
            </div>
@@ -84,7 +84,7 @@
                     label="SUBMIT"
                     type="primary"
                     :extraClasses="'text-sm font-medium px-10  border-psytechBlue'"
-                    @buttonWasClicked="toUpCreditMethod()"
+                    @buttonWasClicked="ticketMethod"
                   ></psytech-button>
                 </div>
                </div>
@@ -121,10 +121,7 @@ export default {
     },
     setup(props, { emit }) {
       const store = useStore();
-      const transferrable = reactive({
-          amount:"",
-          purchaseNotes: ""
-        })
+
        const showDialog = ref(true);
        const showMsg = ref();
 
@@ -137,9 +134,10 @@ export default {
 
     const ticket = reactive({
         subject: "",
+        details: "",
+        client: "",
         user:"",
-        amount: "",
-        details: ""
+        attachments: null
     })
 
     const userData = computed(()=>{
@@ -148,15 +146,17 @@ export default {
 
     const rules = computed(() => {
       return {
-        client: {
+        subject: {
           required: helpers.withMessage("This field is required", required),
+        },
+        details: {
+          required: helpers.withMessage("This field is required", required),
+        },
+        client: {
+          required: helpers.withMessage("This field is required", required)
         },
         user: {
-          required: helpers.withMessage("This field is required", required),
-        },
-        amount: {
-          required: helpers.withMessage("This field is required", required),
-          numeric: helpers.withMessage("Only numeric values are allowed", numeric),
+          required: helpers.withMessage("This field is required", required)
         }
       };
     });
@@ -217,21 +217,21 @@ export default {
     }
 
     const v$ = useVuelidate(rules, ticket);
-    const toUpCreditMethod = ()=>{
+    const ticketMethod = ()=>{
       v$.value.$validate();
       if (
+        v$.value.subject.$invalid ||
+        v$.value.details.$invalid ||
         v$.value.client.$invalid ||
-        v$.value.user.$invalid ||
-        v$.value.amount.$invalid
+        v$.value.user.$invalid
       ) {
         return true;
       }
-      emit("ticket",ticket)
+      emit("ticketData",ticket)
     }
 
     return {
         showDialog,
-        transferrable,
         openDialog,
         closeDialog,
         userLoader,
@@ -242,7 +242,7 @@ export default {
         mdiFileChartOutline,
         fetchListOfUsers,
         ticket,
-        toUpCreditMethod,
+        ticketMethod,
         mdiChevronUp,
         mdiChevronDown,
         v$,

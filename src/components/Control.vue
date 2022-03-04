@@ -24,8 +24,8 @@
     >
       {{ option.text ?? option.text }}
     </option>
-  </select>
-  <FileUpload v-else-if="type == 'imageupload'" v-model="computedValue" :multiple="true" accept="image/*" :maxFileSize="2000000">
+  </select> 
+  <FileUpload v-else-if="type == 'imageupload'" @select="imageUploaded($event)" :multiple="true" accept="image/*" :maxFileSize="2000000">
     <template #empty>
       <p>Drag and drop files to here to upload.</p>
     </template>
@@ -113,9 +113,14 @@ export default {
       return base;
     });
 
+    const imageUploaded = (data)=>{
+      emit("imagesUploaded", data.files)
+    }
+
     return {
       computedValue,
       inputElClass,
+      imageUploaded,
       computedType,
       controlIconH,
       extraClasses,
