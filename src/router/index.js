@@ -146,6 +146,13 @@ const routes = [
         component: () => import('../views/authorized/support-control/List.vue'),
         requiresAuth: true,
       },
+      {
+        path: 'conversation',
+        name: 'ticket-conversation',
+        requiresAuth: true,
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/support-control/Conversation.vue'),
+      },
     ]
   },
   {
