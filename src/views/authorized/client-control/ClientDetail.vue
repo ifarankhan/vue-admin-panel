@@ -162,7 +162,7 @@
               </span>
                 <Calendar v-if="calenderValue" v-model="dates2" selectionMode="range"  ref="cf">
                   <template #footer>
-                    <div @click="closeCalendar" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
+                    <div @click="closeCalendar" class="export-btn" :class="(dates2?.length == 2 && dates2[1] !=null) ?'' : 'export-deactivate'">Export</div>
                   </template>
                 </Calendar>
             </div>
@@ -730,6 +730,7 @@ export default {
     const exportFileRef = ref("");
     const exportAccountData = ref(null);
     const dates2= ref(null);
+
     const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
 
     const { formatDate } = useClientUser();
@@ -767,27 +768,30 @@ export default {
       calenderValue.value = false;
     }
     const closeCalendar = ()=>{
-      console.log(dates2.value)
+      if((dates2.value?.length == 2 && dates2.value[1] ==null) ){
+        return;
+      };
+      const { formatExportDate } = useClientUser();
       const data = {
-        startDate: "2022-02-15",
-        endDate: "2022-03-03",
+        startDate: formatExportDate(dates2.value[0]),
+        endDate: formatExportDate(dates2.value[1]),
         accountId: accountDetail.value?.accountId
       }
       cf.value.overlayVisible = false;
       loader.value = true;
-       store
-          .dispatch("clientControl/exportAccountActivity",data)
-          .then(async (res) => {
-            const URL = res?.data?.data?.activityReportUrl?.url;
-            await (exportFileUrl.value = URL)
-            saveAs(URL)
-
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-             loader.value = false;
-          });
+       // store
+       //    .dispatch("clientControl/exportAccountActivity",data)
+       //    .then(async (res) => {
+       //      const URL = res?.data?.data?.activityReportUrl?.url;
+       //      await (exportFileUrl.value = URL)
+       //      saveAs(URL)
+       //
+       //    })
+       //    .catch((error) => {
+       //      console.log("error is...", error);
+       //    }).finally(()=>{
+       //       loader.value = false;
+       //    });
     }
     // const exportAccountMethod = (e)=>{
     //   const date = new Date(e);
@@ -1226,5 +1230,20 @@ export default {
 }
 .calender .p-button:focus{
   box-shadow: none;
+}
+.export-btn{
+  width: 90%;
+  margin: 0 auto;
+  background-color: #04B2E6;
+  text-align: center;
+  padding: 6px 0px;
+  color: white;
+  border-radius: 3px;
+  cursor:pointer;
+}
+.export-deactivate{
+  background-color: #E5E5E5;
+  color: white;
+  cursor:no-drop;
 }
 </style>
