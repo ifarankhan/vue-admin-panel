@@ -1,4 +1,4 @@
-import { private_url, public_url } from "../../axios";
+import {fresh_desk_url, private_url, public_url} from "../../axios";
 const namespaced = true;
 const state = {
     clientDetail: null,
@@ -70,6 +70,15 @@ const actions = {
        return private_url.get('account-users', {
         params: payload
       })
+    },
+    async addFreshDeskKeyToUser({ },payload){
+        const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
+        return private_url.post('add-freshdesk-company-id', {
+            name: USER_DATA.distributorUserName,
+            email: USER_DATA.userName,
+            distributorId: USER_DATA.distributorId,
+            companyId: payload.companyId,
+        })
     },
     async getClientAccount({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
