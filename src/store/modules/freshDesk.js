@@ -1,15 +1,17 @@
 import { fresh_desk_url } from "../../axios";
 const namespaced = true;
 const state = {
-    
+    ticketData: null
 }
 
 const getters = {
-
+    
   }
 
 const mutations = {
- 
+    setTicketData(state, payload){
+        state.ticketData = payload
+    }
 }
 
 const actions = {
@@ -45,9 +47,12 @@ const actions = {
     async getAllTicketsByCompany({ },payload){
         return fresh_desk_url.get('/tickets', {
             params:{
-                company_id :101000416173
+                company_id :101000563310
             }
         })
+    },
+    async getIndividualTicket({ state }){
+        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}`)
     },
 }
 

@@ -119,12 +119,14 @@
               :rowsPerPageOptions="[10, 20, 30]"
               :rows="10"
               :loading="loading"
-              :image='true'
+               @rowClicked="redirectToDetail($event)"
+              :image='true' 
               tableType="tickets"
           />
         </div>
   <CreateTicket 
   v-if="showCreateTicketDialog"
+  @closeDialog="(showCreateTicketDialog = false)"
   @ticketData="createTicketWithAttachemnts($event)">
 
   </CreateTicket>
@@ -140,6 +142,7 @@ import CreateTicket from "@/components/CreateTicket";
 import { TabGroup, TabList } from "@headlessui/vue";
 import Icon from "@/components/Icon";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
   name: "support-control-list",
   components: {
@@ -154,11 +157,19 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const allTickets = ref([]);
+    const ticketId = ref("");
 
     onMounted(()=>{
       getAllTicketsByCompId()
     })
+
+    // 
+    const redirectToDetail = async e => {
+      store.commit("freshDesk/setTicketData", e.data);
+      router.push({ name: "ticket-conversation" });
+    };
 
     const loading = ref(false);
     const getAllTicketsByCompId = () => {
@@ -170,7 +181,8 @@ export default {
             createDate: item.created_at.split("T")[0],
             CreatedTime: item.created_at.split("T")[1].split("Z")[0],
             status: item.status,
-            priority: item.priority
+            priority: item.priority,
+            ticketId: item.id
           }
         })
         })
@@ -182,8 +194,7 @@ export default {
         })
     };
 
-    const createTicketWithAttachemnts = (data)=>{
-      console.log("datadata",data)
+    const createTicketWithAttachemnts = data => {
         const FORM_DATA = new FormData();
         FORM_DATA.append('description', data.details);
         FORM_DATA.append('subject', data.subject);
@@ -196,12 +207,14 @@ export default {
             FORM_DATA.append("attachments[]", data.attachments[i])
           }
         store.dispatch("freshDesk/addTikcetWithAttachments", FORM_DATA).then(res => {
-          console.log("response is....", res)
+          // console.log("response is....", res)
+          getAllTicketsByCompId()
         })
         .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
+          showCreateTicketDialog.value = false;
         })
     }
 
@@ -223,7 +236,9 @@ export default {
       alreadyMember,
       allTickets,
       loading,
+      ticketId,
       createNewCompany,
+      redirectToDetail,
       createTicketWithAttachemnts,
       showCreateTicketDialog,
       getAllTicketsByCompId
