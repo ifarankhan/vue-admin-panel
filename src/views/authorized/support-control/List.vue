@@ -123,7 +123,7 @@
               tableType="tickets"
           />
         </div>
-  <CreateTicket 
+  <CreateTicket
   v-if="showCreateTicketDialog"
   @ticketData="createTicketWithAttachemnts($event)">
 
@@ -131,7 +131,7 @@
   </div>
 </template>
 <script>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive,computed } from "vue";
 import Loader from "@/components/Loader.vue";
 import DataTable from "@/components/Table";
 import StickyHeader from "@/components/StickyHeader";
@@ -159,9 +159,19 @@ export default {
     onMounted(()=>{
       getAllTicketsByCompId()
     })
-
+    let showCreateTicketDialog = ref(false);
+    let alreadyMember = ref(false);
+    const userData = computed(()=>{
+      return JSON.parse(localStorage.getItem("userData"))
+    })
+    if (userData.value.freshdeskCompanyID != 0){
+      alreadyMember.value = true;
+    }
     const loading = ref(false);
     const getAllTicketsByCompId = () => {
+      if (!alreadyMember.value){
+        return;
+      }
       loading.value = true;
       store.dispatch("freshDesk/getAllTicketsByCompany").then(res => {
         allTickets.value = res.data.map(item=>{
@@ -174,7 +184,7 @@ export default {
           }
         })
         })
-        .catch((error) => { 
+        .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
@@ -204,19 +214,33 @@ export default {
         .finally(()=>{
         })
     }
-
-
-    let showCreateTicketDialog = ref(false);
-    let alreadyMember = ref(true);
     const createNewCompany = () => {
-      store.dispatch("freshDesk/createCompany").then(res => {
-          alreadyMember.value = true;
-          console.log("response is....", res.data.data.id)
+      store.dispatch("freshDesk/createCompany").then(result => {
+        console.log(result.data);
+            const data = {
+              companyId:result.data.id,
+            }
+            store.dispatch("clientControl/addFreshDeskKeyToUser",data).then(async (res) => {
+
+              console.log("response is....", res.data);
+              const DATA = JSON.parse(localStorage.getItem("userData"))
+              const NEW_DATA = {
+                ...DATA,
+                freshdeskCompanyID: result.data.id
+              }
+              await localStorage.setItem("userData", JSON.stringify(NEW_DATA))
+              store.dispatch("auth/localStorageDataAction");
+              alreadyMember.value = true;
+            }).catch((error) => {
+              console.log("error is ", error)
+            });
+
         })
         .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
+
         })
     };
     return {

@@ -1,7 +1,7 @@
 import { fresh_desk_url } from "../../axios";
 const namespaced = true;
 const state = {
-    
+
 }
 
 const getters = {
@@ -9,7 +9,7 @@ const getters = {
   }
 
 const mutations = {
- 
+
 }
 
 const actions = {
@@ -29,7 +29,7 @@ const actions = {
     async associateUserToCompany({ },payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
         return fresh_desk_url.post('/contacts', {
-            name: "mainUser",
+            name: USER_DATA.distributorUserName,
             email: USER_DATA.userName,
             company_id: payload.companyId
         })
@@ -43,9 +43,10 @@ const actions = {
           });
     },
     async getAllTicketsByCompany({ },payload){
+        const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
         return fresh_desk_url.get('/tickets', {
             params:{
-                company_id :101000416173
+                company_id :USER_DATA.freshdeskCompanyID
             }
         })
     },

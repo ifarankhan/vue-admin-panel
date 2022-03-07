@@ -18,7 +18,15 @@ export function useClientUser() {
         year: "numeric",
       })
     }
-  
+
+    const formatExportDate = (value) => {
+        return new Date(value).toLocaleDateString("en-GB", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).split('/').reverse().join('-')
+    }
+
   const tableStatePersistence = (event)=>{
       const data = {
         page: event.page,
@@ -30,7 +38,7 @@ export function useClientUser() {
     }
 
   const trainingArray = reactive({trainingObj: [
-    { 
+    {
       text: "Test User Personality & Ability (TUP & TUA) or Psytech Test Certificate (PTC)",
       value: "PTC",
       selected: false,
@@ -64,6 +72,7 @@ export function useClientUser() {
     trainingArray,
     notifications,
     tableStatePersistence,
-    formatDate
+    formatDate,
+    formatExportDate
   };
 }

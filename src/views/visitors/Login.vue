@@ -210,6 +210,7 @@ export default {
               distributorUserName: info?.user?.distributorUserName,
               credits: info?.user?.credits,
               rememberMe: form.rememberMe,
+              freshdeskCompanyID: info?.user?.freshdeskCompanyID,
             };
             await localStorage.setItem("userData", JSON.stringify(USER_DATA));
             store.dispatch("auth/localStorageDataAction")
