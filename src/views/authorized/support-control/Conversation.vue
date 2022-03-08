@@ -65,7 +65,7 @@
                 class="p-4 mt-2 mb-4 text-justify bg-gray-200"
                 style="word-wrap: break-word"
               >
-               Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora, nisi accusamus dolor provident aliquid dolores ipsum hic voluptatibus dolorem minus est, delectus illo. Fuga impedit tempore ut ipsam provident deserunt?
+               {{ ticketData?.descriptionText }}
               </div>
           </div>
           <!--  -->
@@ -93,15 +93,51 @@
             class="pl-4 mt-2 mb-6"
             v-if="collapsable.attachments && ticketData?.allImages"
           >
-            <p class="mb-2 text-sm font-bold">Images : </p>
+            <p class="mb-1 text-sm font-bold">Images : </p>
             <div class="grid grid-cols-3 gap-1 overflow-hidden">
                <div v-for="(item, index) in ticketData?.allImages" :key="index" class="h-64 p-2 border w-80">
                      <p class="ml-4 font-bold">{{ item.imageName }}</p>
                      <img :src="item.imageUrl" class="w-full h-full" />
                </div>
             </div>
+            <p class="mt-6 mb-1 text-sm font-bold">Files : </p>
+            <div class="mb-8">
+            <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+              <div class="grid grid-cols-3 gap-1 overflow-hidden">
+            <li class="inline-block h-16 p-2 mr-4 border" v-for="(item, index) in ticketData?.allFiles" :key="index">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <img src="../../../assets/svgs/ticketSVG/pdf.svg"  v-if="item.fileName.split('.').pop().toLowerCase() == 'pdf'" alt="Neil image" class="w-8 h-8">
+                        <img src="../../../assets/svgs/ticketSVG/word.svg"  v-if="item.fileName.split('.').pop().toLowerCase() == 'doc'" alt="Neil image" class="w-8 h-8">
+                        <img src="../../../assets/svgs/ticketSVG/excel.svg"  v-if="item.fileName.split('.').pop().toLowerCase() == 'xls'" alt="Neil image" class="w-8 h-8">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                            {{ item.fileName }}
+                        </p>
+                    </div>
+                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                          <a
+                          :href="item.fileUrl"
+                          target="_blank"
+                          class="cursor-pointer"
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                width="25"
+                                height="25"
+                                class="inline-block"
+                              >
+                                <path :d="mdiCloudDownloadOutline" />
+                              </svg>
+                            </a>
+                    </div>
+                </div>
+            </li>
+              </div>
+        </ul>      
+            </div>
 
-            <p class="mt-4 mb-2 text-sm font-bold">Files : </p>
           </div>
           <!--  -->
         </div>
@@ -112,7 +148,7 @@
 <script>
 import { ref, computed, reactive, onMounted } from 'vue';
 import Loader from "@/components/Loader.vue";
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import { mdiChevronDown, mdiChevronUp, mdiCloudDownloadOutline } from "@mdi/js";
 import PsytechButton from "@/components/PsytechButton";
 import { useStore } from "vuex";
 
@@ -164,9 +200,9 @@ export default {
                       imageUrl: DATA.attachments[i].attachment_url
                   });
                 }else {
-                   allImages.push({
-                      imageName: DATA.attachments[i].name,
-                      imageUrl: DATA.attachments[i].attachment_url
+                   allFiles.push({
+                      fileName: DATA.attachments[i].name,
+                      fileUrl: DATA.attachments[i].attachment_url
                   });
                 }
           } // end if
@@ -176,8 +212,8 @@ export default {
         } // end for loop
         ticketData.value.allFiles = allFiles;
         ticketData.value.allImages = allImages;
-        // console.log("all files....", ticketData.value.allFiles);
-        // console.log("all images....", ticketData.value.allImages);
+        console.log("all files....", ticketData.value.allFiles);
+        console.log("all images....", ticketData.value.allImages);
         
         })
         .catch((error) => {
@@ -189,6 +225,7 @@ export default {
         ticketData,
         mdiChevronDown,
         mdiChevronUp,
+        mdiCloudDownloadOutline,
         collapsable
       }
     },

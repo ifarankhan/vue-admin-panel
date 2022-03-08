@@ -25,7 +25,7 @@
       {{ option.text ?? option.text }}
     </option>
   </select> 
-  <FileUpload v-else-if="type == 'imageupload'" @select="imageUploaded($event)" :multiple="true" accept="image/*" :maxFileSize="2000000">
+  <FileUpload v-else-if="type == 'imageupload'" @select="imageUploaded($event)" :multiple="true" :maxFileSize="2000000">
     <template #empty>
       <p>Drag and drop files to here to upload.</p>
     </template>
