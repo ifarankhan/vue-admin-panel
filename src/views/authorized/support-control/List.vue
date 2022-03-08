@@ -72,6 +72,40 @@
                   />
                 </svg>
               </psytech-button>
+              <ul
+                  class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
+                  style="padding: 16px 15px"
+                  id="filter-dropdown"
+                  v-if="showFilters"
+                  v-click-away="closeFilter"
+              >
+                <li class="flex">
+                  <field
+                      label="prority"
+                      labelFor="account"
+                      :applyExtraInputClass="true"
+                  >
+                    <control
+                        v-model="searcheStatus"
+                        type="text"
+                        id="name"
+                        placeholder=" "
+                        @enterPressed="applyFilter()"
+                    />
+                  </field>
+                  <select-option
+                      :filterDropdown="filterDropdown"
+                      v-model="selectedProrityFilter"
+                  ></select-option>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                        @iconWasClicked="(accountName = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+              </ul>
+
+
             </div>
           </div>
 
@@ -110,7 +144,7 @@
         </div>
       </div>
     </sticky-header>
-        <div>
+        <div class="fixedheader">
           <DataTable
               :customers="allTickets"
               :rowHover="true"
@@ -120,7 +154,7 @@
               :rows="10"
               :loading="loading"
                @rowClicked="redirectToDetail($event)"
-              :image='true' 
+              :image='true'
               tableType="tickets"
           />
         </div>
@@ -160,12 +194,20 @@ export default {
     const router = useRouter();
     const allTickets = ref([]);
     const ticketId = ref("");
-
+    let prevNonSearched = ref();
+    let prevSearched = ref();
+    let searchText = ref("");
+    let prevMainSearchHistry = ref("");
+    let searcheStatus = ref("");
+    let searchedPrority = ref("");
+    let selectedStatusFilter = ref("contains");
+    let selectedProrityFilter = ref("contains");
+    let showFilters = ref(false);
     onMounted(()=>{
       getAllTicketsByCompId()
     })
 
-    // 
+    //
     const redirectToDetail = async e => {
       store.commit("freshDesk/setTicketData", e.data);
       router.push({ name: "ticket-conversation" });
@@ -196,6 +238,7 @@ export default {
             ticketId: item.id
           }
         })
+          prevNonSearched.value = allTickets.value;
         })
         .catch((error) => {
           console.log("errror", error)
@@ -257,6 +300,154 @@ export default {
 
         })
     };
+
+
+
+    const clearFilter = () => {
+      searchText.value = "";
+      searchedPrority.value = "";
+      searcheStatus.value = "";
+      searchedPrority.value = "";
+      allTickets.value = prevNonSearched.value;
+      prevSearched.value = [];
+    };
+
+    const subFilter = (item, value, filter) => {
+      const selectedFilter = filter;
+      if (typeof value == "number" || typeof value == "string") {
+        if (selectedFilter == "isNotEqualTo") {
+          return item != value;
+        } else if (selectedFilter == "isEqualTo") {
+          return item == value;
+        } else if (selectedFilter == "lessThen") {
+          return item < value;
+        } else if (selectedFilter == "greaterThen") {
+          return item > value;
+        }
+      }
+      if (typeof value == "string") {
+        if (selectedFilter == "contains") {
+          return item.includes(value);
+        } else if (selectedFilter == "startsWith") {
+          return item.startsWith(value);
+        } else if (selectedFilter == "endsWith") {
+          return item.endsWith(value);
+        } else if (selectedFilter == "notContain") {
+          return !item.includes(value);
+        }
+      }
+    };
+    const applyFilter = () => {
+      let filteredData = [];
+      if (searchText.value) {
+        filteredData = prevMainSearchHistry.value;
+      } else {
+        filteredData = prevNonSearched.value;
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searchedPrority.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.priority && searchedPrority.value
+                  ? false
+                  : searchedPrority.value
+                  ? subFilter(
+                      val.priority.toLowerCase(),
+                      searchedPrority.value.toLowerCase().trim(),
+                      selectedProrityFilter.value
+                  )
+                  : true
+          ) {
+            return true;
+          }
+        });
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (searcheStatus.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+              !val.status && searcheStatus.value
+                  ? false
+                  : !!(searcheStatus.value
+                  ? subFilter(
+                      val.address.toLowerCase(),
+                      searcheStatus.value.toLowerCase().trim(),
+                      selectedStatusFilter.value
+                  )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+      // CHECK wheather record is found againts applied filters
+      allTickets.value = filteredData;
+      prevSearched.value = filteredData;
+    };
+    const filterMethod = (data, value) => {
+      return data.filter(function (ticket) {
+        return (
+            ticket.subject.toLowerCase().indexOf(value) > -1 ||
+            ticket.createDate.indexOf(value) > -1 ||
+            ticket.CreatedTime.indexOf(value) > -1
+        );
+      });
+    };
+    const filteredMainMethod = () => {
+      // var sortKey = this.sortKey
+      let value = searchText.value && searchText.value.toLowerCase();
+      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
+      if (!searchText.value) {
+        prevMainSearchHistry.value = [];
+        applyFilter();
+        return;
+      }
+      // fileds to be check for filters
+      if (searchedPrority.value || searcheStatus.value) {
+        allTickets.value = filterMethod(prevSearched.value, value);
+      } else {
+        console.log(prevNonSearched);
+        // default, When no filters is applied
+        allTickets.value = filterMethod(prevNonSearched.value, value);
+        prevMainSearchHistry.value = allTickets.value;
+      }
+    };
+
+    const closeFilter = () => {
+      if (showFilters.value) {
+        showFilters.value = false;
+      }
+    };
+
+    const filterDropdown = reactive([
+      {
+        text: "Is equal to",
+        value: "isEqualTo",
+      },
+      {
+        text: "Is not equal to",
+        value: "isNotEqualTo",
+      },
+      {
+        text: "Starts with",
+        value: "startsWith",
+      },
+      {
+        text: "Contains",
+        value: "contains",
+      },
+      {
+        text: "Does not contain",
+        value: "notContain",
+      },
+      {
+        text: "Ends With",
+        value: "endsWith",
+      },
+    ]);
+
+    // Seach and filter end
+
     return {
       alreadyMember,
       allTickets,
@@ -266,8 +457,26 @@ export default {
       redirectToDetail,
       createTicketWithAttachemnts,
       showCreateTicketDialog,
-      getAllTicketsByCompId
+      getAllTicketsByCompId,
+      filteredMainMethod,
+      searchText,
+      showFilters,
+      closeFilter,
+      searcheStatus,
+      applyFilter,
+      filterDropdown,
+      selectedProrityFilter
     };
   },
 };
 </script>
+<style>
+#filter-dropdown {
+  min-width: 465px;
+  padding: 16px 15px;
+  box-shadow: #3755634d 0px 8px 30px;
+}
+input[type="search" i]:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+</style>
