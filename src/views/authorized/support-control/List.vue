@@ -4,7 +4,6 @@
     <div class="flex flex-col items-center justify-center" style="height: 60vh">
       <div>
         <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">
-          Welcome to the psytech Support System
         </h1>
       </div>
       <div>
