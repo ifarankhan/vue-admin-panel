@@ -24,7 +24,12 @@
     >
       {{ option.text ?? option.text }}
     </option>
-  </select>
+  </select> 
+  <FileUpload v-else-if="type == 'imageupload'" @select="imageUploaded($event)" :multiple="true" :maxFileSize="2000000">
+    <template #empty>
+      <p>Drag and drop files to here to upload.</p>
+    </template>
+  </FileUpload>
   <input
     v-else
     :type="type"
@@ -52,6 +57,9 @@
 <script>
 import { computed } from "vue";
 import ControlIcon from '@/components/ControlIcon'
+import FileUpload from 'primevue/fileupload';
+
+
 export default {
   emits: ["update:modelValue", "right-icon-click","iconWasClicked"],
   props: {
@@ -78,7 +86,8 @@ export default {
     },
   },
   components:{
-    ControlIcon
+    ControlIcon,
+    FileUpload
   },
   setup(props, { emit }) {
      let extraClasses = props.type === "textarea"? 'h-32':'h-14';
@@ -104,12 +113,17 @@ export default {
       return base;
     });
 
+    const imageUploaded = (data)=>{
+      emit("imagesUploaded", data.files)
+    }
+
     return {
       computedValue,
       inputElClass,
+      imageUploaded,
       computedType,
       controlIconH,
-      extraClasses
+      extraClasses,
     };
   },
 };

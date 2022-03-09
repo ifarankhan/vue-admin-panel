@@ -36,7 +36,6 @@ const actions = {
                 distributorId : userData.distributorId,
                 startDate : `${state.creditStartDate.getFullYear()}-${ String(state.creditStartDate.getMonth() +1).padStart(2, '0') }-${ String(state.creditStartDate.getDate()).padStart(2, '0') }`,
                 endDate : `${state.creditEndDate.getFullYear()}-${ String(state.creditEndDate.getMonth() +1).padStart(2, '0') }-${ String(state.creditEndDate.getDate()).padStart(2, '0') }`,
-
             }
         })
     },

@@ -159,10 +159,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 10 6">
                   <path id="Polygon_11" data-name="Polygon 11" d="M5,0l5,6H0Z" transform="translate(10 6) rotate(180)" fill="#707070"/>
                 </svg>
-              </span> 
-                <Calendar v-if="calenderValue" selectionMode="multiple"  ref="cf" @hide="hideCalendar" @show="openCalender" :hideOnDateTimeSelect="false" view="month" dateFormat="mm/yy" @date-select="exportAccountMethod">
+              </span>
+                <Calendar v-if="calenderValue" v-model="dates2" selectionMode="range"  ref="cf">
                   <template #footer>
-                    <div @click="closeCalendar" style="width: 90%; margin: 0 auto; background-color: #04B2E6; text-align: center; padding: 6px 0px; color: white; border-radius: 3px; cursor:pointer;">Export</div>
+                    <div @click="closeCalendar" class="export-btn" :class="(dates2?.length == 2 && dates2[1] !=null) ?'' : 'export-deactivate'">Export</div>
                   </template>
                 </Calendar>
             </div>
@@ -729,6 +729,8 @@ export default {
     const exportFileUrl = ref("");
     const exportFileRef = ref("");
     const exportAccountData = ref(null);
+    const dates2= ref(null);
+
     const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
 
     const { formatDate } = useClientUser();
@@ -743,21 +745,21 @@ export default {
 
     let cf = ref()
     const openCalender = ()=>{
-      const date = new Date();
-      const month = date.getMonth()
+      // const date = new Date();
+      // const month = date.getMonth()
+      //
+      // let datePicker = document.getElementsByClassName("p-datepicker")[0];
+      // let calendar = document.getElementsByClassName("p-monthpicker")[0].children;
 
-      let datePicker = document.getElementsByClassName("p-datepicker")[0];
-      let calendar = document.getElementsByClassName("p-monthpicker")[0].children;
+      // datePicker.style.width = "294px";
+      // datePicker.style.marginTop = "24px";
+      // datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
 
-      datePicker.style.width = "294px";
-      datePicker.style.marginTop = "24px";
-      datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
-
-      calendar[month].style.backgroundColor = "lightgray";
-      // calendar[month].style.color = "#fff";
-      calendar[month].style.boxShadow = "none";
+      // calendar[month].style.backgroundColor = "lightgray";
+      // // calendar[month].style.color = "#fff";
+      // calendar[month].style.boxShadow = "none";
     }
-    
+
     const showCalender = async ()=>{
       await (calenderValue.value = true);
       cf.value.overlayVisible = true;
@@ -766,47 +768,56 @@ export default {
       calenderValue.value = false;
     }
     const closeCalendar = ()=>{
-      cf.value.overlayVisible = false;
-      loader.value = true;
-       store
-          .dispatch("clientControl/exportAccountActivity",exportAccountData.value)
-          .then(async (res) => {
-            const URL = res?.data?.data?.activityReportUrl?.url;
-            await (exportFileUrl.value = URL)
-            saveAs(URL)
-            
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-             loader.value = false;
-          });
-    }
-    const exportAccountMethod = (e)=>{
-      const date = new Date(e);
-      const month = date.getMonth();
-
-      const currentDate = new Date();
-      const currentMonth = currentDate.getMonth()
-      const currentCalendar = document.getElementsByClassName("p-monthpicker")[0].children;
-      currentCalendar[currentMonth].style.backgroundColor = "transparent";
-
+      if((dates2.value?.length == 2 && dates2.value[1] ==null) ){
+        return;
+      };
+      const { formatExportDate } = useClientUser();
       const data = {
-        month: String(month + 1),
-        year: String(date.getFullYear()),
+        startDate: formatExportDate(dates2.value[0]),
+        endDate: formatExportDate(dates2.value[1]),
         accountId: accountDetail.value?.accountId
       }
-      exportAccountData.value = data;
-      const calendar = document.getElementsByClassName("p-monthpicker")[0].children;
-      calendar[month].style.backgroundColor = "lightgrey";
-      
-      if( (prevMonth.value != -1 && prevMonth.value != month) ){
-        calendar[+prevMonth.value].style.backgroundColor = "transparent";
-      }
-
-      prevMonth.value = month;
-
+      cf.value.overlayVisible = false;
+      loader.value = true;
+       // store
+       //    .dispatch("clientControl/exportAccountActivity",data)
+       //    .then(async (res) => {
+       //      const URL = res?.data?.data?.activityReportUrl?.url;
+       //      await (exportFileUrl.value = URL)
+       //      saveAs(URL)
+       //
+       //    })
+       //    .catch((error) => {
+       //      console.log("error is...", error);
+       //    }).finally(()=>{
+       //       loader.value = false;
+       //    });
     }
+    // const exportAccountMethod = (e)=>{
+    //   const date = new Date(e);
+    //   const month = date.getMonth();
+    //
+    //   const currentDate = new Date();
+    //   const currentMonth = currentDate.getMonth()
+    //   // const currentCalendar = document.getElementsByClassName("p-monthpicker")[0].children;
+    //   // currentCalendar[currentMonth].style.backgroundColor = "transparent";
+    //
+    //   const data = {
+    //     startDate: "2022-02-01",
+    //     endDate: "2022-03-03",
+    //     accountId: accountDetail.value?.accountId
+    //   }
+    //   exportAccountData.value = data;
+    //   // const calendar = document.getElementsByClassName("p-monthpicker")[0].children;
+    //   // calendar[month].style.backgroundColor = "lightgrey";
+    //
+    //   // if( (prevMonth.value != -1 && prevMonth.value != month) ){
+    //   //   calendar[+prevMonth.value].style.backgroundColor = "transparent";
+    //   // }
+    //
+    //   // prevMonth.value = month;
+    //
+    // }
 
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
@@ -1139,7 +1150,7 @@ export default {
       applyFilter,
       clearFilter,
       prevMonth,
-      exportAccountMethod,
+      // exportAccountMethod,
       exportAccountData,
       openCalender,
       exportFileUrl,
@@ -1167,7 +1178,8 @@ export default {
       selectedFamilyNameFilter,
       searchedCredits,
       selectedCreditsFilter,
-      fetchListOfUsers
+      fetchListOfUsers,
+      dates2
     };
   },
 };
@@ -1218,5 +1230,20 @@ export default {
 }
 .calender .p-button:focus{
   box-shadow: none;
+}
+.export-btn{
+  width: 90%;
+  margin: 0 auto;
+  background-color: #04B2E6;
+  text-align: center;
+  padding: 6px 0px;
+  color: white;
+  border-radius: 3px;
+  cursor:pointer;
+}
+.export-deactivate{
+  background-color: #E5E5E5;
+  color: white;
+  cursor:no-drop;
 }
 </style>

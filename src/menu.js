@@ -34,7 +34,6 @@ export default [
       to: '/support',
       icon: mdiHandExtendedOutline  ,
       label: 'Support',
-      class:"disabled-link"
     }
   ],
 ]
