@@ -170,14 +170,14 @@
                    <psytech-button
                     type="Secondary"
                     label="Submit"
-                    @buttonWasClicked="applyFilter"
+                    @buttonWasClicked="''"
                   ></psytech-button>
               </div>
                <div>
                    <psytech-button
                     type="black-small"
                     label="Cancel"
-                    @buttonWasClicked="applyFilter"
+                    @buttonWasClicked="''"
                   ></psytech-button>
               </div>
             </div>
