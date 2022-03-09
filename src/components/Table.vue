@@ -40,8 +40,8 @@
                   </template>
               </Column>
                <Column field="Priority" header="priority" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
-                  <template #body="{data}"> 
-                      <div>{{ data.status && fresDeskPriorities.find(item=> item.value == +data.status).text  }}</div>
+                  <template #body="{data}">
+                      <div>{{ data.priority && fresDeskPriorities.find(item=> item.value == +data.priority).text  }}</div>
                   </template>
               </Column>
                <Column field="status" header="Status" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">

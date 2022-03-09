@@ -80,7 +80,7 @@
               >
                 <li class="flex">
                   <field
-                      label="prority"
+                      label="Status"
                       labelFor="account"
                       :applyExtraInputClass="true"
                   >
@@ -94,14 +94,54 @@
                   </field>
                   <select-option
                       :filterDropdown="filterDropdown"
+                      v-model="selectedStatusFilter"
+                  ></select-option>
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                        @iconWasClicked="(searcheStatus = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                      label="Priority"
+                      labelFor="account"
+                      :applyExtraInputClass="true"
+                  >
+                    <control
+                        v-model="searchedPrority"
+                        type="text"
+                        id="name"
+                        placeholder=" "
+                        @enterPressed="applyFilter()"
+                    />
+                  </field>
+                  <select-option
+                      :filterDropdown="filterDropdown"
                       v-model="selectedProrityFilter"
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                        @iconWasClicked="(accountName = ''), applyFilter()"
+                        @iconWasClicked="(searchedPrority = ''), applyFilter()"
                     />
                   </div>
                 </li>
+                <li class="flex justify-between">
+                  <div class="flex items-center justify-center ml-3">
+                    <a
+                        @click.prevent="clearFilter()"
+                        class="text-xs font-semibold no-underline text-psytechBlue"
+                    >Clear all</a
+                    >
+                  </div>
+                  <psytech-button
+                      label="Apply"
+                      @buttonWasClicked="applyFilter"
+                  ></psytech-button>
+                </li>
+
+
               </ul>
 
 
@@ -175,10 +215,13 @@ import CreateTicket from "@/components/CreateTicket";
 import { TabGroup, TabList } from "@headlessui/vue";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
+import SelectOption from "@/components/SelectOption.vue";
 import Icon from "@/components/Icon";
 import IconSVG from "@/components/IconSVG.vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { useClientUser } from "@/components/composition/clientHelper.js";
+
 export default {
   name: "support-control-list",
   components: {
@@ -193,6 +236,7 @@ export default {
     Loader,
     CreateTicket,
     Icon,
+    SelectOption
   },
   setup() {
     const store = useStore();
@@ -208,6 +252,7 @@ export default {
     let selectedStatusFilter = ref("contains");
     let selectedProrityFilter = ref("contains");
     let showFilters = ref(false);
+    const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
     onMounted(()=>{
       getAllTicketsByCompId()
     })
@@ -266,7 +311,7 @@ export default {
             FORM_DATA.append("attachments[]", data.attachments[i])
           }
         store.dispatch("freshDesk/addTikcetWithAttachments", FORM_DATA).then(res => {
-          // console.log("response is....", res)
+
           getAllTicketsByCompId()
         })
         .catch((error) => {
@@ -278,7 +323,7 @@ export default {
     }
     const createNewCompany = () => {
       store.dispatch("freshDesk/createCompany").then(result => {
-        console.log(result.data);
+
             const data = {
               companyId:result.data.id,
             }
@@ -312,7 +357,6 @@ export default {
       searchText.value = "";
       searchedPrority.value = "";
       searcheStatus.value = "";
-      searchedPrority.value = "";
       allTickets.value = prevNonSearched.value;
       prevSearched.value = [];
     };
@@ -350,6 +394,7 @@ export default {
         filteredData = prevNonSearched.value;
       }
       // Make sure search value has some valid value, then do filtering
+      console.log(searchedPrority.value);
       if (searchedPrority.value) {
         filteredData = filteredData.filter((val) => {
           if (
@@ -357,7 +402,7 @@ export default {
                   ? false
                   : searchedPrority.value
                   ? subFilter(
-                      val.priority.toLowerCase(),
+                      fresDeskPriorities.find(item=> item.value == +val.priority).text.toLowerCase(),
                       searchedPrority.value.toLowerCase().trim(),
                       selectedProrityFilter.value
                   )
@@ -375,7 +420,7 @@ export default {
                   ? false
                   : !!(searcheStatus.value
                   ? subFilter(
-                      val.address.toLowerCase(),
+                      fresDeskStatuses.find(item=> item.value == +val.status).text.toLowerCase(),
                       searcheStatus.value.toLowerCase().trim(),
                       selectedStatusFilter.value
                   )
@@ -411,7 +456,6 @@ export default {
       if (searchedPrority.value || searcheStatus.value) {
         allTickets.value = filterMethod(prevSearched.value, value);
       } else {
-        console.log(prevNonSearched);
         // default, When no filters is applied
         allTickets.value = filterMethod(prevNonSearched.value, value);
         prevMainSearchHistry.value = allTickets.value;
@@ -467,10 +511,13 @@ export default {
       searchText,
       showFilters,
       closeFilter,
+      clearFilter,
       searcheStatus,
+      searchedPrority,
       applyFilter,
       filterDropdown,
-      selectedProrityFilter
+      selectedProrityFilter,
+      selectedStatusFilter
     };
   },
 };
