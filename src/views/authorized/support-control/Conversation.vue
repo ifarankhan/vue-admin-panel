@@ -142,6 +142,49 @@
           <!--  -->
         </div>
 
+  <!-- post comment -->
+     <div class="w-10/12 h-56 px-4 mt-8 mb-4 ml-8">
+          <div class="flex items-center cursor-pointer" @click="collapsable.attachments = !collapsable.attachments">
+            <span
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d=" collapsable.attachments ? mdiChevronDown: mdiChevronUp" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">comment :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+          </div>
+          <!--  -->
+          <div
+            class="h-32 pl-4 mt-2 mb-6"
+            v-if="collapsable.attachments && ticketData?.allImages"
+          >
+            <QuillEditor theme="snow" v-model:content="conversationText" contentType="html" />
+            <div class="flex justify-end">
+              <div>
+                   <psytech-button
+                    type="Secondary"
+                    label="Submit"
+                    @buttonWasClicked="''"
+                  ></psytech-button>
+              </div>
+               <div>
+                   <psytech-button
+                    type="black-small"
+                    label="Cancel"
+                    @buttonWasClicked="''"
+                  ></psytech-button>
+              </div>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+
 </div>
 </template>
 
@@ -150,11 +193,14 @@ import { ref, computed, reactive, onMounted } from 'vue';
 import Loader from "@/components/Loader.vue";
 import { mdiChevronDown, mdiChevronUp, mdiCloudDownloadOutline } from "@mdi/js";
 import PsytechButton from "@/components/PsytechButton";
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { useStore } from "vuex";
 
 export default {
     components:{
         PsytechButton,
+        QuillEditor,
         Loader,
     },
     setup(props, { emit }) {
@@ -206,8 +252,6 @@ export default {
                   });
                 }
           } // end if
-        //   this.$set(this.allConversation[i],'allImages', allImages)
-        //   this.$set(this.allConversation[i],'allFiles', allFiles)
 
         } // end for loop
         ticketData.value.allFiles = allFiles;
@@ -221,9 +265,12 @@ export default {
         });
     });
 
+    const conversationText = ref("");
+
     return {
         ticketData,
         mdiChevronDown,
+        conversationText,
         mdiChevronUp,
         mdiCloudDownloadOutline,
         collapsable

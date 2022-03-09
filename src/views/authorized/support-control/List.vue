@@ -4,7 +4,6 @@
     <div class="flex flex-col items-center justify-center" style="height: 60vh">
       <div>
         <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">
-          Welcome to the psytech Support System
         </h1>
       </div>
       <div>
@@ -174,7 +173,10 @@ import StickyHeader from "@/components/StickyHeader";
 import PsytechButton from "@/components/PsytechButton";
 import CreateTicket from "@/components/CreateTicket";
 import { TabGroup, TabList } from "@headlessui/vue";
+import Field from "@/components/Field.vue";
+import Control from "@/components/Control.vue";
 import Icon from "@/components/Icon";
+import IconSVG from "@/components/IconSVG.vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
@@ -185,6 +187,9 @@ export default {
     PsytechButton,
     TabGroup,
     TabList,
+    Field,
+    IconSVG,
+    Control,
     Loader,
     CreateTicket,
     Icon,
