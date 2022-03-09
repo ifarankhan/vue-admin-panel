@@ -288,7 +288,6 @@ export default {
             ticketId: item.id
           }
         })
-        console.log(allTickets.value);
           prevNonSearched.value = allTickets.value;
         })
         .catch((error) => {
@@ -312,7 +311,7 @@ export default {
             FORM_DATA.append("attachments[]", data.attachments[i])
           }
         store.dispatch("freshDesk/addTikcetWithAttachments", FORM_DATA).then(res => {
-          // console.log("response is....", res)
+
           getAllTicketsByCompId()
         })
         .catch((error) => {
@@ -324,7 +323,7 @@ export default {
     }
     const createNewCompany = () => {
       store.dispatch("freshDesk/createCompany").then(result => {
-        console.log(result.data);
+
             const data = {
               companyId:result.data.id,
             }
@@ -364,7 +363,6 @@ export default {
 
     const subFilter = (item, value, filter) => {
       const selectedFilter = filter;
-      console.log(item)
       if (typeof value == "number" || typeof value == "string") {
         if (selectedFilter == "isNotEqualTo") {
           return item != value;
