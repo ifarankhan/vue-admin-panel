@@ -300,10 +300,11 @@ export default {
     };
 
     const createTicketWithAttachemnts = data => {
+        const USER_DATA = JSON.parse(localStorage.getItem('userData'))
         const FORM_DATA = new FormData();
         FORM_DATA.append('description', data.details);
         FORM_DATA.append('subject', data.subject);
-        FORM_DATA.append('email', 'test73@gmail.com');
+        FORM_DATA.append('email', USER_DATA.userName);
         FORM_DATA.append('custom_fields[cf_client]', String(data.client));
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
         FORM_DATA.append('status', 2); // open
