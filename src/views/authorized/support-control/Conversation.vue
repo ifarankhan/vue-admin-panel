@@ -164,13 +164,13 @@
             class="h-32 pl-4 mt-2 mb-6"
             v-if="collapsable.attachments && ticketData?.allImages"
           >
-            <QuillEditor theme="snow" v-model:content="conversationText" contentType="html" />
+            <QuillEditor theme="snow" v-model:content="conversationText" contentType="text" />
             <div class="flex justify-end">
               <div>
                    <psytech-button
                     type="Secondary"
                     label="Submit"
-                    @buttonWasClicked="''"
+                    @buttonWasClicked="addNoteToTicketMethod"
                   ></psytech-button>
               </div>
                <div>
@@ -184,7 +184,28 @@
           </div>
           <!--  -->
         </div>
-
+    <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+            <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketData.conversations" :key="index">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-1.jpg" alt="Neil image">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                            Neil Sims
+                        </p>
+                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                           {{ item?.body_text }}
+                        </p>
+                    </div>
+                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                        {{ item?.created_at.split("T")[0]+ " "+item?.created_at.split("T")[1].split("Z")[0] }}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 </template>
 
@@ -204,7 +225,7 @@ export default {
         Loader,
     },
     setup(props, { emit }) {
-
+    const loader = ref(false);
     const collapsable = reactive({
       description: true,
       attachments: true
@@ -213,8 +234,8 @@ export default {
     const store = useStore();
     const ticketData = ref(null);
 
-   onMounted(() => {
-      store
+  const geTicketDetail = ()=>{
+          store
         .dispatch("freshDesk/getIndividualTicket")
         .then((res) => {
             console.log("response is....", res.data)
@@ -227,6 +248,8 @@ export default {
                 attachments: DATA.attachments,
                 status: DATA.status,
                 priority: DATA.priority,
+                requester: DATA.requester,
+                conversations: DATA.conversations,
                 allImages: [],
                 allFiles: []
             }
@@ -256,23 +279,43 @@ export default {
         } // end for loop
         ticketData.value.allFiles = allFiles;
         ticketData.value.allImages = allImages;
-        console.log("all files....", ticketData.value.allFiles);
-        console.log("all images....", ticketData.value.allImages);
         
         })
         .catch((error) => {
           console.log("error is...", error);
         });
+  } 
+
+   onMounted(() => {
+     geTicketDetail()
     });
 
     const conversationText = ref("");
+
+    const addNoteToTicketMethod = ()=>{
+        loader.value = true;
+        store
+        .dispatch("freshDesk/addNoteToTicket", {
+          body: conversationText.value
+        })
+          .then((res) => {
+            conversationText.value = " ";
+            geTicketDetail()
+            
+          }).catch((error) => {
+          }).finally(()=>{
+             loader.value = false;
+          })
+    }
 
     return {
         ticketData,
         mdiChevronDown,
         conversationText,
         mdiChevronUp,
+        loader,
         mdiCloudDownloadOutline,
+        addNoteToTicketMethod,
         collapsable
       }
     },

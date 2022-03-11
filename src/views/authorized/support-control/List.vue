@@ -286,7 +286,8 @@ export default {
             CreatedTime: item.created_at.split("T")[1].split("Z")[0],
             status: item.status,
             priority: item.priority,
-            ticketId: item.id
+            ticketId: item.id,
+            requester_id: item.requester_id
           }
         })
           prevNonSearched.value = allTickets.value;
@@ -304,7 +305,7 @@ export default {
         const FORM_DATA = new FormData();
         FORM_DATA.append('description', data.details);
         FORM_DATA.append('subject', data.subject);
-        FORM_DATA.append('email', USER_DATA.userName);
+        FORM_DATA.append('email', data.userName);
         FORM_DATA.append('custom_fields[cf_client]', String(data.client));
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
         FORM_DATA.append('status', 2); // open

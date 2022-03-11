@@ -44,6 +44,11 @@ const actions = {
             headers: headers
           });
     },
+    addNoteToTicket({ }, payload) {
+        const DATA = payload;
+        DATA.user_id = state.ticketData.requester_id
+        return fresh_desk_url.post(`/tickets/${state.ticketData.ticketId}/notes`, DATA);
+    },
     async getAllTicketsByCompany({ },payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
         return fresh_desk_url.get('/tickets', {
@@ -53,7 +58,7 @@ const actions = {
         })
     },
     async getIndividualTicket({ state }){
-        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}`)
+        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}?include=conversations,requester`)
     },
 }
 
