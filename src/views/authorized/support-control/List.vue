@@ -4,6 +4,7 @@
     <div class="flex flex-col items-center justify-center" style="height: 60vh">
       <div>
         <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">
+          Welcome to Psytech support system.
         </h1>
       </div>
       <div>
@@ -299,10 +300,11 @@ export default {
     };
 
     const createTicketWithAttachemnts = data => {
+        const USER_DATA = JSON.parse(localStorage.getItem('userData'))
         const FORM_DATA = new FormData();
         FORM_DATA.append('description', data.details);
         FORM_DATA.append('subject', data.subject);
-        FORM_DATA.append('email', 'test73@gmail.com');
+        FORM_DATA.append('email', USER_DATA.userName);
         FORM_DATA.append('custom_fields[cf_client]', String(data.client));
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
         FORM_DATA.append('status', 2); // open
