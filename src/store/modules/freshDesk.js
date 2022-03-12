@@ -5,7 +5,9 @@ const state = {
 }
 
 const getters = {
-    
+    getTicketData(state){
+        return state.ticketData
+    }
   }
 
 const mutations = {
@@ -44,9 +46,9 @@ const actions = {
             headers: headers
           });
     },
-    addNoteToTicket({ }, payload) {
+    addNoteToTicket({ state }, payload) {
         const DATA = payload;
-        DATA.user_id = state.ticketData.requester_id
+        DATA.user_id = state?.ticketData?.requester_id
         return fresh_desk_url.post(`/tickets/${state.ticketData.ticketId}/notes`, DATA);
     },
     async getAllTicketsByCompany({ },payload){
@@ -57,8 +59,14 @@ const actions = {
             }
         })
     },
+    async getAllContacts({ },payload){
+        return fresh_desk_url.get('/contacts')
+    },
+    async getAllAgents({ },payload){
+        return fresh_desk_url.get('/agents')
+    },
     async getIndividualTicket({ state }){
-        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}?include=conversations,requester`)
+        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}?include=conversations`)
     },
 }
 
