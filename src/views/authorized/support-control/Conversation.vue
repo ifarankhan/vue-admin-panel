@@ -252,6 +252,7 @@ export default {
     const conversationText = ref("");
 
     const addNoteToTicketMethod = ()=>{
+     let element = document.getElementsByClassName("ql-editor");
         loader.value = true;
         store
         .dispatch("freshDesk/addNoteToTicket", {
@@ -262,7 +263,7 @@ export default {
             
           }).catch((error) => {
           }).finally(()=>{
-             conversationText.value = " ";
+             element[0].innerHTML = "";
              loader.value = false;
           })
     }
