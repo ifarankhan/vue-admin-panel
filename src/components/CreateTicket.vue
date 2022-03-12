@@ -13,7 +13,7 @@
                    v-model="ticket.subject"
                    placeholder=" "
                />
-               <error-span :error="v$.amount"></error-span>
+               <error-span :error="v$.subject"></error-span>
              </field>
            </div>
            <div class="mt-6 ml-2">
@@ -58,14 +58,15 @@
               />
             </field>
           </div>
+           <p>
+              <error-span :error="v$.details"></error-span>
+          </p>
            <div class="m-2">
-
                <control
                    type="imageupload"
                    @imagesUploaded="(ticket.attachments = $event)"
                    placeholder=" "
                />
-               <!-- <error-span :error="v$.amount"></error-span> -->
            </div>
 
            </div>
@@ -144,23 +145,6 @@ export default {
       return JSON.parse(localStorage.getItem("userData"))
     })
 
-    const rules = computed(() => {
-      return {
-        subject: {
-          required: helpers.withMessage("This field is required", required),
-        },
-        details: {
-          required: helpers.withMessage("This field is required", required),
-        },
-        client: {
-          required: helpers.withMessage("This field is required", required)
-        },
-        user: {
-          required: helpers.withMessage("This field is required", required)
-        }
-      };
-    });
-
    const clients = ref([]);
    onMounted(() => {
       store
@@ -215,7 +199,23 @@ export default {
             userLoader.value = false;
       })
     }
-
+    
+    const rules = computed(() => {
+      return {
+        subject: {
+          required: helpers.withMessage("This field is required", required),
+        },
+        details: {
+          required: helpers.withMessage("This field is required", required),
+        },
+        client: {
+          required: helpers.withMessage("This field is required", required)
+        },
+        user: {
+          required: helpers.withMessage("This field is required", required)
+        }
+      };
+    });
     const v$ = useVuelidate(rules, ticket);
     const ticketMethod = ()=>{
       v$.value.$validate();

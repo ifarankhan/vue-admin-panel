@@ -286,7 +286,8 @@ export default {
             CreatedTime: item.created_at.split("T")[1].split("Z")[0],
             status: item.status,
             priority: item.priority,
-            ticketId: item.id
+            ticketId: item.id,
+            requester_id: item.requester_id
           }
         })
           prevNonSearched.value = allTickets.value;
@@ -300,6 +301,7 @@ export default {
     };
 
     const createTicketWithAttachemnts = data => {
+      console.log(data)
         const USER_DATA = JSON.parse(localStorage.getItem('userData'))
         const FORM_DATA = new FormData();
         FORM_DATA.append('description', data.details);
@@ -309,9 +311,11 @@ export default {
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
         FORM_DATA.append('status', 2); // open
         FORM_DATA.append('priority', 1); // low
-        for(let i=0; i< data.attachments.length; i++){
-            FORM_DATA.append("attachments[]", data.attachments[i])
-          }
+        if(data.attachments){
+          for(let i=0; i< data.attachments.length; i++){
+              FORM_DATA.append("attachments[]", data.attachments[i])
+            }
+        }
         store.dispatch("freshDesk/addTikcetWithAttachments", FORM_DATA).then(res => {
 
           getAllTicketsByCompId()

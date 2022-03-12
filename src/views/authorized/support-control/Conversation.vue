@@ -30,12 +30,12 @@
      <div class="flex w-3/5 px-4 mt-6 ml-10">
          <div class="flex w-2/4">
              <span class="text-sm font-bold">Creation Date:</span>
-             <span class="ml-2">{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
+             <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
          </div>
 
           <div class="flex w-2/4">
              <span class="text-sm font-bold">Creation Time:</span>
-             <span class="ml-2">{{ ticketData && ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
          </div>
      </div>
     
@@ -94,14 +94,15 @@
             v-if="collapsable.attachments && ticketData?.allImages"
           >
             <p class="mb-1 text-sm font-bold">Images : </p>
-            <div class="grid grid-cols-3 gap-1 overflow-hidden">
+            <div class="grid grid-cols-3 gap-1 overflow-hidden" v-if="ticketData?.allImages.length">
                <div v-for="(item, index) in ticketData?.allImages" :key="index" class="h-64 p-2 border w-80">
                      <p class="ml-4 font-bold">{{ item.imageName }}</p>
                      <img :src="item.imageUrl" class="w-full h-full" />
                </div>
             </div>
+            <p class="" v-else> No Image was Added</p>
             <p class="mt-6 mb-1 text-sm font-bold">Files : </p>
-            <div class="mb-8">
+            <div class="mb-8" v-if="ticketData?.allFiles.length">
             <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
               <div class="grid grid-cols-3 gap-1 overflow-hidden">
             <li class="inline-block h-16 p-2 mr-4 border" v-for="(item, index) in ticketData?.allFiles" :key="index">
@@ -137,14 +138,14 @@
               </div>
         </ul>      
             </div>
-
+            <p class="" v-else> No File was Added</p>
           </div>
           <!--  -->
         </div>
 
   <!-- post comment -->
      <div class="w-10/12 h-56 px-4 mt-8 mb-4 ml-8">
-          <div class="flex items-center cursor-pointer" @click="collapsable.attachments = !collapsable.attachments">
+          <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
               <svg
@@ -153,7 +154,7 @@
                 height="25"
                 class="inline-block"
               >
-                <path :d=" collapsable.attachments ? mdiChevronDown: mdiChevronUp" />
+                <path :d=" collapsable.comments ? mdiChevronDown: mdiChevronUp" />
               </svg>
             </span>
             <span class="-ml-0.5 text-sm font-semibold">comment :</span>
@@ -162,15 +163,15 @@
           <!--  -->
           <div
             class="h-32 pl-4 mt-2 mb-6"
-            v-if="collapsable.attachments && ticketData?.allImages"
+            v-if="collapsable.comments && ticketData?.allImages"
           >
-            <QuillEditor theme="snow" v-model:content="conversationText" contentType="html" />
+            <QuillEditor theme="snow" v-model:content="conversationText" contentType="text" />
             <div class="flex justify-end">
               <div>
                    <psytech-button
                     type="Secondary"
                     label="Submit"
-                    @buttonWasClicked="''"
+                    @buttonWasClicked="addNoteToTicketMethod()"
                   ></psytech-button>
               </div>
                <div>
@@ -184,7 +185,28 @@
           </div>
           <!--  -->
         </div>
-
+    <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+            <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketData.conversations" :key="index">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-shrink-0">
+                        <div class="flex items-center justify-center w-10 h-10 text-white rounded-full" style="background-color: rgba(0, 0, 0, 0.4);" v-if=" item && item.contactName"> {{ item.contactName[0].toUpperCase() }} </div>
+                    </div>
+                    <div class="flex-1 min-w-0 ml-2">
+                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                            {{ item?.contactName }}
+                        </p>
+                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                           {{ item?.body_text }}
+                        </p>
+                    </div>
+                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white" v-if="item && item.created_at">
+                        {{ item?.created_at.split("T")[0] + " "+ item.created_at.split("T")[1].split("Z")[0] }}
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>
 </template>
 
@@ -193,32 +215,75 @@ import { ref, computed, reactive, onMounted } from 'vue';
 import Loader from "@/components/Loader.vue";
 import { mdiChevronDown, mdiChevronUp, mdiCloudDownloadOutline } from "@mdi/js";
 import PsytechButton from "@/components/PsytechButton";
-import { QuillEditor } from '@vueup/vue-quill'
+import { QuillEditor } from '@vueup/vue-quill';
+import store from "../../../store/index";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { useStore } from "vuex";
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    const ticketData = store.getters["freshDesk/getTicketData"];
+    if (!ticketData) {
+      next({ name: "support-control-list" });
+    }
+    next();
+  },
     components:{
         PsytechButton,
         QuillEditor,
         Loader,
     },
     setup(props, { emit }) {
+    const loader = ref(false);
 
     const collapsable = reactive({
       description: true,
-      attachments: true
+      attachments: true,
+      comments: true
     });
 
     const store = useStore();
     const ticketData = ref(null);
 
    onMounted(() => {
-      store
-        .dispatch("freshDesk/getIndividualTicket")
-        .then((res) => {
-            console.log("response is....", res.data)
-            const DATA = res.data;
+     getIndividualTicketData()
+    });
+
+    const conversationText = ref("");
+
+    const addNoteToTicketMethod = ()=>{
+        loader.value = true;
+        store
+        .dispatch("freshDesk/addNoteToTicket", {
+          body: conversationText.value
+        })
+          .then((res) => {
+            getIndividualTicketData()
+            
+          }).catch((error) => {
+          }).finally(()=>{
+             conversationText.value = " ";
+             loader.value = false;
+          })
+    }
+
+    const getIndividualTicketData = ()=>{
+      // loading.value = true;
+      Promise.allSettled([ 
+      store.dispatch("freshDesk/getIndividualTicket"), 
+      store.dispatch("freshDesk/getAllContacts"),
+      store.dispatch("freshDesk/getAllAgents")
+    ]) 
+    .then(async results =>{
+      const [ticketDetail, allContacts, allAgents] = results;
+
+      let freshDeskContacts = [];
+      let freshDeskAgents = [];
+
+      // ticket detail
+       if(ticketDetail.status== "fulfilled"){
+        //  besidesWidgetData.topClients = await topClientsData.value.data.data;
+          const DATA = await ticketDetail.value.data;
             ticketData.value = {
                 subject: DATA.subject,
                 descriptionText: DATA.description_text,
@@ -227,6 +292,8 @@ export default {
                 attachments: DATA.attachments,
                 status: DATA.status,
                 priority: DATA.priority,
+                requester: DATA.requester,
+                conversations: DATA.conversations,
                 allImages: [],
                 allFiles: []
             }
@@ -256,23 +323,56 @@ export default {
         } // end for loop
         ticketData.value.allFiles = allFiles;
         ticketData.value.allImages = allImages;
-        console.log("all files....", ticketData.value.allFiles);
-        console.log("all images....", ticketData.value.allImages);
-        
-        })
-        .catch((error) => {
-          console.log("error is...", error);
-        });
-    });
+       }
 
-    const conversationText = ref("");
+      // all contacts
+       if(allContacts.status== "fulfilled"){
+        freshDeskContacts = await allContacts.value.data;
+       } 
+       
+      // all agents
+       if(allAgents.status== "fulfilled"){
+          freshDeskAgents = await allAgents.value.data;
+          freshDeskAgents = freshDeskAgents.map(item=> {
+            return {
+              id: item.id,
+              name: item.contact.name,
+              email: item.contact.email
+            }
+          })
+       }
+
+      const mergedContactsAndAgents = [...freshDeskContacts, ...freshDeskAgents]
+
+       const CONVERSATIONS = ticketData.value.conversations;
+         const formattedData = CONVERSATIONS.map(item=>{
+           const itemFound = mergedContactsAndAgents.find(x=> x.id == item.user_id)
+           if(itemFound){
+             return {
+                ...item,
+                contactName: itemFound.name,
+                contactEmail: itemFound.email
+             }
+           }
+         })
+
+        ticketData.value.conversations = formattedData;
+
+    }).catch(error=>{ 
+      console.log("error", error) 
+      }).finally(()=>{
+        // loading.value = false;
+      })
+    }
 
     return {
         ticketData,
         mdiChevronDown,
         conversationText,
         mdiChevronUp,
+        loader,
         mdiCloudDownloadOutline,
+        addNoteToTicketMethod,
         collapsable
       }
     },
