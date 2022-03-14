@@ -252,6 +252,7 @@ export default {
     const conversationText = ref("");
 
     const addNoteToTicketMethod = ()=>{
+     if(conversationText.value == "" || conversationText.value == "\n") return;
      let element = document.getElementsByClassName("ql-editor");
         loader.value = true;
         store

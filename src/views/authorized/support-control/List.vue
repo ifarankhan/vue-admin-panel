@@ -301,7 +301,6 @@ export default {
     };
 
     const createTicketWithAttachemnts = data => {
-      console.log(data)
         const USER_DATA = JSON.parse(localStorage.getItem('userData'))
         const FORM_DATA = new FormData();
         FORM_DATA.append('description', data.details);
@@ -317,7 +316,6 @@ export default {
             }
         }
         store.dispatch("freshDesk/addTikcetWithAttachments", FORM_DATA).then(res => {
-
           getAllTicketsByCompId()
         })
         .catch((error) => {
