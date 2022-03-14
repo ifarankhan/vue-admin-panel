@@ -170,7 +170,7 @@
               <div>
                    <psytech-button
                     type="Secondary"
-                    label="Submit"
+                    label="Add Comment"
                     @buttonWasClicked="addNoteToTicketMethod()"
                   ></psytech-button>
               </div>
