@@ -165,7 +165,7 @@
             class="h-32 pl-4 mt-2 mb-6"
             v-if="collapsable.comments"
           >
-            <QuillEditor theme="snow" v-model:content="conversationText" contentType="text" />
+            <QuillEditor theme="snow" v-model:content="conversationText" contentType="html" />
             <div class="flex justify-end">
               <div>
                    <psytech-button
@@ -196,9 +196,8 @@
                         <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
                             {{ item?.contactName }}
                         </p>
-                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                           {{ item?.body_text }}
-                        </p>
+                        <div class="text-sm text-gray-500 dark:text-gray-400" v-html="item?.body">
+                        </div>
                     </div>
                     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white" v-if="item && item.created_at">
                         {{ item?.created_at.split("T")[0] + " "+ item.created_at.split("T")[1].split("Z")[0] }}
