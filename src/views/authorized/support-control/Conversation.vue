@@ -144,7 +144,7 @@
         </div>
 
   <!-- post comment -->
-     <div class="w-10/12 h-56 px-4 mt-8 mb-4 ml-8">
+     <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
           <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
@@ -163,7 +163,7 @@
           <!--  -->
           <div
             class="h-32 pl-4 mt-2 mb-6"
-            v-if="collapsable.comments && ticketData?.allImages"
+            v-if="collapsable.comments"
           >
             <QuillEditor theme="snow" v-model:content="conversationText" contentType="text" />
             <div class="flex justify-end">
@@ -178,14 +178,14 @@
                    <psytech-button
                     type="black-small"
                     label="Cancel"
-                    @buttonWasClicked="''"
+                    @buttonWasClicked="clearConversation()"
                   ></psytech-button>
               </div>
             </div>
           </div>
           <!--  -->
         </div>
-    <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+    <div class="w-10/12 px-4 pt-8 mt-16 mb-4 ml-8">
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
             <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketData.conversations" :key="index">
                 <div class="flex items-center space-x-4">
@@ -250,6 +250,10 @@ export default {
     });
 
     const conversationText = ref("");
+    const clearConversation = ()=>{
+      let element = document.getElementsByClassName("ql-editor");
+      element[0].innerHTML = "";
+    }
 
     const addNoteToTicketMethod = ()=>{
      if(conversationText.value == "" || conversationText.value == "\n") return;
@@ -284,7 +288,6 @@ export default {
 
       // ticket detail
        if(ticketDetail.status== "fulfilled"){
-        //  besidesWidgetData.topClients = await topClientsData.value.data.data;
           const DATA = await ticketDetail.value.data;
             ticketData.value = {
                 subject: DATA.subject,
@@ -373,6 +376,7 @@ export default {
         conversationText,
         mdiChevronUp,
         loader,
+        clearConversation,
         mdiCloudDownloadOutline,
         addNoteToTicketMethod,
         collapsable
