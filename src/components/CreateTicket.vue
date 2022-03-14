@@ -2,6 +2,7 @@
   <Loader v-if="loader" :toBeBigger="true" />
   <div>
   <Dialog v-model:visible="showDialog" :style="{width: '40vw',height:'auto'}" :modal="true" @hide="$emit('closeDialog')">
+     <Loader v-if="loader" :toBeBigger="true" />
           <template #header>
               <h3 class="text-lg font-medium text-black"> Create a Ticket</h3>
             </template>
@@ -125,6 +126,7 @@ export default {
 
        const showDialog = ref(true);
        const showMsg = ref();
+       const loader = ref(false);
 
        const openDialog = () => {
             showDialog.value = true;
@@ -227,6 +229,7 @@ export default {
       ) {
         return true;
       }
+      loader.value = true;
       emit("ticketData",ticket)
     }
 
@@ -235,6 +238,7 @@ export default {
         openDialog,
         closeDialog,
         userLoader,
+        loader,
         userData,
         clients,
         clientUsers,
