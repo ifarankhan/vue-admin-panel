@@ -83,7 +83,7 @@
     <div class="w-1/12 ml-12">
       <psytech-button
         label="Cancel"
-        type="dark"
+        type="black-small"
         @buttonWasClicked="showQuitDialog = true"
       ></psytech-button>
     </div>
@@ -91,7 +91,7 @@
       <div>
         <psytech-button
           label="Back"
-          :type="showStep==0?'light':'dark'"
+          :type="showStep==0?'light':'black'"
           :enabledBackBtn="true"
           @buttonWasClicked="goToBackHandler()"
         ></psytech-button>

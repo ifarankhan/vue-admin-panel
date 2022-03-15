@@ -1,5 +1,5 @@
 <template>
-  <footer v-show="isFooterBarVisible" class="bg-white py-2 px-6 dark:bg-gray-900">
+  <footer v-show="isFooterBarVisible" class="px-6 py-2 bg-white dark:bg-gray-900">
     <level>
       <div>
         Copyright <b>&copy; {{ year }}, <a href="https://psytech.com/" target="_blank">Psytech International. All rights reserved</a>.</b>

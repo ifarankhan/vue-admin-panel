@@ -76,7 +76,7 @@
        </div>
 
     </div>
-    <div>
+    <div class="mb-2">
       <p class="ml-1 text-lg font-bold">Most Used Reports:</p>
        <DataTable
                 :customers="besidesWidgetData.mostUsedReports"

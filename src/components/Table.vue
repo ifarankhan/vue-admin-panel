@@ -21,6 +21,45 @@
                     <Button icon="pi pi-external-link" label="Export" @click="exportCSV($event)" />
                 </div>
             </template> -->
+            <span v-if="tableType=='tickets'">
+              <Column field="createDate" header="Create Date" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                    <div>
+                         <span> {{data.createDate}} </span>
+                 </div>
+                </template>
+              </Column>
+              <Column field="CreatedTime" header="Time" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data.CreatedTime}} </span>
+                </template>
+              </Column>
+              <Column field="subject" header="Subject" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div class="truncate">{{data.subject}}</div>
+                  </template>
+              </Column>
+               <Column field="Priority" header="priority" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div>{{ data.priority && fresDeskPriorities.find(item=> item.value == +data.priority).text  }}</div>
+                  </template>
+              </Column>
+               <Column field="status" header="Status" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
+                  <template #body="{data}">
+                      <div>{{ data.status && fresDeskStatuses.find(item=> item.value == +data.status).text  }}</div>
+                  </template>
+              </Column>
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
 
             <span v-if="tableType=='accountUsers'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
@@ -274,7 +313,7 @@
                       <span> {{data.email}}</span>
                   </template>
               </Column>
-               <Column header="Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+               <!-- <Column header="Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span>{{ data.dateOfUpdate.split("T")[0] }}</span>
                   </template>
@@ -283,7 +322,7 @@
                    <template #body="{data}">
                       <span>{{ data.dateOfUpdate.split("T")[1].split("Z")[0] }}</span>
                   </template>
-              </Column>
+              </Column> -->
             </span>
              <span v-if="tableType =='lowCreditCLients'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
@@ -431,16 +470,6 @@ export default {
 
        const menu = ref();
 
-      // const paginationChanged = (event)=>{
-      //   const data = {
-      //     page: event.page,
-      //     pageCount: event.pageCount,
-      //     first: event.first
-      //   }
-
-      //   store.commit("clientControl/setUsersTablePag",data)
-      // }
-
       const items = ref([
 				{
 					label: 'Request to Correct Credit Update'
@@ -459,6 +488,44 @@ export default {
 
         }
 
+        const fresDeskStatuses = ref([
+          {
+            text: "Open",
+            value: 2
+          },
+          {
+            text: "Pending",
+            value: 3
+          },
+          {
+            text: "Resolved",
+            value: 4
+          },
+          {
+            text: "Closed",
+            value: 5
+          }
+        ])
+
+        const fresDeskPriorities = ref([
+          {
+            text: "Low",
+            value: 1
+          },
+          {
+            text: "Medium",
+            value: 2
+          },
+          {
+            text: "High",
+            value: 3
+          },
+          {
+            text: "Urgent",
+            value: 4
+          }
+        ])
+
         const dt = ref();
         const exportCSV = () => {
             dt.value.exportCSV();
@@ -473,6 +540,8 @@ export default {
             dt,
             items,
             exportCSV,
+            fresDeskStatuses,
+            fresDeskPriorities,
             tableStatePersistence,
             formatDate,
             userTypes

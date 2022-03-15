@@ -18,7 +18,15 @@ export function useClientUser() {
         year: "numeric",
       })
     }
-  
+
+    const formatExportDate = (value) => {
+        return new Date(value).toLocaleDateString("en-GB", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).split('/').reverse().join('-')
+    }
+
   const tableStatePersistence = (event)=>{
       const data = {
         page: event.page,
@@ -30,7 +38,7 @@ export function useClientUser() {
     }
 
   const trainingArray = reactive({trainingObj: [
-    { 
+    {
       text: "Test User Personality & Ability (TUP & TUA) or Psytech Test Certificate (PTC)",
       value: "PTC",
       selected: false,
@@ -59,11 +67,52 @@ export function useClientUser() {
     },
   ]});
 
+    const fresDeskStatuses = reactive([
+        {
+            text: "Open",
+            value: 2
+        },
+        {
+            text: "Pending",
+            value: 3
+        },
+        {
+            text: "Resolved",
+            value: 4
+        },
+        {
+            text: "Closed",
+            value: 5
+        }
+    ])
+
+    const fresDeskPriorities = reactive([
+        {
+            text: "Low",
+            value: 1
+        },
+        {
+            text: "Medium",
+            value: 2
+        },
+        {
+            text: "High",
+            value: 3
+        },
+        {
+            text: "Urgent",
+            value: 4
+        }
+    ])
+
   return {
     userTypes,
     trainingArray,
     notifications,
     tableStatePersistence,
-    formatDate
+    formatDate,
+    formatExportDate,
+      fresDeskStatuses,
+      fresDeskPriorities
   };
 }
