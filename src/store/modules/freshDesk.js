@@ -1,18 +1,25 @@
 import { fresh_desk_url } from "../../axios";
 const namespaced = true;
 const state = {
-    ticketData: null
+    ticketData: null,
+    ticketIdFromURL: null
 }
 
 const getters = {
     getTicketData(state){
         return state.ticketData
+    },
+    getTicketIdFromURL: state =>{
+        return state.ticketIdFromURL
     }
   }
 
 const mutations = {
     setTicketData(state, payload){
         state.ticketData = payload
+    },
+    setTicketidFromURL(state, payload){
+        state.ticketIdFromURL = payload;
     }
 }
 
@@ -65,8 +72,8 @@ const actions = {
     async getAllAgents({ },payload){
         return fresh_desk_url.get('/agents')
     },
-    async getIndividualTicket({ state }){
-        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}?include=conversations`)
+    async getIndividualTicket({ }, payload){
+        return fresh_desk_url.get(`/tickets/${payload.ticketId}?include=conversations`)
     },
 }
 
