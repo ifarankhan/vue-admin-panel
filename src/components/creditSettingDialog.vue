@@ -18,7 +18,7 @@
              <div class="form-check">
                <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                <label class="form-check-label inline-block text-gray-800 aling-i-icon" for="flexRadioDefault1">
-                 Psytech International <icon :path="mdiAlertCircle" size="25" v-tooltip="'If the user donot have any credit. If the user donot have any credit.'"  />
+                 Psytech International <icon :path="mdiAlertCircle" size="25" v-tooltip="{value:' In this case, If any user of any client updates its credit, the credit will be purchased from Psytech International and the distributer will receive the invoice for that purchase.',class:'tooltip-style'}"  />
                </label>
              </div>
            </div>
@@ -26,7 +26,7 @@
              <div class="form-check">
                <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
                <label class="form-check-label inline-block text-gray-800 aling-i-icon" for="flexRadioDefault2">
-                 Distributor <icon :path="mdiAlertCircle" size="25" v-tooltip="'Click to proceed'"  />
+                 Distributor <icon :path="mdiAlertCircle" size="25" v-tooltip="{value:'In this case, If any user of any client updates its credit, that credit will be transferred from the Distributer’s Transferable Credit Pool to that Users’ Account. But if the Distributer’s Transferable Credit Pool is empty then the credit will be purchased from Psytech International and the distributer will receive the invoice for that purchase.',class:'tooltip-style'}"  />
                </label>
              </div>
            </div>
@@ -149,5 +149,8 @@ export default {
 }
 label.aling-i-icon span{
   display:inline-block;
+}
+.tooltip-style .p-tooltip-text {
+  width:300px;
 }
 </style>
