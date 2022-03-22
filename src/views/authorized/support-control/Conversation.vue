@@ -1,6 +1,7 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
   <div class="pt-10">
+
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
@@ -217,22 +218,26 @@ import PsytechButton from "@/components/PsytechButton";
 import { QuillEditor } from '@vueup/vue-quill';
 import store from "../../../store/index";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import Button from 'primevue/button';
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    const ticketData = store.getters["freshDesk/getTicketData"];
-    if (!ticketData) {
-      next({ name: "support-control-list" });
-    }
-    next();
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   const ticketData = store.getters["freshDesk/getTicketData"];
+  //   if (!ticketData) {
+  //     next({ name: "support-control-list" });
+  //   }
+  //   next();
+  // },
     components:{
         PsytechButton,
         QuillEditor,
         Loader,
+        Button
     },
     setup(props, { emit }) {
+    const router = useRouter();
     const loader = ref(false);
 
     const collapsable = reactive({
@@ -272,10 +277,26 @@ export default {
           })
     }
 
-    const getIndividualTicketData = ()=>{
-      // loading.value = true;
+  const isBase64 = str => {
+        if (str ==='' || str.trim() ===''){ return false; }
+        try {
+            return btoa(atob(str)) == str;
+        } catch (err) {
+            return false;
+        }
+  }
+  
+  const getIndividualTicketData = ()=>{
+      let URL;
+      const route = router.currentRoute.value.params.id;
+      try {
+         if(isBase64(route))
+         URL = atob(router.currentRoute.value.params.id);
+      } catch (error) {
+        console.log("error...", error)
+      }
       Promise.allSettled([ 
-      store.dispatch("freshDesk/getIndividualTicket"), 
+      store.dispatch("freshDesk/getIndividualTicket", {ticketId: URL?.split("-")[0] }), 
       store.dispatch("freshDesk/getAllContacts"),
       store.dispatch("freshDesk/getAllAgents")
     ]) 
