@@ -260,8 +260,12 @@ export default {
 
     //
     const redirectToDetail = async e => {
+      const randomT = e.data.ticketId;
+      const randomC = e.data.companyId;
+      const concatInUrl = btoa(`${randomT}-${randomC}`);
+
       store.commit("freshDesk/setTicketData", e.data);
-      router.push({ name: "ticket-conversation" });
+      router.push({name: "ticket-conversation" ,  params: { id: concatInUrl } });
     };
 
     let showCreateTicketDialog = ref(false);
@@ -287,6 +291,7 @@ export default {
             status: item.status,
             priority: item.priority,
             ticketId: item.id,
+            companyId: item.company_id,
             requester_id: item.requester_id
           }
         })
