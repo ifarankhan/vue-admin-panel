@@ -4,7 +4,7 @@
      <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="showError">
      <error-alert
             @dismissError="showError = false"
-            :error="'The ticket is either not there or you do not have permission'"
+            :error="`The ticket is either not there or you don't have permission`"
             :showTranslatedError="false"
           />
      </div>
