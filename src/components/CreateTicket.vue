@@ -229,6 +229,16 @@ export default {
       ) {
         return true;
       }
+      // extract client name
+      ticket.client = (clients.value.filter(item=> {
+        return item.value == ticket.client
+      })[0]).text
+
+      // extract user name
+     const selectedUser = (clientUsers.value.filter(item=> {
+        return item.value == ticket.user
+      })[0])
+      ticket.user = selectedUser.text + "-"+ selectedUser.email
       loader.value = true;
       emit("ticketData",ticket)
     }

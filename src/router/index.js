@@ -147,7 +147,7 @@ const routes = [
         requiresAuth: true,
       },
       {
-        path: 'conversation',
+        path: ':id/conversation',
         name: 'ticket-conversation',
         requiresAuth: true,
         // layout: 'mainLayout',
@@ -190,8 +190,7 @@ router.afterEach(to => {
 
 // Meta Handling
 router.beforeEach((to, from, next) => {
-  // console.log("prev page url", from)
-  // store.commit("setPrevRoute", from)
+  const prevURL = to.name;
   const USER_DATA = JSON.parse(localStorage.getItem('userData'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!USER_DATA?.authToken) {
@@ -199,7 +198,7 @@ router.beforeEach((to, from, next) => {
         path: '/login',
       })
     } else {
-      next()
+        next()
     }
   } else {
     if (USER_DATA?.authToken) {

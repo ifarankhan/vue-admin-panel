@@ -1,6 +1,14 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
   <div class="pt-10">
+     <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="showError">
+     <error-alert
+            @dismissError="showError = false"
+            :error="`The ticket is either not there or you don't have permission`"
+            :showTranslatedError="false"
+          />
+     </div>
+
       <div class="grid grid-cols-2 md:px-2">
       <div class="flex items-center ml-8">
         <div
@@ -216,24 +224,31 @@ import { mdiChevronDown, mdiChevronUp, mdiCloudDownloadOutline } from "@mdi/js";
 import PsytechButton from "@/components/PsytechButton";
 import { QuillEditor } from '@vueup/vue-quill';
 import store from "../../../store/index";
+import ErrorAlert from "@/components/ErrorAlert.vue";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import Button from 'primevue/button';
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    const ticketData = store.getters["freshDesk/getTicketData"];
-    if (!ticketData) {
-      next({ name: "support-control-list" });
-    }
-    next();
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   const ticketData = store.getters["freshDesk/getTicketData"];
+  //   if (!ticketData) {
+  //     next({ name: "support-control-list" });
+  //   }
+  //   next();
+  // },
     components:{
         PsytechButton,
         QuillEditor,
+        ErrorAlert,
         Loader,
+        Button
     },
     setup(props, { emit }) {
+    const router = useRouter();
     const loader = ref(false);
+    let showError = ref("");
 
     const collapsable = reactive({
       description: true,
@@ -272,10 +287,31 @@ export default {
           })
     }
 
-    const getIndividualTicketData = ()=>{
-      // loading.value = true;
+  const isBase64 = str => {
+        if (str ==='' || str.trim() ===''){ return false; }
+        try {
+            return btoa(atob(str)) == str;
+        } catch (err) {
+            return false;
+        }
+  }
+  
+  const getIndividualTicketData = ()=>{
+      let URL;
+      const route = router.currentRoute.value.params.id;
+      try {
+         if(isBase64(route))
+         URL = atob(router.currentRoute.value.params.id);
+      } catch (error) {
+        console.log("error...", error)
+      }
+      if(URL?.split("-")[1] != JSON.parse(localStorage.getItem("userData")).freshdeskCompanyID){
+        showError.value = true;
+        return
+      }
+
       Promise.allSettled([ 
-      store.dispatch("freshDesk/getIndividualTicket"), 
+      store.dispatch("freshDesk/getIndividualTicket", {ticketId: URL?.split("-")[0] }), 
       store.dispatch("freshDesk/getAllContacts"),
       store.dispatch("freshDesk/getAllAgents")
     ]) 
@@ -375,6 +411,7 @@ export default {
         conversationText,
         mdiChevronUp,
         loader,
+        showError,
         clearConversation,
         mdiCloudDownloadOutline,
         addNoteToTicketMethod,
