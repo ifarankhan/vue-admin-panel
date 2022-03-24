@@ -37,8 +37,8 @@
             is-desktop-icon-only
           />
           <template #dropdown>
-            <div class="w-72 p-5">
-              <span class="text-xm text-black cursor-default">Notifications:</span>
+            <div class="p-5 w-72">
+              <span class="text-black cursor-default text-xm">Notifications:</span>
               <nav-bar-menu-divider />
               <nav-bar-item to="/profile">
                 <nav-bar-item-label :icon="mdiHandExtendedOutline" label="New ticket has been created" />
