@@ -179,6 +179,7 @@
                    <psytech-button
                     type="Secondary"
                     label="Add Comment"
+                    :smallYPadding="true"
                     @buttonWasClicked="addNoteToTicketMethod()"
                   ></psytech-button>
               </div>
