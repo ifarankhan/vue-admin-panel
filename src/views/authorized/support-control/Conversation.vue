@@ -232,13 +232,13 @@ import { useStore } from "vuex";
 import Button from 'primevue/button';
 
 export default {
-  // beforeRouteEnter(to, from, next) {
-  //   const ticketData = store.getters["freshDesk/getTicketData"];
-  //   if (!ticketData) {
-  //     next({ name: "support-control-list" });
-  //   }
-  //   next();
-  // },
+  beforeRouteEnter(to, from, next) {
+    const ticketData = store.getters["freshDesk/getTicketData"];
+    if (!ticketData) {
+      next({ name: "support-control-list" });
+    }
+    next();
+  },
     components:{
         PsytechButton,
         QuillEditor,
