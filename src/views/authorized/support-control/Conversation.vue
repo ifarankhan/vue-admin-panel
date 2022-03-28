@@ -56,7 +56,7 @@
 
           <div class="flex w-2/4">
              <span class="text-sm font-bold">Client User:</span>
-             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && ticketData.customFields.cf_clientuser.split("-")[1] }}</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}</span>
          </div>
      </div>
 
@@ -200,6 +200,7 @@
                    <psytech-button
                     type="black-small"
                     label="Cancel"
+                    :smallYPadding="true"
                     @buttonWasClicked="clearConversation()"
                   ></psytech-button>
               </div>
@@ -286,6 +287,7 @@ export default {
     }
 
     const addNoteToTicketMethod = ()=>{
+      
       let URL;
       const route = router.currentRoute.value.params.id;
      if(conversationText.value == "" || conversationText.value == "\n") return;
