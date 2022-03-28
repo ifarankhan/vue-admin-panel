@@ -262,8 +262,9 @@ export default {
     const redirectToDetail = async e => {
       const randomT = e.data.ticketId;
       const randomC = e.data.companyId;
+      const requesterId = e.data.requester_id;
       // console.log("${randomT}-${ticketId}",`${ticketId}-${companyId}`)
-      const concatInUrl = btoa(`${randomT}-${randomC}`);
+      const concatInUrl = btoa(`${randomT}-${randomC}-${requesterId}`);
       // console.log("concatInUrl",concatInUrl)
 
       store.commit("freshDesk/setTicketData", e.data);

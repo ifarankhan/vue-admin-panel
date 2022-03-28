@@ -53,10 +53,12 @@ const actions = {
             headers: headers
           });
     },
-    addNoteToTicket({ state }, payload) {
-        const DATA = payload;
-        DATA.user_id = state?.ticketData?.requester_id
-        return fresh_desk_url.post(`/tickets/${state.ticketData.ticketId}/notes`, DATA);
+    addNoteToTicket({ }, payload) {
+        // const DATA = payload;
+        const TICEKT_ID = payload.ticketId;
+        delete payload.ticketId
+        // DATA.user_id = state?.ticketData?.requester_id
+        return fresh_desk_url.post(`/tickets/${TICEKT_ID}/notes`, payload);
     },
     async getAllTicketsByCompany({ },payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
