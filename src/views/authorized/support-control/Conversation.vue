@@ -48,6 +48,19 @@
      </div>
     
     <!--  -->
+     <div class="flex w-3/5 px-4 mt-6 ml-10">
+         <div class="flex w-2/4">
+             <span class="text-sm font-bold">Client:</span>
+             <span class="ml-2" >{{ ticketData && ticketData.customFields.cf_client }} </span>
+         </div>
+
+          <div class="flex w-2/4">
+             <span class="text-sm font-bold">Client User:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && ticketData.customFields.cf_clientuser.split("-")[1] }}</span>
+         </div>
+     </div>
+
+    <!--  -->
        <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
           <div class="flex items-center cursor-pointer" @click="collapsable.description = !collapsable.description">
             <span
@@ -179,6 +192,7 @@
                    <psytech-button
                     type="Secondary"
                     label="Add Comment"
+                    :smallYPadding="true"
                     @buttonWasClicked="addNoteToTicketMethod()"
                   ></psytech-button>
               </div>
@@ -231,13 +245,6 @@ import { useStore } from "vuex";
 import Button from 'primevue/button';
 
 export default {
-  // beforeRouteEnter(to, from, next) {
-  //   const ticketData = store.getters["freshDesk/getTicketData"];
-  //   if (!ticketData) {
-  //     next({ name: "support-control-list" });
-  //   }
-  //   next();
-  // },
     components:{
         PsytechButton,
         QuillEditor,
@@ -269,13 +276,33 @@ export default {
       element[0].innerHTML = "";
     }
 
+    const isBase64 = str => {
+        if (str ==='' || str.trim() ===''){ return false; }
+        try {
+            return btoa(atob(str)) == str;
+        } catch (err) {
+            return false;
+        }
+    }
+
     const addNoteToTicketMethod = ()=>{
+      let URL;
+      const route = router.currentRoute.value.params.id;
      if(conversationText.value == "" || conversationText.value == "\n") return;
+      try {
+         if(isBase64(route))
+         URL = atob(route);
+      } catch (error) {
+        console.log("error...", error)
+      }
+
      let element = document.getElementsByClassName("ql-editor");
         loader.value = true;
         store
         .dispatch("freshDesk/addNoteToTicket", {
-          body: conversationText.value
+          body: conversationText.value,
+          user_id: +URL.split("-")[2],
+          ticketId: +URL.split("-")[0]
         })
           .then((res) => {
             getIndividualTicketData()
@@ -286,15 +313,6 @@ export default {
              loader.value = false;
           })
     }
-
-  const isBase64 = str => {
-        if (str ==='' || str.trim() ===''){ return false; }
-        try {
-            return btoa(atob(str)) == str;
-        } catch (err) {
-            return false;
-        }
-  }
   
   const getIndividualTicketData = ()=>{
       let URL;
