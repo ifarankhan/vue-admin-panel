@@ -55,8 +55,8 @@
          </div>
 
           <div class="flex w-2/4">
-             <span class="text-sm font-bold">Client User:</span>
-             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}</span>
+             <span class="w-1/5 text-sm font-bold">Client User:</span>
+             <span class="w-4/5 ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}</span>
          </div>
      </div>
 
