@@ -264,9 +264,8 @@ export default {
       // console.log("e.data.requester_id",e.data.requester_id)
       const randomT = e.data.ticketId;
       const randomC = e.data.companyId;
-      const requesterId = e.data.requester_id;
       // console.log("${randomT}-${ticketId}",`${ticketId}-${companyId}`)
-      const concatInUrl = btoa(`${randomT}-${randomC}-${requesterId}`);
+      const concatInUrl = btoa(`${randomT}-${randomC}`);
       // console.log("concatInUrl",concatInUrl)
 
       store.commit("freshDesk/setTicketData", e.data);
