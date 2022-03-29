@@ -190,13 +190,13 @@ router.afterEach(to => {
 
 // Meta Handling
 router.beforeEach((to, from, next) => {
-  const prevURL = to.name;
   const USER_DATA = JSON.parse(localStorage.getItem('userData'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!USER_DATA?.authToken) {
       next({
         path: '/login',
       })
+      return
     } else {
         next()
     }
@@ -205,6 +205,7 @@ router.beforeEach((to, from, next) => {
       next({
         path: '/dashboard',
       })
+      return
     } else {
       next()
     }

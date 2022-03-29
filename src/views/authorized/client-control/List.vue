@@ -1,4 +1,5 @@
 <template>
+<Loader v-if="loader" :toBeBigger="true" />
   <div class="px-8">
     <sticky-header>
       <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
@@ -209,9 +210,18 @@
           :loading="loading"
           :rowsPerPageOptions="[10, 25, 50]"
           @rowClicked="redirectToDetail($event)"
+          @rowData="setClientDetail({data: $event})"
+          @editItemWasClicked="redirectToEditClient($event)"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       />
     </div>
+
+  <confirmDeleteDialog
+  v-if="showDialog"
+  @closeDialog="showDialog = false"
+  :name="clientName && clientName"
+  @dialogConfirmed="deleteAccountMethod()" />
+
   </div>
 </template>
 
@@ -226,6 +236,8 @@ import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from "@/components/SelectOption.vue";
+import Loader from "@/components/Loader.vue";
+import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
@@ -234,8 +246,10 @@ export default {
     InputText,
     DataTable,
     SelectOption,
+    confirmDeleteDialog,
     Control,
     IconSVG,
+    Loader,
     Calendar,
     Field,
     PsytechButton,
@@ -244,6 +258,8 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+
+    const showDialog = ref(false);
 
     const customers = ref();
     let prevCustomers = ref();
@@ -263,7 +279,11 @@ export default {
       address: "",
     });
     onMounted(() => {
-      store
+     loadAllClients()
+    });
+
+    const loadAllClients = ()=>{
+       store
         .dispatch("clientControl/getClientAccount")
         .then((res) => {
           let responseArray = res?.data?.data;
@@ -282,7 +302,7 @@ export default {
         .catch((error) => {
           console.log("error is...", error);
         });
-    });
+    }
 
     const pickedDate = ref(new Date());
     const dropdownFilters = reactive({
@@ -480,20 +500,60 @@ export default {
       router.push({ name: "client-control-list-detail" });
     };
 
+    const setClientDetail = async e=>{
+      await store.commit("clientControl/setClientDetail", e.data);
+      await (clientName.value = e.data.accountName)
+    }
+
+    const loader  = ref(false);
+    const deleteAccountMethod = ()=>{
+      loader.value = true;
+       store
+          .dispatch("clientControl/deleteClientAccount")
+          .then((res) => {
+            if(res?.data?.data?.deleted){
+              customers.value = customers.value.filter(item=> item.name != clientName.value)
+              // console.log("response is...",res.data.data)
+            }
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+             showDialog.value = false;
+             loader.value = false;
+          });
+    }
+
+    const clientName = ref("");
+    const redirectToEditClient = e=>{
+      if(e.eventName == "Edit Client"){
+        router.push({name: 'client-control-edit-client'})
+      } else{
+        showDialog.value = true;
+      }
+    }
+
+
     return {
       customers: customers,
       loading,
       selectedCustomers,
+      redirectToEditClient,
       closeFilter,
+      loadAllClients,
       selectStatus,
+      clientName,
       prevMainSearchHistry,
       filteredMainMethod,
+      deleteAccountMethod,
       searchText,
+      setClientDetail,
       prevSearched,
       accountName,
       pickedDate,
       numberDropdown,
       showFilters,
+      showDialog,
       form,
       searchedaddress,
       searchedUsers,
