@@ -35,7 +35,7 @@
     </div>
     
     <!--  -->
-     <div class="flex w-3/5 px-4 mt-6 ml-10">
+     <div class="flex w-3/5 px-4 mt-6 ml-10" >
          <div class="flex w-2/4">
              <span class="text-sm font-bold">Creation Date:</span>
              <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
@@ -55,8 +55,8 @@
          </div>
 
           <div class="flex w-2/4">
-             <span class="text-sm font-bold">Client User:</span>
-             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}</span>
+             <span class="w-1/5 text-sm font-bold">Client User:</span>
+             <span class="w-4/5 ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}</span>
          </div>
      </div>
 
@@ -93,7 +93,7 @@
         </div>
 
     <!--  -->
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+     <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="!showError">
           <div class="flex items-center cursor-pointer" @click="collapsable.attachments = !collapsable.attachments">
             <span
             >
@@ -165,7 +165,7 @@
         </div>
 
   <!-- post comment -->
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+     <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="!showError">
           <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
@@ -303,7 +303,7 @@ export default {
         store
         .dispatch("freshDesk/addNoteToTicket", {
           body: conversationText.value,
-          user_id: +URL.split("-")[2],
+          user_id: ticketData.value.requester,
           ticketId: +URL.split("-")[0]
         })
           .then((res) => {
@@ -352,7 +352,7 @@ export default {
                 attachments: DATA.attachments,
                 status: DATA.status,
                 priority: DATA.priority,
-                requester: DATA.requester,
+                requester: DATA.requester_id,
                 conversations: DATA.conversations,
                 allImages: [],
                 allFiles: []

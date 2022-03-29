@@ -513,7 +513,6 @@ export default {
           .then((res) => {
             if(res?.data?.data?.deleted){
               customers.value = customers.value.filter(item=> item.name != clientName.value)
-              // console.log("response is...",res.data.data)
             }
           })
           .catch((error) => {
