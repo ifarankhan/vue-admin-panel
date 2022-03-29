@@ -512,15 +512,14 @@ export default {
           .dispatch("clientControl/deleteClientAccount")
           .then((res) => {
             if(res?.data?.data?.deleted){
-              showDialog.value = false
-              // loadAllClients()
-              // customers.value = customers.value.filter(item=> item.name != clientName)
+              customers.value = customers.value.filter(item=> item.name != clientName.value)
               // console.log("response is...",res.data.data)
             }
           })
           .catch((error) => {
             console.log("error is...", error);
           }).finally(()=>{
+             showDialog.value = false;
              loader.value = false;
           });
     }
