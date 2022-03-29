@@ -184,7 +184,7 @@
         </div>
       </div>
     </sticky-header>
-        <div class="fixedheader">
+        <div class="fixedheader ticket">
           <DataTable
               :customers="allTickets"
               :rowHover="true"
@@ -240,6 +240,7 @@ export default {
     SelectOption
   },
   setup() {
+
     const store = useStore();
     const router = useRouter();
     const allTickets = ref([]);
@@ -260,6 +261,7 @@ export default {
 
     //
     const redirectToDetail = async e => {
+      // console.log("e.data.requester_id",e.data.requester_id)
       const randomT = e.data.ticketId;
       const randomC = e.data.companyId;
       const requesterId = e.data.requester_id;
@@ -508,7 +510,7 @@ export default {
     ]);
 
     // Seach and filter end
-
+    
     return {
       alreadyMember,
       allTickets,

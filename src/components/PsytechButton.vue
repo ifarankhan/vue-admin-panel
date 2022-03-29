@@ -52,8 +52,11 @@ export default {
       }
       if(props.type == "black-small"){
          base.push(
-          "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechBlack text-white"
+          "mt-2 mr-2 border-2 border-gray-300 border-solid bg-psytechBlack text-white"
         );
+        if(!props.smallYPadding){
+          base.push("text-sm")
+        }
       }
       if (props.type == "dark") {
         base.push(
@@ -85,7 +88,7 @@ export default {
       }
       if(props.smallText){
         base.push('text-gray-400')
-      }
+      } 
       if(props.smallYPadding){
         base.push('py-1.5')
       }else{
