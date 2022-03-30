@@ -3,13 +3,13 @@
   <div>
   <Dialog v-model:visible="showDialog" :style="{width: '50vw',height:'auto'}" :modal="true" @hide="$emit('closeDialog')">
           <template #header>
-              <h3 class="text-lg font-medium text-black"> Credit Settings </h3>
+              <h2 class="text-lg font-bold text-black"> Credit Settings </h2>
             </template>
            <div>
         <!--  -->
         <div class="flex">
             <div class="mt-1">
-                <p class="text-lg font-bold">Purchase Credit from:</p>
+                <p class="text-md font-medium">Purchase Credit from:</p>
             </div>
         </div>
         <!--  -->
