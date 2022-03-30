@@ -315,6 +315,8 @@ export default {
         FORM_DATA.append('description', data.details);
         FORM_DATA.append('subject', data.subject);
         FORM_DATA.append('email', USER_DATA.userName);
+        FORM_DATA.append('status', data.status);
+        FORM_DATA.append('priority', data.priority);
         FORM_DATA.append('custom_fields[cf_client]', String(data.client));
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
         FORM_DATA.append('status', 2); // open

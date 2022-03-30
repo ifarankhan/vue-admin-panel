@@ -45,6 +45,28 @@
                 :labelText="'Please Select User'"
                 ></select-option>
             </div>
+      <!--  -->
+        <div class="mt-6 ml-2">
+            <select-option
+                :filterDropdown="statuses"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticket.status"
+                :labelText="'Ticket Status'"
+                ></select-option>
+            </div>
+
+      <!--  -->
+        <div class="mt-6 ml-2">
+            <select-option
+                :filterDropdown="priorities"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticket.priority"
+                :labelText="'Ticket Priority'"
+                ></select-option>
+            </div>
+
             <p v-if="showDefaultUsertext" class="mt-1 ml-2 text-sm font-semibold text-red-600"> No user found in this account</p>
             <p v-if="!showDefaultUsertext">
                 <error-span :error="v$.user"></error-span>
@@ -140,6 +162,9 @@ export default {
         details: "",
         client: "",
         user:"",
+        status: 2,
+        priority: 1,
+        due_by: '',
         attachments: null
     })
 
@@ -201,6 +226,44 @@ export default {
             userLoader.value = false;
       })
     }
+
+    const statuses = ref([
+      {
+        text: 'Open',
+        value: 2
+      },
+      {
+        text: 'Pending',
+        value: 3
+      },
+      {
+        text: 'Resolved',
+        value: 4
+      },
+      {
+        text: 'Closed',
+        value: 5
+      }
+    ])
+
+    const priorities = ref([
+      {
+        text: 'Low',
+        value: 1
+      },
+      {
+        text: 'Medium',
+        value: 2
+      },
+      {
+        text: 'High',
+        value: 3
+      },
+      {
+        text: 'Urgent',
+        value: 4
+      }
+    ])
     
     const rules = computed(() => {
       return {
@@ -251,6 +314,8 @@ export default {
         loader,
         userData,
         clients,
+        priorities,
+        statuses,
         clientUsers,
         showDefaultUsertext,
         mdiFileChartOutline,
@@ -287,6 +352,11 @@ export default {
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 25px;
+}
+.ticket-due-date ::placeholder, .ticket-due-date svg {
+  color: #008ac0;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .p-button:enabled:hover {
   background: #008ac0;
