@@ -33,35 +33,11 @@
         <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ ticketData && ticketData.subject }} </div>
       </div>
     </div>
-    
-    <!--  -->
-     <div class="flex w-3/5 px-4 mt-6 ml-10" >
-         <div class="flex w-2/4">
-             <span class="text-sm font-bold">Creation Date:</span>
-             <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
-         </div>
-
-          <div class="flex w-2/4">
-             <span class="text-sm font-bold">Creation Time:</span>
-             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
-         </div>
-     </div>
-    
-    <!--  -->
-     <div class="flex w-3/5 px-4 mt-6 ml-10">
-         <div class="flex w-2/4">
-             <span class="text-sm font-bold">Client:</span>
-             <span class="ml-2" >{{ ticketData && ticketData.customFields.cf_client }} </span>
-         </div>
-
-          <div class="flex w-2/4">
-             <span class="w-1/5 text-sm font-bold">Client User:</span>
-             <span class="w-4/5 ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData && `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}</span>
-         </div>
-     </div>
+  
 
     <!--  -->
-       <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+    <div class="flex">
+       <div class="w-8/12 px-4 mt-8 mb-4 ml-8">
           <div class="flex items-center cursor-pointer" @click="collapsable.description = !collapsable.description">
             <span
             >
@@ -90,10 +66,9 @@
               </div>
           </div>
           <!--  -->
-        </div>
 
-    <!--  -->
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="!showError">
+     <!--  -->
+     <div class="px-4 mt-8 mb-4" v-if="!showError">
           <div class="flex items-center cursor-pointer" @click="collapsable.attachments = !collapsable.attachments">
             <span
             >
@@ -164,8 +139,8 @@
           <!--  -->
         </div>
 
-  <!-- post comment -->
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="!showError">
+          <!-- post comment -->
+     <div class="px-4 mt-8 mb-4" v-if="!showError">
           <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
@@ -208,7 +183,7 @@
           </div>
           <!--  -->
         </div>
-    <div class="w-10/12 px-4 pt-8 mt-16 mb-4 ml-8">
+    <div class="px-4 pt-8 mt-16 mb-4">
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
             <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketData.conversations" :key="index">
                 <div class="flex items-center space-x-4">
@@ -229,6 +204,84 @@
             </li>
         </ul>
     </div>
+    </div>
+
+    <!-- Right Pannel -->
+       <div class="w-4/12 p-8 mr-20 border rounded-2xl custom-height">
+          <div class="mt-4">
+             <span class="text-sm font-bold">Creation Date:</span>
+             <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
+          </div>
+
+          <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Creation Time:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
+         </div>
+
+          <!--  -->
+           <div class="flex items-center mt-10 -ml-1 cursor-pointer" @click="collapsable.status = !collapsable.status">
+            <span
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d=" collapsable.status ? mdiChevronDown: mdiChevronUp" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Status :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+          </div>
+          <div class="w-3/4 mt-2 ml-2" v-if="collapsable.status">
+            <select-option
+                :filterDropdown="fresDeskStatuses"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticketStatuses"
+                :labelText="'Ticket Priority'"
+                ></select-option>
+            </div>
+
+         <!--  -->
+           <div class="flex items-center mt-6 -ml-1 cursor-pointer" @click="collapsable.priority = !collapsable.priority">
+            <span
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d=" collapsable.priority ? mdiChevronDown: mdiChevronUp" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Priority :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+          </div>
+          <div class="w-3/4 mt-4 ml-2" v-if="collapsable.priority">
+            <select-option
+                :filterDropdown="fresDeskPriorities"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticketPriority"
+                :labelText="'Ticket Priority'"
+                ></select-option>
+            </div>
+          <!-- priority button -->
+            <div class="mt-6">
+                   <psytech-button
+                    type="Secondary"
+                    label="Update"
+                    :smallYPadding="true"
+                    @buttonWasClicked="updateTicketFields()"
+                  ></psytech-button>
+              </div>
+        </div>
+    </div>
+    
 </div>
 </template>
 
@@ -239,6 +292,8 @@ import { mdiChevronDown, mdiChevronUp, mdiCloudDownloadOutline } from "@mdi/js";
 import PsytechButton from "@/components/PsytechButton";
 import { QuillEditor } from '@vueup/vue-quill';
 import store from "../../../store/index";
+import SelectOption from "@/components/SelectOption.vue";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { useRouter } from "vue-router";
@@ -249,11 +304,13 @@ export default {
     components:{
         PsytechButton,
         QuillEditor,
+        SelectOption,
         ErrorAlert,
         Loader,
         Button
     },
     setup(props, { emit }) {
+    const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
     const router = useRouter();
     const loader = ref(false);
     let showError = ref("");
@@ -261,11 +318,15 @@ export default {
     const collapsable = reactive({
       description: true,
       attachments: true,
-      comments: true
+      comments: true,
+      status: true,
+      priority: true
     });
 
     const store = useStore();
     const ticketData = ref(null);
+    const ticketPriority = ref();
+    const ticketStatuses = ref();
 
    onMounted(() => {
      getIndividualTicketData()
@@ -358,6 +419,9 @@ export default {
                 allFiles: []
             }
 
+        ticketPriority.value = +DATA.priority;
+        ticketStatuses.value = +DATA.status;
+
         // for files
           let allImages = []
           let allFiles = []
@@ -425,22 +489,55 @@ export default {
       })
     }
 
+    const updateTicketFields = ()=>{
+      const route = router.currentRoute.value.params.id;
+      let URL;
+      try {
+         if(isBase64(route))
+         URL = atob(route);
+      } catch (error) {
+        console.log("error...", error)
+      }
+      console.log("route",route)
+       loader.value = true;
+
+        store
+        .dispatch("freshDesk/updateTicketStatus", {
+          priority: ticketPriority.value,
+          status: ticketStatuses.value,
+          ticketId: +URL.split("-")[0]
+        })
+          .then((res) => {
+            ticketPriority.value = res.data.priority;
+            ticketStatuses.value = res.data.status;
+          }).catch((error) => {
+          }).finally(()=>{
+             loader.value = false;
+          })
+    }
+
     return {
         ticketData,
         mdiChevronDown,
         conversationText,
+        fresDeskPriorities,
+        fresDeskStatuses,
         mdiChevronUp,
+        ticketPriority,
         loader,
         showError,
+        ticketStatuses,
         clearConversation,
         mdiCloudDownloadOutline,
+        updateTicketFields,
         addNoteToTicketMethod,
         collapsable
       }
     },
 }
 </script>
-<style>
-
-
+<style scoped>
+  .custom-height {
+  height: 620px;
+  }
 </style>

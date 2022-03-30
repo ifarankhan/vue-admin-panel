@@ -472,6 +472,7 @@ export default {
 
     },
     setup(props, {emit}) {
+       const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
        const store = useStore();
        const { userTypes, formatDate, tableStatePersistence } = useClientUser();
 
@@ -503,44 +504,6 @@ export default {
         const showConsole = ()=>{
 
         }
-
-        const fresDeskStatuses = ref([
-          {
-            text: "Open",
-            value: 2
-          },
-          {
-            text: "Pending",
-            value: 3
-          },
-          {
-            text: "Resolved",
-            value: 4
-          },
-          {
-            text: "Closed",
-            value: 5
-          }
-        ])
-
-        const fresDeskPriorities = ref([
-          {
-            text: "Low",
-            value: 1
-          },
-          {
-            text: "Medium",
-            value: 2
-          },
-          {
-            text: "High",
-            value: 3
-          },
-          {
-            text: "Urgent",
-            value: 4
-          }
-        ])
 
         const dt = ref();
         const exportCSV = () => {

@@ -54,11 +54,14 @@ const actions = {
           });
     },
     addNoteToTicket({ }, payload) {
-        // const DATA = payload;
         const TICEKT_ID = payload.ticketId;
-        delete payload.ticketId
-        // DATA.user_id = state?.ticketData?.requester_id
+        delete payload.ticketId;
         return fresh_desk_url.post(`/tickets/${TICEKT_ID}/notes`, payload);
+    },
+    updateTicketStatus({ }, payload) {
+        const TICEKT_ID = payload.ticketId;
+        delete payload.ticketId;
+        return fresh_desk_url.put(`/tickets/${TICEKT_ID}`, payload);
     },
     async getAllTicketsByCompany({ },payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
