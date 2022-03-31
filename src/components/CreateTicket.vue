@@ -48,7 +48,7 @@
       <!--  -->
         <div class="mt-6 ml-2">
             <select-option
-                :filterDropdown="statuses"
+                :filterDropdown="fresDeskStatuses"
                 :customeWidth="true"
                 :allyMarginRight="false"
                 v-model="ticket.status"
@@ -59,7 +59,7 @@
       <!--  -->
         <div class="mt-6 ml-2">
             <select-option
-                :filterDropdown="priorities"
+                :filterDropdown="fresDeskPriorities"
                 :customeWidth="true"
                 :allyMarginRight="false"
                 v-model="ticket.priority"
@@ -130,6 +130,7 @@ import { useStore } from "vuex";
 
 import Field from "@/components/Field";
 import Control from "@/components/Control";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 
 import {helpers, required, numeric} from "@vuelidate/validators";
 
@@ -144,6 +145,7 @@ export default {
         ErrorSpan
     },
     setup(props, { emit }) {
+       const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
       const store = useStore();
 
        const showDialog = ref(true);
@@ -226,44 +228,6 @@ export default {
             userLoader.value = false;
       })
     }
-
-    const statuses = ref([
-      {
-        text: 'Open',
-        value: 2
-      },
-      {
-        text: 'Pending',
-        value: 3
-      },
-      {
-        text: 'Resolved',
-        value: 4
-      },
-      {
-        text: 'Closed',
-        value: 5
-      }
-    ])
-
-    const priorities = ref([
-      {
-        text: 'Low',
-        value: 1
-      },
-      {
-        text: 'Medium',
-        value: 2
-      },
-      {
-        text: 'High',
-        value: 3
-      },
-      {
-        text: 'Urgent',
-        value: 4
-      }
-    ])
     
     const rules = computed(() => {
       return {
@@ -314,8 +278,8 @@ export default {
         loader,
         userData,
         clients,
-        priorities,
-        statuses,
+        fresDeskPriorities,
+        fresDeskStatuses,
         clientUsers,
         showDefaultUsertext,
         mdiFileChartOutline,
