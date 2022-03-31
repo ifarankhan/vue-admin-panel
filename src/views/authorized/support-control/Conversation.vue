@@ -1,7 +1,7 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
-  <div class="pt-10">
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8" v-if="showError">
+  <div class="">
+     <div class="w-8/12 px-4 mt-8 mb-4 ml-8" v-if="showError">
      <error-alert
             @dismissError="showError = false"
             :error="`The ticket is either not there or you don't have permission`"
@@ -9,7 +9,7 @@
           />
      </div>
 
-      <div class="grid grid-cols-2 md:px-2">
+      <div class="fixed z-30 grid w-7/12 h-10 grid-cols-2 px-4 py-10 -mr-4 bg-white">
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-9 h-9 "
@@ -30,14 +30,14 @@
             />
           </svg>
         </div>
-        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ ticketData && ticketData.subject }} </div>
+        <div class="ml-3 font-bold text-medium">{{ ticketData && ticketData.subject }} </div>
       </div>
     </div>
   
 
     <!--  -->
-    <div class="flex">
-       <div class="w-8/12 px-4 mt-8 mb-4 ml-8">
+    <div class="flex pt-14">
+       <div class="w-7/12 px-4 mt-12 mb-4 ml-8">
           <div class="flex items-center cursor-pointer" @click="collapsable.description = !collapsable.description">
             <span
             >
@@ -207,7 +207,13 @@
     </div>
 
     <!-- Right Pannel -->
-       <div class="w-4/12 p-8 mr-20 border rounded-2xl custom-height">
+       <div class="fixed p-8 mr-20 border rounded-2xl custom-height" style="z-index: 35;">
+          <div class="mt-4">
+             <span class="text-sm font-bold">Ticket Status:</span>
+             <span class="px-3 py-0.5 ml-2 text-sm text-white bg-green-700 rounded-md">{{ ticketData && fresDeskStatuses.find(item=> item.value == +ticketData.status).text }}</span>
+          </div>
+
+          <!--  -->
           <div class="mt-4">
              <span class="text-sm font-bold">Creation Date:</span>
              <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
@@ -219,8 +225,8 @@
              <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
          </div>
 
-          <!--  -->
-           <div class="flex items-center mt-10 -ml-1 cursor-pointer" @click="collapsable.status = !collapsable.status">
+        <!--  -->
+           <div class="flex items-center mt-6 -ml-1 cursor-pointer" @click="collapsable.assignedTo = !collapsable.assignedTo">
             <span
             >
               <svg
@@ -229,20 +235,16 @@
                 height="25"
                 class="inline-block"
               >
-                <path :d=" collapsable.status ? mdiChevronDown: mdiChevronUp" />
+                <path :d=" collapsable.assignedTo ? mdiChevronDown: mdiChevronUp" />
               </svg>
             </span>
-            <span class="-ml-0.5 text-sm font-semibold">Status :</span>
+            <span class="-ml-0.5 text-sm font-semibold">Assigned to :</span>
             <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
           </div>
-          <div class="w-3/4 mt-2 ml-2" v-if="collapsable.status">
-            <select-option
-                :filterDropdown="fresDeskStatuses"
-                :customeWidth="true"
-                :allyMarginRight="false"
-                v-model="ticketStatuses"
-                :labelText="'Ticket Priority'"
-                ></select-option>
+          <div class="w-3/4 mt-4 ml-2" v-if="collapsable.assignedTo">
+    <label class="block">
+    <input type="text" value="Psytech Support" disabled class="block w-full px-3 py-2 mt-1 text-sm bg-white border rounded-md shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 "/>
+  </label>
             </div>
 
          <!--  -->
@@ -319,14 +321,13 @@ export default {
       description: true,
       attachments: true,
       comments: true,
-      status: true,
+      assignedTo: true,
       priority: true
     });
 
     const store = useStore();
     const ticketData = ref(null);
     const ticketPriority = ref();
-    const ticketStatuses = ref();
 
    onMounted(() => {
      getIndividualTicketData()
@@ -420,7 +421,6 @@ export default {
             }
 
         ticketPriority.value = +DATA.priority;
-        ticketStatuses.value = +DATA.status;
 
         // for files
           let allImages = []
@@ -504,12 +504,10 @@ export default {
         store
         .dispatch("freshDesk/updateTicketStatus", {
           priority: ticketPriority.value,
-          status: ticketStatuses.value,
           ticketId: +URL.split("-")[0]
         })
           .then((res) => {
             ticketPriority.value = res.data.priority;
-            ticketStatuses.value = res.data.status;
           }).catch((error) => {
           }).finally(()=>{
              loader.value = false;
@@ -526,7 +524,6 @@ export default {
         ticketPriority,
         loader,
         showError,
-        ticketStatuses,
         clearConversation,
         mdiCloudDownloadOutline,
         updateTicketFields,
@@ -536,8 +533,12 @@ export default {
     },
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
   .custom-height {
-  height: 620px;
+    height: 620px;
+    right: -90px;
+    margin-right: 150px;
+    width: 30%;
   }
+ 
 </style>
