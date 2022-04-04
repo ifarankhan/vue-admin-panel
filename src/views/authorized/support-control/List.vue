@@ -319,8 +319,6 @@ export default {
         FORM_DATA.append('priority', data.priority);
         FORM_DATA.append('custom_fields[cf_client]', String(data.client));
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
-        FORM_DATA.append('status', 2); // open
-        FORM_DATA.append('priority', 1); // low
         if(data.attachments){
           for(let i=0; i< data.attachments.length; i++){
               FORM_DATA.append("attachments[]", data.attachments[i])
