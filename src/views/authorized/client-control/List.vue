@@ -228,6 +228,7 @@
 <script>
 import { ref, onMounted, reactive } from "vue";
 import InputText from "primevue/inputtext";
+import _ from "lodash";
 import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
@@ -238,6 +239,7 @@ import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from "@/components/SelectOption.vue";
 import Loader from "@/components/Loader.vue";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
@@ -258,6 +260,7 @@ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
+    const { numberDropdown, filterDropdown, filterMethod, subFilter } = useClientUser();
 
     const showDialog = ref(false);
 
@@ -308,51 +311,7 @@ export default {
     const dropdownFilters = reactive({
       users: "",
     });
-    const filterDropdown = reactive([
-      {
-        text: "Is equal to",
-        value: "isEqualTo",
-      },
-      {
-        text: "Is not equal to",
-        value: "isNotEqualTo",
-      },
-      {
-        text: "Starts with",
-        value: "startsWith",
-      },
-      {
-        text: "Contains",
-        value: "contains",
-      },
-      {
-        text: "Does not contain",
-        value: "notContain",
-      },
-      {
-        text: "Ends With",
-        value: "endsWith",
-      },
-    ]);
-
-    const numberDropdown = reactive([
-      {
-        text: "Is equal to",
-        value: "isEqualTo",
-      },
-      {
-        text: "Is not equal to",
-        value: "isNotEqualTo",
-      },
-      {
-        text: "Is less than",
-        value: "lessThen",
-      },
-      {
-        text: "Is greater than",
-        value: "greaterThen",
-      },
-    ]);
+    
     const selectedFilter = ref("contains");
 
     //   const toast = useToast();
@@ -369,31 +328,7 @@ export default {
       prevSearched.value = [];
     };
 
-    const subFilter = (item, value, filter) => {
-      const selectedFilter = filter;
-      if (typeof value == "number" || typeof value == "string") {
-        if (selectedFilter == "isNotEqualTo") {
-          return item != value;
-        } else if (selectedFilter == "isEqualTo") {
-          return item == value;
-        } else if (selectedFilter == "lessThen") {
-          return item < value;
-        } else if (selectedFilter == "greaterThen") {
-          return item > value;
-        }
-      }
-      if (typeof value == "string") {
-        if (selectedFilter == "contains") {
-          return item.includes(value);
-        } else if (selectedFilter == "startsWith") {
-          return item.startsWith(value);
-        } else if (selectedFilter == "endsWith") {
-          return item.endsWith(value);
-        } else if (selectedFilter == "notContain") {
-          return !item.includes(value);
-        }
-      }
-    };
+    
     const applyFilter = () => {
       let filteredData = [];
       if (searchText.value) {
@@ -461,15 +396,7 @@ export default {
       customers.value = filteredData;
       prevSearched.value = filteredData;
     };
-    const filterMethod = (data, value) => {
-      return data.filter(function (customer) {
-        return (
-          customer.name.toLowerCase().indexOf(value) > -1 ||
-          customer.address.toLowerCase().indexOf(value) > -1 ||
-          customer.users == value
-        );
-      });
-    };
+
     const filteredMainMethod = () => {
       // var sortKey = this.sortKey
       let value = searchText.value && searchText.value.toLowerCase();
@@ -481,11 +408,17 @@ export default {
       }
       // fileds to be check for filters
       if (searchedUsers.value || accountName.value || searchedaddress.value) {
-        customers.value = filterMethod(prevSearched.value, value);
+        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+        customers.value = filterMethod(prevSearched.value,searchableFields,value)
+
+        // customers.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
-        customers.value = filterMethod(prevCustomers.value, value);
-        prevMainSearchHistry.value = customers.value;
+        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+        customers.value = filterMethod(prevCustomers.value,searchableFields,value)
+
+        // customers.value = filterMethod(prevCustomers.value, value);
+        // prevMainSearchHistry.value = customers.value;
       }
     };
 
@@ -554,8 +487,10 @@ export default {
       showFilters,
       showDialog,
       form,
+      loader,
       searchedaddress,
       searchedUsers,
+      filterMethod,
       redirectToDetail,
       selectedUsersFilter,
       selectedNameFilter,

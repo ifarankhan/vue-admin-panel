@@ -67,6 +67,52 @@ export function useClientUser() {
     },
   ]});
 
+  const filterDropdown = reactive([
+    {
+      text: "Is equal to",
+      value: "isEqualTo",
+    },
+    {
+      text: "Is not equal to",
+      value: "isNotEqualTo",
+    },
+    {
+      text: "Starts with",
+      value: "startsWith",
+    },
+    {
+      text: "Contains",
+      value: "contains",
+    },
+    {
+      text: "Does not contain",
+      value: "notContain",
+    },
+    {
+      text: "Ends With",
+      value: "endsWith",
+    },
+  ]);
+
+  const numberDropdown = reactive([
+    {
+      text: "Is equal to",
+      value: "isEqualTo",
+    },
+    {
+      text: "Is not equal to",
+      value: "isNotEqualTo",
+    },
+    {
+      text: "Is less than",
+      value: "lessThen",
+    },
+    {
+      text: "Is greater than",
+      value: "greaterThen",
+    },
+  ]);
+
     const fresDeskStatuses = reactive([
         {
             text: "Open",
@@ -105,14 +151,51 @@ export function useClientUser() {
         }
     ])
 
+  const filterMethod = (data, searchableFields, value) => {
+      const matchedArray = searchableFields.map(item=> {
+        return data.filter(customer=>(item.split(" ")[1] == "string"? customer[item.split(" ")[0]]?.toLowerCase().indexOf(value) > -1: String(customer[item.split(" ")[0]]).indexOf(value) > -1))
+      }).flat()
+      return _.uniqWith(matchedArray, _.isEqual)
+    }
+  
+  const subFilter = (item, value, filter) => {
+      const selectedFilter = filter;
+      if (typeof value == "number" || typeof value == "string") {
+        if (selectedFilter == "isNotEqualTo") {
+          return item != value;
+        } else if (selectedFilter == "isEqualTo") {
+          return item == value;
+        } else if (selectedFilter == "lessThen") {
+          return item < value;
+        } else if (selectedFilter == "greaterThen") {
+          return item > value;
+        }
+      }
+      if (typeof value == "string") {
+        if (selectedFilter == "contains") {
+          return item.includes(value);
+        } else if (selectedFilter == "startsWith") {
+          return item.startsWith(value);
+        } else if (selectedFilter == "endsWith") {
+          return item.endsWith(value);
+        } else if (selectedFilter == "notContain") {
+          return !item.includes(value);
+        }
+      }
+    };
+
   return {
     userTypes,
     trainingArray,
     notifications,
     tableStatePersistence,
     formatDate,
+    subFilter,
+    numberDropdown,
+    filterDropdown,
+    filterMethod,
     formatExportDate,
-      fresDeskStatuses,
-      fresDeskPriorities
+    fresDeskStatuses,
+    fresDeskPriorities
   };
 }
