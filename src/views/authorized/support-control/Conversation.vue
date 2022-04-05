@@ -216,7 +216,7 @@
           <!--  -->
           <div class="mt-4">
              <span class="text-sm font-bold">Creation Date:</span>
-             <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
+             <span class="ml-2" >{{ formatDate(ticketData && ticketData.createdAt.split("T")[0]) }}</span>
           </div>
 
           <!--  -->
@@ -312,7 +312,7 @@ export default {
         Button
     },
     setup(props, { emit }) {
-    const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
+    const { fresDeskStatuses, formatDate, fresDeskPriorities } = useClientUser();
     const router = useRouter();
     const loader = ref(false);
     let showError = ref("");
@@ -523,6 +523,7 @@ export default {
         mdiChevronUp,
         ticketPriority,
         loader,
+        formatDate,
         showError,
         clearConversation,
         mdiCloudDownloadOutline,
