@@ -91,7 +91,7 @@
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Date of Update:</p>
-                  <p> {{ data?.updateDateAndTime.split("T")[0] }} </p>
+                  <p> {{ formatDate(data?.updateDateAndTime.split("T")[0]) }} </p>
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Time of Update:</p>
@@ -159,6 +159,7 @@ import Loader from "@/components/Loader.vue";
 import {useStore} from "vuex";
 import { mdiFileChartOutline, mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import useVuelidate from "@vuelidate/core";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import ErrorSpan from "@/components/ErrorSpan";
 
 import Field from "@/components/Field";
@@ -185,6 +186,7 @@ export default {
         ErrorSpan
     },
     setup(props, { emit }) {
+      const { formatDate } = useClientUser();
       const updateCredit = reactive({
           correctCredit:"",
           correctionReason: ""
@@ -209,6 +211,7 @@ export default {
     return {
         showDialog,
         updateCredit,
+        formatDate,
         openDialog,
         closeDialog,
         collapsable,

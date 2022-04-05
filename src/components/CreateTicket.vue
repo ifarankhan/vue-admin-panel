@@ -45,6 +45,10 @@
                 :labelText="'Please Select User'"
                 ></select-option>
             </div>
+            <p v-if="showDefaultUsertext" class="mt-1 ml-2 text-sm font-semibold text-red-600"> No user found in this account</p>
+            <p v-if="!showDefaultUsertext">
+                <error-span :error="v$.user"></error-span>
+            </p>
       <!--  -->
         <div class="mt-6 ml-2">
             <select-option
@@ -66,11 +70,6 @@
                 :labelText="'Ticket Priority'"
                 ></select-option>
             </div>
-
-            <p v-if="showDefaultUsertext" class="mt-1 ml-2 text-sm font-semibold text-red-600"> No user found in this account</p>
-            <p v-if="!showDefaultUsertext">
-                <error-span :error="v$.user"></error-span>
-            </p>
 
           <div>
              <field label="Ticket Details" labelFor="ticketDetails">
