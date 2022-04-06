@@ -176,7 +176,7 @@ export default {
    const clients = ref([]);
    onMounted(() => {
       store
-        .dispatch("clientControl/getClientAccount")
+        .dispatch("freshDesk/getClientAccountForSupport")
         .then((res) => {
           let responseArray = res?.data?.data;
           clients.value = responseArray.map(item=>{
@@ -200,11 +200,12 @@ export default {
         showDefaultUsertext.value = false;
         ticket.user = "";
       store
-          .dispatch("clientControl/getAccountUsers",{
+          .dispatch("freshDesk/getClinetAccountUsersForSupport",{
             accountId: event.value
           })
           .then((res) => {
             let responseArray = res?.data?.data;
+            console.log("responseArray", responseArray)
             if(!responseArray.length){
                 showDefaultUsertext.value = true;
             }

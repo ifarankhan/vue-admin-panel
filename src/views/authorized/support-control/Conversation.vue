@@ -226,6 +226,20 @@
          </div>
 
         <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Client Name:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.customFields.cf_client }}</span>
+         </div>
+
+        <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Account User:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">
+               {{ `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}
+             </span>
+         </div>
+
+        <!--  -->
            <div class="flex items-center mt-6 -ml-1 cursor-pointer" @click="collapsable.assignedTo = !collapsable.assignedTo">
             <span
             >
