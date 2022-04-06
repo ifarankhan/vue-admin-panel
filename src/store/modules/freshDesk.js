@@ -1,4 +1,4 @@
-import { fresh_desk_url } from "../../axios";
+import { fresh_desk_url, private_url } from "../../axios";
 const namespaced = true;
 const state = {
     ticketData: null,
@@ -68,6 +68,20 @@ const actions = {
         return fresh_desk_url.get('/tickets', {
             params:{
                 company_id :USER_DATA.freshdeskCompanyID
+            }
+        })
+    },
+    async getClinetAccountUsersForSupport({ }, payload){
+        return private_url.get('support-account-users', 
+            {
+                params: payload
+          })
+    },
+    async getClientAccountForSupport({ }){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('support-client-accounts', {
+            params:{
+                distributorid :userData.distributorId
             }
         })
     },
