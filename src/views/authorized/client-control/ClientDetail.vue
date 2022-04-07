@@ -733,7 +733,7 @@ export default {
 
     const userTablePagination = (store.getters['clientControl/getUsersTablePag']);
 
-    const { formatDate } = useClientUser();
+    const { formatDate, numberDropdown, filterDropdown, filterMethod, subFilter } = useClientUser();
     const scrollPosition = ref(null);
     let showDialog = ref(false);
     let showMasterDialog = ref(false);
@@ -887,51 +887,6 @@ export default {
     let searchFamilyName = ref("");
     let searchedCredits = ref("");
     let selectedCreditsFilter = ref("isEqualTo");
-    const filterDropdown = reactive([
-      {
-        text: "Is equal to",
-        value: "isEqualTo",
-      },
-      {
-        text: "Is not equal to",
-        value: "isNotEqualTo",
-      },
-      {
-        text: "Starts with",
-        value: "startsWith",
-      },
-      {
-        text: "Contains",
-        value: "contains",
-      },
-      {
-        text: "Does not contain",
-        value: "notContain",
-      },
-      {
-        text: "Ends With",
-        value: "endsWith",
-      },
-    ]);
-
-    const numberDropdown = reactive([
-      {
-        text: "Is equal to",
-        value: "isEqualTo",
-      },
-      {
-        text: "Is not equal to",
-        value: "isNotEqualTo",
-      },
-      {
-        text: "Is less than",
-        value: "lessThen",
-      },
-      {
-        text: "Is greater than",
-        value: "greaterThen",
-      },
-    ]);
 
     const filteredMainMethod = () => {
       // var sortKey = this.sortKey
@@ -944,10 +899,14 @@ export default {
       }
       // fileds to be check for filters
       if (searchedCredits.value || accountName.value || searchUserName.value) {
-        userArray.value = filterMethod(prevSearched.value, value);
+        const searchableFields = ["firstName string", "familyName string", "email number", "credits number"]
+        userArray.value = filterMethod(prevSearched.value,searchableFields,value)
+        // userArray.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
-        userArray.value = filterMethod(prevCustomers.value, value);
+        // userArray.value = filterMethod(prevCustomers.value, value);
+        const searchableFields = ["firstName string", "familyName string", "email number", "credits number"]
+        userArray.value = filterMethod(prevCustomers.value,searchableFields,value)
         prevMainSearchHistry.value = userArray.value;
       }
     };
@@ -1037,16 +996,7 @@ export default {
       userArray.value = filteredData;
       prevSearched.value = filteredData;
     };
-    const filterMethod = (data, value) => {
-      return data.filter(function (customer) {
-        return (
-            customer.firstName.toLowerCase().indexOf(value) > -1 ||
-            customer.familyName.toLowerCase().indexOf(value) > -1 ||
-            customer.email.toLowerCase().indexOf(value) > -1 ||
-            customer.credits == value
-        );
-      });
-    };
+
     const clearFilter = () => {
       searchText.value = "";
       accountName.value = "";
@@ -1055,32 +1005,6 @@ export default {
       searchedCredits.value="";
       userArray.value = prevCustomers.value;
       prevSearched.value = [];
-    };
-
-    const subFilter = (item, value, filter) => {
-      const selectedFilter = filter;
-      if (typeof value == "number" || typeof value == "string") {
-        if (selectedFilter == "isNotEqualTo") {
-          return item != value;
-        } else if (selectedFilter == "isEqualTo") {
-          return item == value;
-        } else if (selectedFilter == "lessThen") {
-          return item < value;
-        } else if (selectedFilter == "greaterThen") {
-          return item > value;
-        }
-      }
-      if (typeof value == "string") {
-        if (selectedFilter == "contains") {
-          return item.includes(value);
-        } else if (selectedFilter == "startsWith") {
-          return item.startsWith(value);
-        } else if (selectedFilter == "endsWith") {
-          return item.endsWith(value);
-        } else if (selectedFilter == "notContain") {
-          return !item.includes(value);
-        }
-      }
     };
 
     const deleteAccountMethod = ()=>{

@@ -216,13 +216,27 @@
           <!--  -->
           <div class="mt-4">
              <span class="text-sm font-bold">Creation Date:</span>
-             <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
+             <span class="ml-2" >{{ formatDate(ticketData && ticketData.createdAt.split("T")[0]) }}</span>
           </div>
 
           <!--  -->
           <div class="mt-4">
              <span class="text-sm font-bold">Creation Time:</span>
              <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
+         </div>
+
+        <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Client Name:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.customFields.cf_client }}</span>
+         </div>
+
+        <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Account User:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">
+               {{ `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}
+             </span>
          </div>
 
         <!--  -->
@@ -312,7 +326,7 @@ export default {
         Button
     },
     setup(props, { emit }) {
-    const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
+    const { fresDeskStatuses, formatDate, fresDeskPriorities } = useClientUser();
     const router = useRouter();
     const loader = ref(false);
     let showError = ref("");
@@ -523,6 +537,7 @@ export default {
         mdiChevronUp,
         ticketPriority,
         loader,
+        formatDate,
         showError,
         clearConversation,
         mdiCloudDownloadOutline,

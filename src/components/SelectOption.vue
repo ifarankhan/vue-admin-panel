@@ -129,7 +129,7 @@ export default {
 }
 
 .extra-select-class{
-  width: 287px;
+  width: 200px;
 }
 
 .margin-right {

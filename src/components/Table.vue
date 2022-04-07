@@ -25,13 +25,13 @@
               <Column field="createDate" header="Create Date" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div>
-                         <span> {{data.createDate}} </span>
+                         <span> {{ formatDate(data.createDate) }} </span>
                  </div>
                 </template>
               </Column>
               <Column field="CreatedTime" header="Time" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data.CreatedTime}} </span>
+                   <span>{{ data.CreatedTime}} </span>
                 </template>
               </Column>
               <Column field="subject" header="Subject" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -64,7 +64,7 @@
             <span v-if="tableType=='accountUsers'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <div>
+                    <div class="truncate custome-width">
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
                          <span> {{data.firstName}} </span>
                  </div>
@@ -109,12 +109,12 @@
             <span v-if="tableType=='creditTableFirst'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.time }} </span>
+                   <span>{{ data?.time }} </span>
                 </template>
               </Column>
               <Column field="amount" header="Credit Requested" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
@@ -144,12 +144,12 @@
              <span v-if="tableType=='creditTableSecond'">
               <Column field="date" header="Date of Update" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.time }} </span>
+                   <span>{{ data?.time }} </span>
                 </template>
               </Column>
               <Column field="requestAmount" header="Credit Requested" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -194,7 +194,7 @@
              <span v-if="tableType=='creditTableThird'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
@@ -472,9 +472,8 @@ export default {
 
     },
     setup(props, {emit}) {
-       const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
        const store = useStore();
-       const { userTypes, formatDate, tableStatePersistence } = useClientUser();
+       const { userTypes, formatDate, tableStatePersistence, fresDeskPriorities, fresDeskStatuses } = useClientUser();
 
        const menu = ref();
 
