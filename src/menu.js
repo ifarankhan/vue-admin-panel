@@ -34,6 +34,11 @@ export default [
       to: '/support',
       icon: mdiHandExtendedOutline  ,
       label: 'Support',
+    },
+    {
+      to: '/distributor-control/list',
+      icon: mdiHandExtendedOutline  ,
+      label: 'Distributor Control',
     }
   ],
 ]
