@@ -25,7 +25,6 @@ router.beforeEach(to => {
   store.dispatch('asideLgToggle', false)
 })
 
-
 const app = createApp(App)
 app.use(i18n)
 app.use(PrimeVue)

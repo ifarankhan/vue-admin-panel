@@ -15,7 +15,7 @@ export default [
       label: 'Dashboard'
     },
     {
-      to: '/distributor-control/list',
+      to: '/distributor/list',
       icon: mdiAccountConvert ,
       label: 'Distributor Control'
     },
