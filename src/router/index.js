@@ -156,6 +156,36 @@ const routes = [
     ]
   },
   {
+    path: '/distributor-control',
+    name: 'distributor-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'distributor-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/distributor-control/DistributorControl.vue'),
+    children: [
+      {
+        path: 'list',
+        name: 'distributor-control-list',
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/client-control/mainList.vue'),
+        requiresAuth: true,
+        children: [
+          {
+            path: '',
+            name: 'list-page',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/distributor-control/List.vue'),
+          }
+        ]
+      },
+    ]
+  },
+  {
     // path: "*",
     path: "/:catchAll(.*)",
     name: "notFound",
