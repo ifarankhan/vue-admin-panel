@@ -11,6 +11,7 @@
     <router-view/>
     <!-- <div class="inset-x-0 bottom-0" style="bottom: 0px;position: absolute"> -->
       <!-- <footer-bar/> -->
+      
     <!-- </div> -->
   </div>
   <footer-bar />
