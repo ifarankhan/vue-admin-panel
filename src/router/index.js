@@ -156,7 +156,7 @@ const routes = [
     ]
   },
   {
-    path: '/distributor-control',
+    path: '/distributor',
     name: 'distributor-control',
     props: true,
     meta:{
@@ -169,19 +169,25 @@ const routes = [
     children: [
       {
         path: 'list',
-        name: 'distributor-control-list',
+        name: 'support-control-list',
         // layout: 'mainLayout',
-        component: () => import('../views/authorized/client-control/mainList.vue'),
-        requiresAuth: true,
+        component: () => import('../views/authorized/distributor-control/DistributorList.vue'),
         children: [
           {
             path: '',
-            name: 'list-page',
-            requiresAuth: true,
+            name: 'support-control-list-main',
             // layout: 'mainLayout',
             component: () => import('../views/authorized/distributor-control/List.vue'),
+            requiresAuth: true,
           }
         ]
+      },
+      {
+        path: ':id/conversation',
+        name: 'ticket-conversation',
+        requiresAuth: true,
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/support-control/Conversation.vue'),
       },
     ]
   },

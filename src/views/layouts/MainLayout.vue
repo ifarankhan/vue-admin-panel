@@ -6,10 +6,12 @@
   <template v-else>
     <aside-menu :menu="menu"/>
   </template>
+  
   <div class="relative" style="min-height: calc(100vh - 115px);padding-bottom: 40px;">
     <router-view/>
     <!-- <div class="inset-x-0 bottom-0" style="bottom: 0px;position: absolute"> -->
       <!-- <footer-bar/> -->
+      
     <!-- </div> -->
   </div>
   <footer-bar />
