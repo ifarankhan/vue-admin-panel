@@ -22,7 +22,7 @@
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-9 h-9 "
-          @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'list-page' })"
+          @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'distributors-list' })"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -169,7 +169,7 @@
 
             <div
               class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
-              @click="$router.push({ name: 'client-control-edit-client' })"
+              @click="$router.push({ name: 'support-control-list-main' })"
             >
               <span class="p-0.5">
                 <svg
