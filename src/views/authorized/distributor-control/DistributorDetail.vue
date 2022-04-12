@@ -1,11 +1,5 @@
 <template>
   <!-- <sticky-header> -->
-  <confirmDeleteDialog
-  v-if="showDialog"
-  @closeDialog="showDialog = false"
-  :name="accountDetail && accountDetail.accountName"
-  @dialogConfirmed="deleteAccountMethod()" />
-
   <change-master-dialog
       v-if="showMasterDialog"
       @closeDialog="showMasterDialog = false"
@@ -39,7 +33,7 @@
             />
           </svg>
         </div>
-        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.accountName }} </div>
+        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.name }} </div>
       </div>
       <div class="mr-12 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
@@ -63,7 +57,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Account Details
+                  Distributor Account Details
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
@@ -73,7 +67,17 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Account Users ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers :'' }})
+                  Distributor's Client ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers :'' }})
+                </button>
+              </Tab>
+              <Tab as="template" v-slot="{ selected }">
+                <button
+                    :class="[
+                    'block px-6 py-4 sm:px-4 sm:text-sm sm:py-3 font-bold text-black active hover:text-psytechBlueBtHover focus:outline-none',
+                    selected ? 'border-b-2 border-gray-400' : 'border-0',
+                  ]"
+                >
+                  Credit Settings
                 </button>
               </Tab>
             </TabList>
@@ -233,77 +237,6 @@
               <span> Edit Account </span>
             </div>
 
-            <div
-              class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
-              @click="showDialog = true"
-            >
-              <span class="p-0.5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="17"
-                  height="16.427"
-                  viewBox="0 0 19 18.427"
-                >
-                  <g
-                    id="Group_36445"
-                    data-name="Group 36445"
-                    transform="translate(-459.764 -2813.831)"
-                  >
-                    <line
-                      id="Line_307"
-                      data-name="Line 307"
-                      x2="18"
-                      transform="translate(460.264 2816.206)"
-                      fill="none"
-                      stroke="#000"
-                      stroke-linecap="round"
-                      stroke-width="1"
-                    />
-                    <rect
-                      id="Rectangle_3696"
-                      data-name="Rectangle 3696"
-                      width="5.613"
-                      height="1.727"
-                      transform="translate(466.422 2813.831)"
-                    />
-                    <path
-                      id="Path_13069"
-                      data-name="Path 13069"
-                      d="M472.953,2830.47H462.884l-.725-15.03h11.67Z"
-                      transform="translate(1.516 1.287)"
-                      fill="none"
-                      stroke="#000"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="1"
-                    />
-                    <line
-                      id="Line_308"
-                      data-name="Line 308"
-                      x2="0.489"
-                      y2="10.272"
-                      transform="translate(467.081 2819.192)"
-                      fill="none"
-                      stroke="#000"
-                      stroke-linecap="round"
-                      stroke-width="1"
-                    />
-                    <line
-                      id="Line_309"
-                      data-name="Line 309"
-                      x1="0.489"
-                      y2="10.272"
-                      transform="translate(471.44 2819.192)"
-                      fill="none"
-                      stroke="#000"
-                      stroke-linecap="round"
-                      stroke-width="1"
-                    />
-                  </g>
-                </svg>
-              </span>
-              <span> Delete Account </span>
-            </div>
           </div>
         </div>
 
@@ -311,21 +244,20 @@
         <TabPanel>
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
-              <div class="ml-1 font-bold text-medium">Account Details</div>
-              <div
-                :class="[
-                  !accountDetail?.accountDescription ? 'line-through' : '',
-                ]"
-                class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
-                style="word-wrap: break-word;"
-              >
-                {{
-                  accountDetail?.accountDescription
-                    ? accountDetail?.accountDescription
-                    : "No detail found."
-                }}
+              <div class="grid w-6/12 grid-cols-2 gap-8 pb-3">
+                <div class="ml-1 font-bold text-medium">Distributor Name:</div>
+                <div class="...">{{accountDetail?.displayName}}</div>
+                <div class="ml-1 font-bold text-medium">Distributor Email:</div>
+                <div class="...">{{accountDetail?.email}}</div>
+                <div class="ml-1 font-bold text-medium">Account Password:</div>
+                <div class="..."><span>******* </span><span><a href="#">Change Password</a></span> </div>
+                <div class="ml-1 font-bold text-medium">Currency:</div>
+                <div class="...">{{accountDetail?.invoiceCurrency}}</div>
+                <div class="ml-1 font-bold text-medium">Status:</div>
+                <div class="...">{{accountDetail?.active?"Active":"In-Active"}}</div>
+                <div class="ml-1 font-bold text-medium">Country:</div>
+                <div class="...">{{accountDetail?.country}}</div>
               </div>
-
               <div class="ml-1 font-bold text-medium md:mt-6">
                 Account Address
               </div>
@@ -333,7 +265,7 @@
                 class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
                 style="word-wrap: break-word"
               >
-                {{ accountDetail?.accountAddress ?? "" }}
+                {{ accountDetail?.addressLine1 ?? ""}} {{ accountDetail?.addressLine2 ?? ""}} {{ accountDetail?.addressLine3 ?? ""}} {{ accountDetail?.addressLine4 ?? ""}} , {{ accountDetail?.city ?? ""}}
               </div>
             </div>
             <div class="w-1/3">
@@ -688,7 +620,6 @@ import IconSVG from "@/components/IconSVG.vue";
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
-import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import ChangeMasterDialog from "@/components/ChangeMasterDialog";
@@ -706,7 +637,6 @@ export default {
     ChangeMasterDialog,
     StickyHeader,
     PsytechButton,
-    confirmDeleteDialog,
     DataTable,
     Field,
     Control,
@@ -822,6 +752,7 @@ export default {
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
+    console.log(accountDetail.value);
     const userArray = ref();
     let showFilters = ref(false);
     let prevCustomers = ref();
