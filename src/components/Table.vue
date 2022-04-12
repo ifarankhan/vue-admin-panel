@@ -106,6 +106,55 @@
               </template>
             </Column>
             </span>
+
+               <span v-if="tableType=='distributorsList'">
+              <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span> {{data.name}} </span>
+                </template>
+              </Column>
+              <Column field="eamil" header="Distributor Email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                  <div class="truncate custome-width">
+                      <span>{{data.email}} </span>
+                  </div>
+                </template>
+              </Column>
+               <Column header="Invoice Email" sortField="invoiceEmailAddress" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                     <div class="truncate custome-width">
+                      <span>{{ data.invoiceEmailAddress }}</span>
+                     </div>
+                  </template>
+              </Column>
+               <Column header="Credit Limit" sortField="transferableCreditLimit" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.transferableCreditLimit }}</span>
+                  </template>
+              </Column>
+               <Column header="Invoice Currency" sortField="invoiceCurrency" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.invoiceCurrency }}</span>
+                  </template>
+              </Column> 
+              
+              <Column header="Status" sortField="active" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.active?"Active":"In-Active" }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
             <span v-if="tableType=='creditTableFirst'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
