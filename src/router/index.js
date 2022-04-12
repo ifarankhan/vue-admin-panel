@@ -179,7 +179,14 @@ const routes = [
             // layout: 'mainLayout',
             component: () => import('../views/authorized/distributor-control/List.vue'),
             requiresAuth: true,
-          }
+          },
+          {
+            path: 'detail',
+            name: 'support-control-list-detail',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/distributor-control/DistributorDetail.vue'),
+          },
         ]
       },
       {

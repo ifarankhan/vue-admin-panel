@@ -3,7 +3,7 @@
   <div class="px-8">
     <sticky-header>
       <h1 class="text-2xl font-normal leading-tight ">Distributor Control</h1>
-      <p class="p-1 text-medium text-grey">No. of distributors available: 30</p>
+      <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length }}</p>
       <div class="grid main-grid md:grid-cols-2">
         <!-- left section -->
         <div>
@@ -43,12 +43,12 @@
               >
                 <li class="flex">
                   <field
-                    label="Name"
-                    labelFor="account"
+                    label="Distributor Name"
+                    labelFor="distributorName"
                     :applyExtraInputClass="true"
                   >
                     <control
-                      v-model="accountName"
+                      v-model="distributorName"
                       type="text"
                       id="name"
                       placeholder=" "
@@ -64,19 +64,19 @@
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(accountName = ''), applyFilter()"
+                      @iconWasClicked="(distributorName = ''), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Address"
-                    labelFor="address"
+                    label="Email"
+                    labelFor="email"
                     :applyExtraInputClass="true"
                   >
                     <control
-                      v-model="searchedaddress"
+                      v-model="searchedEmail"
                       type="text"
                       id="address"
                       placeholder=" "
@@ -88,13 +88,64 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedaddressFilter"
                   ></select-option>
-
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedaddressFilter" />
-                  </field> -->
+                  
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedaddress = ''), applyFilter()"
+                      @iconWasClicked="(searchedEmail = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                  <li class="flex">
+                  <field
+                    label="Invoice Email"
+                    labelFor="email"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="searchedInvoiceEmail"
+                      type="text"
+                      id="address"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedInvoiceEmailFilter"
+                  ></select-option>
+                  
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(searchedInvoiceEmail = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                    label="Currency"
+                    labelFor="currency"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="searchedCurrency"
+                      type="text"
+                      id="users"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedCurrencyFilter"
+                  ></select-option>
+
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(searchedCurrency = ''), applyFilter()"
                     />
                   </div>
                 </li>
@@ -106,7 +157,7 @@
                     :applyExtraInputClass="true"
                   >
                     <control
-                      v-model="searchedUsers"
+                      v-model="searchedCredits"
                       type="text"
                       id="users"
                       placeholder=" "
@@ -116,15 +167,15 @@
 
                   <select-option
                     :filterDropdown="numberDropdown"
-                    v-model="selectedUsersFilter"
+                    v-model="selectedCreditsFilter"
                   ></select-option>
 
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
+                    <control :options="filterDropdown" type="select" v-model="selectedCreditsFilter" />
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
+                      @iconWasClicked="(searchedCredits = ''), applyFilter()"
                     />
                   </div>
                 </li>
@@ -187,6 +238,7 @@
           :rows="50"
           :rowHover="true"
           :loading="loading"
+          tableType="distributorsList"
           :rowsPerPageOptions="[10, 25, 50]"
           @rowClicked="redirectToDetail($event)"
           @rowData="setClientDetail({data: $event})"
@@ -247,13 +299,16 @@ export default {
     let prevCustomers = ref();
     let prevSearched = ref();
     let searchText = ref("");
-    let accountName = ref("");
-    let searchedaddress = ref("");
-    let searchedUsers = ref("");
+    let searchedEmail = ref(""); 
+    let searchedInvoiceEmail = ref("");  
+    let searchedCredits = ref(""); 
+    let searchedCurrency = ref(""); 
     let selectStatus = ref("");
     let selectedNameFilter = ref("contains");
     let selectedaddressFilter = ref("contains");
-    let selectedUsersFilter = ref("isEqualTo");
+    let selectedInvoiceEmailFilter = ref("contains");  
+    let selectedCurrencyFilter = ref("contains"); 
+    let selectedCreditsFilter = ref("isEqualTo");
     let prevMainSearchHistry = ref("");
     let showFilters = ref(false);
     const form = reactive({
@@ -266,18 +321,10 @@ export default {
 
     const loadAllClients = ()=>{
        store
-        .dispatch("clientControl/getClientAccount")
+        .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
           let responseArray = res?.data?.data;
           customers.value = responseArray;
-          customers.value.forEach(
-            (customer) => (
-              (customer.date = new Date(customer.creationDate)),
-              (customer.name = customer.accountName),
-              (customer.address = customer.accountAddress),
-              (customer.users = customer.numberOfUsers)
-            )
-          );
           prevCustomers.value = customers.value;
           loading.value = false;
         })
@@ -298,11 +345,18 @@ export default {
     const selectedCustomers = ref();
     const loading = ref(true);
 
+    const distributorName = ref("");
+    const distributorEmail = ref("");
+    const invoiceEmail = ref("");
+    const credits = ref("");
+    
     const clearFilter = () => {
       searchText.value = "";
-      accountName.value = "";
-      searchedaddress.value = "";
-      searchedUsers.value = "";
+      distributorName.value = "";
+      distributorEmail.value = "";
+      searchedInvoiceEmail.value = "";
+      invoiceEmail.value = "";
+      credits.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
     };
@@ -316,15 +370,15 @@ export default {
         filteredData = prevCustomers.value;
       }
       // Make sure search value has some valid value, then do filtering
-      if (accountName.value) {
+      if (distributorName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.name && accountName.value
+            !val.name && distributorName.value
               ? false
-              : accountName.value
+              : distributorName.value
               ? subFilter(
                   val.name.toLowerCase(),
-                  accountName.value.toLowerCase().trim(),
+                  distributorName.value.toLowerCase().trim(),
                   selectedNameFilter.value
                 )
               : true
@@ -332,17 +386,17 @@ export default {
             return true;
           }
         });
-      }
+      } 
       // Make sure search value has some valid value, then do filtering
-      if (searchedaddress.value) {
+      if (searchedEmail.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.address && searchedaddress.value
+            !val.email && searchedEmail.value
               ? false
-              : !!(searchedaddress.value
+              : !!(searchedEmail.value
                   ? subFilter(
-                      val.address.toLowerCase(),
-                      searchedaddress.value.toLowerCase().trim(),
+                      val.email.toLowerCase(),
+                      searchedEmail.value.toLowerCase().trim(),
                       selectedaddressFilter.value
                     )
                   : true)
@@ -353,16 +407,55 @@ export default {
       }
 
       // Make sure search value has some valid value, then do filtering
-      if (searchedUsers.value) {
+      if (searchedInvoiceEmail.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.users && val.users != 0 && searchedUsers.value
+            !val.invoiceEmailAddress && searchedInvoiceEmail.value
               ? false
-              : !!(searchedUsers.value
+              : !!(searchedInvoiceEmail.value
                   ? subFilter(
-                      +val.users,
-                      +searchedUsers.value,
-                      selectedUsersFilter.value
+                      val.invoiceEmailAddress.toLowerCase(),
+                      searchedInvoiceEmail.value.toLowerCase().trim(),
+                      selectedInvoiceEmailFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+
+      // Make sure search value has some valid value, then do filtering
+      if (searchedCurrency.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.invoiceCurrency && searchedCurrency.value
+              ? false
+              : !!(searchedCurrency.value
+                  ? subFilter(
+                      val.invoiceCurrency.toLowerCase(),
+                      searchedCurrency.value.toLowerCase().trim(),
+                      selectedCurrencyFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+      // Make sure search value has some valid value, then do filtering
+      if (searchedCredits.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.transferableCreditLimit && val.transferableCreditLimit != 0 && searchedCredits.value
+              ? false
+              : !!(searchedCredits.value
+                  ? subFilter(
+                      +val.transferableCreditLimit,
+                      +searchedCredits.value,
+                      selectedCreditsFilter.value
                     )
                   : true)
           ) {
@@ -386,14 +479,14 @@ export default {
         return;
       }
       // fileds to be check for filters
-      if (searchedUsers.value || accountName.value || searchedaddress.value) {
-        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+      if (searchedCredits.value || distributorName.value || searchedEmail.value) {
+        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceEmailAddress string", "invoiceCurrency string"]
         customers.value = filterMethod(prevSearched.value,searchableFields,value)
 
         // customers.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
-        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceEmailAddress string", "invoiceCurrency string"]
         customers.value = filterMethod(prevCustomers.value,searchableFields,value)
 
         // customers.value = filterMethod(prevCustomers.value, value);
@@ -414,7 +507,7 @@ export default {
 
     const setClientDetail = async e=>{
       await store.commit("clientControl/setClientDetail", e.data);
-      await (clientName.value = e.data.accountName)
+      await (clientName.value = e.data.distributorName)
     }
 
     const loader  = ref(false);
@@ -458,22 +551,26 @@ export default {
       filteredMainMethod,
       deleteAccountMethod,
       searchText,
+      searchedCurrency,
       setClientDetail,
       prevSearched,
-      accountName,
+      distributorName,
       pickedDate,
       numberDropdown,
       showFilters,
       showDialog,
       form,
       loader,
-      searchedaddress,
-      searchedUsers,
+      searchedEmail,
+      searchedCredits,
       filterMethod,
+      searchedInvoiceEmail,
       redirectToDetail,
-      selectedUsersFilter,
+      selectedCreditsFilter,
       selectedNameFilter,
       selectedaddressFilter,
+      selectedInvoiceEmailFilter,
+      selectedCurrencyFilter,
       applyFilter,
       clearFilter,
       dropdownFilters,
