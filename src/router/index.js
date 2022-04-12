@@ -156,6 +156,42 @@ const routes = [
     ]
   },
   {
+    path: '/distributor',
+    name: 'distributor-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'distributor-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/distributor-control/DistributorControl.vue'),
+    children: [
+      {
+        path: 'list',
+        name: 'support-control-list',
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/distributor-control/DistributorList.vue'),
+        children: [
+          {
+            path: '',
+            name: 'support-control-list-main',
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/distributor-control/List.vue'),
+            requiresAuth: true,
+          }
+        ]
+      },
+      {
+        path: ':id/conversation',
+        name: 'ticket-conversation',
+        requiresAuth: true,
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/support-control/Conversation.vue'),
+      },
+    ]
+  },
+  {
     // path: "*",
     path: "/:catchAll(.*)",
     name: "notFound",
