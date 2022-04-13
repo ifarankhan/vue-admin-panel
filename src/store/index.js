@@ -3,6 +3,7 @@ import auth from './modules/auth';
 import freshDesk from './modules/freshDesk';
 import clientControl from './modules/clientControl';
 import creditControl from './modules/creditControl';
+import masterPannel from './modules/masterPannel';
 
 export default createStore({
   state: {
@@ -91,6 +92,7 @@ export default createStore({
   modules: {
     auth,
     freshDesk,
+    masterPannel,
     clientControl,
     creditControl
   },

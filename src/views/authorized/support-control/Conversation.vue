@@ -1,7 +1,15 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
-  <div class="pt-10">
-      <div class="grid grid-cols-2 md:px-2">
+  <div class="">
+     <div class="w-8/12 px-4 mt-8 mb-4 ml-8" v-if="showError">
+     <error-alert
+            @dismissError="showError = false"
+            :error="`The ticket is either not there or you don't have permission`"
+            :showTranslatedError="false"
+          />
+     </div>
+
+      <div class="fixed z-30 grid w-7/12 h-10 grid-cols-2 px-4 py-10 -mr-4 bg-white">
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-9 h-9 "
@@ -22,25 +30,14 @@
             />
           </svg>
         </div>
-        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ ticketData && ticketData.subject }} </div>
+        <div class="ml-3 font-bold text-medium">{{ ticketData && ticketData.subject }} </div>
       </div>
     </div>
-    
-    <!--  -->
-     <div class="flex w-3/5 px-4 mt-6 ml-10">
-         <div class="flex w-2/4">
-             <span class="text-sm font-bold">Creation Date:</span>
-             <span class="ml-2" >{{ ticketData && ticketData.createdAt.split("T")[0] }}</span>
-         </div>
+  
 
-          <div class="flex w-2/4">
-             <span class="text-sm font-bold">Creation Time:</span>
-             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
-         </div>
-     </div>
-    
     <!--  -->
-       <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+    <div class="flex pt-14">
+       <div class="w-7/12 px-4 mt-12 mb-4 ml-8">
           <div class="flex items-center cursor-pointer" @click="collapsable.description = !collapsable.description">
             <span
             >
@@ -69,10 +66,9 @@
               </div>
           </div>
           <!--  -->
-        </div>
 
-    <!--  -->
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+     <!--  -->
+     <div class="px-4 mt-8 mb-4" v-if="!showError">
           <div class="flex items-center cursor-pointer" @click="collapsable.attachments = !collapsable.attachments">
             <span
             >
@@ -143,8 +139,8 @@
           <!--  -->
         </div>
 
-  <!-- post comment -->
-     <div class="w-10/12 px-4 mt-8 mb-4 ml-8">
+          <!-- post comment -->
+     <div class="px-4 mt-8 mb-4" v-if="!showError">
           <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
@@ -171,6 +167,7 @@
                    <psytech-button
                     type="Secondary"
                     label="Add Comment"
+                    :smallYPadding="true"
                     @buttonWasClicked="addNoteToTicketMethod()"
                   ></psytech-button>
               </div>
@@ -178,6 +175,7 @@
                    <psytech-button
                     type="black-small"
                     label="Cancel"
+                    :smallYPadding="true"
                     @buttonWasClicked="clearConversation()"
                   ></psytech-button>
               </div>
@@ -185,7 +183,7 @@
           </div>
           <!--  -->
         </div>
-    <div class="w-10/12 px-4 pt-8 mt-16 mb-4 ml-8">
+    <div class="px-4 pt-8 mt-16 mb-4">
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
             <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketData.conversations" :key="index">
                 <div class="flex items-center space-x-4">
@@ -206,6 +204,100 @@
             </li>
         </ul>
     </div>
+    </div>
+
+    <!-- Right Pannel -->
+       <div class="fixed p-8 mr-20 border rounded-2xl custom-height" style="z-index: 35;">
+          <div class="mt-4">
+             <span class="text-sm font-bold">Ticket Status:</span>
+             <span class="px-3 py-0.5 ml-2 text-sm text-white bg-green-700 rounded-md">{{ ticketData && fresDeskStatuses.find(item=> item.value == +ticketData.status).text }}</span>
+          </div>
+
+          <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Creation Date:</span>
+             <span class="ml-2" >{{ formatDate(ticketData && ticketData.createdAt.split("T")[0]) }}</span>
+          </div>
+
+          <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Creation Time:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.createdAt.split("T")[1].split("Z")[0] }}</span>
+         </div>
+
+        <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Client Name:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">{{ ticketData.customFields.cf_client }}</span>
+         </div>
+
+        <!--  -->
+          <div class="mt-4">
+             <span class="text-sm font-bold">Account User:</span>
+             <span class="ml-2" v-if="ticketData && ticketData.createdAt">
+               {{ `${ticketData.customFields.cf_clientuser.split("-")[0]} (${ticketData.customFields.cf_clientuser.split("-")[1]})` }}
+             </span>
+         </div>
+
+        <!--  -->
+           <div class="flex items-center mt-6 -ml-1 cursor-pointer" @click="collapsable.assignedTo = !collapsable.assignedTo">
+            <span
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d=" collapsable.assignedTo ? mdiChevronDown: mdiChevronUp" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Assigned to :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+          </div>
+          <div class="w-3/4 mt-4 ml-2" v-if="collapsable.assignedTo">
+    <label class="block">
+    <input type="text" value="Psytech Support" disabled class="block w-full px-3 py-2 mt-1 text-sm bg-white border rounded-md shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 "/>
+  </label>
+            </div>
+
+         <!--  -->
+           <div class="flex items-center mt-6 -ml-1 cursor-pointer" @click="collapsable.priority = !collapsable.priority">
+            <span
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                class="inline-block"
+              >
+                <path :d=" collapsable.priority ? mdiChevronDown: mdiChevronUp" />
+              </svg>
+            </span>
+            <span class="-ml-0.5 text-sm font-semibold">Priority :</span>
+            <div class="flex-auto ml-4 border-t-2 border-gray-300"></div>
+          </div>
+          <div class="w-3/4 mt-4 ml-2" v-if="collapsable.priority">
+            <select-option
+                :filterDropdown="fresDeskPriorities"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticketPriority"
+                :labelText="'Ticket Priority'"
+                ></select-option>
+            </div>
+          <!-- priority button -->
+            <div class="mt-6">
+                   <psytech-button
+                    type="Secondary"
+                    label="Update"
+                    :smallYPadding="true"
+                    @buttonWasClicked="updateTicketFields()"
+                  ></psytech-button>
+              </div>
+        </div>
+    </div>
+    
 </div>
 </template>
 
@@ -216,33 +308,40 @@ import { mdiChevronDown, mdiChevronUp, mdiCloudDownloadOutline } from "@mdi/js";
 import PsytechButton from "@/components/PsytechButton";
 import { QuillEditor } from '@vueup/vue-quill';
 import store from "../../../store/index";
+import SelectOption from "@/components/SelectOption.vue";
+import { useClientUser } from "@/components/composition/clientHelper.js";
+import ErrorAlert from "@/components/ErrorAlert.vue";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import Button from 'primevue/button';
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    const ticketData = store.getters["freshDesk/getTicketData"];
-    if (!ticketData) {
-      next({ name: "support-control-list" });
-    }
-    next();
-  },
     components:{
         PsytechButton,
         QuillEditor,
+        SelectOption,
+        ErrorAlert,
         Loader,
+        Button
     },
     setup(props, { emit }) {
+    const { fresDeskStatuses, formatDate, fresDeskPriorities } = useClientUser();
+    const router = useRouter();
     const loader = ref(false);
+    let showError = ref("");
 
     const collapsable = reactive({
       description: true,
       attachments: true,
-      comments: true
+      comments: true,
+      assignedTo: true,
+      priority: true
     });
 
     const store = useStore();
     const ticketData = ref(null);
+    const ticketPriority = ref();
 
    onMounted(() => {
      getIndividualTicketData()
@@ -254,13 +353,34 @@ export default {
       element[0].innerHTML = "";
     }
 
+    const isBase64 = str => {
+        if (str ==='' || str.trim() ===''){ return false; }
+        try {
+            return btoa(atob(str)) == str;
+        } catch (err) {
+            return false;
+        }
+    }
+
     const addNoteToTicketMethod = ()=>{
+      
+      let URL;
+      const route = router.currentRoute.value.params.id;
      if(conversationText.value == "" || conversationText.value == "\n") return;
+      try {
+         if(isBase64(route))
+         URL = atob(route);
+      } catch (error) {
+        console.log("error...", error)
+      }
+
      let element = document.getElementsByClassName("ql-editor");
         loader.value = true;
         store
         .dispatch("freshDesk/addNoteToTicket", {
-          body: conversationText.value
+          body: conversationText.value,
+          user_id: ticketData.value.requester,
+          ticketId: +URL.split("-")[0]
         })
           .then((res) => {
             getIndividualTicketData()
@@ -271,11 +391,23 @@ export default {
              loader.value = false;
           })
     }
+  
+  const getIndividualTicketData = ()=>{
+      let URL;
+      const route = router.currentRoute.value.params.id;
+      try {
+         if(isBase64(route))
+         URL = atob(router.currentRoute.value.params.id);
+      } catch (error) {
+        console.log("error...", error)
+      }
+      if(URL?.split("-")[1] != JSON.parse(localStorage.getItem("userData")).freshdeskCompanyID){
+        showError.value = true;
+        return
+      }
 
-    const getIndividualTicketData = ()=>{
-      // loading.value = true;
       Promise.allSettled([ 
-      store.dispatch("freshDesk/getIndividualTicket"), 
+      store.dispatch("freshDesk/getIndividualTicket", {ticketId: URL?.split("-")[0] }), 
       store.dispatch("freshDesk/getAllContacts"),
       store.dispatch("freshDesk/getAllAgents")
     ]) 
@@ -296,11 +428,13 @@ export default {
                 attachments: DATA.attachments,
                 status: DATA.status,
                 priority: DATA.priority,
-                requester: DATA.requester,
+                requester: DATA.requester_id,
                 conversations: DATA.conversations,
                 allImages: [],
                 allFiles: []
             }
+
+        ticketPriority.value = +DATA.priority;
 
         // for files
           let allImages = []
@@ -369,21 +503,57 @@ export default {
       })
     }
 
+    const updateTicketFields = ()=>{
+      const route = router.currentRoute.value.params.id;
+      let URL;
+      try {
+         if(isBase64(route))
+         URL = atob(route);
+      } catch (error) {
+        console.log("error...", error)
+      }
+      console.log("route",route)
+       loader.value = true;
+
+        store
+        .dispatch("freshDesk/updateTicketStatus", {
+          priority: ticketPriority.value,
+          ticketId: +URL.split("-")[0]
+        })
+          .then((res) => {
+            ticketPriority.value = res.data.priority;
+          }).catch((error) => {
+          }).finally(()=>{
+             loader.value = false;
+          })
+    }
+
     return {
         ticketData,
         mdiChevronDown,
         conversationText,
+        fresDeskPriorities,
+        fresDeskStatuses,
         mdiChevronUp,
+        ticketPriority,
         loader,
+        formatDate,
+        showError,
         clearConversation,
         mdiCloudDownloadOutline,
+        updateTicketFields,
         addNoteToTicketMethod,
         collapsable
       }
     },
 }
 </script>
-<style>
-
-
+<style scoped lang="scss">
+  .custom-height {
+    height: 620px;
+    right: -90px;
+    margin-right: 150px;
+    width: 30%;
+  }
+ 
 </style>

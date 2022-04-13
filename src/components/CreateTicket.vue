@@ -49,6 +49,27 @@
             <p v-if="!showDefaultUsertext">
                 <error-span :error="v$.user"></error-span>
             </p>
+      <!--  -->
+        <div class="mt-6 ml-2">
+            <select-option
+                :filterDropdown="fresDeskStatuses"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticket.status"
+                :labelText="'Ticket Status'"
+                ></select-option>
+            </div>
+
+      <!--  -->
+        <div class="mt-6 ml-2">
+            <select-option
+                :filterDropdown="fresDeskPriorities"
+                :customeWidth="true"
+                :allyMarginRight="false"
+                v-model="ticket.priority"
+                :labelText="'Ticket Priority'"
+                ></select-option>
+            </div>
 
           <div>
              <field label="Ticket Details" labelFor="ticketDetails">
@@ -108,6 +129,7 @@ import { useStore } from "vuex";
 
 import Field from "@/components/Field";
 import Control from "@/components/Control";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 
 import {helpers, required, numeric} from "@vuelidate/validators";
 
@@ -122,6 +144,7 @@ export default {
         ErrorSpan
     },
     setup(props, { emit }) {
+       const { fresDeskStatuses, fresDeskPriorities } = useClientUser();
       const store = useStore();
 
        const showDialog = ref(true);
@@ -140,6 +163,9 @@ export default {
         details: "",
         client: "",
         user:"",
+        status: 2,
+        priority: 1,
+        due_by: '',
         attachments: null
     })
 
@@ -150,7 +176,7 @@ export default {
    const clients = ref([]);
    onMounted(() => {
       store
-        .dispatch("clientControl/getClientAccount")
+        .dispatch("freshDesk/getClientAccountForSupport")
         .then((res) => {
           let responseArray = res?.data?.data;
           clients.value = responseArray.map(item=>{
@@ -174,11 +200,12 @@ export default {
         showDefaultUsertext.value = false;
         ticket.user = "";
       store
-          .dispatch("clientControl/getAccountUsers",{
+          .dispatch("freshDesk/getClinetAccountUsersForSupport",{
             accountId: event.value
           })
           .then((res) => {
             let responseArray = res?.data?.data;
+            console.log("responseArray", responseArray)
             if(!responseArray.length){
                 showDefaultUsertext.value = true;
             }
@@ -229,6 +256,16 @@ export default {
       ) {
         return true;
       }
+      // extract client name
+      ticket.client = (clients.value.filter(item=> {
+        return item.value == ticket.client
+      })[0]).text
+
+      // extract user name
+     const selectedUser = (clientUsers.value.filter(item=> {
+        return item.value == ticket.user
+      })[0])
+      ticket.user = selectedUser.text + "-"+ selectedUser.email
       loader.value = true;
       emit("ticketData",ticket)
     }
@@ -241,6 +278,8 @@ export default {
         loader,
         userData,
         clients,
+        fresDeskPriorities,
+        fresDeskStatuses,
         clientUsers,
         showDefaultUsertext,
         mdiFileChartOutline,
@@ -277,6 +316,11 @@ export default {
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
   border-radius: 25px;
+}
+.ticket-due-date ::placeholder, .ticket-due-date svg {
+  color: #008ac0;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .p-button:enabled:hover {
   background: #008ac0;

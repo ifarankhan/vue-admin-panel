@@ -184,7 +184,7 @@
         </div>
       </div>
     </sticky-header>
-        <div class="fixedheader">
+        <div class="fixedheader ticket">
           <DataTable
               :customers="allTickets"
               :rowHover="true"
@@ -240,6 +240,7 @@ export default {
     SelectOption
   },
   setup() {
+
     const store = useStore();
     const router = useRouter();
     const allTickets = ref([]);
@@ -260,8 +261,15 @@ export default {
 
     //
     const redirectToDetail = async e => {
+      // console.log("e.data.requester_id",e.data.requester_id)
+      const randomT = e.data.ticketId;
+      const randomC = e.data.companyId;
+      // console.log("${randomT}-${ticketId}",`${ticketId}-${companyId}`)
+      const concatInUrl = btoa(`${randomT}-${randomC}`);
+      // console.log("concatInUrl",concatInUrl)
+
       store.commit("freshDesk/setTicketData", e.data);
-      router.push({ name: "ticket-conversation" });
+      router.push({name: "ticket-conversation" ,  params: { id: concatInUrl } });
     };
 
     let showCreateTicketDialog = ref(false);
@@ -287,6 +295,7 @@ export default {
             status: item.status,
             priority: item.priority,
             ticketId: item.id,
+            companyId: item.company_id,
             requester_id: item.requester_id
           }
         })
@@ -306,10 +315,10 @@ export default {
         FORM_DATA.append('description', data.details);
         FORM_DATA.append('subject', data.subject);
         FORM_DATA.append('email', USER_DATA.userName);
+        FORM_DATA.append('status', data.status);
+        FORM_DATA.append('priority', data.priority);
         FORM_DATA.append('custom_fields[cf_client]', String(data.client));
         FORM_DATA.append('custom_fields[cf_clientuser]', String(data.user));
-        FORM_DATA.append('status', 2); // open
-        FORM_DATA.append('priority', 1); // low
         if(data.attachments){
           for(let i=0; i< data.attachments.length; i++){
               FORM_DATA.append("attachments[]", data.attachments[i])
@@ -500,7 +509,7 @@ export default {
     ]);
 
     // Seach and filter end
-
+    
     return {
       alreadyMember,
       allTickets,

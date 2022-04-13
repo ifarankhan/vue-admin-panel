@@ -80,6 +80,18 @@
             <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="(showCreditToClientDialog = true,  showSuccessAlert = false)"> Transfer Credit to clients </div>
           </div>
 
+        <div class="relative p-4 mt-10 ml-20 border-2 border-gray-300 rounded-md w-72">
+          <div class="flex">
+            <div>
+              <p class="text-sm font-semibold"> Update Settings </p>
+              <p class="mb-2 text-lg font-bold text-black"> {{ '--' }} </p>
+            </div>
+            <div></div>
+          </div>
+          <!--  -->
+          <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showSettingsDialog = true">View/Update Settings </div>
+        </div>
+
       </div>
       <topUpCreditDialog
       v-if="topUpCreditDialog"
@@ -216,12 +228,18 @@
     topHeaderText="Credit Details"
     :data="dialogData"
     @openCreditDialog="(showDialog=true),(showViewDialog = false)"
-    @closeDialog="showViewDialog = false" /> 
+    @closeDialog="showViewDialog = false" />
 
-    <credit-to-clientDialog 
+    <credit-to-clientDialog
     v-if="showCreditToClientDialog"
     @closeDialog="showCreditToClientDialog = false"
     @transferCreditClientData="sendCallCreditToClient($event)" />
+
+    <credit-setting-dialog
+    v-if="showSettingsDialog"
+    @closeDialog="showSettingsDialog = false"
+    />
+
   </div>
 </template>
 
@@ -243,9 +261,11 @@ import creditToClientDialog from "@/components/transferredCreditToClientDialog.v
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
+import CreditSettingDialog from "@/components/creditSettingDialog";
 export default {
   name: "demoTable",
   components: {
+    CreditSettingDialog,
     DataTable,
     StickyHeader,
     CreditTopBar,
@@ -280,6 +300,7 @@ export default {
     let loading = ref(false)
     let loader = ref(false);
     let tabIndex = ref(2)
+    let showSettingsDialog = ref(false);
     const getData = (url, payload)=>{
       loading.value = true;
       error.value = null
@@ -517,7 +538,7 @@ export default {
             showSuccessAlert.value = true;
           }
         })
-        .catch((error) => { 
+        .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
@@ -548,6 +569,7 @@ export default {
       showSection,
       downloadExportFile,
       getData,
+      showSettingsDialog,
       tabIndex,
       loading,
       loader,

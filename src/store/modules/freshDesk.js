@@ -1,18 +1,25 @@
-import { fresh_desk_url } from "../../axios";
+import { fresh_desk_url, private_url } from "../../axios";
 const namespaced = true;
 const state = {
-    ticketData: null
+    ticketData: null,
+    ticketIdFromURL: null
 }
 
 const getters = {
     getTicketData(state){
         return state.ticketData
+    },
+    getTicketIdFromURL: state =>{
+        return state.ticketIdFromURL
     }
   }
 
 const mutations = {
     setTicketData(state, payload){
         state.ticketData = payload
+    },
+    setTicketidFromURL(state, payload){
+        state.ticketIdFromURL = payload;
     }
 }
 
@@ -46,10 +53,15 @@ const actions = {
             headers: headers
           });
     },
-    addNoteToTicket({ state }, payload) {
-        const DATA = payload;
-        DATA.user_id = state?.ticketData?.requester_id
-        return fresh_desk_url.post(`/tickets/${state.ticketData.ticketId}/notes`, DATA);
+    addNoteToTicket({ }, payload) {
+        const TICEKT_ID = payload.ticketId;
+        delete payload.ticketId;
+        return fresh_desk_url.post(`/tickets/${TICEKT_ID}/notes`, payload);
+    },
+    updateTicketStatus({ }, payload) {
+        const TICEKT_ID = payload.ticketId;
+        delete payload.ticketId;
+        return fresh_desk_url.put(`/tickets/${TICEKT_ID}`, payload);
     },
     async getAllTicketsByCompany({ },payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
@@ -59,14 +71,28 @@ const actions = {
             }
         })
     },
+    async getClinetAccountUsersForSupport({ }, payload){
+        return private_url.get('support-account-users', 
+            {
+                params: payload
+          })
+    },
+    async getClientAccountForSupport({ }){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('support-client-accounts', {
+            params:{
+                distributorid :userData.distributorId
+            }
+        })
+    },
     async getAllContacts({ },payload){
         return fresh_desk_url.get('/contacts')
     },
     async getAllAgents({ },payload){
         return fresh_desk_url.get('/agents')
     },
-    async getIndividualTicket({ state }){
-        return fresh_desk_url.get(`/tickets/${state.ticketData.ticketId}?include=conversations`)
+    async getIndividualTicket({ }, payload){
+        return fresh_desk_url.get(`/tickets/${payload.ticketId}?include=conversations`)
     },
 }
 

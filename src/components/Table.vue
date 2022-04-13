@@ -25,13 +25,13 @@
               <Column field="createDate" header="Create Date" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div>
-                         <span> {{data.createDate}} </span>
+                         <span> {{ formatDate(data.createDate) }} </span>
                  </div>
                 </template>
               </Column>
               <Column field="CreatedTime" header="Time" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data.CreatedTime}} </span>
+                   <span>{{ data.CreatedTime}} </span>
                 </template>
               </Column>
               <Column field="subject" header="Subject" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -64,7 +64,7 @@
             <span v-if="tableType=='accountUsers'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <div>
+                    <div class="truncate custome-width">
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
                          <span> {{data.firstName}} </span>
                  </div>
@@ -106,15 +106,64 @@
               </template>
             </Column>
             </span>
+
+        <span v-if="tableType=='distributorsList'">
+              <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span> {{data.name}} </span>
+                </template>
+              </Column>
+              <Column field="eamil" header="Distributor Email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                  <div class="truncate custome-width">
+                      <span>{{data.email}} </span>
+                  </div>
+                </template>
+              </Column>
+               <Column header="Invoice Email" sortField="invoiceEmailAddress" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                     <div class="truncate custome-width">
+                      <span>{{ data.invoiceEmailAddress }}</span>
+                     </div>
+                  </template>
+              </Column>
+               <Column header="Credit Limit" sortField="transferableCreditLimit" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.transferableCreditLimit }}</span>
+                  </template>
+              </Column>
+               <Column header="Invoice Currency" sortField="invoiceCurrency" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.invoiceCurrency }}</span>
+                  </template>
+              </Column> 
+              
+              <Column header="Status" sortField="active" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.active?"Active":"In-Active" }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
             <span v-if="tableType=='creditTableFirst'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.time }} </span>
+                   <span>{{ data?.time }} </span>
                 </template>
               </Column>
               <Column field="amount" header="Credit Requested" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
@@ -144,12 +193,12 @@
              <span v-if="tableType=='creditTableSecond'">
               <Column field="date" header="Date of Update" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.time }} </span>
+                   <span>{{ data?.time }} </span>
                 </template>
               </Column>
               <Column field="requestAmount" header="Credit Requested" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -194,7 +243,7 @@
              <span v-if="tableType=='creditTableThird'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
@@ -283,12 +332,19 @@
                   </template>
               </Column>
               <Column style="min-width: 10rem; cursor: pointer" bodyStyle="text-align:right">
-              <template #body>
-                  <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <template #body="{data}">
+                  <div class="my-center-text" @click.stop="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
+                  </div>
+                  <div>
+                    <Menu id="overlay_menu" ref="menu" class="menu-width" :model="actions" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('editItemWasClicked', {eventName: item.label})">{{ item.label }}</p>
+                    </template>
+                    </Menu>
                   </div>
               </template>
             </Column>
@@ -408,7 +464,7 @@ export default {
     LanguageSwitcher,
     Icon,
     },
-    emits:['rowClicked'],
+    emits:['rowClicked','rowData','editItemWasClicked'],
 
     props:{
         first:{
@@ -466,13 +522,22 @@ export default {
     },
     setup(props, {emit}) {
        const store = useStore();
-       const { userTypes, formatDate, tableStatePersistence } = useClientUser();
+       const { userTypes, formatDate, tableStatePersistence, fresDeskPriorities, fresDeskStatuses } = useClientUser();
 
        const menu = ref();
 
       const items = ref([
 				{
 					label: 'Request to Correct Credit Update'
+				}
+			])
+
+      const actions = ref([
+				{
+					label: 'Edit Client'
+				},
+        {
+					label: 'Delete Client'
 				}
 			])
 
@@ -488,44 +553,6 @@ export default {
 
         }
 
-        const fresDeskStatuses = ref([
-          {
-            text: "Open",
-            value: 2
-          },
-          {
-            text: "Pending",
-            value: 3
-          },
-          {
-            text: "Resolved",
-            value: 4
-          },
-          {
-            text: "Closed",
-            value: 5
-          }
-        ])
-
-        const fresDeskPriorities = ref([
-          {
-            text: "Low",
-            value: 1
-          },
-          {
-            text: "Medium",
-            value: 2
-          },
-          {
-            text: "High",
-            value: 3
-          },
-          {
-            text: "Urgent",
-            value: 4
-          }
-        ])
-
         const dt = ref();
         const exportCSV = () => {
             dt.value.exportCSV();
@@ -539,6 +566,7 @@ export default {
             menu,
             dt,
             items,
+            actions,
             exportCSV,
             fresDeskStatuses,
             fresDeskPriorities,
@@ -569,6 +597,12 @@ export default {
 .sticky-header-footer .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
+}
+
+.menu-width {
+  width: 200px !important;
+  min-width: 0px !important;
+  left: calc(100% - 255px)  !important;
 }
 
 .custome-width{

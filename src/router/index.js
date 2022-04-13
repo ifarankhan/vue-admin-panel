@@ -147,7 +147,50 @@ const routes = [
         requiresAuth: true,
       },
       {
-        path: 'conversation',
+        path: ':id/conversation',
+        name: 'ticket-conversation',
+        requiresAuth: true,
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/support-control/Conversation.vue'),
+      },
+    ]
+  },
+  {
+    path: '/distributor',
+    name: 'distributor-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'distributor-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/distributor-control/DistributorControl.vue'),
+    children: [
+      {
+        path: 'list',
+        name: 'distributor-control-list',
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/distributor-control/DistributorList.vue'),
+        children: [
+          {
+            path: '',
+            name: 'distributors-list',
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/distributor-control/List.vue'),
+            requiresAuth: true,
+          },
+          {
+            path: 'detail',
+            name: 'distributor-control-list-detail',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/distributor-control/DistributorDetail.vue'),
+          },
+        ]
+      },
+      {
+        path: ':id/conversation',
         name: 'ticket-conversation',
         requiresAuth: true,
         // layout: 'mainLayout',
@@ -190,22 +233,22 @@ router.afterEach(to => {
 
 // Meta Handling
 router.beforeEach((to, from, next) => {
-  // console.log("prev page url", from)
-  // store.commit("setPrevRoute", from)
   const USER_DATA = JSON.parse(localStorage.getItem('userData'))
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!USER_DATA?.authToken) {
       next({
         path: '/login',
       })
+      return
     } else {
-      next()
+        next()
     }
   } else {
     if (USER_DATA?.authToken) {
       next({
         path: '/dashboard',
       })
+      return
     } else {
       next()
     }
