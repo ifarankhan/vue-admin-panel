@@ -107,7 +107,7 @@
             </Column>
             </span>
 
-               <span v-if="tableType=='distributorsList'">
+        <span v-if="tableType=='distributorsList'">
               <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                    <span> {{data.name}} </span>

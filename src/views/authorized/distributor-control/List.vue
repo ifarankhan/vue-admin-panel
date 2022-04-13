@@ -502,7 +502,7 @@ export default {
 
     const redirectToDetail = (e) => {
       store.commit("clientControl/setClientDetail", e.data);
-      router.push({ name: "client-control-list-detail" });
+      router.push({ name: "distributor-control-list-detail" });
     };
 
     const setClientDetail = async e=>{
