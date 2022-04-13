@@ -1,14 +1,5 @@
 <template>
   <!-- <sticky-header> -->
-  <change-master-dialog
-      v-if="showMasterDialog"
-      @closeDialog="showMasterDialog = false"
-      :providers-array="userArray"
-      :currentMaster="masterUser"
-      :account-id="accountDetail.accountId"
-      @refreshUserList="fetchListOfUsers()"
-      topHeaderText="Change Master User"
-  />
   <Loader v-if="loader" :toBeBigger="true" />
 
 <div class="pt-10">
@@ -67,7 +58,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Distributor's Client ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers :'' }})
+                  Distributor's Client ({{ customers?.length }})
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
@@ -82,7 +73,6 @@
               </Tab>
             </TabList>
           </div>
-
           <div
             class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
@@ -292,111 +282,7 @@
         </TabPanel>
 
         <TabPanel>
-            <div class="mt-4 ml-5">
-            <psytech-button
-              @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
-              label="Add User"
-              type="outline"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </psytech-button>
-            <psytech-button
-                v-if="userArray?.length"
-                @click="showMasterDialog = true"
-                label=" Change Master User"
-                type="outline"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 pr-1" viewBox="0 0 18.139 14.272">
-                <g id="Group_36612" data-name="Group 36612" transform="translate(0 0.309)">
-                  <g id="Group_36613" data-name="Group 36613" transform="translate(0 0)">
-                    <path id="Path_13504" data-name="Path 13504" d="M2.628,6.837A6.637,6.637,0,0,1,15.1,3.674" transform="translate(-0.126 -0.01)" fill="none" stroke="#353535" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
-                    <path id="Path_13505" data-name="Path 13505" d="M15.933,7.17A6.637,6.637,0,0,1,3.324,10.065" transform="translate(-0.159 -0.343)" fill="none" stroke="#353535" stroke-linecap="round" stroke-miterlimit="10" stroke-width="1"/>
-                    <path id="Path_13506" data-name="Path 13506" d="M5,5.857l-2.5,2.5L0,5.857Z" transform="translate(0 -0.28)" fill="#353535"/>
-                    <path id="Path_13507" data-name="Path 13507" d="M13.795,8.359l2.5-2.5,2.5,2.5Z" transform="translate(-0.659 -0.28)" fill="#353535"/>
-                  </g>
-                </g>
-              </svg>
-
-            </psytech-button>
-          <!-- Create New Client Account -->
-        </div>
-        <!-- paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" -->
-        <div class="mt-4 mb-2 ml-5">
-          <p class="pl-2 text-sm font-semibold">Master User:</p>
-          <div class="mr-10 md:pr-12 lg:pr-0">
-            <DataTable
-                :customers="masterUser"
-                :loading="loading"
-                @rowClicked="redirectToDetail($event)"
-                :sortTable="false"
-                tableType="accountUsers"
-                :image='true'
-              />
-            </div>
-          <!-- <div class="mt-2 mr-10 md:pr-12 lg:pr-0">
-            <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-            <table class="border border-gray-200 rounded-md table-auto hover:table-fixed">
-              <thead>
-              <tr>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">First Name</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">Family Name</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">User Name</th>
-                <th style="min-width: 12rem; cursor: pointer; text-align:left;" class="text-base font-semibold">User Type</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">Credits</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold">Status</th>
-                <th style="min-width: 10rem; cursor: pointer; text-align:left;" class="text-base font-semibold"> </th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr v-if="masterUser && masterUser.length === 0">
-                <td colspan="7">
-                  <div class="flex items-center content-center justify-center font-bold">{{ $t('No master user found for this account.') }}</div>
-                </td>
-              </tr>
-              <tr v-else v-for="(user, index) in masterUser" :key="index">
-                <td>{{user.firstName}}</td>
-                <td>{{user.familyName}}</td>
-                <td>{{user.email}}</td>
-                <td>Professional</td>
-                <td>{{ user.credits }}</td>
-                <td>{{ user.status?"Active":"In-Active" }}</td>
-                <td>
-                   <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                    </svg>
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            </div>
-          </div> -->
-        </div>
-
-        <!--    -->
-        <div class="grid mt-5 main-grid md:grid-cols-2">
-        <!-- left section -->
-        <div class="flex items-end mb-5 ml-4">
-         <p class="pl-2 text-sm font-semibold">Other Users:</p>
-        </div>
-
-        <!-- Right Section -->
-        <div class="flex justify-end mb-5 mr-10 xs:flex-col">
+      <div class="flex justify-end mt-4 mr-8 xs:flex-col">
           <div>
             <div class="relative inline-block dropdown">
               <psytech-button
@@ -420,15 +306,15 @@
                 </svg>
               </psytech-button>
               <ul
-                class="absolute z-40 w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
-                style="padding: 16px 15px"
+                class="absolute w-24 text-gray-700 bg-white rounded-md shadow top-14 -left-16 dropdown-menu"
+                style="padding: 16px 15px;"
                 id="filter-dropdown"
                 v-if="showFilters"
                 v-click-away="closeFilter"
               >
                 <li class="flex">
                   <field
-                    label="First Name"
+                    label="Name"
                     labelFor="account"
                     :applyExtraInputClass="true"
                   >
@@ -437,6 +323,7 @@
                       type="text"
                       id="name"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
                   <select-option
@@ -452,79 +339,53 @@
 
                 <li class="flex">
                   <field
-                      label="Family Name"
-                      labelFor="familyName"
-                      :applyExtraInputClass="true"
-                  >
-                    <control
-                        v-model="searchFamilyName"
-                        type="text"
-                        id="address"
-                        placeholder=" "
-                    />
-                  </field>
-
-                  <select-option
-                      :filterDropdown="filterDropdown"
-                      v-model="selectedFamilyNameFilter"
-                  ></select-option>
-                  <div class="flex items-center justify-center mt-1">
-                    <IconSVG
-                        @iconWasClicked="(searchFamilyName = ''), applyFilter()"
-                    />
-                  </div>
-                </li>
-
-                <li class="flex">
-                  <field
-                    label="User Name"
-                    labelFor="userName"
+                    label="Address"
+                    labelFor="address"
                     :applyExtraInputClass="true"
                   >
                     <control
-                      v-model="searchUserName"
+                      v-model="searchedaddress"
                       type="text"
                       id="address"
                       placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
 
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedUserNameFilter"
+                    v-model="selectedaddressFilter"
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchUserName = ''), applyFilter()"
+                      @iconWasClicked="(searchedaddress = ''), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                      label="Credits"
-                      labelFor="credits"
-                      :applyExtraInputClass="true"
+                    label="Users"
+                    labelFor="users"
+                    :applyExtraInputClass="true"
                   >
                     <control
-                        v-model="searchedCredits"
-                        type="text"
-                        id="users"
-                        placeholder=" "
+                      v-model="searchedUsers"
+                      type="text"
+                      id="users"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
                     />
                   </field>
 
                   <select-option
-                      :filterDropdown="numberDropdown"
-                      v-model="selectedCreditsFilter"
+                    :filterDropdown="numberDropdown"
+                    v-model="selectedUsersFilter"
                   ></select-option>
 
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                        @iconWasClicked="(searchedCredits = ''), applyFilter()"
+                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
                     />
                   </div>
                 </li>
@@ -578,24 +439,22 @@
           </div>
           <!-- end search -->
         </div>
-      </div>
-      <!-- table two -->
-       <div class="mt-2 ml-5">
-          <div class="mr-10 sticky-header-footer md:pr-12 lg:pr-0">
-             <DataTable
-                :customers="userArray"
-                :rowHover="true"
-                :first="($store.getters['clientControl/getIsNewUser'])? 0 : userTablePagination && userTablePagination.first"
-                :paginator="true"
-                :rowsPerPageOptions="[10, 20, 30]"
-                :rows="10"
-                :loading="loading"
-                @rowClicked="redirectToDetail($event)"
-                :image='true'
-                tableType="accountUsers"
-              />
-          </div>
-        </div>
+  <div class="ml-5">
+    <div class="mr-10 sticky-header-footer md:pr-12 lg:pr-0">
+      <DataTable
+          :customers="customers"
+          :paginator="true"
+          :rows="50"
+          :rowHover="true"
+          :loading="loading"
+          :rowsPerPageOptions="[10, 25, 50]"
+          @rowData="setClientDetail({data: $event})"
+          @editItemWasClicked="redirectToEditClient($event)"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+      />
+    </div>
+  </div>
+
         </TabPanel>
       </TabGroup>
     </div>
@@ -605,15 +464,14 @@
 </template>
 
 <script>
-import { reactive, ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import StickyHeader from "@/components/StickyHeader";
 import PsytechButton from "@/components/PsytechButton";
 import DataTable from "@/components/Table.vue";
 import { useStore } from "vuex";
-import store from "../../../store/index";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import SelectOption from "@/components/SelectOption.vue";
-import utility from "@/components/composition/utility";
+import _ from "lodash";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
 import IconSVG from "@/components/IconSVG.vue";
@@ -622,19 +480,16 @@ import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
-import ChangeMasterDialog from "@/components/ChangeMasterDialog";
-import { saveAs } from 'file-saver';
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    const accountDetail = store.getters["clientControl/getClientDetail"];
-    if (!accountDetail) {
-      next({ name: "list-page" });
-    }
-    next();
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   const accountDetail = store.getters["clientControl/getClientDetail"];
+  //   if (!accountDetail) {
+  //     next({ name: "list-page" });
+  //   }
+  //   next();
+  // },
   components: {
-    ChangeMasterDialog,
     StickyHeader,
     PsytechButton,
     DataTable,
@@ -654,6 +509,27 @@ export default {
   setup() {
     const router = useRouter();
     const store = useStore();
+
+   const customers = ref();
+    let prevCustomers = ref();
+    let prevSearched = ref();
+    let searchText = ref("");
+    let accountName = ref("");
+    let searchedaddress = ref("");
+    let searchedUsers = ref("");
+    let selectStatus = ref("");
+    let selectedNameFilter = ref("contains");
+    let selectedaddressFilter = ref("contains");
+    let selectedUsersFilter = ref("isEqualTo");
+    let prevMainSearchHistry = ref("");
+
+    let showFilters = ref(false);
+    const closeFilter = () => {
+      if (showFilters.value) {
+        showFilters.value = false;
+      }
+    };
+
     const calenderValue = ref(false);
     const prevMonth = ref(-1);
     const exportFileUrl = ref("");
@@ -673,22 +549,55 @@ export default {
       e.stopPropagation()
     }
 
-    let cf = ref()
-    const openCalender = ()=>{
-      // const date = new Date();
-      // const month = date.getMonth()
-      //
-      // let datePicker = document.getElementsByClassName("p-datepicker")[0];
-      // let calendar = document.getElementsByClassName("p-monthpicker")[0].children;
-
-      // datePicker.style.width = "294px";
-      // datePicker.style.marginTop = "24px";
-      // datePicker.style.left = `${parseInt(datePicker.style.left) -255}px`
-
-      // calendar[month].style.backgroundColor = "lightgray";
-      // // calendar[month].style.color = "#fff";
-      // calendar[month].style.boxShadow = "none";
+    const loadAllClients = ()=>{
+      loading.value = true;
+       store
+        .dispatch("clientControl/getClientAccount")
+        .then((res) => {
+          let responseArray = res?.data?.data;
+          customers.value = responseArray;
+          customers.value.forEach(
+            (customer) => (
+              (customer.date = new Date(customer.creationDate)),
+              (customer.name = customer.accountName),
+              (customer.address = customer.accountAddress),
+              (customer.users = customer.numberOfUsers)
+            )
+          );
+          prevCustomers.value = customers.value;
+          loading.value = false;
+        })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
     }
+
+    let cf = ref()
+
+     const filteredMainMethod = () => {
+      // var sortKey = this.sortKey
+      let value = searchText.value && searchText.value.toLowerCase();
+      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
+      if (!searchText.value) {
+        prevMainSearchHistry.value = [];
+        applyFilter();
+        return;
+      }
+      // fileds to be check for filters
+      if (searchedUsers.value || accountName.value || searchedaddress.value) {
+        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+        customers.value = filterMethod(prevSearched.value,searchableFields,value)
+
+        // customers.value = filterMethod(prevSearched.value, value);
+      } else {
+        // default, When no filters is applied
+        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+        customers.value = filterMethod(prevCustomers.value,searchableFields,value)
+
+        // customers.value = filterMethod(prevCustomers.value, value);
+        // prevMainSearchHistry.value = customers.value;
+      }
+    };
 
     const showCalender = async ()=>{
       await (calenderValue.value = true);
@@ -709,73 +618,33 @@ export default {
       }
       cf.value.overlayVisible = false;
       loader.value = true;
-       // store
-       //    .dispatch("clientControl/exportAccountActivity",data)
-       //    .then(async (res) => {
-       //      const URL = res?.data?.data?.activityReportUrl?.url;
-       //      await (exportFileUrl.value = URL)
-       //      saveAs(URL)
-       //
-       //    })
-       //    .catch((error) => {
-       //      console.log("error is...", error);
-       //    }).finally(()=>{
-       //       loader.value = false;
-       //    });
     }
-    // const exportAccountMethod = (e)=>{
-    //   const date = new Date(e);
-    //   const month = date.getMonth();
-    //
-    //   const currentDate = new Date();
-    //   const currentMonth = currentDate.getMonth()
-    //   // const currentCalendar = document.getElementsByClassName("p-monthpicker")[0].children;
-    //   // currentCalendar[currentMonth].style.backgroundColor = "transparent";
-    //
-    //   const data = {
-    //     startDate: "2022-02-01",
-    //     endDate: "2022-03-03",
-    //     accountId: accountDetail.value?.accountId
-    //   }
-    //   exportAccountData.value = data;
-    //   // const calendar = document.getElementsByClassName("p-monthpicker")[0].children;
-    //   // calendar[month].style.backgroundColor = "lightgrey";
-    //
-    //   // if( (prevMonth.value != -1 && prevMonth.value != month) ){
-    //   //   calendar[+prevMonth.value].style.backgroundColor = "transparent";
-    //   // }
-    //
-    //   // prevMonth.value = month;
-    //
-    // }
 
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
-    console.log(accountDetail.value);
+
     const userArray = ref();
-    let showFilters = ref(false);
-    let prevCustomers = ref();
     let loading = ref();
     let masterUser = ref();
 
     const updateScroll = ()=> {
       scrollPosition.value = window.scrollY
       let added = false;
-      if(window.scrollY > 448 && !added){
+      if(window.scrollY > 200 && !added){
         added = true;
-        const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
-        const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
+        const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
+        const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
 
         tableHead.style.position = "absolute";
-        tableHead.style.top = "-448px";
+        tableHead.style.top = "-200px";
         tableBody.classList.add("margin-table-body");
         tableHead.children[0].classList.add("header-footer");
 
-      } else if(window.scrollY < 448){
+      } else if(window.scrollY < 200){
         added = false;
-         const tableHead = document.getElementsByClassName("p-datatable-thead")[1];
-         const tableBody = document.getElementsByClassName("p-datatable-tbody")[1];
+         const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
+         const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
 
         if(tableHead){
           tableHead.style.position = null;
@@ -790,14 +659,9 @@ export default {
       }
     }
 
-    const redirectToDetail = (e) => {
-      store.commit("clientControl/setClientUserDetails", e.data);
-      router.push({ name: "client-control-view-user" });
-    };
-
     onMounted(() => {
+      loadAllClients();
       window.addEventListener('scroll', updateScroll);
-      fetchListOfUsers();
     });
 
     onUnmounted(()=>{
@@ -807,41 +671,7 @@ export default {
 
 
     //Search and filters starts from here
-    let searchText = ref("");
-    let prevMainSearchHistry = ref("");
-    let prevSearched = ref();
-    let selectedNameFilter = ref("contains");
-    let selectedUserNameFilter = ref("contains");
-    let selectedFamilyNameFilter = ref("contains");
-    let accountName = ref("");
-    let searchUserName = ref("");
-    let searchFamilyName = ref("");
-    let searchedCredits = ref("");
-    let selectedCreditsFilter = ref("isEqualTo");
-
-    const filteredMainMethod = () => {
-      // var sortKey = this.sortKey
-      let value = searchText.value && searchText.value.toLowerCase();
-      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
-      if (!searchText.value) {
-        prevMainSearchHistry.value = [];
-        applyFilter();
-        return;
-      }
-      // fileds to be check for filters
-      if (searchedCredits.value || accountName.value || searchUserName.value) {
-        const searchableFields = ["firstName string", "familyName string", "email number", "credits number"]
-        userArray.value = filterMethod(prevSearched.value,searchableFields,value)
-        // userArray.value = filterMethod(prevSearched.value, value);
-      } else {
-        // default, When no filters is applied
-        // userArray.value = filterMethod(prevCustomers.value, value);
-        const searchableFields = ["firstName string", "familyName string", "email number", "credits number"]
-        userArray.value = filterMethod(prevCustomers.value,searchableFields,value)
-        prevMainSearchHistry.value = userArray.value;
-      }
-    };
-    const applyFilter = () => {
+        const applyFilter = () => {
       let filteredData = [];
       if (searchText.value) {
         filteredData = prevMainSearchHistry.value;
@@ -852,50 +682,32 @@ export default {
       if (accountName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.firstName && accountName.value
-                  ? false
-                  : accountName.value
-                  ? subFilter(
-                      val.firstName.toLowerCase(),
-                      accountName.value.toLowerCase().trim(),
-                      selectedNameFilter.value
-                  )
-                  : true
+            !val.name && accountName.value
+              ? false
+              : accountName.value
+              ? subFilter(
+                  val.name.toLowerCase(),
+                  accountName.value.toLowerCase().trim(),
+                  selectedNameFilter.value
+                )
+              : true
           ) {
             return true;
           }
         });
       }
       // Make sure search value has some valid value, then do filtering
-      if (searchUserName.value) {
+      if (searchedaddress.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.email && searchUserName.value
-                  ? false
-                  : !!(searchUserName.value
+            !val.address && searchedaddress.value
+              ? false
+              : !!(searchedaddress.value
                   ? subFilter(
-                      val.email.toLowerCase(),
-                      searchUserName.value.toLowerCase().trim(),
-                      selectedUserNameFilter.value
-                  )
-                  : true)
-          ) {
-            return true;
-          }
-        });
-      }
-      // Make sure search value has some valid value, then do filtering
-      if (searchFamilyName.value) {
-        filteredData = filteredData.filter((val) => {
-          if (
-              !val.familyName && searchFamilyName.value
-                  ? false
-                  : !!(searchFamilyName.value
-                  ? subFilter(
-                      val.familyName.toLowerCase(),
-                      searchFamilyName.value.toLowerCase().trim(),
-                      selectedFamilyNameFilter.value
-                  )
+                      val.address.toLowerCase(),
+                      searchedaddress.value.toLowerCase().trim(),
+                      selectedaddressFilter.value
+                    )
                   : true)
           ) {
             return true;
@@ -903,19 +715,18 @@ export default {
         });
       }
 
-
       // Make sure search value has some valid value, then do filtering
-      if (searchedCredits.value) {
+      if (searchedUsers.value) {
         filteredData = filteredData.filter((val) => {
           if (
-              !val.credits && val.credits != 0 && searchedCredits.value
-                  ? false
-                  : !!(searchedCredits.value
+            !val.users && val.users != 0 && searchedUsers.value
+              ? false
+              : !!(searchedUsers.value
                   ? subFilter(
-                      +val.credits,
-                      +searchedCredits.value,
-                      selectedCreditsFilter.value
-                  )
+                      +val.users,
+                      +searchedUsers.value,
+                      selectedUsersFilter.value
+                    )
                   : true)
           ) {
             return true;
@@ -924,73 +735,38 @@ export default {
       }
 
       // CHECK wheather record is found againts applied filters
-      userArray.value = filteredData;
+      customers.value = filteredData;
       prevSearched.value = filteredData;
     };
-
+    
     const clearFilter = () => {
       searchText.value = "";
       accountName.value = "";
-      searchUserName.value = "";
-      searchFamilyName.value = "";
-      searchedCredits.value="";
-      userArray.value = prevCustomers.value;
+      searchedaddress.value = "";
+      searchedUsers.value = "";
+      customers.value = prevCustomers.value;
       prevSearched.value = [];
     };
 
-    const deleteAccountMethod = ()=>{
-      loader.value = true;
-       store
-          .dispatch("clientControl/deleteClientAccount")
-          .then((res) => {
-            if(res?.data?.data?.deleted){
-              showDialog.value = false
-              const { navigateTo } = utility("list-page");
-              navigateTo();
-              // console.log("response is...",res.data.data)
-            }
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-             loader.value = false;
-          });
-    }
-
-    const fetchListOfUsers = ()=>{
-      loading.value = true;
-      store
-          .dispatch("clientControl/getAccountUsers",{
-            accountId: accountDetail.value?.accountId??''
-          })
-          .then((res) => {
-            let responseArray = res?.data?.data;
-            userArray.value = responseArray.sort(function(a, b) {
-                return (b.userId - a.userId);
-              });
-            masterUser.value = userArray.value.filter(item => item.isMasterAccount)
-            userArray.value = userArray.value.filter(item => !item.isMasterAccount)
-            prevCustomers.value = userArray.value;
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-        loading.value = false;
-      })
-    }
-
-    const startTableFrom = ref('');
-    const isNewUserAdded = computed(()=>{
-      if(store.getters['clientControl/getIsNewUser']){
-        const pageCal = (userArray?.value?.length / 10)
-        startTableFrom.value = pageCal < 0? 0 : Math.floor(pageCal);
-        userTablePagination.first = startTableFrom.value
-        return startTableFrom.value
-      }
-    })
-
     return {
+      selectStatus,
+
+      loadAllClients,
       showFilters,
+      customers,
+      prevCustomers,
+      prevSearched,
+      searchText,
+      accountName,
+      searchedaddress,
+      searchedUsers,
+      selectStatus,
+      selectedNameFilter,
+      selectedaddressFilter,
+      selectedUsersFilter,
+      prevMainSearchHistry,
+      closeFilter,
+
       accountDetail,
       scrollPosition,
       calenderValue,
@@ -1000,14 +776,10 @@ export default {
       searchText,
       hideCalendar,
       filteredMainMethod,
-      isNewUserAdded,
-      startTableFrom,
       applyFilter,
       clearFilter,
       prevMonth,
-      // exportAccountMethod,
       exportAccountData,
-      openCalender,
       exportFileUrl,
       exportFileRef,
       userTablePagination,
@@ -1017,23 +789,12 @@ export default {
       loading,
       showDialog,
       showMasterDialog,
-      redirectToDetail,
       showCalender,
       closeCalendar,
-      prevMainSearchHistry,
-      deleteAccountMethod,
-      prevSearched,
       numberDropdown,
       filterDropdown,
       accountName,
-      searchUserName,
       selectedNameFilter,
-      selectedUserNameFilter,
-      searchFamilyName,
-      selectedFamilyNameFilter,
-      searchedCredits,
-      selectedCreditsFilter,
-      fetchListOfUsers,
       dates2
     };
   },
@@ -1051,6 +812,9 @@ export default {
 }
 .div-hover:hover .drop-icon svg path{
   fill: #008ac0;
+}
+.dropdown .dropdown-menu {
+  z-index: 1000;
 }
 .div-hover:hover svg path,
 .div-hover:hover svg line {
