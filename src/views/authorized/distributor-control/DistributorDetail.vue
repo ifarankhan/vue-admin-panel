@@ -26,10 +26,10 @@
         </div>
         <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.name }} </div>
       </div>
-      <div class="mr-12 place-self-end">
+      <!-- <div class="mr-12 place-self-end">
         <span class="text-sm font-semibold"> Creation Date: </span>
         <span class="text-sm"> {{ accountDetail && accountDetail.creationDate?formatDate(accountDetail.creationDate):'' }} </span>
-      </div>
+      </div> -->
     </div>
 
     <!-- tab section -->
