@@ -456,6 +456,33 @@
   </div>
 
         </TabPanel>
+
+        <TabPanel>
+          <div class="flex p-4 md:mt-6">
+            <div class="w-2/3">
+              <div class="ml-1 font-bold text-medium md:mt-6">
+                Credit Control
+              </div>
+              <div
+                  class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
+                  style="word-wrap: break-word"
+              >
+              3300
+              </div>
+              <div class="grid w-6/12 grid-cols-2 gap-8 pb-3">
+                <div class="ml-1 font-bold text-medium">Last Credit Update:</div>
+                <div class="...">10-05-2020</div>
+                <div class="ml-1 font-bold text-medium">Allowed to update Credit:</div>
+                <div class="...">Yes</div>
+                <div class="ml-1 font-bold text-medium">Credit Limit:</div>
+                <div class="...">{{accountDetail?.transferableCreditLimit}}</div>
+              </div>
+
+            </div>
+            <div class="w-1/3">
+            </div>
+          </div>
+        </TabPanel>
       </TabGroup>
     </div>
 
@@ -623,6 +650,7 @@ export default {
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
+    console.log(accountDetail.value)
 
     const userArray = ref();
     let loading = ref();
@@ -738,7 +766,7 @@ export default {
       customers.value = filteredData;
       prevSearched.value = filteredData;
     };
-    
+
     const clearFilter = () => {
       searchText.value = "";
       accountName.value = "";
