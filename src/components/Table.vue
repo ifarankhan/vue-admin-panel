@@ -108,6 +108,11 @@
             </span>
 
         <span v-if="tableType=='distributorsList'">
+              <Column header="SN" style="cursor: pointer;">
+                <template #body="{index}">
+                   <span> {{  String(index + 1).padStart(2, '0') }} </span>
+                </template>
+              </Column>
               <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                    <span> {{data.name}} </span>
@@ -584,16 +589,17 @@ export default {
 .fixedheader .p-datatable-thead tr{
     position: fixed;
     width: calc(100% - 305px)  !important;
-}
+} 
 .fixedheader .p-datatable-tbody{
   margin-top: 57px;
 }
-
+.extra-body-margin .p-datatable-thead tr{
+  height: 60px !important;
+}
 .fixedheader .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
 }
-
 .sticky-header-footer .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
@@ -665,5 +671,10 @@ export default {
   left: 122px;
   max-height: 100;
   overflow: auto;
+}
+::v-deep(.p-paginator) {
+  .p-paginator-current {
+    margin-left: auto;
+  }
 }
 </style>

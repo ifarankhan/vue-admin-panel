@@ -231,7 +231,7 @@
         </div>
       </div>
     </sticky-header>
-    <div class="fixedheader">
+    <div class="fixedheader extra-body-margin">
       <DataTable
           :customers="customers"
           :paginator="true"
@@ -588,11 +588,7 @@ export default {
 img {
   vertical-align: middle;
 }
-::v-deep(.p-paginator) {
-  .p-paginator-current {
-    margin-left: auto;
-  }
-}
+
 .dropdown .dropdown-menu {
   z-index: 1000;
 }
