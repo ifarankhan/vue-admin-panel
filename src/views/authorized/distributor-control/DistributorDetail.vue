@@ -58,7 +58,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Distributor's Client ({{ customers?.length??0 }})
+                  Distributor's Clients ({{ customers?.length??0 }})
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
