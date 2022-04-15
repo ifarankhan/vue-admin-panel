@@ -235,7 +235,7 @@
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
               <div class="grid w-6/12 grid-cols-2 gap-8 pb-3">
-                <div class="ml-1 font-bold text-medium">Distributor Name:</div>
+                <div class="ml-1 font-bold text-medium">Display Name:</div>
                 <div class="...">{{accountDetail?.displayName}}</div>
                 <div class="ml-1 font-bold text-medium">Distributor Email:</div>
                 <div class="...">{{accountDetail?.email}}</div>
@@ -467,7 +467,7 @@
                   class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
                   style="word-wrap: break-word"
               >
-              3300
+                {{accountDetail?.transferableCredits}}
               </div>
               <div class="grid w-6/12 grid-cols-2 gap-8 pb-3">
                 <div class="ml-1 font-bold text-medium">Last Credit Update:</div>
