@@ -3,7 +3,7 @@
   <div class="px-8">
     <sticky-header>
       <h1 class="text-2xl font-normal leading-tight ">Distributor Control</h1>
-      <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length }}</p>
+      <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length??0 }}</p>
       <div class="grid main-grid md:grid-cols-2">
         <!-- left section -->
         <div>
@@ -96,33 +96,6 @@
                   </div>
                 </li>
 
-                  <li class="flex">
-                  <field
-                    label="Invoice Email"
-                    labelFor="email"
-                    :applyExtraInputClass="true"
-                  >
-                    <control
-                      v-model="searchedInvoiceEmail"
-                      type="text"
-                      id="address"
-                      placeholder=" "
-                      @enterPressed="applyFilter()"
-                    />
-                  </field>
-
-                  <select-option
-                    :filterDropdown="filterDropdown"
-                    v-model="selectedInvoiceEmailFilter"
-                  ></select-option>
-                  
-                  <div class="flex items-center justify-center mt-1">
-                    <IconSVG
-                      @iconWasClicked="(searchedInvoiceEmail = ''), applyFilter()"
-                    />
-                  </div>
-                </li>
-
                 <li class="flex">
                   <field
                     label="Currency"
@@ -146,6 +119,33 @@
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
                       @iconWasClicked="(searchedCurrency = ''), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+              <li class="flex">
+                  <field
+                    label="No. of Clients"
+                    labelFor="noOfClients"
+                    :applyExtraInputClass="true"
+                  >
+                    <control
+                      v-model="noOfClients"
+                      type="text"
+                      id="address"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="numberDropdown"
+                    v-model="selectedNoOfClientsFilter"
+                  ></select-option>
+                  
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(noOfClients = ''), applyFilter()"
                     />
                   </div>
                 </li>
@@ -231,7 +231,7 @@
         </div>
       </div>
     </sticky-header>
-    <div class="fixedheader">
+    <div class="fixedheader extra-body-margin">
       <DataTable
           :customers="customers"
           :paginator="true"
@@ -300,13 +300,13 @@ export default {
     let prevSearched = ref();
     let searchText = ref("");
     let searchedEmail = ref(""); 
-    let searchedInvoiceEmail = ref("");  
+    let noOfClients = ref("");  
     let searchedCredits = ref(""); 
     let searchedCurrency = ref(""); 
     let selectStatus = ref("");
     let selectedNameFilter = ref("contains");
     let selectedaddressFilter = ref("contains");
-    let selectedInvoiceEmailFilter = ref("contains");  
+    let selectedNoOfClientsFilter = ref("isEqualTo");  
     let selectedCurrencyFilter = ref("contains"); 
     let selectedCreditsFilter = ref("isEqualTo");
     let prevMainSearchHistry = ref("");
@@ -354,7 +354,7 @@ export default {
       searchText.value = "";
       distributorName.value = "";
       distributorEmail.value = "";
-      searchedInvoiceEmail.value = "";
+      noOfClients.value = "";
       invoiceEmail.value = "";
       credits.value = "";
       customers.value = prevCustomers.value;
@@ -407,16 +407,16 @@ export default {
       }
 
       // Make sure search value has some valid value, then do filtering
-      if (searchedInvoiceEmail.value) {
+      if (noOfClients.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.invoiceEmailAddress && searchedInvoiceEmail.value
+            !val.numberOfClients && noOfClients.value
               ? false
-              : !!(searchedInvoiceEmail.value
+              : !!(noOfClients.value
                   ? subFilter(
-                      val.invoiceEmailAddress.toLowerCase(),
-                      searchedInvoiceEmail.value.toLowerCase().trim(),
-                      selectedInvoiceEmailFilter.value
+                      val.numberOfClients,
+                      noOfClients.value,
+                      selectedNoOfClientsFilter.value
                     )
                   : true)
           ) {
@@ -564,12 +564,12 @@ export default {
       searchedEmail,
       searchedCredits,
       filterMethod,
-      searchedInvoiceEmail,
+      noOfClients,
       redirectToDetail,
       selectedCreditsFilter,
       selectedNameFilter,
       selectedaddressFilter,
-      selectedInvoiceEmailFilter,
+      selectedNoOfClientsFilter,
       selectedCurrencyFilter,
       applyFilter,
       clearFilter,
@@ -588,11 +588,7 @@ export default {
 img {
   vertical-align: middle;
 }
-::v-deep(.p-paginator) {
-  .p-paginator-current {
-    margin-left: auto;
-  }
-}
+
 .dropdown .dropdown-menu {
   z-index: 1000;
 }

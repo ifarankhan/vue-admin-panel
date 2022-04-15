@@ -108,22 +108,27 @@
             </span>
 
         <span v-if="tableType=='distributorsList'">
+              <Column header="SN" style="cursor: pointer;">
+                <template #body="{index}">
+                   <span> {{  String(index + 1).padStart(2, '0') }} </span>
+                </template>
+              </Column>
               <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                    <span> {{data.name}} </span>
                 </template>
               </Column>
-              <Column field="eamil" header="Distributor Email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                   <div class="truncate custome-width">
                       <span>{{data.email}} </span>
                   </div>
                 </template>
               </Column>
-               <Column header="Invoice Email" sortField="invoiceEmailAddress" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+               <Column header="No. of Clients" sortField="numberOfClients" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
                    <template #body="{data}">
-                     <div class="truncate custome-width">
-                      <span>{{ data.invoiceEmailAddress }}</span>
+                     <div>
+                      <span>{{ data.numberOfClients }}</span>
                      </div>
                   </template>
               </Column>
@@ -138,9 +143,9 @@
                   </template>
               </Column> 
               
-              <Column header="Status" sortField="active" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+              <Column header="Last Credit Update" sortField="lastCreditUpdate" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
                    <template #body="{data}">
-                      <span>{{ data.active?"Active":"In-Active" }}</span>
+                      <span>{{ data?.lastCreditUpdate && formatDate(data.lastCreditUpdate.split(" ")[0]) }}</span>
                   </template>
               </Column>
               <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
@@ -584,16 +589,17 @@ export default {
 .fixedheader .p-datatable-thead tr{
     position: fixed;
     width: calc(100% - 305px)  !important;
-}
+} 
 .fixedheader .p-datatable-tbody{
   margin-top: 57px;
 }
-
+.extra-body-margin .p-datatable-thead tr{
+  height: 60px !important;
+}
 .fixedheader .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
 }
-
 .sticky-header-footer .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
@@ -665,5 +671,10 @@ export default {
   left: 122px;
   max-height: 100;
   overflow: auto;
+}
+::v-deep(.p-paginator) {
+  .p-paginator-current {
+    margin-left: auto;
+  }
 }
 </style>
