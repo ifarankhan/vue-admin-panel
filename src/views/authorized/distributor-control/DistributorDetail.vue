@@ -58,7 +58,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Distributor's Client ({{ customers?.length }})
+                  Distributor's Client ({{ customers?.length??0 }})
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
@@ -650,7 +650,6 @@ export default {
     const accountDetail = computed(() => {
       return store.getters["clientControl/getClientDetail"];
     });
-    console.log(accountDetail.value)
 
     const userArray = ref();
     let loading = ref();

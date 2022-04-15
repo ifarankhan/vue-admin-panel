@@ -3,7 +3,7 @@
   <div class="px-8">
     <sticky-header>
       <h1 class="text-2xl font-normal leading-tight ">Distributor Control</h1>
-      <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length }}</p>
+      <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length??0 }}</p>
       <div class="grid main-grid md:grid-cols-2">
         <!-- left section -->
         <div>
