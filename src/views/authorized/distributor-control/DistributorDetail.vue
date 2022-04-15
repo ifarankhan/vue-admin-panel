@@ -471,9 +471,7 @@
               </div>
               <div class="grid w-6/12 grid-cols-2 gap-8 pb-3">
                 <div class="ml-1 font-bold text-medium">Last Credit Update:</div>
-                <div class="...">10-05-2020</div>
-                <div class="ml-1 font-bold text-medium">Allowed to update Credit:</div>
-                <div class="...">Yes</div>
+                <div class="...">{{accountDetail?.lastCreditUpdate}}</div>
                 <div class="ml-1 font-bold text-medium">Credit Limit:</div>
                 <div class="...">{{accountDetail?.transferableCreditLimit}}</div>
               </div>
