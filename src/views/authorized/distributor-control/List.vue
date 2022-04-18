@@ -489,6 +489,7 @@ export default {
     };
 
     const redirectToDetail = (e) => {
+      console.log("e data is....", e)
       store.commit("clientControl/setClientDetail", e.data);
       router.push({ name: "distributor-control-list-detail" });
     };

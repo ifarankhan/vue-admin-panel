@@ -43,12 +43,12 @@
           ></div>
           <div
               class="relative flex items-center text-xs font-semibold"
-              :class="[showStep != 3 ? 'text-gray-800 text-opacity-50' : '']"
+              :class="[showStep != 1 ? 'text-gray-800 text-opacity-50' : '']"
           >
             <div
                 class="flex items-center justify-center w-8 h-8 py-3 border-2 border-gray-300 rounded-full "
                 :class="[
-              showStep == 3
+              showStep == 1
                 ? 'bg-black text-white'
                 : 'text-gray-800 text-opacity-50',
             ]"
@@ -69,7 +69,7 @@
   </section>
 </template>
 <script>
-import { ref } from 'vue-demi';
+
 export default {
   name: 'StickyHeader',
   // props: ['title', 'icon'],
@@ -80,17 +80,14 @@ export default {
     icon: {
       type: String
     },
+    showStep:{
+      type: Number,
+      default: 0
+    },
     showStepper: {
       type: Boolean,
       default: false
     },
-  },
-   setup(props, { emit }) {
-      const showStep = ref(0);
-
-    return {
-      showStep
-    };
-  },
+  }
 }
 </script>

@@ -1,17 +1,17 @@
 <template>
-  <sticky-header :icon="mdiPencilOutline" title="Edit Distributor Account" showStepper="ture">
+  <sticky-header :icon="mdiPencilOutline" title="Edit Distributor Account" showStepper="ture" :showStep="showStep">
       
   </sticky-header>
   <Loader v-if="form.loader" :toBeBigger="true" />
-  <!-- <main-section class="grid grid-cols-3 gap-4"> -->
       <div class="flex p-4 ml-4 md:mt-6">
-      <div class="w-2/3">
+      <div class="w-2/3" v-if="showStep == 0">
         <div class="mt-8 ml-3">
           <div class="flex w-11/12 -ml-2">
             <div class="w-full">
               <field label="Distributor Name" labelFor="email">
                 <control
                   type="text"
+                  v-model="form.distributorName"
                   placeholder=" "
                 />
               </field>
@@ -20,6 +20,7 @@
               <field label="Email Address/User Name" labelFor="email">
                 <control
                   type="text"
+                  v-model="form.distributorEmail"
                   placeholder="Email"
                 />
               </field>
@@ -40,6 +41,7 @@
               <field label="Account Details" labelFor="email">
                 <control
                   type="textarea"
+                  v-model="form.distributorDetails"
                   placeholder="Name"
                 />
               </field>
@@ -53,6 +55,7 @@
                 <control
                   type="textarea"
                   :smallTextArea="true"
+                  v-model="form.distributorAddress"
                   placeholder="Name"
                 />
               </field>
@@ -61,6 +64,26 @@
 
           <!--  -->
         </div>
+
+        </div>
+
+        <!--  -->
+         <div class="w-2/3" v-if="showStep == 1">
+              <div class="ml-1 font-bold text-medium md:mt-6">
+                Credit Control
+              </div>
+              <div
+                  class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
+                  style="word-wrap: break-word"
+              >
+                {{accountDetail?.transferableCredits}}
+              </div>
+              <div class="grid w-6/12 grid-cols-2 gap-8 pb-3">
+                <div class="ml-1 font-bold text-medium">Last Credit Update:</div>
+                <div class="...">{{accountDetail?.lastCreditUpdate}}</div>
+                <div class="ml-1 font-bold text-medium">Credit Limit:</div>
+                <div class="...">{{accountDetail?.transferableCreditLimit}}</div>
+              </div>
 
             </div>
             <div class="w-1/3">
@@ -93,14 +116,14 @@
         label="Cancel"
         :smallYPadding="true"
         type="light-small"
-        @buttonWasClicked="showQuitDialog = true"
+        @buttonWasClicked="$router.push({name: 'distributor-control-list-detail'})"
       ></psytech-button>
     </div>
     <div class="w-11/12">
         <psytech-button
           label="Update User"
           type="black"
-          @buttonWasClicked="addAccountUserMethod()"
+          @buttonWasClicked="''"
         ></psytech-button>
       </div>
     <div class="flex justify-end w-11/12">
@@ -115,7 +138,7 @@
       <div v-if="showStep != 3">
         <psytech-button
           label="Next"
-          type="black"
+          :type="showStep==1?'light':'black'"
           @buttonWasClicked="gotoNextHandler()"
         ></psytech-button>
       </div>
@@ -165,16 +188,33 @@ export default {
     let store = useStore();
     const showStep = ref(0);
 
-    const form = reactive({
-      companyName: "",
-      accountDetails: "",
-      accountAddress: "",
-      error: "",
-      loader:false,
-      addAnother: false,
-    });
     const clientName = ref("");
     const showSuccessAlert = ref(false);
+
+   const accountDetail = computed(() => {
+      return store.getters["clientControl/getClientDetail"];
+    });
+
+  const gotoNextHandler = ()=>{
+    if(showStep.value ==0 ){
+      showStep.value = showStep.value +1;
+    }
+  }
+
+  const goToBackHandler = ()=>{
+    if(showStep.value ==1 ){
+      showStep.value = showStep.value -1;
+    }
+  }
+
+  const form = reactive({
+      distributorName: accountDetail?.value?.name,
+      distributorEmail: accountDetail?.value?.email, 
+      distributorAddress: accountDetail?.value?.addressLine1+ " "+ accountDetail?.value?.addressLine2+ " "+accountDetail?.value?.addressLine3+ ""+accountDetail?.value?.addressLine4,
+      distributorDetails: "",
+      error: "",
+      loader:false,
+    });
 
     const rules = computed(() => {
       return {
@@ -269,7 +309,10 @@ export default {
       cancel,
       showStep,
       showSuccessAlert,
+      gotoNextHandler,
+      goToBackHandler,
       submit,
+      accountDetail,
       clientName,
       mdiPencilOutline  ,
     };
