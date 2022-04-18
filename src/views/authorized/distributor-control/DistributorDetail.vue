@@ -163,7 +163,7 @@
 
             <div
               class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
-              @click="$router.push({ name: 'support-control-list-main' })"
+              @click="$router.push({ name: 'distributor-control-list-edit' })"
             >
               <span class="p-0.5">
                 <svg

@@ -4,7 +4,7 @@
         :id="id"
         placeholder=" "
         v-model="computedValue"
-        class="w-full h-24 border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
+        class="w-full border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
         :class="extraClasses"
         autocomplete="off"
     ></textarea>
@@ -80,6 +80,10 @@ export default {
     id: {
       type: String,
     },
+    smallTextArea:{
+      type: Boolean,
+      default: false
+    },
     modelValue: {
       type: [String, Number, Boolean, Array, Object],
       default: "",
@@ -90,7 +94,14 @@ export default {
     FileUpload
   },
   setup(props, { emit }) {
-     let extraClasses = props.type === "textarea"? 'h-32':'h-14';
+     let extraClasses;
+     if(!props.smallTextArea && props.type === "textarea"){
+       extraClasses = "h-32";
+     } else if(props.smallTextArea && props.type === "textarea"){
+       extraClasses = "h-20";
+     } else{
+       extraClasses = "h-14";
+     }
     const computedValue = computed({
       get: () => props.modelValue,
       set: (value) => {
