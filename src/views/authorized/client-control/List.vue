@@ -418,7 +418,7 @@ export default {
         customers.value = filterMethod(prevCustomers.value,searchableFields,value)
 
         // customers.value = filterMethod(prevCustomers.value, value);
-        // prevMainSearchHistry.value = customers.value;
+        prevMainSearchHistry.value = customers.value;
       }
     };
 

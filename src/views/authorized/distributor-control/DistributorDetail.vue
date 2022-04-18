@@ -399,7 +399,7 @@
                   </div>
                   <psytech-button
                     label="Apply"
-                    @buttonWasClicked="applyFilter"
+                    @buttonWasClicked="applyFilter()"
                   ></psytech-button>
                 </li>
               </ul>
@@ -503,17 +503,18 @@ import IconSVG from "@/components/IconSVG.vue";
 import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
+import store from "../../../store/index";
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 
 export default {
-  // beforeRouteEnter(to, from, next) {
-  //   const accountDetail = store.getters["clientControl/getClientDetail"];
-  //   if (!accountDetail) {
-  //     next({ name: "list-page" });
-  //   }
-  //   next();
-  // },
+  beforeRouteEnter(to, from, next) {
+    const distributorDetail = store.getters["clientControl/getClientDetail"];
+    if (!distributorDetail) {
+      next({ name: "distributors-list" });
+    }
+    next();
+  },
   components: {
     StickyHeader,
     PsytechButton,
@@ -577,7 +578,7 @@ export default {
     const loadAllClients = ()=>{
       loading.value = true;
        store
-        .dispatch("clientControl/getClientAccount")
+        .dispatch("clientControl/getClientAccountForDistributor")
         .then((res) => {
           let responseArray = res?.data?.data;
           customers.value = responseArray;
@@ -620,7 +621,7 @@ export default {
         customers.value = filterMethod(prevCustomers.value,searchableFields,value)
 
         // customers.value = filterMethod(prevCustomers.value, value);
-        // prevMainSearchHistry.value = customers.value;
+        prevMainSearchHistry.value = customers.value;
       }
     };
 
@@ -661,6 +662,10 @@ export default {
         const tableHead = document.getElementsByClassName("p-datatable-thead")[0];
         const tableBody = document.getElementsByClassName("p-datatable-tbody")[0];
 
+        if( !(tableHead && tableBody) ){
+          return
+        }
+
         tableHead.style.position = "absolute";
         tableHead.style.top = "-200px";
         tableBody.classList.add("margin-table-body");
@@ -693,7 +698,6 @@ export default {
       store.commit("clientControl/setNewUser", false)
       window.removeEventListener('scroll', updateScroll);
     })
-
 
     //Search and filters starts from here
         const applyFilter = () => {

@@ -152,8 +152,8 @@
 
                 <li class="flex">
                   <field
-                    label="Users"
-                    labelFor="users"
+                    label="Credit Limit"
+                    labelFor="creditLimit"
                     :applyExtraInputClass="true"
                   >
                     <control
@@ -247,19 +247,11 @@
       />
     </div>
 
-  <confirmDeleteDialog
-  v-if="showDialog"
-  @closeDialog="showDialog = false"
-  :name="clientName && clientName"
-  @dialogConfirmed="deleteAccountMethod()" />
-
   </div>
 </template>
 
 <script>
 import { ref, onMounted, reactive } from "vue";
-import InputText from "primevue/inputtext";
-import _ from "lodash";
 import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
@@ -269,17 +261,15 @@ import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from "@/components/SelectOption.vue";
 import Loader from "@/components/Loader.vue";
-import confirmDeleteDialog from '@/components/DeleteDialog.vue';
+import _ from "lodash";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
   name: "demoTable",
   components: {
-    InputText,
     DataTable,
     SelectOption,
-    confirmDeleteDialog,
     Control,
     IconSVG,
     Loader,
@@ -303,7 +293,6 @@ export default {
     let noOfClients = ref("");  
     let searchedCredits = ref(""); 
     let searchedCurrency = ref(""); 
-    let selectStatus = ref("");
     let selectedNameFilter = ref("contains");
     let selectedaddressFilter = ref("contains");
     let selectedNoOfClientsFilter = ref("isEqualTo");  
@@ -316,10 +305,10 @@ export default {
       address: "",
     });
     onMounted(() => {
-     loadAllClients()
+     loadAllDistributors()
     });
 
-    const loadAllClients = ()=>{
+    const loadAllDistributors = ()=>{
        store
         .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
@@ -346,16 +335,13 @@ export default {
     const loading = ref(true);
 
     const distributorName = ref("");
-    const distributorEmail = ref("");
-    const invoiceEmail = ref("");
     const credits = ref("");
     
     const clearFilter = () => {
       searchText.value = "";
+      searchedEmail.value = "";
       distributorName.value = "";
-      distributorEmail.value = "";
       noOfClients.value = "";
-      invoiceEmail.value = "";
       credits.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
@@ -470,6 +456,7 @@ export default {
     };
 
     const filteredMainMethod = () => {
+      console.log("enterred...")
       // var sortKey = this.sortKey
       let value = searchText.value && searchText.value.toLowerCase();
       // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
@@ -480,17 +467,18 @@ export default {
       }
       // fileds to be check for filters
       if (searchedCredits.value || distributorName.value || searchedEmail.value) {
-        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceEmailAddress string", "invoiceCurrency string"]
+        console.log("akkl")
+        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceCurrency string"]
         customers.value = filterMethod(prevSearched.value,searchableFields,value)
 
         // customers.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
-        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceEmailAddress string", "invoiceCurrency string"]
+        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceCurrency string"]
         customers.value = filterMethod(prevCustomers.value,searchableFields,value)
 
         // customers.value = filterMethod(prevCustomers.value, value);
-        // prevMainSearchHistry.value = customers.value;
+        prevMainSearchHistry.value = customers.value;
       }
     };
 
@@ -507,28 +495,9 @@ export default {
 
     const setClientDetail = async e=>{
       await store.commit("clientControl/setClientDetail", e.data);
-      await (clientName.value = e.data.distributorName)
     }
 
     const loader  = ref(false);
-    const deleteAccountMethod = ()=>{
-      loader.value = true;
-       store
-          .dispatch("clientControl/deleteClientAccount")
-          .then((res) => {
-            if(res?.data?.data?.deleted){
-              customers.value = customers.value.filter(item=> item.name != clientName.value)
-            }
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-             showDialog.value = false;
-             loader.value = false;
-          });
-    }
-
-    const clientName = ref("");
     const redirectToEditClient = e=>{
       if(e.eventName == "Edit Client"){
         router.push({name: 'client-control-edit-client'})
@@ -544,12 +513,9 @@ export default {
       selectedCustomers,
       redirectToEditClient,
       closeFilter,
-      loadAllClients,
-      selectStatus,
-      clientName,
+      loadAllDistributors,
       prevMainSearchHistry,
       filteredMainMethod,
-      deleteAccountMethod,
       searchText,
       searchedCurrency,
       setClientDetail,
