@@ -58,6 +58,16 @@ export default {
           base.push("text-sm")
         }
       }
+
+    if(props.type == "light-small"){
+         base.push(
+          "mt-2 mr-4 bg-psytechLight text-white"
+        );
+         if(!props.smallYPadding){
+          base.push("text-sm")
+        }
+      }
+
       if (props.type == "dark") {
         base.push(
           "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechDark text-white"

@@ -73,6 +73,7 @@
               </Tab>
             </TabList>
           </div>
+
           <div
             class="flex items-center justify-around w-1/2 ml-3 mr-10 calender sm:ml-3 flex-shrink-1 lg:ml-28"
           >
@@ -163,7 +164,7 @@
 
             <div
               class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
-              @click="$router.push({ name: 'support-control-list-main' })"
+              @click="$router.push({ name: 'distributor-control-list-edit' })"
             >
               <span class="p-0.5">
                 <svg
@@ -229,7 +230,24 @@
 
           </div>
         </div>
-
+        <div class="flex w-2/3 p-4 ml-3 md:mt-6" v-if="errorText">
+          <div class="w-3/4">
+            <error-alert
+                @dismissError="errorText = ''"
+                :error="errorText"
+                :showTranslatedError="false"
+            />
+          </div>
+        </div>
+        <div class="flex w-2/3 p-4 ml-3 md:mt-6" v-if="successText">
+          <div class="w-3/4">
+            <success-alert
+                @dismissError="successText = ''"
+                :error="successText"
+                :showTranslatedError="false"
+            />
+          </div>
+        </div>
         <!-- <a v-show="true" :href="exportFileUrl" target="_self" @click="click" ref="exportFileRef">Download File</a> -->
         <TabPanel>
           <div class="flex p-4 md:mt-6">
@@ -240,7 +258,7 @@
                 <div class="ml-1 font-bold text-medium">Distributor Email:</div>
                 <div class="...">{{accountDetail?.email}}</div>
                 <div class="ml-1 font-bold text-medium">Account Password:</div>
-                <div class="..."><span>******* </span><span><a href="#">Change Password</a></span> </div>
+                <div class="..."><span>******* </span><span><a href="#" @click="changePassword">Change Password</a></span> </div>
                 <div class="ml-1 font-bold text-medium">Currency:</div>
                 <div class="...">{{accountDetail?.invoiceCurrency}}</div>
                 <div class="ml-1 font-bold text-medium">Status:</div>
@@ -504,6 +522,8 @@ import Button from 'primevue/button';
 import Calendar from 'primevue/calendar';
 import Loader from "@/components/Loader.vue";
 import store from "../../../store/index";
+import ErrorAlert from "@/components/ErrorAlert.vue";
+import SuccessAlert from "@/components/SuccessAlert.vue";
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 
@@ -531,6 +551,8 @@ export default {
     Tab,
     TabPanels,
     TabPanel,
+    ErrorAlert,
+    SuccessAlert,
   },
   setup() {
     const router = useRouter();
@@ -570,6 +592,8 @@ export default {
     let showDialog = ref(false);
     let showMasterDialog = ref(false);
     let loader = ref(false);
+    let errorText = ref("");
+    let successText = ref("");
 
     const click = (e)=>{
       e.stopPropagation()
@@ -596,6 +620,23 @@ export default {
         .catch((error) => {
           console.log("error is...", error);
         });
+    }
+
+    const changePassword = async ()=>{
+      loader.value = true;
+      let emailChange = accountDetail.value?.email?.split(";")[0];
+      store.dispatch("masterPannel/initateChangePassword",{email: emailChange })
+          .then((res) => {
+            if (res?.status==200){
+              successText.value = "Email has been sent to the primary email holder of this account!";
+            }
+          })
+          .catch(error=>{
+            errorText.value = error?.message ?? "";
+          })
+          .finally(()=>{
+            loader.value = false;
+          });
     }
 
     let cf = ref()
@@ -629,6 +670,9 @@ export default {
       await (calenderValue.value = true);
       cf.value.overlayVisible = true;
     }
+
+
+
     const hideCalendar = ()=>{
       calenderValue.value = false;
     }
@@ -789,7 +833,6 @@ export default {
       accountName,
       searchedaddress,
       searchedUsers,
-      selectStatus,
       selectedNameFilter,
       selectedaddressFilter,
       selectedUsersFilter,
@@ -802,7 +845,6 @@ export default {
       formatDate,
       masterUser,
       userArray,
-      searchText,
       hideCalendar,
       filteredMainMethod,
       applyFilter,
@@ -822,9 +864,10 @@ export default {
       closeCalendar,
       numberDropdown,
       filterDropdown,
-      accountName,
-      selectedNameFilter,
-      dates2
+      dates2,
+      changePassword,
+      errorText,
+      successText
     };
   },
 };

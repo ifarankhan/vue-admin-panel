@@ -187,6 +187,13 @@ const routes = [
             // layout: 'mainLayout',
             component: () => import('../views/authorized/distributor-control/DistributorDetail.vue'),
           },
+          {
+            path: 'edit',
+            name: 'distributor-control-list-edit',
+            requiresAuth: true,
+            // layout: 'mainLayout',
+            component: () => import('../views/authorized/distributor-control/EditDistributor.vue'),
+          },
         ]
       },
       {
