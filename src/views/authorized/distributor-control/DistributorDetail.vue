@@ -820,9 +820,9 @@ export default {
       customers.value = prevCustomers.value;
       prevSearched.value = [];
 
-    selectedNameFilter.value = 'contains';
-    selectedaddressFilter.value = 'contains';
-    selectedUsersFilter.value = 'isEqualTo';
+      selectedNameFilter.value = 'contains';
+      selectedaddressFilter.value = 'contains';
+      selectedUsersFilter.value = 'isEqualTo';
     
     };
 
