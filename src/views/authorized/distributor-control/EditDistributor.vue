@@ -34,7 +34,15 @@
               <!-- <error-span :error="v$.familyname"></error-span> -->
             </span>
           </div>
-        
+
+        <!--  -->
+        <div class="flex w-11/12 -ml-2">
+            <div class="flex w-full my-2">
+              <span class="px-2 ml-1 text-base font-semibold">Switch Status: </span>
+              <div class="ml-4"> <InputSwitch v-model="statusSwitcher" /> </div>
+            </div>
+        </div>
+
         <!--  -->
           <div class="flex w-11/12 -ml-2">
             <div class="w-full">
@@ -161,6 +169,8 @@ import StickyFooter from "@/components/StickyFooter";
 import Loader from "@/components/Loader.vue";
 import { minLength, helpers, required, maxLength } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import store from "../../../store/index";
+import InputSwitch from 'primevue/inputswitch';
 import ErrorSpan from "@/components/ErrorSpan";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import Tabs from '@/components/user/Tabs.vue';
@@ -172,6 +182,7 @@ export default {
     Divider,
     MainSection,
     CheckRadioPicker,
+    InputSwitch,
     Field,
     Loader,
     Control,
@@ -184,9 +195,18 @@ export default {
     utility,
     useStore,
   },
+  beforeRouteEnter(to, from, next) {
+    const accountDetail = store.getters["clientControl/getClientDetail"];
+    if (!accountDetail) {
+      next({ name: "distributors-list" });
+    }
+    next();
+  },
   setup() {
     let store = useStore();
     const showStep = ref(0);
+
+    const statusSwitcher = ref("");
 
     const clientName = ref("");
     const showSuccessAlert = ref(false);
@@ -312,6 +332,7 @@ export default {
       gotoNextHandler,
       goToBackHandler,
       submit,
+      statusSwitcher,
       accountDetail,
       clientName,
       mdiPencilOutline  ,
