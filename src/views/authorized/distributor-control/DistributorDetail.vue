@@ -258,7 +258,7 @@
                 <div class="ml-1 font-bold text-medium">Distributor Email:</div>
                 <div class="...">{{accountDetail?.email}}</div>
                 <div class="ml-1 font-bold text-medium">Account Password:</div>
-                <div class="..."><span>******* </span><span><a href="#" @click="changePassword">Change Password</a></span> </div>
+                <div class="..."><span>******* </span><span><a href="#" @click="changePassword" style="text-decoration: underline;color:blue;">Reset Password</a></span> </div>
                 <div class="ml-1 font-bold text-medium">Currency:</div>
                 <div class="...">{{accountDetail?.invoiceCurrency}}</div>
                 <div class="ml-1 font-bold text-medium">Status:</div>
