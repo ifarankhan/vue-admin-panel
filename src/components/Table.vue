@@ -109,8 +109,8 @@
 
         <span v-if="tableType=='distributorsList'">
               <Column header="SN" style="cursor: pointer;">
-                <template #body="{index}">
-                   <span> {{  String(index + 1).padStart(2, '0') }} </span>
+                <template #body="{data}">
+                   <span> {{  String(data.sno).padStart(2, '0') }} </span>
                 </template>
               </Column>
               <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
@@ -439,7 +439,7 @@
     </DataTable>
 </template>
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { useStore } from "vuex";
@@ -529,7 +529,7 @@ export default {
        const store = useStore();
        const { userTypes, formatDate, tableStatePersistence, fresDeskPriorities, fresDeskStatuses } = useClientUser();
 
-       const menu = ref();
+      const menu = ref();
 
       const items = ref([
 				{

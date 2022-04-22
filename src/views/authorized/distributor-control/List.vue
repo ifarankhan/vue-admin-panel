@@ -313,6 +313,7 @@ export default {
         .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
           let responseArray = res?.data?.data;
+          responseArray = responseArray.map((d, index) => ({ ...d, sno: index + 1 }))
           customers.value = responseArray;
           prevCustomers.value = customers.value;
           loading.value = false;
