@@ -1,5 +1,5 @@
 <template>
-  <sticky-header :icon="mdiPencilOutline" title="Edit Distributor Account" showStepper="ture" :showStep="showStep">
+  <sticky-header :icon="mdiPencilOutline" image="true" title="Edit Distributor Account" showStepper="ture" :showStep="showStep">
       
   </sticky-header>
   <Loader v-if="form.loader" :toBeBigger="true" />
@@ -38,8 +38,8 @@
         <!--  -->
         <div class="flex w-11/12 -ml-2">
             <div class="flex w-full my-2">
-              <span class="px-2 ml-1 text-base font-semibold">Switch Status: </span>
-              <div class="ml-4"> <InputSwitch v-model="statusSwitcher" /> </div>
+              <span class="px-2 ml-1 text-base font-semibold">Distributor Status: </span>
+              <div class="ml-4"> <InputSwitch v-model="form.statusSwitcher" /> </div>
             </div>
         </div>
 
@@ -129,7 +129,7 @@
     </div>
     <div class="w-11/12">
         <psytech-button
-          label="Update User"
+          label="Update Account"
           type="black"
           @buttonWasClicked="''"
         ></psytech-button>
@@ -206,8 +206,6 @@ export default {
     let store = useStore();
     const showStep = ref(0);
 
-    const statusSwitcher = ref("");
-
     const clientName = ref("");
     const showSuccessAlert = ref(false);
 
@@ -230,6 +228,7 @@ export default {
   const form = reactive({
       distributorName: accountDetail?.value?.name,
       distributorEmail: accountDetail?.value?.email, 
+      statusSwitcher: accountDetail?.value?.active,
       distributorAddress: accountDetail?.value?.addressLine1+ " "+ accountDetail?.value?.addressLine2+ " "+accountDetail?.value?.addressLine3+ ""+accountDetail?.value?.addressLine4,
       distributorDetails: "",
       error: "",
@@ -332,7 +331,6 @@ export default {
       gotoNextHandler,
       goToBackHandler,
       submit,
-      statusSwitcher,
       accountDetail,
       clientName,
       mdiPencilOutline  ,
