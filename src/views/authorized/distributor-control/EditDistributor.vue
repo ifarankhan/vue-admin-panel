@@ -1,5 +1,5 @@
 <template>
-  <sticky-header :icon="mdiPencilOutline" title="Edit Distributor Account" showStepper="ture" :showStep="showStep">
+  <sticky-header :icon="mdiPencilOutline" image="true" title="Edit Distributor Account" showStepper="ture" :showStep="showStep">
       
   </sticky-header>
   <Loader v-if="form.loader" :toBeBigger="true" />
@@ -34,7 +34,15 @@
               <!-- <error-span :error="v$.familyname"></error-span> -->
             </span>
           </div>
-        
+
+        <!--  -->
+        <div class="flex w-11/12 -ml-2">
+            <div class="flex w-full my-2">
+              <span class="px-2 ml-1 text-base font-semibold">Distributor Status: </span>
+              <div class="ml-4"> <InputSwitch v-model="form.statusSwitcher" /> </div>
+            </div>
+        </div>
+
         <!--  -->
           <div class="flex w-11/12 -ml-2">
             <div class="w-full">
@@ -121,7 +129,7 @@
     </div>
     <div class="w-11/12">
         <psytech-button
-          label="Update User"
+          label="Update Account"
           type="black"
           @buttonWasClicked="''"
         ></psytech-button>
@@ -161,6 +169,8 @@ import StickyFooter from "@/components/StickyFooter";
 import Loader from "@/components/Loader.vue";
 import { minLength, helpers, required, maxLength } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import store from "../../../store/index";
+import InputSwitch from 'primevue/inputswitch';
 import ErrorSpan from "@/components/ErrorSpan";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import Tabs from '@/components/user/Tabs.vue';
@@ -172,6 +182,7 @@ export default {
     Divider,
     MainSection,
     CheckRadioPicker,
+    InputSwitch,
     Field,
     Loader,
     Control,
@@ -183,6 +194,13 @@ export default {
     Tabs,
     utility,
     useStore,
+  },
+  beforeRouteEnter(to, from, next) {
+    const accountDetail = store.getters["clientControl/getClientDetail"];
+    if (!accountDetail) {
+      next({ name: "distributors-list" });
+    }
+    next();
   },
   setup() {
     let store = useStore();
@@ -210,6 +228,7 @@ export default {
   const form = reactive({
       distributorName: accountDetail?.value?.name,
       distributorEmail: accountDetail?.value?.email, 
+      statusSwitcher: accountDetail?.value?.active,
       distributorAddress: accountDetail?.value?.addressLine1+ " "+ accountDetail?.value?.addressLine2+ " "+accountDetail?.value?.addressLine3+ ""+accountDetail?.value?.addressLine4,
       distributorDetails: "",
       error: "",

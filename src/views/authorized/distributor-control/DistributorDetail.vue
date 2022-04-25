@@ -350,7 +350,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(accountName = ''), applyFilter()"
+                      @iconWasClicked="(accountName = ''), (selectedNameFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -376,7 +376,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedaddress = ''), applyFilter()"
+                      @iconWasClicked="(searchedaddress = ''),(selectedaddressFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -403,7 +403,7 @@
 
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
+                      @iconWasClicked="(searchedUsers = ''),(selectedUsersFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -819,6 +819,11 @@ export default {
       searchedUsers.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
+
+      selectedNameFilter.value = 'contains';
+      selectedaddressFilter.value = 'contains';
+      selectedUsersFilter.value = 'isEqualTo';
+    
     };
 
     return {

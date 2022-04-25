@@ -64,7 +64,7 @@
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(distributorName = ''), applyFilter()"
+                      @iconWasClicked="(distributorName = ''), (selectedNameFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -86,12 +86,12 @@
 
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedaddressFilter"
+                    v-model="selectedEmailFilter"
                   ></select-option>
                   
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedEmail = ''), applyFilter()"
+                      @iconWasClicked="(searchedEmail = ''),(selectedEmailFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -118,7 +118,7 @@
 
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedCurrency = ''), applyFilter()"
+                      @iconWasClicked="(searchedCurrency = ''), (selectedCurrencyFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -145,7 +145,7 @@
                   
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(noOfClients = ''), applyFilter()"
+                      @iconWasClicked="(noOfClients = ''), (selectedNoOfClientsFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -175,7 +175,7 @@
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedCredits = ''), applyFilter()"
+                      @iconWasClicked="(searchedCredits = ''), (selectedCreditsFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -294,7 +294,7 @@ export default {
     let searchedCredits = ref(""); 
     let searchedCurrency = ref(""); 
     let selectedNameFilter = ref("contains");
-    let selectedaddressFilter = ref("contains");
+    let selectedEmailFilter = ref("contains");
     let selectedNoOfClientsFilter = ref("isEqualTo");  
     let selectedCurrencyFilter = ref("contains"); 
     let selectedCreditsFilter = ref("isEqualTo");
@@ -313,6 +313,7 @@ export default {
         .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
           let responseArray = res?.data?.data;
+          responseArray = responseArray.map((d, index) => ({ ...d, sno: index + 1 }))
           customers.value = responseArray;
           prevCustomers.value = customers.value;
           loading.value = false;
@@ -345,6 +346,12 @@ export default {
       credits.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
+
+      selectedNoOfClientsFilter.value = "isEqualTo";
+      selectedCreditsFilter.value     = "isEqualTo"; 
+      selectedCurrencyFilter.value    = "contains";  
+      selectedEmailFilter.value       = "contains";  
+      selectedNameFilter.value        = "contains";  
     };
 
     
@@ -383,7 +390,7 @@ export default {
                   ? subFilter(
                       val.email.toLowerCase(),
                       searchedEmail.value.toLowerCase().trim(),
-                      selectedaddressFilter.value
+                      selectedEmailFilter.value
                     )
                   : true)
           ) {
@@ -467,7 +474,6 @@ export default {
       }
       // fileds to be check for filters
       if (searchedCredits.value || distributorName.value || searchedEmail.value) {
-        console.log("akkl")
         const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceCurrency string"]
         customers.value = filterMethod(prevSearched.value,searchableFields,value)
 
@@ -535,7 +541,7 @@ export default {
       redirectToDetail,
       selectedCreditsFilter,
       selectedNameFilter,
-      selectedaddressFilter,
+      selectedEmailFilter,
       selectedNoOfClientsFilter,
       selectedCurrencyFilter,
       applyFilter,
