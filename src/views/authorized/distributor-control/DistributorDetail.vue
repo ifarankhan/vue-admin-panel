@@ -467,6 +467,7 @@
           :loading="loading"
           :rowsPerPageOptions="[10, 25, 50]"
           @rowData="setClientDetail({data: $event})"
+          @rowClicked="redirectToDetail($event)"
           @editItemWasClicked="redirectToEditClient($event)"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       />
@@ -671,6 +672,16 @@ export default {
       cf.value.overlayVisible = true;
     }
 
+    const redirectToDetail = (e) => {
+      store.commit("clientControl/setClientDetail", e.data);
+      router.push({ name: "client-control-list-detail" });
+    };
+
+    const setClientDetail = async e=>{
+      await store.commit("clientControl/setClientDetail", e.data);
+      await (clientName.value = e.data.accountName)
+    }
+
 
 
     const hideCalendar = ()=>{
@@ -823,7 +834,7 @@ export default {
       selectedNameFilter.value = 'contains';
       selectedaddressFilter.value = 'contains';
       selectedUsersFilter.value = 'isEqualTo';
-    
+
     };
 
     return {
@@ -871,6 +882,8 @@ export default {
       filterDropdown,
       dates2,
       changePassword,
+      setClientDetail,
+      redirectToDetail,
       errorText,
       successText
     };
