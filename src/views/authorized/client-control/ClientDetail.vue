@@ -22,7 +22,7 @@
       <div class="flex items-center ml-8">
         <div
           class="flex items-center justify-center text-white bg-black rounded rounded-full cursor-pointer w-9 h-9 "
-          @click="$store.commit('clientControl/setUsersTablePag',null),$router.push({ name: 'list-page' })"
+          @click="goBackUrl()"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -170,6 +170,7 @@
             <div
               class="flex items-center cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="$router.push({ name: 'client-control-edit-client' })"
+              v-if="!userData.isMasterPanelUser"
             >
               <span class="p-0.5">
                 <svg
@@ -236,6 +237,7 @@
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
               @click="showDialog = true"
+              v-if="!userData.isMasterPanelUser"
             >
               <span class="p-0.5">
                 <svg
@@ -365,6 +367,7 @@
               @buttonWasClicked="$router.push({ name: 'client-control-add-user' })"
               label="Add User"
               type="outline"
+              v-if="!userData.isMasterPanelUser"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -382,7 +385,7 @@
               </svg>
             </psytech-button>
             <psytech-button
-                v-if="userArray?.length"
+                v-if="userArray?.length && !userData.isMasterPanelUser"
                 @click="showMasterDialog = true"
                 label=" Change Master User"
                 type="outline"
@@ -833,6 +836,9 @@ export default {
       store.commit("clientControl/setNewUser", false)
       window.removeEventListener('scroll', updateScroll);
     })
+    const userData = computed(()=>{
+      return JSON.parse(localStorage.getItem("userData"))
+    });
 
 
     //Search and filters starts from here
@@ -1008,6 +1014,18 @@ export default {
       })
     }
 
+    const goBackUrl = ()=>{
+      const USER_DATA = JSON.parse(localStorage.getItem('userData'));
+      if(USER_DATA.isMasterPanelUser) {
+        router.push({ name: 'distributor-control-list' });
+      }else{
+        store.commit('clientControl/setUsersTablePag',null);
+        router.push({ name: 'list-page' });
+      }
+    }
+
+
+
     const startTableFrom = ref('');
     const isNewUserAdded = computed(()=>{
       if(store.getters['clientControl/getIsNewUser']){
@@ -1063,7 +1081,9 @@ export default {
       searchedCredits,
       selectedCreditsFilter,
       fetchListOfUsers,
-      dates2
+      dates2,
+      goBackUrl,
+      userData
     };
   },
 };
