@@ -23,7 +23,7 @@
               d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
           </svg>
-        </div>
+        </div> 
         <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.name }} </div>
       </div>
       <!-- <div class="mr-12 place-self-end">
@@ -530,7 +530,7 @@ import { useClientUser } from "@/components/composition/clientHelper.js";
 
 export default {
   beforeRouteEnter(to, from, next) {
-    const distributorDetail = store.getters["clientControl/getClientDetail"];
+    const distributorDetail = store.getters["masterPannel/getDistributorDetail"];
     if (!distributorDetail) {
       next({ name: "distributors-list" });
     }
@@ -603,7 +603,7 @@ export default {
     const loadAllClients = ()=>{
       loading.value = true;
        store
-        .dispatch("clientControl/getClientAccountForDistributor")
+        .dispatch("masterPannel/getClientAccountForDistributor")
         .then((res) => {
           let responseArray = res?.data?.data;
           customers.value = responseArray;
@@ -702,7 +702,7 @@ export default {
     }
 
     const accountDetail = computed(() => {
-      return store.getters["clientControl/getClientDetail"];
+      return store.getters["masterPannel/getDistributorDetail"];
     });
 
     const userArray = ref();

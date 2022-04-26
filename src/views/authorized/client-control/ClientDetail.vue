@@ -1017,7 +1017,7 @@ export default {
     const goBackUrl = ()=>{
       const USER_DATA = JSON.parse(localStorage.getItem('userData'));
       if(USER_DATA.isMasterPanelUser) {
-        router.push({ name: 'distributor-control-list' });
+        router.push({ name: 'distributor-control-list-detail' });
       }else{
         store.commit('clientControl/setUsersTablePag',null);
         router.push({ name: 'list-page' });
