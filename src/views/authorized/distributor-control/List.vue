@@ -494,14 +494,15 @@ export default {
       }
     };
 
-    const redirectToDetail = (e) => {
-      console.log("e data is....", e)
-      store.commit("clientControl/setClientDetail", e.data);
+    const redirectToDetail = async e => {
+      // const DATA = customers.value[e.index]
+      // console.log("DATA",DATA)
+      await store.commit("masterPannel/setDistributorDetail", e.data);
       router.push({ name: "distributor-control-list-detail" });
     };
 
     const setClientDetail = async e=>{
-      await store.commit("clientControl/setClientDetail", e.data);
+      // await store.commit("masterPannel/setDistributorDetail", e.data);
     }
 
     const loader  = ref(false);

@@ -88,13 +88,6 @@ const actions = {
             }
         })
     },
-    async getClientAccountForDistributor({state}){
-      return private_url.get('client-accounts', {
-          params: {
-              distributorid: state.clientDetail && state.clientDetail.id
-          }
-      })
-  },
     async getClientUserDetails({state, commit}){
       return private_url.get('account-user-details', {
         params: {
