@@ -3,6 +3,15 @@
       
   </sticky-header>
   <Loader v-if="form.loader" :toBeBigger="true" />
+  <div class="flex w-2/3 p-4 ml-3 md:mt-6" v-if="form.error">
+      <div class="w-3/4">
+          <error-alert
+            @dismissError="form.error = ''"
+            :error="form.error"
+            :showTranslatedError="false"
+          />
+      </div>
+    </div>
       <div class="flex p-4 ml-4 md:mt-6">
       <div class="w-2/3" v-if="showStep == 0">
         <div class="mt-8 ml-3">
@@ -28,32 +37,11 @@
           </div>
           <div class="flex w-11/12 -ml-2">
             <span class="inline-block w-full">
-              <!-- <error-span :error="v$.firstname"></error-span> -->
+              <error-span :error="v$.distributorName"></error-span>
             </span>
             <span class="inline-block w-full">
-              <!-- <error-span :error="v$.familyname"></error-span> -->
+              <error-span :error="v$.distributorEmail"></error-span>
             </span>
-          </div>
-
-        <!--  -->
-        <div class="flex w-11/12 -ml-2">
-            <div class="flex w-full my-2">
-              <span class="px-2 ml-1 text-base font-semibold">Distributor Status: </span>
-              <div class="ml-4"> <InputSwitch v-model="form.statusSwitcher" /> </div>
-            </div>
-        </div>
-
-        <!--  -->
-          <div class="flex w-11/12 -ml-2">
-            <div class="w-full">
-              <field label="Account Details" labelFor="email">
-                <control
-                  type="textarea"
-                  v-model="form.distributorDetails"
-                  placeholder="Name"
-                />
-              </field>
-            </div>
           </div>
 
           <!--  -->
@@ -69,8 +57,15 @@
               </field>
             </div>
           </div>
-
           <!--  -->
+
+      <!--  -->
+        <div class="flex w-11/12 -ml-2">
+            <div class="flex w-full my-2 input-switcher">
+              <span class="px-2 ml-1">Distributor Status: </span>
+              <div class="ml-4"> <InputSwitch  :style="{height: '25px', widht: '30px'}" v-model="form.statusSwitcher" /> <p class="-mt-8 ml-14">{{ `${form.statusSwitcher?'Active':'In-Active'}` }}</p></div>
+            </div>
+        </div>
         </div>
 
         </div>
@@ -118,7 +113,7 @@
   <!-- </main-section> -->
 
   <sticky-footer>
-   <div class="flex justify-center w-11/12 mb-3">
+   <div class="flex justify-center w-11/12 mb-3 pr-28">
     <div class="w-1/12 ml-12">
       <psytech-button
         label="Cancel"
@@ -131,10 +126,10 @@
         <psytech-button
           label="Update Account"
           type="black"
-          @buttonWasClicked="''"
+          @buttonWasClicked="submit()"
         ></psytech-button>
       </div>
-    <div class="flex justify-end w-11/12">
+    <div class="flex justify-end w-11/12 mr-4">
       <div>
         <psytech-button
           label="Back"
@@ -167,7 +162,6 @@ import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import StickyFooter from "@/components/StickyFooter";
 import Loader from "@/components/Loader.vue";
-import { minLength, helpers, required, maxLength } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import store from "../../../store/index";
 import InputSwitch from 'primevue/inputswitch';
@@ -175,6 +169,7 @@ import ErrorSpan from "@/components/ErrorSpan";
 import ErrorAlert from "@/components/ErrorAlert.vue";
 import Tabs from '@/components/user/Tabs.vue';
 import { useStore } from "vuex";
+import { required, email, helpers, minLength, maxLength } from "@vuelidate/validators";
 
 export default {
   name: "master-control-edit",
@@ -196,7 +191,7 @@ export default {
     useStore,
   },
   beforeRouteEnter(to, from, next) {
-    const accountDetail = store.getters["clientControl/getClientDetail"];
+    const accountDetail = store.getters["masterPannel/getDistributorDetail"];
     if (!accountDetail) {
       next({ name: "distributors-list" });
     }
@@ -210,7 +205,7 @@ export default {
     const showSuccessAlert = ref(false);
 
    const accountDetail = computed(() => {
-      return store.getters["clientControl/getClientDetail"];
+      return store.getters["masterPannel/getDistributorDetail"];
     });
 
   const gotoNextHandler = ()=>{
@@ -226,37 +221,25 @@ export default {
   }
 
   const form = reactive({
+      distributorId: accountDetail?.value?.id,
       distributorName: accountDetail?.value?.name,
       distributorEmail: accountDetail?.value?.email, 
       statusSwitcher: accountDetail?.value?.active,
       distributorAddress: accountDetail?.value?.addressLine1+ " "+ accountDetail?.value?.addressLine2+ " "+accountDetail?.value?.addressLine3+ ""+accountDetail?.value?.addressLine4,
-      distributorDetails: "",
       error: "",
       loader:false,
     });
 
     const rules = computed(() => {
       return {
-        companyName: {
-          required: helpers.withMessage("Company Name is required", required),
-          minLength: minLength(4),
+        distributorName: {
+          required: helpers.withMessage("Name is required", required),
+          minLength: minLength(3),
           maxLength: maxLength(255),
         },
-        accountDetails: {
-          required: helpers.withMessage(
-            "Account Details are required",
-            required
-          ),
-          minLength: minLength(10),
-          maxLength: maxLength(255),
-        },
-        accountAddress: {
-          required: helpers.withMessage(
-            "Account Address are required",
-            required
-          ),
-          minLength: minLength(10),
-          maxLength: maxLength(255),
+        distributorEmail: {
+          required: helpers.withMessage("Email is required", required),
+          email: helpers.withMessage("Email is invalid", email),
         },
       };
     });
@@ -266,47 +249,22 @@ export default {
       if (v$.value.$validate() && v$.value.$error) {
         return true;
       }
-      showSuccessAlert.value = false;
       form.error = ''
       form.loader = true;
       store
-        .dispatch("clientControl/postClientDetails", {
-          accountName: form.companyName,
-          accountAddress: form.accountAddress,
-          description: form.accountDetails,
+        .dispatch("masterPannel/editDistributorAccount", {
+          distributorID: form.distributorId,
+          name: form.distributorName,
+          email: form.distributorEmail,
+          status: form.statusSwitcher,
+          distributorAddress: form.distributorAddress,
         })
         .then((res) => {
-           const RESPONSE = res?.data;
-          if(RESPONSE.status == 500){
-            throw new Error(RESPONSE.data.message)
-          } else if (RESPONSE.data.message) {
-            throw new Error(RESPONSE.data.message);
-          } else if (!form.addAnother) {
-            store.commit("clientControl/setClientDetail", {
-              accountName: form.companyName,
-              accountDescription: form.accountDetails,
-              accountAddress: form.accountAddress,
-              numberOfUsers: 0,
-              accountId: RESPONSE.data.accountId,
-              creationDate: new Date()
-            });
-            store.commit("clientControl/setClientDetail", {
-              accountId: RESPONSE.data.accountId,
-              accountName: form.companyName,
-              accountDescription: form.accountDetails,
-              accountAddress: form.accountAddress,
-              creationDate: new Date(),
-              numberOfUsers: 0,
-            });
-            const { navigateTo } = utility("client-control-list-detail");
-            navigateTo();
-          } else {
-            clientName.value = form.companyName;
-            showSuccessAlert.value = true;
-            v$.value.$reset();
-            form.companyName = "";
-            form.accountDetails = "";
-            form.accountAddress = "";
+          if (res.data.status == 200 && res?.data?.message) {
+             throw new Error(res.data.message);
+          } else if(res.data.data.accountUpdatedSuccessfully){
+              const { navigateTo } = utility("distributors-list");
+              navigateTo();
           }
         })
         .catch((error) => {
@@ -317,15 +275,10 @@ export default {
         });
     };
 
-    const cancel = () => {
-      const { navigateTo } = utility("dashboard");
-      navigateTo();
-    };
 
     return {
       form,
       v$,
-      cancel,
       showStep,
       showSuccessAlert,
       gotoNextHandler,
@@ -333,12 +286,16 @@ export default {
       submit,
       accountDetail,
       clientName,
-      mdiPencilOutline  ,
+      mdiPencilOutline,
     };
   },
 };
 </script>
-<style scoped>
+<style>
+.input-switcher .p-inputswitch.p-focus .p-inputswitch-slider {
+  outline: none;
+  box-shadow: none;
+}
 ::-webkit-input-placeholder {
   /* WebKit browsers */
   color: #fff;
