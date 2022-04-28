@@ -45,7 +45,7 @@
                   <field
                     label="Distributor Name"
                     labelFor="distributorName"
-                    :applyExtraInputClass="true"
+                    applyExtraInputClass="true"
                   >
                     <control
                       v-model="distributorName"
@@ -73,7 +73,7 @@
                   <field
                     label="Email"
                     labelFor="email"
-                    :applyExtraInputClass="true"
+                    applyExtraInputClass="true"
                   >
                     <control
                       v-model="searchedEmail"
@@ -100,7 +100,7 @@
                   <field
                     label="Currency"
                     labelFor="currency"
-                    :applyExtraInputClass="true"
+                    applyExtraInputClass="true"
                   >
                     <control
                       v-model="searchedCurrency"
@@ -127,7 +127,7 @@
                   <field
                     label="No. of Clients"
                     labelFor="noOfClients"
-                    :applyExtraInputClass="true"
+                    applyExtraInputClass="true"
                   >
                     <control
                       v-model="noOfClients"
@@ -154,7 +154,7 @@
                   <field
                     label="Credit Limit"
                     labelFor="creditLimit"
-                    :applyExtraInputClass="true"
+                    applyExtraInputClass="true"
                   >
                     <control
                       v-model="searchedCredits"
