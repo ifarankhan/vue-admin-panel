@@ -1,7 +1,7 @@
 <template>
  <div>
     <Loader v-if="loader" />
-  <Listbox as="div" v-model="computedValue" style="margin-top: 0.55rem">
+  <Listbox as="div" v-model="computedValue">
     <div class="relative" :class="[customeWidth?'extra-select-class-width' : 'extra-select-class', allyMarginRight?'margin-right':'width-full']">
       <ListboxButton
        style="height: 45px; min-height: 45px; max-height: 45px"
@@ -130,6 +130,7 @@ export default {
 
 .extra-select-class{
   width: 200px;
+  margin-top: 7.5px;
 }
 
 .margin-right {
