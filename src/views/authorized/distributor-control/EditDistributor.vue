@@ -62,7 +62,7 @@
       <!--  -->
         <div class="flex w-11/12 -ml-2">
             <div class="flex w-full my-2 input-switcher">
-              <span class="px-2 ml-1">Distributor Status: </span>
+              <span class="px-2 ml-1">Distributor Status : </span>
               <div class="ml-4"> <InputSwitch v-model="form.statusSwitcher" /> <p class="-mt-8 ml-14">{{ `${form.statusSwitcher?'Active':'In-Active'}` }}</p></div>
             </div>
         </div>
