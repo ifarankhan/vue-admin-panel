@@ -292,10 +292,6 @@ export default {
 };
 </script>
 <style scoped>
-.input-switcher .p-inputswitch.p-focus .p-inputswitch-slider {
-  outline: none;
-  box-shadow: none;
-}
 ::-webkit-input-placeholder {
   /* WebKit browsers */
   color: #fff;
