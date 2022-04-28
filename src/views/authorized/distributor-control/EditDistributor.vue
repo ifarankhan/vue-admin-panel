@@ -291,7 +291,7 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
 .input-switcher .p-inputswitch.p-focus .p-inputswitch-slider {
   outline: none;
   box-shadow: none;
