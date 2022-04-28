@@ -4,7 +4,7 @@
         :id="id"
         placeholder=" "
         v-model="computedValue"
-        class="w-full border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
+        class="w-full text-xs font-medium border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
         :class="extraClasses"
         autocomplete="off"
     ></textarea>
