@@ -1,8 +1,8 @@
 <template>
  <div>
     <Loader v-if="loader" />
-  <Listbox as="div" v-model="computedValue" :class="[customeWidth?'extra-select-class-width' : 'extra-select-class', allyMarginRight?'margin-right':'width-full']">
-    <div class="relative" >
+  <Listbox as="div" v-model="computedValue">
+    <div class="relative" :class="[customeWidth?'extra-select-class-width' : 'extra-select-class', allyMarginRight?'margin-right':'width-full']">
       <ListboxButton
        style="height: 45px; min-height: 45px; max-height: 45px"
        class="relative w-full py-2 pl-3 pr-10 text-left bg-white border border-gray-300 rounded-md shadow-sm cursor-default focus:bg-opacity-50 focus:outline-none focus:ring-none focus:border-0 sm:text-sm"
