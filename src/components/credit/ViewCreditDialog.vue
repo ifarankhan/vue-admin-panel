@@ -25,17 +25,17 @@
           </div>
           <div class="pl-2 ml-6 border-l-4 border-psytechBlueBtHover" v-if="collapsable.accountDetail">
               <div class="flex mt-2 mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Type:</p>
+                  <p class="text-xs font-bold text-black w-52"> {{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Type:</p>
                   <p> {{ data?.clientType }} </p>
               </div>
               <div class="flex mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Name:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Name:</p>
                   <p> {{ data?.clientName?data?.clientName:'--' }}</p>
               </div>
               <div class="flex mb-2">
-                  <p class="text-xs font-bold text-black w-52">Account Admin:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'Admin of this User': 'Account Admin'}` }}:</p>
                   <div v-if="data.accountAdmin !='   '" class="flex items-center justify-center mr-1 text-xs text-white rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
-                    {{ data.accountAdmin && data.accountAdmin.split(" ").map(item=> item[0]?.toUpperCase()).join("") }}
+                    {{ data.accountAdmin && data.accountAdmin.split(" ")[0] }}
                     </div>
                     <div v-else class="flex items-center justify-center mr-1 text-xs text-black rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
                       --
