@@ -217,13 +217,13 @@ export default {
             store.dispatch("auth/localStorageDataAction")
             const URL = router.currentRoute?.value?.redirectedFrom;
             if(URL?.name == "ticket-conversation"){
-              router.push({name: "ticket-conversation" ,  params: { id: URL.fullPath.split("/support/")[1] } });
-              router.push({
-                name: "ticket-conversation",
-                params: {
-                  id: URL.fullPath.split("/support/")[1].split("/")[0]
-                }
-              })
+              router.push({name: "ticket-conversation" ,  params: { id: URL.fullPath.split("/distributor/")[1] } });
+              // router.push({
+              //   name: "ticket-conversation",
+              //   params: {
+              //     id: URL.fullPath.split("/support/")[1].split("/")[0]
+              //   }
+              // })
               return
             }
             const { navigateTo } = utility("dashboard");
@@ -233,6 +233,7 @@ export default {
           }
         })
         .catch((error) => {
+          console.log("error...", error)
           form.error = error?.response?.data?.data?.message ?? error.message;
         })
         .finally(() => {

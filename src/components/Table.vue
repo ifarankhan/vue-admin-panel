@@ -113,9 +113,9 @@
                    <span> {{  String(data.sno).padStart(2, '0') }} </span>
                 </template>
               </Column>
-              <Column field="name" header="Distributor Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Display Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                   <span> {{data.name}} </span>
+                   <span> {{data.displayName}} </span>
                 </template>
               </Column>
               <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
