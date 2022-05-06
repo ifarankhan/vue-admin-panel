@@ -222,10 +222,10 @@ export default {
 
   const form = reactive({
       distributorId: accountDetail?.value?.id,
-      distributorName: accountDetail?.value?.name,
+      distributorName: accountDetail?.value?.displayName,
       distributorEmail: accountDetail?.value?.email, 
       statusSwitcher: accountDetail?.value?.active,
-      distributorAddress: accountDetail?.value?.addressLine1+ " "+ accountDetail?.value?.addressLine2+ " "+accountDetail?.value?.addressLine3+ ""+accountDetail?.value?.addressLine4,
+      distributorAddress: accountDetail?.value?.addressLine1,
       error: "",
       loader:false,
     });
@@ -237,10 +237,10 @@ export default {
           minLength: minLength(3),
           maxLength: maxLength(255),
         },
-        distributorEmail: {
-          required: helpers.withMessage("Email is required", required),
-          email: helpers.withMessage("Email is invalid", email),
-        },
+        // distributorEmail: {
+        //   required: helpers.withMessage("Email is required", required),
+        //   email: helpers.withMessage("Email is invalid", email),
+        // },
       };
     });
 

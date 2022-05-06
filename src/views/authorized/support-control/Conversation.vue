@@ -287,7 +287,7 @@
                 ></select-option>
             </div>
           <!-- priority button -->
-            <div class="mt-6">
+            <div class="mt-6" v-if="!showError">
                    <psytech-button
                     type="Secondary"
                     label="Update"
@@ -364,8 +364,8 @@ export default {
 
     const addNoteToTicketMethod = ()=>{
       
-      let URL;
-      const route = router.currentRoute.value.params.id;
+     let URL;
+     let route = router.currentRoute?.value?.params?.id?.split("/")[0];
      if(conversationText.value == "" || conversationText.value == "\n") return;
       try {
          if(isBase64(route))
@@ -373,7 +373,8 @@ export default {
       } catch (error) {
         console.log("error...", error)
       }
-
+      console.log(route)
+      console.log(URL)
      let element = document.getElementsByClassName("ql-editor");
         loader.value = true;
         store
@@ -394,13 +395,14 @@ export default {
   
   const getIndividualTicketData = ()=>{
       let URL;
-      const route = router.currentRoute.value.params.id;
+      let route = router.currentRoute?.value?.params?.id?.split("/")[0];
       try {
          if(isBase64(route))
-         URL = atob(router.currentRoute.value.params.id);
+         URL = atob(route);
       } catch (error) {
         console.log("error...", error)
       }
+      
       if(URL?.split("-")[1] != JSON.parse(localStorage.getItem("userData")).freshdeskCompanyID){
         showError.value = true;
         return
@@ -504,7 +506,7 @@ export default {
     }
 
     const updateTicketFields = ()=>{
-      const route = router.currentRoute.value.params.id;
+      const route =  router.currentRoute?.value?.params?.id?.split("/")[0];
       let URL;
       try {
          if(isBase64(route))
