@@ -237,10 +237,10 @@ export default {
           minLength: minLength(3),
           maxLength: maxLength(255),
         },
-        distributorEmail: {
-          required: helpers.withMessage("Email is required", required),
-          email: helpers.withMessage("Email is invalid", email),
-        },
+        // distributorEmail: {
+        //   required: helpers.withMessage("Email is required", required),
+        //   email: helpers.withMessage("Email is invalid", email),
+        // },
       };
     });
 
