@@ -1,115 +1,121 @@
 <template>
   <Loader v-if="loader" :toBeBigger="true" />
   <!-- quit-dialog -->
-  <quit-dialog 
-    v-if="showQuitDialog" 
+  <quit-dialog
+    v-if="showQuitDialog"
     headerText="Quit Editing"
-    @dialogClosed="(showQuitDialog = false)" 
-    @quitConfirmed="onConformQuitDialog" 
+    @dialogClosed="(showQuitDialog = false)"
+    @quitConfirmed="onConformQuitDialog"
   />
 
   <div class="p-5">
-    <h1
-      class="pb-3 pl-6 mt-10 ml-1 text-3xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white"
-    >
+   <div class="sticky-head">
+     <h1
+         class="pb-3 pl-6 mt-10 ml-1 text-3xl font-normal leading-tight bg-white border-gray-100 dark:bg-gray-900 dark:border-gray-900 dark:text-white"
+     >
       <span>
         <svg viewBox="0 0 24 24" width="35" height="35" class="inline-block">
           <path :d="mdiPlus" />
         </svg>
       </span>
-      Edit User
-    </h1>
-    <!-- {{ viewUserDetail }}  -->
-    <Tabs 
-    :enabledClick="true"
-    :showStep="showStep"
-    :userType="userDetail.userType"
-    @updatedShowStep="(showStep=$event)"
-    />
-    
-    <!-- middle section step == 0 -->
-    <div class="flex p-4 ml-3 md:mt-6" v-show="showStep ==0">
-      <User-detail 
-      ref="userDetailRef"
-      :disableUserStaus="false"
-      :onUserEdit="true"
-      @valid="checkForValidity($event)"
-      @userTypeSelected="updateUserType($event)"
-      @isEmailTaken="emailIsTaken = $event"
-      @userDetail="setUserDetail($event)"
-       />
+       Edit User
+     </h1>
+     <!-- {{ viewUserDetail }}  -->
+     <Tabs
+         :enabledClick="true"
+         :showStep="showStep"
+         :userType="userDetail.userType"
+         @updatedShowStep="(showStep=$event)"
+     />
+   </div>
+    <div class="clear mt-40">
+      <!-- middle section step == 0 -->
+      <div class="flex p-4 ml-3 md:mt-6" v-show="showStep ==0">
+        <User-detail
+            ref="userDetailRef"
+            :disableUserStaus="false"
+            :onUserEdit="true"
+            @valid="checkForValidity($event)"
+            @userTypeSelected="updateUserType($event)"
+            @isEmailTaken="emailIsTaken = $event"
+            @userDetail="setUserDetail($event)"
+        />
+      </div>
+
+      <!-- step == 1 -->
+      <div class="flex p-4 ml-2 md:mt-6" v-show="showStep ==1">
+        <training-selection
+            ref="trainingDetailRef"
+            :onEditUser="true"
+            @valid="checkForValidity($event)"
+            @trainingSelectionDetail="setUserDetail($event)" />
+      </div>
+
+      <!-- step == 2 -->
+      <div class="flex p-4 md:mt-10" v-show="showStep ==2">
+        <Assessments
+            ref="assessmentsRef"
+            :editUser="true"
+            @valid="checkForValidity($event)"
+            @assessmentsDetail="setUserDetail($event)" />
+      </div>
+
+      <!-- showStep == 3 -->
+      <div class="flex p-4 md:mt-6" v-show="showStep ==3">
+        <credit-control
+            ref="creditControlRef"
+            :shareAndAlowCreditVal="userDetail.allowedToUpdateCredit"
+            @valid="checkForValidity($event)"
+            @creditControlDetail="setUserDetail($event)"
+        />
+      </div>
     </div>
 
-    <!-- step == 1 -->
-    <div class="flex p-4 ml-2 md:mt-6" v-show="showStep ==1">
-     <training-selection 
-      ref="trainingDetailRef"
-      :onEditUser="true"
-      @valid="checkForValidity($event)"
-      @trainingSelectionDetail="setUserDetail($event)" />
-    </div>
-
-    <!-- step == 2 -->
-    <div class="flex p-4 md:mt-10" v-show="showStep ==2">
-      <Assessments
-       ref="assessmentsRef"
-       :editUser="true"
-       @valid="checkForValidity($event)"
-       @assessmentsDetail="setUserDetail($event)" />
-    </div>
-
-    <!-- showStep == 3 -->
-    <div class="flex p-4 md:mt-6" v-show="showStep ==3">
-      <credit-control 
-       ref="creditControlRef"
-       :shareAndAlowCreditVal="userDetail.allowedToUpdateCredit"
-       @valid="checkForValidity($event)"
-       @creditControlDetail="setUserDetail($event)"
-       />
-    </div>
-
-    <!-- bottom navigation -->
-    <div class="flex justify-center mt-20 -ml-8">
-      <div class="w-11/12 border-t-2 border-teal-600"></div>
-    </div>
   </div>
 
   <!-- Bottom Navigation -->
-  <div class="flex justify-center w-11/12 mb-3">
-    <div class="flex w-1/2 ml-12">
-     <div>
-      <psytech-button
-        label="Cancel"
-        type="black-small"
-        @buttonWasClicked="showQuitDialog = true"
-      ></psytech-button>
-     </div>
-    <div>
-        <psytech-button
-          label="Update"
-          type="black-small"
-          @buttonWasClicked="updateAccountUserMethod()"
-        ></psytech-button>
+  <sticky-footer>
+    <!-- bottom navigation -->
+    <div class="flex justify-center mt-1 mb-5 -ml-8">
+      <div class="w-11/12 border-t-2 border-teal-600"></div>
+    </div>
+    <div class="flex justify-center w-11/12 mb-3">
+      <div class="flex w-1/2 ml-12">
+        <div>
+          <psytech-button
+              label="Cancel"
+              type="black-small"
+              @buttonWasClicked="showQuitDialog = true"
+          ></psytech-button>
+        </div>
+        <div>
+          <psytech-button
+              label="Update"
+              type="black-small"
+              @buttonWasClicked="updateAccountUserMethod()"
+          ></psytech-button>
+        </div>
       </div>
-     </div>
-    <div class="flex justify-end w-1/2">
-      <div>
-        <psytech-button
-          label="Back"
-          :type="showStep==0?'light':'black'"
-          :enabledBackBtn="true"
-          @buttonWasClicked="goToBackHandler()"
-        ></psytech-button>
-      </div>
-      <div v-if="showStep != 3">
-        <psytech-button
-          label="Next"
-          type="black"
-          @buttonWasClicked="gotoNextHandler()"
-        ></psytech-button>
+      <div class="flex justify-end w-1/2">
+        <div>
+          <psytech-button
+              label="Back"
+              :type="showStep==0?'light':'black'"
+              :enabledBackBtn="true"
+              @buttonWasClicked="goToBackHandler()"
+          ></psytech-button>
+        </div>
+        <div v-if="showStep != 3">
+          <psytech-button
+              label="Next"
+              type="black"
+              @buttonWasClicked="gotoNextHandler()"
+          ></psytech-button>
+        </div>
       </div>
     </div>
-  </div>
+  </sticky-footer>
+
 </template>
 
 <script>
@@ -128,6 +134,7 @@ import CreditControl from '@/components/user/CreditControl.vue';
 import Assessments from '@/components/user/Assessment.vue';
 import TrainingSelection from '@/components/user/TrainingSelection.vue';
 import { useStore } from "vuex";
+import StickyFooter from "@/components/StickyFooter";
 import _ from "lodash";
 import store from "../../../../store/index";
 
@@ -153,6 +160,7 @@ export default {
     PsytechButton,
     ErrorAlert,
     utility,
+    StickyFooter
   },
   setup() {
     const store = useStore();
@@ -162,8 +170,8 @@ export default {
     const assessmentsTabData = ref(null);
     const creditControlTabData = ref(null);
     const userDetailRef = ref('');
-    const assessmentsRef = ref(''); 
-    const creditControlRef = ref(''); 
+    const assessmentsRef = ref('');
+    const creditControlRef = ref('');
     const trainingDetailRef = ref('');
     let isInvalid = ref(true);
     let userDetailData = reactive(null)
@@ -185,7 +193,7 @@ export default {
       userDetail.allowedToUpdateCredit = userDetail.sharedCredit = 0;
      }
     }
-        
+
     const setUserDetail = (e)=>{
       userDetailData = e;
     }
@@ -205,8 +213,8 @@ export default {
 
     if(indUserDetail?.activateTab){
       showStep.value = +indUserDetail.activateTab;
-    } 
-   
+    }
+
     const goToBackHandler = () => {
       if (showStep.value <= 0) {
         return;
@@ -225,11 +233,11 @@ export default {
       if (showStep.value >= 3) {
         return true;
       }
-      
+
       if(showStep.value ==1){
         trainingDetailRef?.value?.trainingDetailMethod()
       }
-      
+
       if(showStep.value ==2){
         assessmentsRef?.value?.assessmentDetailMethod()
       }
@@ -259,7 +267,7 @@ export default {
             navigateTo();
     }
 
-  const updateMethodAction = (actionName, data)=>{ 
+  const updateMethodAction = (actionName, data)=>{
      loader.value = true;
      store
       .dispatch(`clientControl/${actionName}`, data)
@@ -295,7 +303,7 @@ export default {
           username:userDetailData?.email,
           pin:userDetailData?.pin,
           allowUpdateCredits: false,
-          sharedCreditsUserID: userDetailData?.supervisor??'', 
+          sharedCreditsUserID: userDetailData?.supervisor??'',
           active:userDetailData && +userDetailData.activeBlocked? false: true,
           receiveEmailNotifications: userDetailData && +userDetailData.sendNotifications?true: false
         }
@@ -330,7 +338,7 @@ export default {
         if(!isInvalid.value){
           return
         }
-        
+
         const data = {
           amount: +userDetailData.credits,
           currentCredits: userDetailData.currentCredits,
@@ -342,7 +350,7 @@ export default {
 
         return
       }
-      
+
     };
     return {
       checkForValidity,
@@ -393,6 +401,14 @@ export default {
 :-ms-input-placeholder {
   /* Internet Explorer 10+ */
   color: #fff;
+}
+.sticky-head{
+  position: fixed;
+  width: 100%;
+  margin: 0 auto;
+  background: white;
+  z-index: 1000;
+  padding-bottom: 15px;
 }
 </style>
 
