@@ -57,11 +57,11 @@
           </div>
           <div class="pl-2 ml-6 border-l-4 border-psytechBlueBtHover">
               <div class="flex mt-2 mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Type:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Type:</p>
                   <p> {{ data?.clientType }} </p>
               </div>
               <div class="flex mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Name:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Name:</p>
                   <p> {{ data?.clientName }} </p>
               </div>
               <div class="flex mb-2">
@@ -116,8 +116,7 @@
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Date of Update:</p>
-                  <p v-if="data && String(data.updateDateAndTime).includes('T')"> {{ data?.updateDateAndTime.split("T")[1].split("Z")[0] }} </p>
-                  <p v-else> {{ data?.updateDateAndTime.split(" ")[1] }} </p>
+                  <p> {{ formatDate(data?.updateDateAndTime.split("T")[0]) }} </p>
               </div>
           </div>
         </div>
@@ -156,6 +155,7 @@ import {useStore} from "vuex";
 import { mdiFileChartOutline, mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 
 import Field from "@/components/Field";
 import Control from "@/components/Control";
@@ -181,6 +181,7 @@ export default {
         ErrorSpan
     },
     setup(props, { emit }) {
+      const { formatDate } = useClientUser();
       const updateCredit = reactive({
           correctCredit:"",
           correctionReason: ""
@@ -227,6 +228,7 @@ export default {
         openDialog,
         closeDialog,
         collapsable,
+        formatDate,
         mdiFileChartOutline,
         creditCorrectionMethod,
         mdiChevronUp,
