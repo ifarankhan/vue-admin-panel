@@ -77,7 +77,7 @@ import ErrorSpan from "@/components/ErrorSpan";
 import Field from "@/components/Field";
 import Control from "@/components/Control";
 
-import {helpers, required, numeric} from "@vuelidate/validators";
+import {helpers, required, integer} from "@vuelidate/validators";
 
 export default {
     components:{
@@ -111,7 +111,7 @@ export default {
       return {
         amount: {
           required: helpers.withMessage("This field is required", required),
-          numeric: helpers.withMessage("Only numeric values are allowed", numeric),
+          integer: helpers.withMessage("Only integers are allowed", integer),
         }
       };
     });
