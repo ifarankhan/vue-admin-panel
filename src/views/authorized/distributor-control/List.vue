@@ -344,6 +344,8 @@ export default {
       distributorName.value = "";
       noOfClients.value = "";
       credits.value = "";
+      searchedCurrency.value = "";
+      searchedCredits.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
 
