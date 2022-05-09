@@ -94,6 +94,7 @@
               type="black-small"
               @buttonWasClicked="updateAccountUserMethod()"
           ></psytech-button>
+
         </div>
       </div>
       <div class="flex justify-end w-1/2">
