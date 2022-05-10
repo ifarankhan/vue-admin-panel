@@ -140,7 +140,7 @@
         </div>
 
           <!-- post comment -->
-     <div class="px-4 mt-8 mb-4" v-if="!showError">
+     <div class="px-4 mt-8 mb-4" v-if="!showUpdateBtn">
           <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
@@ -210,7 +210,7 @@
        <div class="fixed p-8 mr-20 border rounded-2xl custom-height" style="z-index: 35;">
           <div class="mt-4">
              <span class="text-sm font-bold">Ticket Status:</span>
-             <span class="px-3 py-0.5 ml-2 text-sm text-white bg-green-700 rounded-md">{{ ticketData && fresDeskStatuses.find(item=> item.value == +ticketData.status).text }}</span>
+             <span class="px-3 py-0.5 ml-2 text-sm text-white bg-green-700 rounded-md pb-1.5">{{ ticketData && fresDeskStatuses.find(item=> item.value == +ticketData.status).text }}</span>
           </div>
 
           <!--  -->
@@ -287,7 +287,7 @@
                 ></select-option>
             </div>
           <!-- priority button -->
-            <div class="mt-6" v-if="!showError">
+            <div class="mt-6" v-if="!showUpdateBtn">
                    <psytech-button
                     type="Secondary"
                     label="Update"
@@ -373,8 +373,7 @@ export default {
       } catch (error) {
         console.log("error...", error)
       }
-      console.log(route)
-      console.log(URL)
+
      let element = document.getElementsByClassName("ql-editor");
         loader.value = true;
         store
@@ -384,15 +383,15 @@ export default {
           ticketId: +URL.split("-")[0]
         })
           .then((res) => {
-            getIndividualTicketData()
-            
-          }).catch((error) => {
+            }).catch((error) => {
           }).finally(()=>{
              element[0].innerHTML = "";
              loader.value = false;
+             getIndividualTicketData();
           })
     }
   
+  const showUpdateBtn = ref(true);
   const getIndividualTicketData = ()=>{
       let URL;
       let route = router.currentRoute?.value?.params?.id?.split("/")[0];
@@ -407,7 +406,8 @@ export default {
         showError.value = true;
         return
       }
-
+      showUpdateBtn.value = true;
+      
       Promise.allSettled([ 
       store.dispatch("freshDesk/getIndividualTicket", {ticketId: URL?.split("-")[0] }), 
       store.dispatch("freshDesk/getAllContacts"),
@@ -497,8 +497,9 @@ export default {
          })
 
         ticketData.value.conversations = formattedData;
-
+        showUpdateBtn.value = false;
     }).catch(error=>{ 
+      showUpdateBtn.value = true;
       console.log("error", error) 
       }).finally(()=>{
         // loading.value = false;
@@ -533,6 +534,7 @@ export default {
     return {
         ticketData,
         mdiChevronDown,
+        showUpdateBtn,
         conversationText,
         fresDeskPriorities,
         fresDeskStatuses,
