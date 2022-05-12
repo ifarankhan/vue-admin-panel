@@ -140,7 +140,8 @@
         </div>
 
           <!-- post comment -->
-     <div class="px-4 mt-8 mb-4" v-if="!showUpdateBtn">
+          <!-- {{ showUpdateBtn }} -->
+     <div class="px-4 mt-8 mb-4" v-if="showUpdateBtn">
           <div class="flex items-center cursor-pointer" @click="collapsable.comments = !collapsable.comments">
             <span
             >
@@ -185,7 +186,8 @@
         </div>
     <div class="px-4 pt-8 mt-16 mb-4">
         <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-            <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketData.conversations" :key="index">
+          <!-- {{ ticketConversation?.length }} -->
+            <li class="py-3 sm:py-4" v-for="(item, index) in ticketData && ticketConversation" :key="index">
                 <div class="flex items-center space-x-4">
                     <div class="flex-shrink-0">
                         <div class="flex items-center justify-center w-10 h-10 text-white rounded-full" style="background-color: rgba(0, 0, 0, 0.4);" v-if=" item && item.contactName"> {{ item.contactName[0].toUpperCase() }} </div>
@@ -287,7 +289,7 @@
                 ></select-option>
             </div>
           <!-- priority button -->
-            <div class="mt-6" v-if="!showUpdateBtn">
+            <div class="mt-6" v-if="showUpdateBtn">
                    <psytech-button
                     type="Secondary"
                     label="Update"
@@ -330,6 +332,7 @@ export default {
     const router = useRouter();
     const loader = ref(false);
     let showError = ref("");
+    let ticketConversation = ref([]);
 
     const collapsable = reactive({
       description: true,
@@ -363,7 +366,7 @@ export default {
     }
 
     const addNoteToTicketMethod = ()=>{
-      
+     pageNoForConversation.value = 1;
      let URL;
      let route = router.currentRoute?.value?.params?.id?.split("/")[0];
      if(conversationText.value == "" || conversationText.value == "\n") return;
@@ -383,15 +386,100 @@ export default {
           ticketId: +URL.split("-")[0]
         })
           .then((res) => {
+            if(res.status == 201){
+              loadTicketConversation();
+            }
             }).catch((error) => {
           }).finally(()=>{
              element[0].innerHTML = "";
              loader.value = false;
-             getIndividualTicketData();
           })
     }
   
-  const showUpdateBtn = ref(true);
+  const pageNoForConversation = ref(1);
+  const loadTicketConversation = ()=>{
+      let URL;
+      let route = router.currentRoute?.value?.params?.id?.split("/")[0];
+      try {
+         if(isBase64(route))
+         URL = atob(route);
+      } catch (error) {
+        console.log("error...", error)
+      }
+      
+      if(URL?.split("-")[1] != JSON.parse(localStorage.getItem("userData")).freshdeskCompanyID){
+        showError.value = true;
+        return
+      }
+
+      let freshDeskContacts = [];
+      let freshDeskAgents = [];
+      let CONVERSATIONS = [];
+
+      Promise.allSettled([ 
+      store.dispatch("freshDesk/getTicketConversation",{ticketId: URL?.split("-")[0], pageNo: pageNoForConversation.value }), 
+      store.dispatch("freshDesk/getAllContacts"),
+      store.dispatch("freshDesk/getAllAgents"),
+    ]) 
+    .then(async results =>{
+      const [ticketConversationData, allContacts, allAgents] = results; 
+      if(ticketConversationData.status== "fulfilled"){
+        CONVERSATIONS = await ticketConversationData.value.data;
+            if(CONVERSATIONS.length == 0){
+             return
+            }
+            if(ticketConversation.value?.length){
+              ticketConversation.value.push(...CONVERSATIONS)
+            } else{
+              ticketConversation.value = CONVERSATIONS;
+            }
+          pageNoForConversation.value += 1;
+      }
+
+      // all contacts
+       if(allContacts.status== "fulfilled"){
+        freshDeskContacts = await allContacts.value.data;
+       } 
+       
+      // all agents
+       if(allAgents.status== "fulfilled"){
+          freshDeskAgents = await allAgents.value.data;
+          freshDeskAgents = freshDeskAgents.map(item=> {
+            return {
+              id: item.id,
+              name: item.contact.name,
+              email: item.contact.email
+            }
+          })
+       }
+
+      //  console.log("CONVERSATIONS",CONVERSATIONS)
+
+      const mergedContactsAndAgents = [...freshDeskContacts, ...freshDeskAgents]
+      
+         const formattedData =  ticketConversation.value.map(item=>{
+           const itemFound = mergedContactsAndAgents.find(x=> x.id == item.user_id)
+           if(itemFound){
+             return {
+                ...item,
+                contactName: itemFound.name,
+                contactEmail: itemFound.email
+             }
+           }
+         })
+
+        ticketConversation.value = formattedData;
+        loadTicketConversation(); 
+        // showUpdateBtn.value = false;
+    }).catch(error=>{ 
+      // showUpdateBtn.value = true;
+      console.log("error", error) 
+      }).finally(()=>{
+        // loading.value = false;
+      })
+  }
+
+  const showUpdateBtn = ref(false);
   const getIndividualTicketData = ()=>{
       let URL;
       let route = router.currentRoute?.value?.params?.id?.split("/")[0];
@@ -407,17 +495,12 @@ export default {
         return
       }
       showUpdateBtn.value = true;
-      
       Promise.allSettled([ 
-      store.dispatch("freshDesk/getIndividualTicket", {ticketId: URL?.split("-")[0] }), 
-      store.dispatch("freshDesk/getAllContacts"),
-      store.dispatch("freshDesk/getAllAgents")
+      store.dispatch("freshDesk/getIndividualTicket", {ticketId: URL?.split("-")[0] })
     ]) 
     .then(async results =>{
-      const [ticketDetail, allContacts, allAgents] = results;
-
-      let freshDeskContacts = [];
-      let freshDeskAgents = [];
+      const [ticketDetail] = results;
+      // console.log("ticketConversation",ticketConversation)
 
       // ticket detail
        if(ticketDetail.status== "fulfilled"){
@@ -437,8 +520,8 @@ export default {
             }
 
         ticketPriority.value = +DATA.priority;
-
-        // for files
+        
+          // for files
           let allImages = []
           let allFiles = []
           for(let i=0; i< DATA.attachments.length; i++){
@@ -463,43 +546,14 @@ export default {
         } // end for loop
         ticketData.value.allFiles = allFiles;
         ticketData.value.allImages = allImages;
+
        }
 
-      // all contacts
-       if(allContacts.status== "fulfilled"){
-        freshDeskContacts = await allContacts.value.data;
-       } 
-       
-      // all agents
-       if(allAgents.status== "fulfilled"){
-          freshDeskAgents = await allAgents.value.data;
-          freshDeskAgents = freshDeskAgents.map(item=> {
-            return {
-              id: item.id,
-              name: item.contact.name,
-              email: item.contact.email
-            }
-          })
-       }
-
-      const mergedContactsAndAgents = [...freshDeskContacts, ...freshDeskAgents]
-
-       const CONVERSATIONS = ticketData.value.conversations;
-         const formattedData = CONVERSATIONS.map(item=>{
-           const itemFound = mergedContactsAndAgents.find(x=> x.id == item.user_id)
-           if(itemFound){
-             return {
-                ...item,
-                contactName: itemFound.name,
-                contactEmail: itemFound.email
-             }
-           }
-         })
-
-        ticketData.value.conversations = formattedData;
-        showUpdateBtn.value = false;
+      loadTicketConversation();     
+    
+        // showUpdateBtn.value = false;
     }).catch(error=>{ 
-      showUpdateBtn.value = true;
+      // showUpdateBtn.value = true;
       console.log("error", error) 
       }).finally(()=>{
         // loading.value = false;
@@ -537,9 +591,11 @@ export default {
         showUpdateBtn,
         conversationText,
         fresDeskPriorities,
+        loadTicketConversation,
         fresDeskStatuses,
         mdiChevronUp,
         ticketPriority,
+        ticketConversation,
         loader,
         formatDate,
         showError,
