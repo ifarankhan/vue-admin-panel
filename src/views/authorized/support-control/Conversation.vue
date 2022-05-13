@@ -375,6 +375,7 @@ export default {
       try {
          if(isBase64(route))
          URL = atob(route);
+         
       } catch (error) {
         console.log("error...", error)
       }
