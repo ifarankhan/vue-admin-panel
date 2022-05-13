@@ -92,8 +92,12 @@ const actions = {
         return fresh_desk_url.get('/agents')
     },
     async getIndividualTicket({ }, payload){
-        return fresh_desk_url.get(`/tickets/${payload.ticketId}?include=conversations`)
+        return fresh_desk_url.get(`/tickets/${payload.ticketId}`)
     },
+    async getTicketConversation({ }, payload){
+        return fresh_desk_url.get(`/tickets/${payload.ticketId}/conversations?page=${payload.pageNo}`)
+    },
+
 }
 
 export default {

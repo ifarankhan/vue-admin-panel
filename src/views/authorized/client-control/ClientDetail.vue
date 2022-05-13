@@ -742,19 +742,19 @@ export default {
       }
       cf.value.overlayVisible = false;
       loader.value = true;
-       // store
-       //    .dispatch("clientControl/exportAccountActivity",data)
-       //    .then(async (res) => {
-       //      const URL = res?.data?.data?.activityReportUrl?.url;
-       //      await (exportFileUrl.value = URL)
-       //      saveAs(URL)
-       //
-       //    })
-       //    .catch((error) => {
-       //      console.log("error is...", error);
-       //    }).finally(()=>{
-       //       loader.value = false;
-       //    });
+       store
+          .dispatch("clientControl/exportAccountActivity",data)
+          .then(async (res) => {
+            const URL = res?.data?.data?.partnerStatement;
+            await (exportFileUrl.value = URL)
+            saveAs(URL)
+
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+             loader.value = false;
+          });
     }
     // const exportAccountMethod = (e)=>{
     //   const date = new Date(e);
