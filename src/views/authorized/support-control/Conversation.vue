@@ -90,10 +90,10 @@
             v-if="collapsable.attachments && ticketData?.allImages"
           >
             <p class="mb-1 text-sm font-bold">Images : </p>
-            <div class="grid grid-cols-3 gap-1 overflow-hidden" v-if="ticketData?.allImages.length">
-               <div v-for="(item, index) in ticketData?.allImages" :key="index" class="h-64 p-2 border w-80">
-                     <p class="ml-4 font-bold">{{ item.imageName }}</p>
-                     <img :src="item.imageUrl" class="w-full h-full" />
+            <div class="grid grid-cols-12 mx-auto bg-gray-200 max-w-7xl" v-if="ticketData?.allImages.length">
+               <div v-for="(item, index) in ticketData?.allImages" :key="index" class="col-span-6 ml-4">
+                     <p class="ml-4 font-bold break-words">{{ item.imageName }}</p>
+                     <img :src="item.imageUrl" class="inline-block object-fill pb-2" />
                </div>
             </div>
             <p class="" v-else> No Image was Added</p>
@@ -316,6 +316,7 @@ import ErrorAlert from "@/components/ErrorAlert.vue";
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import _ from "lodash";
 import Button from 'primevue/button';
 
 export default {
@@ -367,6 +368,7 @@ export default {
 
     const addNoteToTicketMethod = ()=>{
      pageNoForConversation.value = 1;
+     ticketConversation.value = [];
      let URL;
      let route = router.currentRoute?.value?.params?.id?.split("/")[0];
      if(conversationText.value == "" || conversationText.value == "\n") return;
@@ -415,6 +417,7 @@ export default {
       let freshDeskContacts = [];
       let freshDeskAgents = [];
       let CONVERSATIONS = [];
+      // ticketConversation.value = [];
 
       Promise.allSettled([ 
       store.dispatch("freshDesk/getTicketConversation",{ticketId: URL?.split("-")[0], pageNo: pageNoForConversation.value }), 
@@ -468,7 +471,8 @@ export default {
            }
          })
 
-        ticketConversation.value = formattedData;
+        const data = _.cloneDeep(formattedData);
+        ticketConversation.value = (data).sort((a,b)=> new Date(b.created_at).getTime() - new Date(a.created_at).getTime() );
         loadTicketConversation(); 
         // showUpdateBtn.value = false;
     }).catch(error=>{ 
