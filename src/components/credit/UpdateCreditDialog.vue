@@ -115,7 +115,7 @@
                   <p>  {{ data?.sharedCredit?"Yes":"No" }} </p>
               </div>
               <div class="flex">
-                  <p class="text-xs font-bold text-black w-52">Date of Update:</p>
+                  <p class="text-xs font-bold text-black w-52">Date of Update: </p>
                   <p> {{ formatDate(data?.updateDateAndTime.split("T")[0]) }} </p>
               </div>
           </div>
@@ -222,15 +222,56 @@ export default {
         // console.log("activeBlocked",activeBlocked.value)  
     }
 
+    const UTCDate = (date)=>{
+      console.log("datatta", date)
+      console.log("datatta", new Date().toISOString())
+
+      const today = new Date().toISOString();
+      const dateOfUpdate = new Date(date).toISOString();
+      const diffTime = Math.abs(today - dateOfUpdate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      console.log(diffTime + " milliseconds");
+      console.log(diffDays + " days");
+
+      return +(new Date(date).toISOString())
+    }
+
+    const getUTCNow = (date)=>
+    {
+      let now;
+      if(date){
+        now = new Date(date);
+      } else{
+        now = new Date();
+      }
+        let time = now.getTime();
+        let offset = now.getTimezoneOffset();
+        offset = offset * 60000;
+        return time - offset;
+    }
+
+    const isEnabedCorrectionBtn = ref(false);
+    const daysDiffrence = ()=>{
+      const today = getUTCNow()
+      const dateOfUpdate = getUTCNow(props?.data?.updateDateAndTime)
+      const diff = Math.trunc((today - dateOfUpdate)/(1000*60*60*24))
+      isEnabedCorrectionBtn.value = diff;
+    }
+    daysDiffrence()
+
     return {
         showDialog,
         updateCredit,
         openDialog,
         closeDialog,
+        getUTCNow,
+        UTCDate,
         collapsable,
         formatDate,
         mdiFileChartOutline,
         creditCorrectionMethod,
+        daysDiffrence,
+        isEnabedCorrectionBtn,
         mdiChevronUp,
         mdiChevronDown,
         v$,

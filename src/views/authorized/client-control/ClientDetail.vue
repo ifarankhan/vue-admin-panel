@@ -476,7 +476,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(accountName = ''), applyFilter()"
+                      @iconWasClicked="(accountName = ''), (selectedNameFilter = 'contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -501,7 +501,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                        @iconWasClicked="(searchFamilyName = ''), applyFilter()"
+                        @iconWasClicked="(searchFamilyName = ''), (selectedFamilyNameFilter = 'contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -526,7 +526,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchUserName = ''), applyFilter()"
+                      @iconWasClicked="(searchUserName = ''), (selectedUserNameFilter = 'contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -549,13 +549,9 @@
                       :filterDropdown="numberDropdown"
                       v-model="selectedCreditsFilter"
                   ></select-option>
-
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                        @iconWasClicked="(searchedCredits = ''), applyFilter()"
+                        @iconWasClicked="(searchedCredits = ''), (selectedCreditsFilter = 'isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -847,7 +843,7 @@ export default {
     let prevSearched = ref();
     let selectedNameFilter = ref("contains");
     let selectedUserNameFilter = ref("contains");
-    let selectedFamilyNameFilter = ref("contains");
+    let selectedFamilyNameFilter = ref("contains"); 
     let accountName = ref("");
     let searchUserName = ref("");
     let searchFamilyName = ref("");
@@ -969,6 +965,12 @@ export default {
       searchUserName.value = "";
       searchFamilyName.value = "";
       searchedCredits.value="";
+      
+      selectedNameFilter.value = 'contains'; 
+      selectedUserNameFilter.value = 'contains'; 
+      selectedFamilyNameFilter.value = 'contains';
+      selectedCreditsFilter.value = 'isEqualTo';
+
       userArray.value = prevCustomers.value;
       prevSearched.value = [];
     };

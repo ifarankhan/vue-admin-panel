@@ -131,6 +131,7 @@
                <div class="flex mb-6">
                   <div class="ml-4">
                    <psytech-button
+                    v-if="daysDiffrence(data?.updateDateAndTime) <=5 ? true: false"
                     label="CORRECT CREDIT"
                     type="outline"
                     :extraClasses="'text-sm font-medium text-psytechBlue px-10  border-psytechBlue'"
@@ -158,14 +159,12 @@ import Dialog from 'primevue/dialog';
 import Loader from "@/components/Loader.vue";
 import {useStore} from "vuex";
 import { mdiFileChartOutline, mdiChevronDown, mdiChevronUp } from "@mdi/js";
-import useVuelidate from "@vuelidate/core";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import ErrorSpan from "@/components/ErrorSpan";
 
 import Field from "@/components/Field";
 import Control from "@/components/Control";
-
-import {email, helpers, maxLength, minLength, numeric, required} from "@vuelidate/validators";
+import { useCreditHelper } from '@/components/composition/creditHelper';
 
 export default {
     props:{
@@ -187,6 +186,7 @@ export default {
     },
     setup(props, { emit }) {
       const { formatDate } = useClientUser();
+      const { daysDiffrence } = useCreditHelper();
       const updateCredit = reactive({
           correctCredit:"",
           correctionReason: ""
@@ -214,6 +214,7 @@ export default {
         formatDate,
         openDialog,
         closeDialog,
+        daysDiffrence,
         collapsable,
         mdiFileChartOutline,
         mdiChevronUp,
