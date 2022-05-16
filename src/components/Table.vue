@@ -234,7 +234,7 @@
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
-                  <div>
+                  <div v-if="daysDiffrence(data?.dateOfUpdate) <=5 ? true: false">
                     <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
                        <template #item="{item}">
                             <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
@@ -284,7 +284,7 @@
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
-                  <div>
+                  <div v-if="daysDiffrence(data?.dateOfUpdate) <=5 ? true: false">
                     <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
                        <template #item="{item}">
                             <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
@@ -446,6 +446,7 @@ import { useStore } from "vuex";
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import { useCreditHelper } from '@/components/composition/creditHelper';
 
 import NavBarItem from "@/components/NavBarItem";
 import NavBarItemLabel from "@/components/NavBarItemLabel";
@@ -527,6 +528,7 @@ export default {
     },
     setup(props, {emit}) {
        const store = useStore();
+       const { daysDiffrence } = useCreditHelper();
        const { userTypes, formatDate, tableStatePersistence, fresDeskPriorities, fresDeskStatuses } = useClientUser();
 
       const menu = ref();
@@ -548,7 +550,9 @@ export default {
 
        const toggle = (event, data) => {
             emit("rowData", data)
-            menu.value.toggle(event);
+            if(daysDiffrence(data?.dateOfUpdate) <=5){
+              menu.value.toggle(event);
+            }
         };
         const save = () => {
             // toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
@@ -573,6 +577,7 @@ export default {
             items,
             actions,
             exportCSV,
+            daysDiffrence,
             fresDeskStatuses,
             fresDeskPriorities,
             tableStatePersistence,

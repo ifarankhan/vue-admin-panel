@@ -99,7 +99,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                        @iconWasClicked="(searcheStatus = ''), applyFilter()"
+                        @iconWasClicked="(searcheStatus = ''), (selectedStatusFilter ='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -124,7 +124,7 @@
                   ></select-option>
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                        @iconWasClicked="(searchedPrority = ''), applyFilter()"
+                        @iconWasClicked="(searchedPrority = ''), (selectedProrityFilter ='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -370,6 +370,8 @@ export default {
       searchText.value = "";
       searchedPrority.value = "";
       searcheStatus.value = "";
+      selectedStatusFilter.value = 'contains';
+      selectedProrityFilter.value = 'contains';
       allTickets.value = prevNonSearched.value;
       prevSearched.value = [];
     };
