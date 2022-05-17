@@ -137,12 +137,17 @@
                       <span>{{ data.transferableCreditLimit }}</span>
                   </template>
               </Column>
+              <Column header="Status" sortField="status" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data?.active?"Active":"In-Active" }}</span>
+                  </template>
+              </Column>
                <Column header="Invoice Currency" sortField="invoiceCurrency" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
                    <template #body="{data}">
                       <span>{{ data.invoiceCurrency }}</span>
                   </template>
-              </Column> 
-              
+              </Column>
+
               <Column header="Last Credit Update" sortField="lastCreditUpdate" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
                    <template #body="{data}">
                       <span>{{ data?.lastCreditUpdate && formatDate(data.lastCreditUpdate.split(" ")[0]) }}</span>
@@ -589,7 +594,7 @@ export default {
 .fixedheader .p-datatable-thead tr{
     position: fixed;
     width: calc(100% - 305px)  !important;
-} 
+}
 .fixedheader .p-datatable-tbody{
   margin-top: 57px;
 }

@@ -5,7 +5,7 @@
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="flex mb-2 ml-4">
          <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md  mr-10 cursor-pointer font-semibold" :class="[showSection == 1?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 1">Credit History</div>
-         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2">My Credit </div>
+         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2">Credit Transactions </div>
       </div>
 
     <div
@@ -123,7 +123,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  <span class="-ml-6"> Top Up credits </span>
+                  <span class="-ml-6"> Transferable Credits </span>
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
