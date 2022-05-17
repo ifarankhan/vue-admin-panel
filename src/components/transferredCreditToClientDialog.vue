@@ -7,9 +7,16 @@
             </template>
            <div>
         <!--  -->
+           <div class="mt-2 ml-2">
 
-           <div class="mt-6 ml-2">
-            <select-option
+             <div class="p-2 mb-2 rounded-md bg-psytechLightGray">
+               <div class="flex items-center">
+                 <p class="text-base">
+                   This credit will be transferred from the transferrable credit pool
+                 </p>
+               </div>
+             </div>
+             <select-option
                 :filterDropdown="clients"
                 :customeWidth="true"
                 :allyMarginRight="false"
@@ -137,8 +144,8 @@ export default {
 
     const userData = computed(()=>{
       return JSON.parse(localStorage.getItem("userData"))
-    }) 
-    
+    })
+
     const rules = computed(() => {
       return {
         client: {
@@ -171,7 +178,7 @@ export default {
           console.log("error is...", error);
         });
     });
-    
+
     const clientUsers = ref([]);
     const userLoader = ref(false);
     const showDefaultUsertext = ref(false);
@@ -215,7 +222,7 @@ export default {
       if (
         v$.value.client.$invalid ||
         v$.value.user.$invalid ||
-        v$.value.amount.$invalid 
+        v$.value.amount.$invalid
       ) {
         return true;
       }
