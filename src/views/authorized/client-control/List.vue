@@ -80,12 +80,9 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedNameFilter"
                   ></select-option>
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(accountName = ''), applyFilter()"
+                      @iconWasClicked="(accountName = ''), (selectedNameFilter = 'contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -109,13 +106,9 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedaddressFilter"
                   ></select-option>
-
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedaddressFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedaddress = ''), applyFilter()"
+                      @iconWasClicked="(searchedaddress = ''), (selectedaddressFilter = 'contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -139,13 +132,9 @@
                     :filterDropdown="numberDropdown"
                     v-model="selectedUsersFilter"
                   ></select-option>
-
-                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedUsersFilter" />
-                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedUsers = ''), applyFilter()"
+                      @iconWasClicked="(searchedUsers = ''), (selectedUsersFilter = 'isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -324,6 +313,11 @@ export default {
       accountName.value = "";
       searchedaddress.value = "";
       searchedUsers.value = "";
+
+      selectedUsersFilter.value = "isEqualTo";
+      selectedaddressFilter.value = "contains";
+      selectedNameFilter.value = "contains";
+
       customers.value = prevCustomers.value;
       prevSearched.value = [];
     };
