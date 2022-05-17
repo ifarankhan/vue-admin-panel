@@ -23,7 +23,7 @@
               d="M10 19l-7-7m0 0l7-7m-7 7h18"
             />
           </svg>
-        </div> 
+        </div>
         <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ accountDetail && accountDetail.name }} </div>
       </div>
       <!-- <div class="mr-12 place-self-end">
@@ -527,6 +527,7 @@ import ErrorAlert from "@/components/ErrorAlert.vue";
 import SuccessAlert from "@/components/SuccessAlert.vue";
 import { useRouter } from "vue-router";
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import { saveAs } from 'file-saver';
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -688,6 +689,7 @@ export default {
       calenderValue.value = false;
     }
     const closeCalendar = ()=>{
+      console.log(accountDetail.value);
       if((dates2.value?.length == 2 && dates2.value[1] ==null) ){
         return;
       };
@@ -695,10 +697,23 @@ export default {
       const data = {
         startDate: formatExportDate(dates2.value[0]),
         endDate: formatExportDate(dates2.value[1]),
-        accountId: accountDetail.value?.accountId
+        distributorId: accountDetail.value?.id
       }
       cf.value.overlayVisible = false;
       loader.value = true;
+      store
+          .dispatch("clientControl/exportPartnerStatement",data)
+          .then(async (res) => {
+            const URL = res?.data?.data?.partnerStatement;
+            await (exportFileUrl.value = URL)
+            saveAs(URL)
+
+          })
+          .catch((error) => {
+            console.log("error is...", error);
+          }).finally(()=>{
+        loader.value = false;
+      });
     }
 
     const accountDetail = computed(() => {

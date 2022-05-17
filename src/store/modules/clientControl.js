@@ -177,6 +177,12 @@ const actions = {
       DATA.distributorId = userData.distributorId;
       return private_url.post('export-account-activity',DATA)
     },
+    async exportPartnerStatement({}, payload){
+      const userData = await JSON.parse(localStorage.getItem("userData"));
+      const DATA = payload;
+      DATA.accountId = userData.accountId;
+      return private_url.post('export-partner-statement',DATA)
+    },
     async updateClientDetail({state, commit},payload){
         const DATA = payload;
         return private_url.put('account', payload).then(res=>{
