@@ -156,6 +156,34 @@ const routes = [
     ]
   },
   {
+    path: '/financial',
+    name: 'financial-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'financial-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/financial-control/FinancialControl.vue'),
+    children: [
+      {
+        path: '',
+        name: 'view-deductions',
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/financial-control/deductions/listing.vue'),
+        requiresAuth: true,
+      },
+      {
+        path: 'create-deduction',
+        name: 'create-deduction',
+        // layout: 'mainLayout',
+        component: () => import('../views/authorized/financial-control/deductions/DistributorAdd.vue'),
+        requiresAuth: true,
+      },
+    ]
+  },
+  {
     path: '/distributor',
     name: 'distributor-control',
     props: true,
@@ -214,6 +242,7 @@ const routes = [
       requiresAuth: false
     }
   },
+
 ]
 
 const router = createRouter({

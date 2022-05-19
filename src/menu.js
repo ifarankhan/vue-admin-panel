@@ -3,7 +3,7 @@ import {
   mdiAccountConvert,
   mdiCurrencyUsd,
   mdiBookOpenVariant,
-  mdiHandExtendedOutline
+  mdiHandExtendedOutline, mdiViewList, mdiDatabaseMinus
 } from '@mdi/js'
 
 export default [
@@ -30,6 +30,27 @@ export default [
       label: 'Trainings',
       class:"disabled-link"
     },
+    {
+      to: '/financial',
+      icon: mdiDatabaseMinus ,
+      label: 'Deductions',
+    },
+    // {
+    //   label: 'Financials',
+    //   icon: mdiViewList,
+    //   menu: [
+    //     {
+    //       to: '/credit-control/credits',
+    //       icon: mdiDatabaseMinus ,
+    //       label: 'Deduction'
+    //     },
+    //     {
+    //       to: '/credit-control/credits',
+    //       icon: mdiCurrencyUsd ,
+    //       label: 'Invoices'
+    //     },
+    //   ]
+    // },
     {
       to: '/support',
       icon: mdiHandExtendedOutline  ,
