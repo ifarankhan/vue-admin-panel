@@ -34,6 +34,7 @@ const routes = [
       layout: 'mainLayout',
       requiresAuth: true,
       title: 'client-control',
+      isMasterTrue: false,
       fullScreen: true
     },
     component: () => import('../views/authorized/client-control/ClientControl.vue'),
@@ -104,6 +105,7 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
+      isMasterTrue: false,
       title: 'credit-control',
       fullScreen: true
     },
@@ -134,6 +136,7 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
+      isMasterTrue: false,
       title: 'support-control',
       fullScreen: true
     },
@@ -162,6 +165,7 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
+      isMasterTrue: true,
       title: 'distributor-control',
       fullScreen: true
     },

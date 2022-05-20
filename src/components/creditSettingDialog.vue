@@ -9,23 +9,23 @@
         <!--  -->
         <div class="flex">
             <div class="mt-1">
-                <p class="text-md font-medium">Purchase Credit from:</p>
+                <p class="font-medium text-md">Purchase Credit from:</p>
             </div>
         </div>
         <!--  -->
          <div class="flex flex-row mt-4">
-           <div class="mt-2 w-64">
+           <div class="w-64 mt-2">
              <div class="form-check">
-               <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-               <label class="form-check-label inline-block text-gray-800 aling-i-icon" for="flexRadioDefault1">
+               <input class="float-left w-4 h-4 mt-1 mr-2 align-top transition duration-200 bg-white bg-center bg-no-repeat bg-contain border border-gray-300 rounded-full appearance-none cursor-pointer form-check-input checked:bg-blue-600 checked:border-blue-600 focus:outline-none" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+               <label class="inline-block text-gray-800 form-check-label aling-i-icon" for="flexRadioDefault1">
                  Psytech International <span style="color:gray"><icon :path="mdiAlertCircle" size="20" v-tooltip="{value:' In this case, If any user of any client updates its credit, the credit will be purchased from Psytech International and the distributer will receive the invoice for that purchase.',class:'tooltip-style'}"  /></span>
                </label>
              </div>
            </div>
-           <div class="mt-2 w-64">
+           <div class="w-64 mt-2">
              <div class="form-check">
-               <input class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
-               <label class="form-check-label inline-block text-gray-800 aling-i-icon" for="flexRadioDefault2">
+               <input class="float-left w-4 h-4 mt-1 mr-2 align-top transition duration-200 bg-white bg-center bg-no-repeat bg-contain border border-gray-300 rounded-full appearance-none cursor-pointer form-check-input checked:bg-blue-600 checked:border-blue-600 focus:outline-none" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+               <label class="inline-block text-gray-800 form-check-label aling-i-icon" for="flexRadioDefault2">
                  Distributor <span style="color:gray"><icon :path="mdiAlertCircle" size="20" v-tooltip="{value:'In this case, If any user of any client updates its credit, that credit will be transferred from the Distributer’s Transferable Credit Pool to that Users’ Account. But if the Distributer’s Transferable Credit Pool is empty then the credit will be purchased from Psytech International and the distributer will receive the invoice for that purchase.',class:'tooltip-style'}"  /></span>
                </label>
              </div>
@@ -66,7 +66,7 @@ import Loader from "@/components/Loader.vue";
 import { mdiFileChartOutline, mdiChevronDown, mdiChevronUp,mdiAlertCircle } from "@mdi/js";
 import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
-import Icon from '@/components/Icon'
+import Icon from '@/components/Icon';
 import Field from "@/components/Field";
 import Control from "@/components/Control";
 

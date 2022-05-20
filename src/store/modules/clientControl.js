@@ -228,7 +228,17 @@ const actions = {
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;
       return private_url.post('add-account-user', payload)
-  }
+  },
+  async updateUserCreditSetting({state},payload){ 
+    if(payload.isFromEdit){
+      payload.accountid = state.individualClientUserDetail.userDetails.accountID;
+      payload.userid = state.individualClientUserDetail.userDetails.userID;
+      delete payload.isFromEdit;
+    } else{
+      payload.accountid = state.clientDetail.accountId;
+    }
+    return private_url.post('update-user-credits-settings', payload)
+}
 }
 
 export default {
