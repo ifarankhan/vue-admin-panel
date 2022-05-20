@@ -42,50 +42,38 @@ const routes = [
       {
         path: 'create-client',
         name: 'client-control-create-client',
-        // layout: 'mainLayout',
         requiresAuth: true,
         component: () => import('../views/authorized/client-control/Account.vue'),
       },
       {
         path: 'edit-client',
         name: 'client-control-edit-client',
-        // layout: 'mainLayout',
         requiresAuth: true,
         component: () => import('../views/authorized/client-control/Edit.vue'),
       },
       {
         path: 'list',
         name: 'client-control-list',
-        // layout: 'mainLayout',
         component: () => import('../views/authorized/client-control/mainList.vue'),
-        requiresAuth: true,
         children: [
           {
             path: '',
             name: 'list-page',
-            requiresAuth: true,
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/client-control/List.vue'),
           },
           {
             path: 'detail',
             name: 'client-control-list-detail',
-            requiresAuth: true,
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/client-control/ClientDetail.vue'),
           },
           {
             path: 'add-user',
             name: 'client-control-add-user',
-            requiresAuth: true,
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/client-control/user/AddUser.vue'),
           },
           {
             path: 'edit-user',
             name: 'client-control-edit-user',
-            requiresAuth: true,
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/client-control/user/EditUser.vue'),
           },
           {
@@ -114,15 +102,11 @@ const routes = [
         {
           path: 'credits',
           name: 'credit-control-list',
-          // layout: 'mainLayout',
           component: () => import('../views/authorized/client-control/mainList.vue'),
-          requiresAuth: true,
           children: [
             {
               path: '',
               name: 'credit-list-page',
-              requiresAuth: true,
-              // layout: 'mainLayout',
               component: () => import('../views/authorized/credit-control/List.vue'),
             }
           ]
@@ -145,15 +129,11 @@ const routes = [
       {
         path: '',
         name: 'support-control-list',
-        // layout: 'mainLayout',
         component: () => import('../views/authorized/support-control/List.vue'),
-        requiresAuth: true,
       },
       {
         path: ':id/conversation',
         name: 'ticket-conversation',
-        requiresAuth: true,
-        // layout: 'mainLayout',
         component: () => import('../views/authorized/support-control/Conversation.vue'),
       },
     ]
@@ -174,39 +154,25 @@ const routes = [
       {
         path: 'list',
         name: 'distributor-control-list',
-        // layout: 'mainLayout',
         component: () => import('../views/authorized/distributor-control/DistributorList.vue'),
         children: [
           {
             path: '',
             name: 'distributors-list',
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/distributor-control/List.vue'),
-            requiresAuth: true,
           },
           {
             path: 'detail',
             name: 'distributor-control-list-detail',
-            requiresAuth: true,
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/distributor-control/DistributorDetail.vue'),
           },
           {
             path: 'edit',
             name: 'distributor-control-list-edit',
-            requiresAuth: true,
-            // layout: 'mainLayout',
             component: () => import('../views/authorized/distributor-control/EditDistributor.vue'),
           },
         ]
-      },
-      {
-        path: ':id/conversation',
-        name: 'ticket-conversation',
-        requiresAuth: true,
-        // layout: 'mainLayout',
-        component: () => import('../views/authorized/support-control/Conversation.vue'),
-      },
+      }
     ]
   },
   {
@@ -234,12 +200,6 @@ router.afterEach(to => {
     } else {
       document.title = defaultDocumentTitle
     }
-
-      /* Full screen mode */
-  // store.dispatch('fullScreenToggle', !!to.meta.fullScreen)
-
-    /* Dark mode */
-    // store.dispatch('darkMode')
   })
 
 // Meta Handling
@@ -252,14 +212,25 @@ router.beforeEach((to, from, next) => {
       })
       return
     } else {
-        next()
+      if(to.meta.isMasterTrue && USER_DATA?.isMasterPanelUser){
+        return next()
+      } else if(!to.meta.isMasterTrue && !USER_DATA?.isMasterPanelUser){
+          next()
+      } else{
+       if(to.name != 'dashboard'){
+         return next({
+           path: '/dashboard',
+         })
+       }else{
+         next()
+       }
+      }
     }
   } else {
     if (USER_DATA?.authToken) {
-      next({
+      return next({
         path: '/dashboard',
       })
-      return
     } else {
       next()
     }
