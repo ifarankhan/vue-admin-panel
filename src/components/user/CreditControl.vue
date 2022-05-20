@@ -111,27 +111,41 @@
             </div>
           </div>
         </div>
-
-        <!--  -->
-        <!-- <div class="mt-8">
-          <p class="pl-4 mb-2 text-sm font-semibold">Monthly Update Limit:</p>
-          <div class="w-2/5">
-              <field label="Monthly Update Limit" labelFor="credit">
-                <control
-                  v-model="userDetail.credits"
-                  placeholder=" "
-                />
-              </field>
-            </div>
-        </div> -->
+        
+         <!--  -->
+         <div class="mt-8 ml-2">
+          <p class="pl-4 mb-2 text-sm font-semibold">
+            Purchase Credit from: {{ indUserDetail?.loadCreditsFromDistributor }} 
+          </p>
+          <div class="flex flex-row mt-1 ml-4">
+           <div class="w-86">
+             <div class="form-check">
+               <input v-model="updateCredit.creditRadioBtn" value="false" class="float-left w-4 h-4 mt-1 mr-2 align-top transition duration-200 bg-white bg-center bg-no-repeat bg-contain border border-gray-300 rounded-full appearance-none cursor-pointer form-check-input checked:bg-blue-600 checked:border-blue-600 focus:outline-none" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+               <label class="inline-block -mt-2 text-gray-800 form-check-label aling-i-icon" for="flexRadioDefault1">
+                 Psytech International <i> (Default) </i> <span style="color:gray"><icon :path="mdiAlertCircle" size="20" v-tooltip="{value:' In this case, If any user of any client updates its credit, the credit will be purchased from Psytech International and the distributer will receive the invoice for that purchase.',class:'tooltip-style'}"  /></span>
+               </label>
+             </div>
+           </div>
+           <div class="w-64 ml-16">
+             <div class="form-check">
+               <input v-model="updateCredit.creditRadioBtn" value="false" class="float-left w-4 h-4 mt-1 mr-2 align-top transition duration-200 bg-white bg-center bg-no-repeat bg-contain border border-gray-300 rounded-full appearance-none cursor-pointer form-check-input checked:bg-blue-600 checked:border-blue-600 focus:outline-none" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+               <label class="inline-block -mt-2 text-gray-800 form-check-label aling-i-icon" for="flexRadioDefault2">
+                 Distributor <span style="color:gray"><icon :path="mdiAlertCircle" size="20" v-tooltip="{value:'In this case, If any user of any client updates its credit, that credit will be transferred from the Distributer’s Transferable Credit Pool to that Users’ Account. But if the Distributer’s Transferable Credit Pool is empty then the credit will be purchased from Psytech International and the distributer will receive the invoice for that purchase.',class:'tooltip-style'}"  /></span>
+               </label>
+             </div>
+           </div>
+         </div>
+         </div>
       </div>
 </template>
 <script>
 import { ref, reactive, computed, watch } from "vue";
-import { mdiFileChartOutline } from "@mdi/js";
+import { mdiFileChartOutline, mdiAlertCircle } from "@mdi/js";
 import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
 import PsytechButton from "@/components/PsytechButton";
+import Icon from '@/components/Icon';
+import Tooltip from 'primevue/tooltip';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
 import Field from "@/components/Field";
 import { useStore } from "vuex";
@@ -150,9 +164,14 @@ export default {
     CheckRadioPicker,
     SelectOption,
     PsytechButton,
+    Tooltip,
     Field,
+    Icon,
     Control,
     ErrorSpan,
+  },
+  directives: {
+      'tooltip': Tooltip
   },
    setup (props, { emit }) {
      const store = useStore();
@@ -162,11 +181,13 @@ export default {
       currentCredits: indUserDetail?.credits??0,
       allowedToUpdateCredit: +props.shareAndAlowCreditVal,
       sharedCredit: +props.shareAndAlowCreditVal,
+      creditRadioBtn: indUserDetail?.loadCreditsFromDistributor
     });
     const updateCredit = reactive({ 
       currentCredits: indUserDetail?.credits??0,
       credits: "",
       purchaseId: "",
+      creditRadioBtn: true
     });
 
      watch(
@@ -223,14 +244,20 @@ export default {
         toggleCredits,
         notifications,
         mdiFileChartOutline,
+        mdiAlertCircle,
         v$
      }  
     },
 }
 </script>
 
-<style scoped>
-
+<style>
+label.aling-i-icon span{
+  display:inline-block;
+}
+.tooltip-style .p-tooltip-text {
+  width:300px;
+}
 </style>
 
 

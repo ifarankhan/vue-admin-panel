@@ -28,7 +28,7 @@
          @updatedShowStep="(showStep=$event)"
      />
    </div>
-    <div class="clear mt-40">
+    <div class="mt-40 clear">
       <!-- middle section step == 0 -->
       <div class="flex p-4 ml-3 md:mt-6" v-show="showStep ==0">
         <User-detail
@@ -268,6 +268,21 @@ export default {
             navigateTo();
     }
 
+  const updateUserCreditSettingMethod = ()=>{
+      store
+        .dispatch("clientControl/updateUserCreditSetting", {isFromEdit: true, loadCreditsFromDistributor: userDetailData.creditRadioBtn === 'true'? true: false })
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+            loader.value = false;
+            store.commit("clientControl/setIndividualClientUserDetail", null);
+            const { navigateTo } = utility("client-control-list-detail");
+            navigateTo();
+          } 
+        })
+        .catch((error) => {  }); 
+    }
+
   const updateMethodAction = (actionName, data)=>{
      loader.value = true;
      store
@@ -276,9 +291,13 @@ export default {
         const RESPONSE_DATA = res.data;
         if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
           loader.value = false;
-          store.commit("clientControl/setIndividualClientUserDetail", null);
-          const { navigateTo } = utility("client-control-list-detail");
-          navigateTo();
+          if(actionName == 'updateIndCredit'){
+            updateUserCreditSettingMethod()
+          } else{
+            store.commit("clientControl/setIndividualClientUserDetail", null);
+            const { navigateTo } = utility("client-control-list-detail");
+            navigateTo();
+          }
         } else {
           throw new Error(RESPONSE_DATA.data.message);
         }
