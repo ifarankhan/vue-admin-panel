@@ -58,53 +58,52 @@
         </div>
 
         <form action="#" @submit.prevent="submit">
-          <div class="flex flex-wrap overflow-hidden sm:-mx-1 md:-mx-2 lg:-mx-1 xl:-mx-px">
+          <div class="flex flex-wrap  sm:-mx-1 md:-mx-2 lg:-mx-1 xl:-mx-px">
+
+            <div class="w-1/5 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px pt-2">
+              <select-option
+                  :filterDropdown="itemTypeArray"
+                  labelText="Item Type"
+                  :customeWidth="true"
+                  v-model="form.itemType"
+              ></select-option>
+            </div>
+
+            <div class="w-1/5 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px pt-2">
+              <select-option
+                  :filterDropdown="quantityArray"
+                  labelText="Quantity"
+                  :customeWidth="true"
+                  v-model="form.quantity"
+              ></select-option>
+            </div>
 
             <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Client Name" labelFor="email">
-                <control type="text" v-model="form.companyName" placeholder="Email" />
-                <error-span :error="v$.companyName"></error-span>
+              <field label="Total Cost" labelFor="number">
+                <control type="number" v-model="form.totalCost" placeholder="Total Cost" />
+                <error-span :error="v$.totalCost"></error-span>
               </field>
             </div>
 
             <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Client Name" labelFor="email">
-                <control type="text" v-model="form.companyName" placeholder="Email" />
-                <error-span :error="v$.companyName"></error-span>
-              </field>
+                <control type="date" v-model="form.date" name="expenseDate" placeholder="Expense Date" />
+                <error-span :error="v$.date"></error-span>
             </div>
 
-            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Client Name" labelFor="email">
-                <control type="text" v-model="form.companyName" placeholder="Email" />
-                <error-span :error="v$.companyName"></error-span>
-              </field>
-            </div>
-
-            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Client Name" labelFor="email">
-                <control type="text" v-model="form.companyName" placeholder="Email" />
-                <error-span :error="v$.companyName"></error-span>
-              </field>
-            </div>
-
-            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Client Name" labelFor="email">
-                <control type="text" v-model="form.companyName" placeholder="Email" />
-                <error-span :error="v$.companyName"></error-span>
+            <div class="w-4/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
+              <field label="Client Address" labelFor="accountAddress">
+                <control
+                    type="textarea"
+                    v-model="form.accountAddress"
+                    placeholder="Account Address"
+                />
+                <error-span :error="v$.accountAddress"></error-span>
               </field>
             </div>
 
           </div>
 
-          <field label="Client Address" labelFor="accountAddress">
-            <control
-                type="textarea"
-                v-model="form.accountAddress"
-                placeholder="Account Address"
-            />
-            <error-span :error="v$.accountAddress"></error-span>
-          </field>
+
           <divider />
         </form>
       </div>
@@ -122,7 +121,9 @@ import {mdiPlus} from '@mdi/js';
 import { ref, reactive, computed } from "vue";
 import {helpers, maxLength, minLength, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
+import SelectOption from "@/components/SelectOption";
 import utility from "@/components/composition/utility";
+
 
 export default {
   name:"FinancialControlDeductionDistributorAdd",
@@ -131,26 +132,85 @@ export default {
     MainSection,
     Field,
     Control,
-    ErrorSpan
+    ErrorSpan,
+    SelectOption,
   },
   setup () {
     const form = reactive({
-      companyName: "",
-      accountDetails: "",
-      accountAddress: "",
+      totalCost: 0,
+      itemType: "",
+      quantity: "",
+      date: "",
       error: "",
       loader:false,
       addAnother: false,
     });
     const showSuccessAlert = ref(false);
+    const itemTypeArray =[
+          {
+            text :'faran',
+            value :'faran',
+          },
+          {
+            text :'this',
+            value :'thsi',
+          },
+          {
+            text :'okkk',
+            value :'ok',
+          }
+        ];
+    const quantityArray =[
+      {
+        text :'1',
+        value :1,
+      },
+      {
+        text :'2',
+        value :2,
+      },
+      {
+        text :'3',
+        value :3,
+      },
+      {
+        text :'4',
+        value :4,
+      },
+      {
+        text :'5',
+        value :5,
+      },
+      {
+        text :'6',
+        value :6,
+      },
+      {
+        text :'7',
+        value :7,
+      },
+      {
+        text :'8',
+        value :8,
+      },
+      {
+        text :'9',
+        value :9,
+      },
+      {
+        text :'10',
+        value :10,
+      }
+    ];
+
     const rules = computed(() => {
       return {
-        companyName: {
+        totalCost: {
           required: helpers.withMessage("Company Name is required", required),
           minLength: minLength(4),
           maxLength: maxLength(255),
         },
-        accountDetails: {
+        trainingprovider: {
           required: helpers.withMessage(
               "Account Details are required",
               required
@@ -235,6 +295,8 @@ export default {
       mdiPlus,
       form,
       v$,
+      itemTypeArray,
+      quantityArray,
       cancel,
       showSuccessAlert,
       submit,
