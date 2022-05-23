@@ -142,6 +142,7 @@ export default {
       quantity: "",
       date: "",
       error: "",
+      itemDescription: "",
       loader:false,
       addAnother: false,
     });
@@ -206,25 +207,33 @@ export default {
     const rules = computed(() => {
       return {
         totalCost: {
-          required: helpers.withMessage("Company Name is required", required),
-          minLength: minLength(4),
-          maxLength: maxLength(255),
+          required: helpers.withMessage("Total Cost is required", required),
         },
-        trainingprovider: {
+        itemType: {
           required: helpers.withMessage(
-              "Account Details are required",
+              "Item type is required",
               required
           ),
           minLength: minLength(10),
           maxLength: maxLength(255),
         },
-        accountAddress: {
+        quantity: {
           required: helpers.withMessage(
               "Account Address are required",
               required
           ),
-          minLength: minLength(10),
-          maxLength: maxLength(255),
+        },
+        date: {
+            required: helpers.withMessage(
+                "Account Address are required",
+                required
+            ),
+        },
+        itemDescription: {
+          required: helpers.withMessage(
+              "Account Address are required",
+              required
+          ),
         },
       };
     });
