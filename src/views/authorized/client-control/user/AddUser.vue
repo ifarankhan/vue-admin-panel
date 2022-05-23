@@ -315,7 +315,7 @@ export default {
             });
             updateUserCreditSettingMethod({
               userid: RESPONSE_DATA.data.userId,
-              loadCreditsFromDistributor: data.creditRadioBtn === 'true'? true: false 
+              loadCreditsFromDistributor: data.creditRadioBtn == true? false: true 
             })
           } else {
             throw new Error(RESPONSE_DATA.data.message);
