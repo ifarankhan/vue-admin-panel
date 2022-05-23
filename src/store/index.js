@@ -4,6 +4,7 @@ import freshDesk from './modules/freshDesk';
 import clientControl from './modules/clientControl';
 import creditControl from './modules/creditControl';
 import masterPannel from './modules/masterPannel';
+import deductions from './modules/deductions';
 
 export default createStore({
   state: {
@@ -94,6 +95,7 @@ export default createStore({
     freshDesk,
     masterPannel,
     clientControl,
-    creditControl
+    creditControl,
+    deductions
   },
 })

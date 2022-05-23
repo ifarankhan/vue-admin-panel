@@ -441,6 +441,47 @@
               </Column>
             </span>
 
+            <span v-if="tableType=='deductions'">
+              <Column field="partnerName" header="Partner Name" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.partnerName }}</span>
+                </template>
+              </Column>
+              <Column field="time" header="Quantity" sortField="quantity" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data?.quantity }} </span>
+                </template>
+              </Column>
+              <Column field="amount" header="Amount" sortField="amount" :sortable="sortTable" style="min-width:13rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.amount }}</span>
+                  </template>
+              </Column>
+              <Column field="date" header="Date" sortField="date" :sortable="sortTable" style="min-width: 13rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.date.split("T")[0] }}</span>
+                  </template>
+              </Column>
+               
+            <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body="{data}">
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+                  <!-- <div>
+                    <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
+                    </template>
+                    </Menu>
+                  </div> -->
+              </template>
+            </Column>
+            </span>
+
     </DataTable>
 </template>
 <script>
