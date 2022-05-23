@@ -8,7 +8,9 @@
         <path :d="icon"/>
       </svg>
       </span>
+      <span v-else>
         <img class="inline-block w-6 h-6 ml-4" src="../assets/icons/editDistributor.png" alt="edit distributor icon">
+      </span>
         {{ $t(title) }}
       </h1>
     </slot>

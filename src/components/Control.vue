@@ -24,12 +24,22 @@
     >
       {{ option.text ?? option.text }}
     </option>
-  </select> 
+  </select>
   <FileUpload v-else-if="type == 'imageupload'" @select="imageUploaded($event)" :multiple="true" :maxFileSize="2000000">
     <template #empty>
       <p>Drag and drop files to here to upload.</p>
     </template>
   </FileUpload>
+
+  <Calendar v-else-if="type == 'date'" id="icon" v-on:keyup.enter="$emit('enterPressed')"
+            class="text-xs font-medium"
+            :class="inputElClass"
+            @blur="$emit('onFocusLeave')"
+            onfocus="this.removeAttribute('readonly');"
+            v-model="computedValue"
+            :placeholder="placeholder"
+            inputClass="clanderField"
+            dateFormat="mm-dd-yy" />
   <input
     v-else
     :type="type"
@@ -58,6 +68,7 @@
 import { computed } from "vue";
 import ControlIcon from '@/components/ControlIcon'
 import FileUpload from 'primevue/fileupload';
+import Calendar from 'primevue/calendar';
 
 
 export default {
@@ -84,6 +95,9 @@ export default {
       type: Boolean,
       default: false
     },
+    placeholder:{
+      type: String,
+    },
     modelValue: {
       type: [String, Number, Boolean, Array, Object],
       default: "",
@@ -91,7 +105,8 @@ export default {
   },
   components:{
     ControlIcon,
-    FileUpload
+    FileUpload,
+    Calendar
   },
   setup(props, { emit }) {
      let extraClasses;
