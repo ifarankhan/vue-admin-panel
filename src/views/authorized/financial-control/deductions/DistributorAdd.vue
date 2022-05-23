@@ -85,19 +85,19 @@
               </field>
             </div>
 
-            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
+            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px calendar">
                 <control type="date" v-model="form.date" name="expenseDate" placeholder="Expense Date" />
                 <error-span :error="v$.date"></error-span>
             </div>
 
             <div class="w-4/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Client Address" labelFor="accountAddress">
+              <field label="Item Description / Expense details " labelFor="accountAddress">
                 <control
                     type="textarea"
-                    v-model="form.accountAddress"
-                    placeholder="Account Address"
+                    v-model="form.itemDescription"
+                    placeholder="Item"
                 />
-                <error-span :error="v$.accountAddress"></error-span>
+                <error-span :error="v$.itemDescription"></error-span>
               </field>
             </div>
 
@@ -304,3 +304,14 @@ export default {
   }
 }
 </script>
+<style>
+.clanderField{
+  height: 42px;
+  margin-top: 9px;
+  border: 1px solid #9ca3af4d;
+  border-radius: 4px;
+}
+.calendar span.p-calendar {
+  border: none !important;
+}
+</style>

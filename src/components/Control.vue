@@ -38,6 +38,7 @@
             onfocus="this.removeAttribute('readonly');"
             v-model="computedValue"
             :placeholder="placeholder"
+            inputClass="clanderField"
             dateFormat="mm-dd-yy" />
   <input
     v-else
