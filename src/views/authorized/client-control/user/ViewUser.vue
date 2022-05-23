@@ -463,6 +463,8 @@
                 <div>{{creditControl.allowUpdateCredits?"Yes":"No"}}</div>
                 <div class="font-bold">Monthly Update Limit:</div>
                 <div>{{creditControl.updateLimit}}</div>
+                <div class="font-semibold">Purchased Credit from:</div> 
+                <div>{{userDetailsList?.loadCreditsFromDistributor?'Distributor': 'Psytech International' }}</div>
               </div>
             </div>
           </TabPanel>
@@ -480,8 +482,8 @@ import StickyHeader from "@/components/StickyHeader";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import { mdiAlertCircle } from "@mdi/js";
 import Loader from "@/components/Loader.vue";
-import {colorsBorders, colorsText} from "@/colors";
 import useVuelidate from "@vuelidate/core";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
@@ -693,6 +695,7 @@ export default {
       userTyp,
       selectedTrannings,
       sendNotification,
+      mdiAlertCircle,
       userTests,
       userBatteries,
       userSolutions,
