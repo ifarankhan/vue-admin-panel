@@ -268,9 +268,10 @@ export default {
             navigateTo();
     }
 
-  const updateUserCreditSettingMethod = ()=>{
+  const updateUserCreditSettingMethod = ()=>{ 
+    console.log("userDetailData",userDetailData)
       store
-        .dispatch("clientControl/updateUserCreditSetting", {isFromEdit: true, loadCreditsFromDistributor: userDetailData.creditRadioBtn === 'true'? true: false })
+        .dispatch("clientControl/updateUserCreditSetting", {isFromEdit: true, loadCreditsFromDistributor: JSON.parse(userDetailData.creditRadioBtn) == true? false: true })
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
