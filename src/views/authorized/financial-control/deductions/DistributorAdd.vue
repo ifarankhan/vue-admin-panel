@@ -287,7 +287,7 @@ export default {
         item: form.itemType,
         price: +form.totalCost,
         quantity: form.quantity,
-        invoiceDate: form.date.toISOString()
+        invoiceDate: form.date
       }
       showSuccessAlert.value = false;
       form.error = ''

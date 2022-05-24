@@ -1,10 +1,10 @@
 <template>
-  <div class="p-8">
-   <sticky-header>
-      <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
-      <div class="grid main-grid md:grid-cols-2">
+  <div class="px-8">
+    <sticky-header>
+      <h1 class="text-2xl font-normal leading-tight ">Deductions</h1>
+      <div class="grid py-4 main-grid md:grid-cols-2">
         <!-- left section -->
-        <div class="mb-2">
+        <div>
           <psytech-button
             @buttonWasClicked="
               $router.push({ name: 'create-deduction' })
@@ -27,11 +27,10 @@
               />
             </svg>
           </psytech-button>
-          <!-- Create New Client Account -->
         </div>
 
         <!-- Right Section -->
-        <div class="flex justify-end xs:flex-col">
+        <div class="flex justify-end mb-2 xs:flex-col">
           <div>
             <div class="relative inline-block dropdown">
               <psytech-button
@@ -63,12 +62,12 @@
               >
                 <li class="flex">
                   <field
-                    label="Name"
-                    labelFor="account"
-                    :applyExtraInputClass="true"
+                    label="Distributor Name"
+                    labelFor="distributorName"
+                    applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="accountName"
+                      v-model="distributorName"
                       type="text"
                       id="name"
                       placeholder=" "
@@ -79,21 +78,24 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedNameFilter"
                   ></select-option>
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                    <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(accountName = ''), (selectedNameFilter = 'contains'), applyFilter()"
+                      @iconWasClicked="(distributorName = ''), (selectedNameFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Address"
-                    labelFor="address"
-                    :applyExtraInputClass="true"
+                    label="Email"
+                    labelFor="email"
+                    applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="searchedaddress"
+                      v-model="searchedEmail"
                       type="text"
                       id="address"
                       placeholder=" "
@@ -103,23 +105,78 @@
 
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedaddressFilter"
+                    v-model="selectedEmailFilter"
                   ></select-option>
+                  
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedaddress = ''), (selectedaddressFilter = 'contains'), applyFilter()"
+                      @iconWasClicked="(searchedEmail = ''),(selectedEmailFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Users"
-                    labelFor="users"
-                    :applyExtraInputClass="true"
+                    label="Currency"
+                    labelFor="currency"
+                    applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="searchedUsers"
+                      v-model="searchedCurrency"
+                      type="text"
+                      id="users"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedCurrencyFilter"
+                  ></select-option>
+
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(searchedCurrency = ''), (selectedCurrencyFilter='contains'), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+              <li class="flex">
+                  <field
+                    label="No. of Clients"
+                    labelFor="noOfClients"
+                    applyExtraSelectClass="true"
+                  >
+                    <control
+                      v-model="noOfClients"
+                      type="text"
+                      id="address"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="numberDropdown"
+                    v-model="selectedNoOfClientsFilter"
+                  ></select-option>
+                  
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(noOfClients = ''), (selectedNoOfClientsFilter='isEqualTo'), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                    label="Credit Limit"
+                    labelFor="creditLimit"
+                    applyExtraSelectClass="true"
+                  >
+                    <control
+                      v-model="searchedCredits"
                       type="text"
                       id="users"
                       placeholder=" "
@@ -129,11 +186,15 @@
 
                   <select-option
                     :filterDropdown="numberDropdown"
-                    v-model="selectedUsersFilter"
+                    v-model="selectedCreditsFilter"
                   ></select-option>
+
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                    <control :options="filterDropdown" type="select" v-model="selectedCreditsFilter" />
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedUsers = ''), (selectedUsersFilter = 'isEqualTo'), applyFilter()"
+                      @iconWasClicked="(searchedCredits = ''), (selectedCreditsFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -189,8 +250,7 @@
         </div>
       </div>
     </sticky-header>
-
-      <div class="fixedheader">
+   <div class="fixedheader extra-body-margin">
       <DataTable
           :customers="deductions"
           tableType='deductions'
@@ -254,3 +314,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.stick-header{
+  margin-top: -7px;
+}
+</style>
