@@ -114,33 +114,32 @@
         </form>
       </div>
     </main-section>
+  </div>
+  <!-- Bottom Navigation -->
+  <sticky-footer>
+      <div class="flex justify-center mt-1 mb-5 -ml-8">
+        <div class="w-11/12 border-t-2 border-teal-600"></div>
+      </div>
 
- <!-- Bottom Navigation -->
-  <div class="absolute bottom-0 flex justify-center w-11/12 mb-3">
-    <div class="flex justify-center mt-1 mb-5 -ml-8">
-      <div class="w-11/12 border-t-2 border-teal-600"></div>
-    </div>
-
-    <div class="w-11/12 mb-3">
-      <div class="flex w-1/2 ml-12">
-        <div>
-          <psytech-button
-              label="Cancel"
-              type="black-small"
-              @buttonWasClicked="$router.push({name: 'view-deductions'})"
-          ></psytech-button>
-        </div>
-        <div>
-          <psytech-button
-              label="Send"
-              :type="showStep==0?'light':'black'"
-              @buttonWasClicked="addDeductionsMethod()"
-          ></psytech-button>
+      <div class="w-11/12 mb-3">
+        <div class="flex w-1/2 ml-12">
+          <div>
+            <psytech-button
+                label="Cancel"
+                type="black-small"
+                @buttonWasClicked="$router.push({name: 'view-deductions'})"
+            ></psytech-button>
+          </div>
+          <div>
+            <psytech-button
+                label="Send"
+                :type="showStep==0?'light':'black'"
+                @buttonWasClicked="addDeductionsMethod()"
+            ></psytech-button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  </div>
+  </sticky-footer>
 </template>
 <script>
 
@@ -152,13 +151,14 @@ import ErrorSpan from "@/components/ErrorSpan";
 import {mdiPlus} from '@mdi/js';
 import { ref, reactive, computed } from "vue";
 import utility from "@/components/composition/utility";
-import {helpers, required} from "@vuelidate/validators";
+import {helpers, numeric, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import PsytechButton from "@/components/PsytechButton";
 import SelectOption from "@/components/SelectOption";
 import { useStore } from "vuex";
 import Loader from "@/components/Loader.vue";
 import StickyFooter from "@/components/StickyFooter";
+import {useClientUser} from "@/components/composition/clientHelper";
 
 export default {
   name:"FinancialControlDeductionDistributorAdd",
@@ -187,16 +187,28 @@ export default {
     const showSuccessAlert = ref(false);
     const itemTypeArray =[
           {
-            text :'faran',
-            value :'faran',
+            text :'Credits',
+            value :'Credits',
           },
           {
-            text :'this',
-            value :'thsi',
+            text :'Customisation',
+            value :'Customisation',
           },
           {
-            text :'okkk',
-            value :'ok',
+            text :'Expenses',
+            value :'Expenses',
+          },
+          {
+            text :'Materials',
+            value :'Materials',
+          },
+          {
+            text :'Training Courses',
+            value :'Training Courses',
+          },
+          {
+            text :'Surcharge',
+            value :'Surcharge',
           }
         ];
     const quantityArray =[
@@ -246,6 +258,7 @@ export default {
       return {
         totalCost: {
           required: helpers.withMessage("Total Cost is required", required),
+          numeric: helpers.withMessage("Only numeric values are allowed", numeric),
         },
         itemType: {
           required: helpers.withMessage(
@@ -254,20 +267,17 @@ export default {
           ),
         },
         quantity: {
-          required: helpers.withMessage(
-              "Account Address are required",
-              required
-          ),
+          required: helpers.withMessage("This field is required", required),
         },
         date: {
             required: helpers.withMessage(
-                "Account Address are required",
+                "Date is required",
                 required
             ),
         },
         itemDescription: {
           required: helpers.withMessage(
-              "Account Address are required",
+              "Item description / expense details required",
               required
           ),
         },
@@ -279,21 +289,23 @@ export default {
     });
 
     const v$ = useVuelidate(rules, form);
+    const { formatExportDate } = useClientUser();
     const addDeductionsMethod = () => {
       if (v$.value.$validate() && v$.value.$error) {
         return true;
       }
+
       const DATA = {
+        invoiceDate: formatExportDate(form.date),
         item: form.itemType,
         price: +form.totalCost,
-        quantity: form.quantity,
-        invoiceDate: form.date
+        quantity: form.quantity
       }
       showSuccessAlert.value = false;
       form.error = ''
       form.loader = true;
       store
-          .dispatch("deductions/addDeduction", DATA)
+          .dispatch("financialControl/addDeduction", DATA)
           .then((res) => {
             const RESPONSE = res.data.data
             if(RESPONSE.partnerCreditDeductionAdded){
@@ -304,6 +316,7 @@ export default {
           }).finally(()=>{
             form.loader = false;
           })
+
     };
 
     return {

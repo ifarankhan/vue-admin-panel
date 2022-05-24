@@ -296,7 +296,7 @@ export default {
   const loading = ref(false);
   const loadAllClients = ()=>{
     store
-    .dispatch("deductions/getDeductionList")
+    .dispatch("financialControl/getDeductionList")
     .then((res) => {
       deductions.value = res.data.data;
     })
