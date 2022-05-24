@@ -463,7 +463,7 @@
                 <div>{{creditControl.allowUpdateCredits?"Yes":"No"}}</div>
                 <div class="font-bold">Monthly Update Limit:</div>
                 <div>{{creditControl.updateLimit}}</div>
-                <div class="font-semibold">Purchased Credit from:</div> 
+                <div class="font-semibold">Purchase Credit from:</div> 
                 <div>{{userDetailsList?.loadCreditsFromDistributor?'Distributor': 'Psytech International' }}</div>
               </div>
             </div>
