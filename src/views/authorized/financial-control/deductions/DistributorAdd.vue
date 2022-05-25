@@ -1,4 +1,5 @@
 <template>
+<Loader v-if="form.loader" :toBeBigger="true" />
   <div class="p-8">
     <sticky-header :icon="mdiPlus" title="Create Invoice Deduction">
     </sticky-header>
@@ -57,30 +58,37 @@
           </div>
         </div>
 
-        <form action="#" @submit.prevent="submit">
-          <div class="flex flex-wrap  sm:-mx-1 md:-mx-2 lg:-mx-1 xl:-mx-px">
+        <form action="#">
+          <div class="flex flex-wrap sm:-mx-1 md:-mx-2 lg:-mx-1 xl:-mx-px">
 
-            <div class="w-1/5 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px pt-2">
+            <div class="w-1/5 pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
               <select-option
                   :filterDropdown="itemTypeArray"
                   labelText="Item Type"
                   :customeWidth="true"
                   v-model="form.itemType"
               ></select-option>
+               <p>
+                <error-span :error="v$.itemType"></error-span>
+            </p>
             </div>
 
-            <div class="w-1/5 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px pt-2">
+            <div class="w-1/5 pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
               <select-option
                   :filterDropdown="quantityArray"
                   labelText="Quantity"
                   :customeWidth="true"
                   v-model="form.quantity"
               ></select-option>
+               <p>
+                <error-span :error="v$.quantity"></error-span>
+            </p>
             </div>
 
-            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
+            <div class="relative w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
               <field label="Total Cost" labelFor="number">
-                <control type="number" v-model="form.totalCost" placeholder="Total Cost" />
+                <control type="text" v-model="form.totalCost" placeholder="Total Cost" />
+                <span class="absolute right-2 top-3">{{ userData.invoiceCurrency }}</span>
                 <error-span :error="v$.totalCost"></error-span>
               </field>
             </div>
@@ -102,13 +110,36 @@
             </div>
 
           </div>
-
-
           <divider />
         </form>
       </div>
     </main-section>
   </div>
+  <!-- Bottom Navigation -->
+  <sticky-footer>
+      <div class="flex justify-center mt-1 mb-5 -ml-8">
+        <div class="w-11/12 border-t-2 border-teal-600"></div>
+      </div>
+
+      <div class="w-11/12 mb-3">
+        <div class="flex w-1/2 ml-12">
+          <div>
+            <psytech-button
+                label="Cancel"
+                type="black-small"
+                @buttonWasClicked="$router.push({name: 'view-deductions'})"
+            ></psytech-button>
+          </div>
+          <div>
+            <psytech-button
+                label="Send"
+                :type="showStep==0?'light':'black'"
+                @buttonWasClicked="addDeductionsMethod()"
+            ></psytech-button>
+          </div>
+        </div>
+      </div>
+  </sticky-footer>
 </template>
 <script>
 
@@ -119,17 +150,24 @@ import Control from "@/components/Control";
 import ErrorSpan from "@/components/ErrorSpan";
 import {mdiPlus} from '@mdi/js';
 import { ref, reactive, computed } from "vue";
-import {helpers, maxLength, minLength, required} from "@vuelidate/validators";
-import useVuelidate from "@vuelidate/core";
-import SelectOption from "@/components/SelectOption";
 import utility from "@/components/composition/utility";
-
+import {helpers, numeric, required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+import PsytechButton from "@/components/PsytechButton";
+import SelectOption from "@/components/SelectOption";
+import { useStore } from "vuex";
+import Loader from "@/components/Loader.vue";
+import StickyFooter from "@/components/StickyFooter";
+import {useClientUser} from "@/components/composition/clientHelper";
 
 export default {
   name:"FinancialControlDeductionDistributorAdd",
   components:{
     StickyHeader,
+    StickyFooter,
+    PsytechButton,
     MainSection,
+    Loader,
     Field,
     Control,
     ErrorSpan,
@@ -144,21 +182,33 @@ export default {
       error: "",
       itemDescription: "",
       loader:false,
-      addAnother: false,
     });
+    const store = useStore()
     const showSuccessAlert = ref(false);
     const itemTypeArray =[
           {
-            text :'faran',
-            value :'faran',
+            text :'Credits',
+            value :'Credits',
           },
           {
-            text :'this',
-            value :'thsi',
+            text :'Customisation',
+            value :'Customisation',
           },
           {
-            text :'okkk',
-            value :'ok',
+            text :'Expenses',
+            value :'Expenses',
+          },
+          {
+            text :'Materials',
+            value :'Materials',
+          },
+          {
+            text :'Training Courses',
+            value :'Training Courses',
+          },
+          {
+            text :'Surcharge',
+            value :'Surcharge',
           }
         ];
     const quantityArray =[
@@ -208,107 +258,76 @@ export default {
       return {
         totalCost: {
           required: helpers.withMessage("Total Cost is required", required),
+          numeric: helpers.withMessage("Only numeric values are allowed", numeric),
         },
         itemType: {
           required: helpers.withMessage(
               "Item type is required",
               required
           ),
-          minLength: minLength(10),
-          maxLength: maxLength(255),
         },
         quantity: {
-          required: helpers.withMessage(
-              "Account Address are required",
-              required
-          ),
+          required: helpers.withMessage("This field is required", required),
         },
         date: {
             required: helpers.withMessage(
-                "Account Address are required",
+                "Date is required",
                 required
             ),
         },
         itemDescription: {
           required: helpers.withMessage(
-              "Account Address are required",
+              "Item description / expense details required",
               required
           ),
         },
       };
     });
 
+    const userData = computed(()=>{
+      return JSON.parse(localStorage.getItem("userData"))
+    });
+
     const v$ = useVuelidate(rules, form);
-    const submit = () => {
+    const { formatExportDate } = useClientUser();
+    const addDeductionsMethod = () => {
       if (v$.value.$validate() && v$.value.$error) {
         return true;
+      }
+
+      const DATA = {
+        invoiceDate: formatExportDate(form.date),
+        item: form.itemType,
+        price: +form.totalCost,
+        quantity: form.quantity
       }
       showSuccessAlert.value = false;
       form.error = ''
       form.loader = true;
       store
-          .dispatch("clientControl/postClientDetails", {
-            accountName: form.companyName,
-            accountAddress: form.accountAddress,
-            description: form.accountDetails,
-          })
+          .dispatch("financialControl/addDeduction", DATA)
           .then((res) => {
-            const RESPONSE = res?.data;
-            if(RESPONSE.status == 500){
-              throw new Error(RESPONSE.data.message)
-            } else if (RESPONSE.data.message) {
-              throw new Error(RESPONSE.data.message);
-            } else if (!form.addAnother) {
-              store.commit("clientControl/setClientDetail", {
-                accountName: form.companyName,
-                accountDescription: form.accountDetails,
-                accountAddress: form.accountAddress,
-                numberOfUsers: 0,
-                accountId: RESPONSE.data.accountId,
-                creationDate: new Date()
-              });
-              store.commit("clientControl/setClientDetail", {
-                accountId: RESPONSE.data.accountId,
-                accountName: form.companyName,
-                accountDescription: form.accountDetails,
-                accountAddress: form.accountAddress,
-                creationDate: new Date(),
-                numberOfUsers: 0,
-              });
-              const { navigateTo } = utility("client-control-list-detail");
-              navigateTo();
-            } else {
-              clientName.value = form.companyName;
-              showSuccessAlert.value = true;
-              v$.value.$reset();
-              form.companyName = "";
-              form.accountDetails = "";
-              form.accountAddress = "";
+            const RESPONSE = res.data.data
+            if(RESPONSE.partnerCreditDeductionAdded){
+              const { navigateTo } = utility('view-deductions'); navigateTo();
             }
           })
           .catch((error) => {
-            form.error = error?.message ?? "";
-          })
-          .finally(() => {
+          }).finally(()=>{
             form.loader = false;
-          });
-    };
+          })
 
-    const cancel = () => {
-      const { navigateTo } = utility("dashboard");
-      navigateTo();
     };
-
 
     return {
       mdiPlus,
       form,
       v$,
+      userData,
       itemTypeArray,
       quantityArray,
-      cancel,
       showSuccessAlert,
-      submit,
+      addDeductionsMethod,
     }
   }
 }

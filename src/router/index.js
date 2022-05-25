@@ -145,6 +145,7 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
+      isMasterTrue: false,
       title: 'financial-control',
       fullScreen: true
     },
