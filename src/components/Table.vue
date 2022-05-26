@@ -447,9 +447,19 @@
                     <span>{{ data.partnerName }}</span>
                 </template>
               </Column>
+              <Column field="reference" header="Item Type" sortField="reference" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.reference }}</span>
+                </template>
+              </Column>
               <Column field="time" header="Quantity" sortField="quantity" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
                    <span>{{data?.quantity }} </span>
+                </template>
+              </Column>
+              <Column field="currency" header="Currency" sortField="currency" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{`${data?.currency} (${ currency_symbols[data?.currency.toUpperCase()]})` }}  </span>
                 </template>
               </Column>
               <Column field="amount" header="Amount" sortField="amount" :sortable="sortTable" style="min-width:13rem; cursor: pointer">
@@ -594,6 +604,25 @@ export default {
 				}
 			])
 
+    const currency_symbols = ref({
+    'USD': '$', // US Dollar
+    'EURO': '€', // Euro
+    'CRC': '₡', // Costa Rican Colón
+    'GBP': '£', // British Pound Sterling
+    'ILS': '₪', // Israeli New Sheqel
+    'INR': '₹', // Indian Rupee
+    'JPY': '¥', // Japanese Yen
+    'KRW': '₩', // South Korean Won
+    'NGN': '₦', // Nigerian Naira
+    'PHP': '₱', // Philippine Peso
+    'PLN': 'zł', // Polish Zloty
+    'PYG': '₲', // Paraguayan Guarani
+    'THB': '฿', // Thai Baht
+    'UAH': '₴', // Ukrainian Hryvnia
+    'VND': '₫', // Vietnamese Dong
+});
+
+
        const toggle = (event, data) => {
             emit("rowData", data)
             if(daysDiffrence(data?.dateOfUpdate) <=5){
@@ -623,6 +652,7 @@ export default {
             items,
             actions,
             exportCSV,
+            currency_symbols,
             daysDiffrence,
             fresDeskStatuses,
             fresDeskPriorities,
