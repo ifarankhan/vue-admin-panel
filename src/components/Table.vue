@@ -469,7 +469,7 @@
               </Column>
               <Column field="date" header="Date" sortField="date" :sortable="sortTable" style="min-width: 13rem; cursor: pointer">
                    <template #body="{data}">
-                      <span>{{ data.date.split("T")[0] }}</span>
+                      <span>{{ formatDate(data.date.split("T")[0]) }}</span>
                   </template>
               </Column>
                
