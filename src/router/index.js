@@ -1,6 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from "../store/index";
 
+ /** List to be accessed by Super admin
+  * 1) /client-control/list/detail
+  * 2) /client-control/list/view-user
+  * 3) /financial
+  * 4) /financial/create-deduction
+  * */
 const routes = [
   {
     path: '/login',
@@ -34,7 +40,7 @@ const routes = [
       layout: 'mainLayout',
       requiresAuth: true,
       title: 'client-control',
-      isMasterTrue: false,
+      isMasterTrue: true,
       fullScreen: true
     },
     component: () => import('../views/authorized/client-control/ClientControl.vue'),
