@@ -62,12 +62,12 @@
               >
                 <li class="flex">
                   <field
-                    label="Distributor Name"
-                    labelFor="distributorName"
+                    label="Partner Name"
+                    labelFor="partnerName"
                     applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="distributorName"
+                      v-model="partnerName"
                       type="text"
                       id="name"
                       placeholder=" "
@@ -76,26 +76,26 @@
                   </field>
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedNameFilter"
+                    v-model="selectedNameFilter" 
                   ></select-option>
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(distributorName = ''), (selectedNameFilter='contains'), applyFilter()"
+                      @iconWasClicked="(partnerName = ''), (selectedNameFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Email"
-                    labelFor="email"
+                    label="Item Type"
+                    labelFor="itemTYpe"
                     applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="searchedEmail"
+                      v-model="searchItemType"
                       type="text"
                       id="address"
                       placeholder=" "
@@ -105,12 +105,12 @@
 
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedEmailFilter"
+                    v-model="selectedItemTypeFilter"
                   ></select-option>
                   
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedEmail = ''),(selectedEmailFilter='contains'), applyFilter()"
+                      @iconWasClicked="(searchItemType = ''),(selectedItemTypeFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -144,12 +144,12 @@
 
               <li class="flex">
                   <field
-                    label="No. of Clients"
-                    labelFor="noOfClients"
+                    label="Quantity"
+                    labelFor="quantity"
                     applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="noOfClients"
+                      v-model="quantity"
                       type="text"
                       id="address"
                       placeholder=" "
@@ -159,24 +159,24 @@
 
                   <select-option
                     :filterDropdown="numberDropdown"
-                    v-model="selectedNoOfClientsFilter"
+                    v-model="selectedQuantityFilter"
                   ></select-option>
                   
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(noOfClients = ''), (selectedNoOfClientsFilter='isEqualTo'), applyFilter()"
+                      @iconWasClicked="(quantity = ''), (selectedQuantityFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Credit Limit"
-                    labelFor="creditLimit"
+                    label="Amount"
+                    labelFor="amount"
                     applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="searchedCredits"
+                      v-model="searchedAmount"
                       type="text"
                       id="users"
                       placeholder=" "
@@ -186,15 +186,15 @@
 
                   <select-option
                     :filterDropdown="numberDropdown"
-                    v-model="selectedCreditsFilter"
+                    v-model="selectedAmountFilter"
                   ></select-option>
 
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
-                    <control :options="filterDropdown" type="select" v-model="selectedCreditsFilter" />
+                    <control :options="filterDropdown" type="select" v-model="selectedAmountFilter" />
                   </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedCredits = ''), (selectedCreditsFilter='isEqualTo'), applyFilter()"
+                      @iconWasClicked="(searchedAmount = ''), (selectedAmountFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -252,7 +252,7 @@
     </sticky-header>
    <div class="fixedheader extra-body-margin">
       <DataTable
-          :customers="deductions"
+          :customers="allDeductions"
           tableType='deductions'
           :paginator="true"
           :rows="50"
@@ -271,34 +271,58 @@ import PsytechButton from "@/components/PsytechButton";
 import DataTable from "@/components/Table.vue";
 import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
+import SelectOption from "@/components/SelectOption.vue";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import IconSVG from "@/components/IconSVG.vue";
 import { useStore } from "vuex";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, reactive  } from "vue";
 export default {
   name:"add",
   components: {
     StickyHeader,
     PsytechButton,
+    SelectOption,
     DataTable,
     Control,
     IconSVG,
     Field
   } ,
    setup() {
+    const allDeductions = ref([]);
+    let prevNonSearched = ref();
+    let prevSearched = ref();
+    let searchText = ref("");
+    let prevMainSearchHistry = ref("");
+    
+    let partnerName = ref("");
+    let searchItemType = ref("");
+    let searchedCurrency = ref("");
+    let quantity = ref("");
+    let searchedAmount = ref("");
+
+    let selectedNameFilter = ref("contains");
+    let selectedItemTypeFilter = ref("contains");
+    let selectedCurrencyFilter = ref("contains");
+    let selectedQuantityFilter = ref("isEqualTo");
+    let selectedAmountFilter = ref("isEqualTo");
+
+    let showFilters = ref(false);
+
     const store = useStore();
 
     onMounted(() => {
       loading.value = true;
-     loadAllClients()
+     loadAllDeductions()
     });
+  const { numberDropdown, filterDropdown, filterMethod, subFilter } = useClientUser();
 
-  const deductions = ref([]);
   const loading = ref(false);
-  const loadAllClients = ()=>{
+  const loadAllDeductions = ()=>{
     store
     .dispatch("financialControl/getDeductionList")
     .then((res) => {
-      deductions.value = res.data.data;
+      allDeductions.value = res.data.data;
+      prevNonSearched.value = res.data.data
     })
     .catch((error) => {
     }).finally(()=>{
@@ -306,10 +330,178 @@ export default {
     });
     }
 
+   const clearFilter = () => {
+      searchText.value = "";
+      partnerName.value = "";
+      searchItemType.value = "";
+      searchedCurrency.value = "";
+      quantity.value = "";
+      searchedAmount.value = "";
+
+      selectedNameFilter.value = "contains";
+      selectedItemTypeFilter.value = "contains";
+      selectedCurrencyFilter.value = "contains";
+      selectedQuantityFilter.value = "isEqualTo";
+      selectedAmountFilter.value = "isEqualTo";
+      allDeductions.value = prevNonSearched.value;
+      prevSearched.value = [];
+    };
+
+    const applyFilter = () => {
+      console.log("apply filter...")
+      let filteredData = [];
+      if (searchText.value) {
+        filteredData = prevMainSearchHistry.value;
+      } else {
+        filteredData = prevNonSearched.value;
+      }
+      // Make sure search value has some valid value, then do filtering
+      if (partnerName.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.partnerName && partnerName.value
+              ? false
+              : !!(partnerName.value
+                  ? subFilter(
+                      val.partnerName.toLowerCase(),
+                      partnerName.value.toLowerCase().trim(),
+                      selectedNameFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+    if (searchItemType.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.reference && searchItemType.value
+              ? false
+              : !!(searchItemType.value
+                  ? subFilter(
+                      val.reference.toLowerCase(),
+                      searchItemType.value.toLowerCase().trim(),
+                      selectedItemTypeFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+    if (searchedCurrency.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.currency && searchedCurrency.value
+              ? false
+              : !!(searchedCurrency.value
+                  ? subFilter(
+                      val.currency.toLowerCase(),
+                      searchedCurrency.value.toLowerCase().trim(),
+                      selectedCurrencyFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+      if (quantity.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.quantity && val.quantity != 0 && quantity.value
+              ? false
+              : !!(quantity.value
+                  ? subFilter(
+                      +val.quantity,
+                      +quantity.value,
+                      selectedQuantityFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+      
+      if (searchedAmount.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.amount && val.amount != 0 && searchedAmount.value
+              ? false
+              : !!(searchedAmount.value
+                  ? subFilter(
+                      +val.amount,
+                      +searchedAmount.value,
+                      selectedAmountFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+      // CHECK wheather record is found againts applied filters
+      allDeductions.value = filteredData;
+      prevSearched.value = filteredData;
+    };
+    const filteredMainMethod = () => {
+      // var sortKey = this.sortKey
+      let value = searchText.value && searchText.value.toLowerCase();
+      // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
+      if (!searchText.value) {
+        prevMainSearchHistry.value = [];
+        applyFilter();
+        return;
+      }
+      // fileds to be check for filters
+      if (partnerName.value || searchItemType.value || searchItemType.value || searchedCurrency.value || quantity.value || searchedAmount.value) {
+         const searchableFields = ["partnerName string", "reference string", "currency string","amount number","quantity number", "date number"]
+        allDeductions.value = filterMethod(prevSearched.value,searchableFields,value)
+      } else {
+        // default, When no filters is applied
+         const searchableFields = ["partnerName string", "reference string", "currency string", "amount number","quantity number", "date number"]
+        allDeductions.value = filterMethod(prevNonSearched.value,searchableFields,value)
+        prevMainSearchHistry.value = allDeductions.value;
+      }
+    };
+
+    const closeFilter = () => {
+      if (showFilters.value) {
+        showFilters.value = false;
+      }
+    };
+
     return {
-      loadAllClients,
-      deductions,
-      loading
+      partnerName,
+      searchItemType,
+      searchedCurrency,
+      quantity,
+      searchedAmount,
+      selectedAmountFilter,
+      selectedQuantityFilter,
+      selectedCurrencyFilter,
+      selectedItemTypeFilter,
+      selectedNameFilter,
+      loadAllDeductions,
+      filterDropdown,
+      allDeductions,
+      filteredMainMethod,
+      closeFilter,
+      applyFilter,
+      clearFilter,
+      loading,
+      numberDropdown,
+      filteredMainMethod,
+      searchText,
+      prevSearched,
+      showFilters
     };
   },
 }
@@ -317,5 +509,18 @@ export default {
 <style scoped>
 .stick-header{
   margin-top: -7px;
+}
+</style>
+<style scoped>
+.dropdown .dropdown-menu {
+  z-index: 1000;
+}
+#filter-dropdown {
+  min-width: 465px;
+  padding: 16px 15px;
+  box-shadow: #3755634d 0px 8px 30px;
+}
+input[type="search" i]:enabled:read-write:-webkit-any(:focus, :hover)::-webkit-search-cancel-button {
+  cursor: pointer;
 }
 </style>
