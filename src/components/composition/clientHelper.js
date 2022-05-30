@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import { useStore } from "vuex";
+import _ from "lodash";
 export function useClientUser() {
   const store = useStore();
    const userTypes = reactive([
