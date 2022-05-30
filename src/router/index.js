@@ -1,6 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from "../store/index";
 
+ /** List to be accessed by Super admin
+  * 1) /client-control/list/detail
+  * 2) /client-control/list/view-user
+  * 3) /financial
+  * 4) /financial/create-deduction
+  * */
 const routes = [
   {
     path: '/login',
@@ -34,7 +40,6 @@ const routes = [
       layout: 'mainLayout',
       requiresAuth: true,
       title: 'client-control',
-      isMasterTrue: false,
       fullScreen: true
     },
     component: () => import('../views/authorized/client-control/ClientControl.vue'),
@@ -42,13 +47,17 @@ const routes = [
       {
         path: 'create-client',
         name: 'client-control-create-client',
-        requiresAuth: true,
+        meta:{
+          userType: 1,
+        },
         component: () => import('../views/authorized/client-control/Account.vue'),
       },
       {
         path: 'edit-client',
         name: 'client-control-edit-client',
-        requiresAuth: true,
+        meta:{
+          userType: 1,
+        },
         component: () => import('../views/authorized/client-control/Edit.vue'),
       },
       {
@@ -59,27 +68,41 @@ const routes = [
           {
             path: '',
             name: 'list-page',
+            meta:{
+              userType: 1,
+            },
             component: () => import('../views/authorized/client-control/List.vue'),
           },
           {
             path: 'detail',
             name: 'client-control-list-detail',
+            meta:{
+              userType: 3,
+            },
             component: () => import('../views/authorized/client-control/ClientDetail.vue'),
           },
           {
             path: 'add-user',
+            meta:{
+              userType: 1,
+            },
             name: 'client-control-add-user',
             component: () => import('../views/authorized/client-control/user/AddUser.vue'),
           },
           {
             path: 'edit-user',
+            meta:{
+              userType: 1,
+            },
             name: 'client-control-edit-user',
             component: () => import('../views/authorized/client-control/user/EditUser.vue'),
           },
           {
             path: 'view-user',
+            meta:{
+              userType: 3,
+            },
             name: 'client-control-view-user',
-            requiresAuth: true,
             component: () => import('../views/authorized/client-control/user/ViewUser.vue'),
           }
         ]
@@ -93,7 +116,6 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
-      isMasterTrue: false,
       title: 'credit-control',
       fullScreen: true
     },
@@ -102,6 +124,9 @@ const routes = [
         {
           path: 'credits',
           name: 'credit-control-list',
+          meta:{
+            userType: 1,
+          },
           component: () => import('../views/authorized/client-control/mainList.vue'),
           children: [
             {
@@ -120,7 +145,6 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
-      isMasterTrue: false,
       title: 'support-control',
       fullScreen: true
     },
@@ -129,11 +153,17 @@ const routes = [
       {
         path: '',
         name: 'support-control-list',
+        meta:{
+          userType: 1,
+        },
         component: () => import('../views/authorized/support-control/List.vue'),
       },
       {
         path: ':id/conversation',
         name: 'ticket-conversation',
+        meta:{
+          userType: 1,
+        },
         component: () => import('../views/authorized/support-control/Conversation.vue'),
       },
     ]
@@ -145,7 +175,6 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
-      isMasterTrue: false,
       title: 'financial-control',
       fullScreen: true
     },
@@ -154,16 +183,19 @@ const routes = [
       {
         path: '',
         name: 'view-deductions',
-        // layout: 'mainLayout',
+        meta:{
+          userType: 3,
+        },
         component: () => import('../views/authorized/financial-control/deductions/listing.vue'),
         requiresAuth: true,
       },
       {
         path: 'create-deduction',
         name: 'create-deduction',
-        // layout: 'mainLayout',
+        meta:{
+          userType: 3,
+        },
         component: () => import('../views/authorized/financial-control/deductions/DistributorAdd.vue'),
-        requiresAuth: true,
       },
     ]
   },
@@ -174,7 +206,6 @@ const routes = [
     meta:{
       layout: 'mainLayout',
       requiresAuth: true,
-      isMasterTrue: true,
       title: 'distributor-control',
       fullScreen: true
     },
@@ -187,16 +218,25 @@ const routes = [
         children: [
           {
             path: '',
+            meta:{
+              userType: 2,
+            },
             name: 'distributors-list',
             component: () => import('../views/authorized/distributor-control/List.vue'),
           },
           {
             path: 'detail',
+            meta:{
+              userType: 2,
+            },
             name: 'distributor-control-list-detail',
             component: () => import('../views/authorized/distributor-control/DistributorDetail.vue'),
           },
           {
             path: 'edit',
+            meta:{
+              userType: 2,
+            },
             name: 'distributor-control-list-edit',
             component: () => import('../views/authorized/distributor-control/EditDistributor.vue'),
           },
@@ -242,10 +282,13 @@ router.beforeEach((to, from, next) => {
       })
       return
     } else {
-      if(to.meta.isMasterTrue && USER_DATA?.isMasterPanelUser){
+      if(to.meta.userType == 2 && USER_DATA?.isMasterPanelUser){
         return next()
-      } else if(!to.meta.isMasterTrue && !USER_DATA?.isMasterPanelUser){
+      } else if((to.meta.userType == 3 && USER_DATA?.isMasterPanelUser) || (to.meta.userType == 3 && !USER_DATA?.isMasterPanelUser)){
           next()
+      }
+      else if(to.meta.userType == 1 && !USER_DATA?.isMasterPanelUser){
+        next()
       } else{
        if(to.name != 'dashboard'){
          return next({

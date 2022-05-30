@@ -3,7 +3,7 @@ import {
   mdiAccountConvert,
   mdiCurrencyUsd,
   mdiBookOpenVariant,
-  mdiHandExtendedOutline
+  mdiHandExtendedOutline, mdiViewList, mdiDatabaseMinus, mdiFileChartOutline
 } from '@mdi/js'
 
 export default [
@@ -18,6 +18,22 @@ export default [
       to: '/distributor/list',
       icon: mdiAccountConvert ,
       label: 'Distributor Control'
+    },
+    {
+      label: 'Financials',
+      icon: mdiViewList,
+      menu: [
+        {
+          to: '/financial',
+          icon: mdiDatabaseMinus ,
+          label: 'Deductions'
+        },
+        {
+          to: '/credit-control/credits',
+          icon: mdiFileChartOutline ,
+          label: 'Statements'
+        },
+      ]
     },
   ],
 ]
