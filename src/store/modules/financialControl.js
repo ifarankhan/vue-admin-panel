@@ -1,14 +1,19 @@
 import { private_url } from "../../axios";
 const namespaced = true;
 const state = {
+    distributorName: ''
 }
 
 const getters = {
-
+    getDistributorName: state =>{
+        return state.distributorName
+    }
   }
 
 const mutations = {
-
+    setDistributorName : (state, payload)=>{
+        state.distributorName = payload
+    }
 }
 
 const actions = {
