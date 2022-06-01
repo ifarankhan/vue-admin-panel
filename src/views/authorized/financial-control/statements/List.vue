@@ -1,15 +1,15 @@
 <template>
   <div class="px-8">
     <sticky-header>
-      <h1 class="text-2xl font-normal leading-tight ">Deductions</h1>
+      <h1 class="text-2xl font-normal leading-tight ">Statements</h1>
       <div class="grid py-4 main-grid md:grid-cols-2">
         <!-- left section -->
         <div>
           <psytech-button
             @buttonWasClicked="
-              $router.push({ name: 'create-deduction' })
+              $router.push({ name: 'create-statement' })
             "
-            label="Create Deduction"
+            label="Create & Send Statement"
             type="outline"
           >
             <svg

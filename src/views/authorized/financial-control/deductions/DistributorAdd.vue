@@ -59,22 +59,47 @@
           </div>
         </div>
 
+        <!--  -->
+        <div class="p-4 bg-gray-200" v-if="userData.isMasterPanelUser">
+          <p class="text-sm">
+            <span class="font-extrabold">Note:</span>
+            This invoice will be sent to the selected Distributor and the cost of item added in this invoice will be deducted from the final invoice. Example: Expenses, Over charges, etc.
+          </p>
+        </div>
+
         <form action="#">
           <div class="flex flex-wrap sm:-mx-1 md:-mx-2 lg:-mx-1 xl:-mx-px">
-
-            <div class="w-1/5 pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <select-option
-                  :filterDropdown="itemTypeArray"
-                  labelText="Item Type"
-                  :customeWidth="true"
-                  v-model="form.itemType"
-              ></select-option>
-               <p>
-                <error-span :error="v$.itemType"></error-span>
-            </p>
-            </div>
-
-            <div class="w-1/5 pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
+            <div class="w-1/5 pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px" v-if="userData.isMasterPanelUser">
+                  <select-option
+                    :filterDropdown="distributors"
+                    :customeWidth="true"
+                    :allyMarginRight="false"
+                    :emitCustomEvent="true"
+                    :loader="false"
+                    @itemWasSelected="''"
+                    v-model="form.distributorId"
+                    :labelText="'Please Select Distributor'"
+                    ></select-option>
+                  <p>
+                      <error-span :error="v$.distributorId"></error-span>
+                  </p>
+              </div>
+            <!--  -->
+              <div class="pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px" :class="[userData.isMasterPanelUser?'w-1/5':'w-1/4']">
+                  <select-option
+                      :filterDropdown="itemTypeArray"
+                      labelText="Item Type"
+                      :customeWidth="true"
+                      v-model="form.itemType"
+                  ></select-option>
+                  <p>
+                    <error-span :error="v$.itemType"></error-span>
+                </p>
+              </div>
+            
+            <!--  -->
+            <div class="pt-2 sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px"
+            :class="[userData.isMasterPanelUser?'w-1/5': 'w-1/4']">
               <select-option
                   :filterDropdown="quantityArray"
                   labelText="Quantity"
@@ -86,7 +111,8 @@
             </p>
             </div>
 
-            <div class="relative w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
+          <div class="relative -ml-2 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px"
+            :class="[userData.isMasterPanelUser?'w-1/5': 'w-1/4']">
               <field label="Total Cost" labelFor="number">
                 <control type="text" v-model="form.totalCost" placeholder="Total Cost" />
                 <span class="absolute right-2 top-3">{{ userData.invoiceCurrency }}</span>
@@ -94,12 +120,15 @@
               </field>
             </div>
 
-            <div class="w-1/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px calendar">
+            <div class="overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px calendar"
+            :class="[userData.isMasterPanelUser?'w-1/5': 'w-1/4']">
                 <control type="date" v-model="form.date" name="expenseDate" placeholder="Expense Date" />
                 <error-span :error="v$.date"></error-span>
             </div>
-
-            <div class="w-4/5 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
+          </div>
+          
+          <!--  -->
+            <div class="overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
               <field label="Item Description / Expense details " labelFor="accountAddress">
                 <control
                     type="textarea"
@@ -109,8 +138,7 @@
                 <error-span :error="v$.itemDescription"></error-span>
               </field>
             </div>
-
-          </div>
+        
           <divider />
         </form>
       </div>
@@ -150,7 +178,7 @@ import Field from "@/components/Field";
 import Control from "@/components/Control";
 import ErrorSpan from "@/components/ErrorSpan";
 import {mdiPlus} from '@mdi/js';
-import { ref, reactive, computed } from "vue";
+import { ref, onMounted, reactive, computed } from "vue";
 import utility from "@/components/composition/utility";
 import {helpers, numeric, required} from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
@@ -181,8 +209,28 @@ export default {
       quantity: "",
       date: "",
       error: "",
+      distributorId: "",
       itemDescription: "",
       loader:false,
+    });
+
+    const distributors = ref([]);
+    onMounted(() => {
+      store
+        .dispatch("masterPannel/getAllDirtributorList")
+        .then((res) => {
+          console.log("response is....", res)
+          let responseArray = res?.data?.data;
+          distributors.value = responseArray.map(item=>{
+              return {
+                  value: item.id,
+                  text: item.name
+              }
+          });
+        })
+        .catch((error) => {
+          console.log("error is...", error);
+        });
     });
     const showMsg = ref();
     const store = useStore()
@@ -268,6 +316,12 @@ export default {
               required
           ),
         },
+        distributorId:{
+          required: helpers.withMessage(
+              "Please select distributor",
+              required
+          ),
+        },
         quantity: {
           required: helpers.withMessage("This field is required", required),
         },
@@ -293,7 +347,14 @@ export default {
     const v$ = useVuelidate(rules, form);
     const { formatExportDate } = useClientUser();
     const addDeductionsMethod = () => {
-      if (v$.value.$validate() && v$.value.$error) {
+      v$.value.$validate();
+      if (
+        v$.value.totalCost.$invalid ||
+        v$.value.itemType.$invalid ||
+        v$.value.quantity.$invalid ||
+        v$.value.date.$invalid ||
+        (v$.value.distributorId.$invalid &&  userData.value.isMasterPanelUser)
+      ) {
         return true;
       }
 
@@ -305,6 +366,10 @@ export default {
         description: form.itemDescription
       }
       showSuccessAlert.value = false;
+      if( userData.value.isMasterPanelUser ){
+        DATA.partnerId = form.distributorId
+      }
+      console.log("data is...", DATA)
       form.error = ''
       form.loader = true;
       store
@@ -333,6 +398,7 @@ export default {
       quantityArray,
       showSuccessAlert,
       addDeductionsMethod,
+      distributors,
       showMsg
     }
   }
