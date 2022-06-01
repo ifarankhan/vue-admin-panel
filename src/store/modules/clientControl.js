@@ -180,7 +180,7 @@ const actions = {
     async exportPartnerStatement({}, payload){
       const userData = await JSON.parse(localStorage.getItem("userData"));
       const DATA = payload;
-      DATA.accountId = userData.accountId;
+      // DATA.accountId = userData.accountId;
       return private_url.post('export-partner-statement',DATA)
     },
     async updateClientDetail({state, commit},payload){
@@ -229,7 +229,7 @@ const actions = {
       payload.accountid = state.clientDetail.accountId;
       return private_url.post('add-account-user', payload)
   },
-  async updateUserCreditSetting({state},payload){ 
+  async updateUserCreditSetting({state},payload){
     if(payload.isFromEdit){
       payload.accountid = state.individualClientUserDetail.userDetails.accountID;
       payload.userid = state.individualClientUserDetail.userDetails.userID;
