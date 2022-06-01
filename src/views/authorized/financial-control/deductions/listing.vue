@@ -76,7 +76,7 @@
                   </field>
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedNameFilter" 
+                    v-model="selectedNameFilter"
                   ></select-option>
                   <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
                     <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
@@ -107,7 +107,7 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedItemTypeFilter"
                   ></select-option>
-                  
+
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
                       @iconWasClicked="(searchItemType = ''),(selectedItemTypeFilter='contains'), applyFilter()"
@@ -161,7 +161,7 @@
                     :filterDropdown="numberDropdown"
                     v-model="selectedQuantityFilter"
                   ></select-option>
-                  
+
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
                       @iconWasClicked="(quantity = ''), (selectedQuantityFilter='isEqualTo'), applyFilter()"
@@ -293,7 +293,7 @@ export default {
     let prevSearched = ref();
     let searchText = ref("");
     let prevMainSearchHistry = ref("");
-    
+
     let partnerName = ref("");
     let searchItemType = ref("");
     let searchedCurrency = ref("");
@@ -318,8 +318,9 @@ export default {
 
   const loading = ref(false);
   const loadAllDeductions = ()=>{
+    const USER_DATA = JSON.parse(localStorage.getItem('userData'));
     store
-    .dispatch("financialControl/getDeductionList")
+    .dispatch(USER_DATA.isMasterPanelUser?"financialControl/getMasterDeductionList":"financialControl/getDeductionList")
     .then((res) => {
       allDeductions.value = res.data.data;
       prevNonSearched.value = res.data.data
@@ -428,7 +429,7 @@ export default {
         });
       }
 
-      
+
       if (searchedAmount.value) {
         filteredData = filteredData.filter((val) => {
           if (
@@ -498,7 +499,6 @@ export default {
       clearFilter,
       loading,
       numberDropdown,
-      filteredMainMethod,
       searchText,
       prevSearched,
       showFilters
