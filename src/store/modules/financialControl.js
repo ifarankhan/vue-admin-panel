@@ -27,6 +27,14 @@ const actions = {
             }
         })
       },
+    async getMasterDeductionList({}, payload){
+        const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
+        return private_url.get('credit-deductions', {
+            params: {
+                // distributorId: USER_DATA.distributorId
+            }
+        })
+    },
 }
 
 export default {
