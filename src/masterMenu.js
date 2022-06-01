@@ -29,7 +29,7 @@ export default [
           label: 'Deductions'
         },
         {
-          to: '/credit-control/credits',
+          to: '/statement',
           icon: mdiFileChartOutline ,
           label: 'Statements'
         },

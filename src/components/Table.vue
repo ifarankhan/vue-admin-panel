@@ -459,7 +459,7 @@
               </Column>
               <Column field="currency" header="Currency" sortField="currency" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{`${data?.currency} (${ currency_symbols[data?.currency.toUpperCase()]})` }}  </span>
+                   <span>{{`${data?.currency} ${ data?.currency && (currency_symbols[data?.currency.toUpperCase()] )}` }}  </span>
                 </template>
               </Column>
               <Column field="amount" header="Amount" sortField="amount" :sortable="sortTable" style="min-width:13rem; cursor: pointer">
@@ -607,6 +607,11 @@ export default {
     const currency_symbols = ref({
     'USD': '$', // US Dollar
     'EURO': '€', // Euro
+    'AED': 'د.إ',
+    'CHF': 'SFr',
+    'GBP': '£',
+    'TRY': '₺',
+
     'CRC': '₡', // Costa Rican Colón
     'GBP': '£', // British Pound Sterling
     'ILS': '₪', // Israeli New Sheqel
