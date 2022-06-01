@@ -120,7 +120,7 @@ import StickyFooter from "@/components/StickyFooter";
 import {useClientUser} from "@/components/composition/clientHelper";
 
 export default {
-  name:"FinancialControlDeductionDistributorAdd",
+  name:"FinancialControlAddStatement",
   components:{
     StickyHeader,
     StickyFooter,
@@ -137,7 +137,7 @@ export default {
       fromDate: "",
       toDate: "",
       distributorId: "",
-      loader: false
+      loader: true
     });
 
     const distributors = ref([]);
@@ -145,7 +145,6 @@ export default {
       store
         .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
-          console.log("response is....", res)
           let responseArray = res?.data?.data;
           distributors.value = responseArray.map(item=>{
               return {
@@ -153,6 +152,7 @@ export default {
                   text: item.name
               }
           });
+          statement.loader = false;
         })
         .catch((error) => {
           console.log("error is...", error);
@@ -195,6 +195,7 @@ export default {
         endDate: formatExportDate(statement.toDate),
         distributorId: statement.distributorId
       }
+      store.commit("financialControl/setDistributorName", { distributorName: distributors.value.find(item=> item.value == statement.distributorId).text})
       statement.loader = true;
       store
           .dispatch("clientControl/exportPartnerStatement", DATA)
@@ -202,7 +203,6 @@ export default {
             const RESPONSE = res.data.data;
             saveAs(RESPONSE.partnerStatement, 'statement.xls')
             const { navigateTo } = utility('view-statements'); navigateTo();
-            
           })
           .catch((error) => {
           }).finally(()=>{
@@ -222,14 +222,4 @@ export default {
   }
 }
 </script>
-<style>
-.clanderField{
-  height: 42px;
-  margin-top: 9px;
-  border: 1px solid #9ca3af4d;
-  border-radius: 4px;
-}
-.calendar span.p-calendar {
-  border: none !important;
-}
-</style>
+

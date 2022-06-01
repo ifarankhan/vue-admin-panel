@@ -1,6 +1,10 @@
 <template>
   <div class="px-8">
     <sticky-header>
+      <success-message v-if="$store.getters['financialControl/getDistributorName']?.distributorName? true: false">
+          New statement has been created and sent to 
+          <span class="font-semibold">{{ $store.getters['financialControl/getDistributorName']?.distributorName }}</span>
+      </success-message>
       <h1 class="text-2xl font-normal leading-tight ">Statements</h1>
       <div class="grid py-4 main-grid md:grid-cols-2">
         <!-- left section -->
@@ -274,14 +278,18 @@ import Control from "@/components/Control.vue";
 import SelectOption from "@/components/SelectOption.vue";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import IconSVG from "@/components/IconSVG.vue";
+import Message from 'primevue/message';
 import { useStore } from "vuex";
-import { onMounted, ref, reactive  } from "vue";
+import SuccessMessage from '@/components/successMessage.vue';
+import { onMounted, onUnmounted, ref, reactive  } from "vue";
 export default {
   name:"add",
   components: {
     StickyHeader,
     PsytechButton,
     SelectOption,
+    Message,
+    SuccessMessage,
     DataTable,
     Control,
     IconSVG,
@@ -477,6 +485,10 @@ export default {
         showFilters.value = false;
       }
     };
+
+    onUnmounted(()=>{
+        store.commit('financialControl/setDistributorName',null)
+    })
 
     return {
       partnerName,
