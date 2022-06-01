@@ -14,7 +14,9 @@ const mutations = {
 const actions = {
     async addDeduction({ },payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
-        payload.partnerId = USER_DATA.distributorId;
+        if(!USER_DATA.isMasterPanelUser){
+            payload.partnerId = USER_DATA.distributorId;
+        }
         return private_url.post('partner-credit-deductions', payload)
     },
     async getDeductionList({}, payload){

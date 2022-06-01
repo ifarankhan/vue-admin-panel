@@ -178,10 +178,7 @@ const actions = {
       return private_url.post('export-account-activity',DATA)
     },
     async exportPartnerStatement({}, payload){
-      const userData = await JSON.parse(localStorage.getItem("userData"));
-      const DATA = payload;
-      // DATA.accountId = userData.accountId;
-      return private_url.post('export-partner-statement',DATA)
+      return private_url.post('export-partner-statement',payload)
     },
     async updateClientDetail({state, commit},payload){
         const DATA = payload;
