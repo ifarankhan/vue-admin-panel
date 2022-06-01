@@ -28,11 +28,11 @@ export default [
           icon: mdiDatabaseMinus ,
           label: 'Deductions'
         },
-        {
-          to: '/credit-control/credits',
-          icon: mdiFileChartOutline ,
-          label: 'Statements'
-        },
+        // {
+        //   to: '/statement',
+        //   icon: mdiFileChartOutline ,
+        //   label: 'Statements'
+        // },
       ]
     },
   ],

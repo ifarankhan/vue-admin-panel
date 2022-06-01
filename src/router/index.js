@@ -200,6 +200,37 @@ const routes = [
     ]
   },
   {
+    path: '/statement',
+    name: 'statement-control',
+    props: true,
+    meta:{
+      layout: 'mainLayout',
+      requiresAuth: true,
+      title: 'statement-control',
+      fullScreen: true
+    },
+    component: () => import('../views/authorized/financial-control/FinancialControl.vue'),
+    children: [
+      {
+        path: '',
+        name: 'view-statements',
+        meta:{
+          userType: 2,
+        },
+        component: () => import('../views/authorized/financial-control/statements/List.vue'),
+        requiresAuth: true,
+      },
+      {
+        path: 'create-statement',
+        name: 'create-statement',
+        meta:{
+          userType: 2,
+        },
+        component: () => import('../views/authorized/financial-control/statements/StamentAdd.vue'),
+      },
+    ]
+  },
+  {
     path: '/distributor',
     name: 'distributor-control',
     props: true,
