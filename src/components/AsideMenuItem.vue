@@ -7,7 +7,7 @@
       :target="itemTarget"
       v-slot="vSlot"
       class=" "
-      :class="[isSubmenuList ? 'p-3 text-sm' : 'py-2']"
+      :class="[isSubmenuList ? 'text-sm' : 'py-2']"
       @click="menuClick"
     >
       <div class="flex cursor-pointer hover:bg-psytechBlueHover dark:hover:bg-psytechBlueHover rounded-md py-2" :class="[(vSlot && vSlot.isExactActive ? 'bg-psytechBlueActive':''),(item.class ? item.class :'')]">
@@ -34,7 +34,7 @@
     <aside-menu-list
       v-if="hasDropdown"
       :menu="item.menu"
-      :class="{ 'hidden': !isDropdownActive, 'block bg-gray-700 dark:bg-gray-800': isDropdownActive }"
+      :class="{ 'hidden': !isDropdownActive, 'block bg-psytechBlue dark:bg-psytechBlue': isDropdownActive }"
       is-submenu-list
     />
   </li>

@@ -57,11 +57,11 @@
           </div>
           <div class="pl-2 ml-6 border-l-4 border-psytechBlueBtHover">
               <div class="flex mt-2 mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Type:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Type:</p>
                   <p> {{ data?.clientType }} </p>
               </div>
               <div class="flex mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Name:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Name:</p>
                   <p> {{ data?.clientName }} </p>
               </div>
               <div class="flex mb-2">
@@ -115,9 +115,8 @@
                   <p>  {{ data?.sharedCredit?"Yes":"No" }} </p>
               </div>
               <div class="flex">
-                  <p class="text-xs font-bold text-black w-52">Date of Update:</p>
-                  <p v-if="data && String(data.updateDateAndTime).includes('T')"> {{ data?.updateDateAndTime.split("T")[1].split("Z")[0] }} </p>
-                  <p v-else> {{ data?.updateDateAndTime.split(" ")[1] }} </p>
+                  <p class="text-xs font-bold text-black w-52">Date of Update: </p>
+                  <p> {{ formatDate(data?.updateDateAndTime.split("T")[0]) }} </p>
               </div>
           </div>
         </div>
@@ -156,6 +155,7 @@ import {useStore} from "vuex";
 import { mdiFileChartOutline, mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import useVuelidate from "@vuelidate/core";
 import ErrorSpan from "@/components/ErrorSpan";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 
 import Field from "@/components/Field";
 import Control from "@/components/Control";
@@ -181,6 +181,7 @@ export default {
         ErrorSpan
     },
     setup(props, { emit }) {
+      const { formatDate } = useClientUser();
       const updateCredit = reactive({
           correctCredit:"",
           correctionReason: ""
@@ -221,14 +222,56 @@ export default {
         // console.log("activeBlocked",activeBlocked.value)  
     }
 
+    const UTCDate = (date)=>{
+      console.log("datatta", date)
+      console.log("datatta", new Date().toISOString())
+
+      const today = new Date().toISOString();
+      const dateOfUpdate = new Date(date).toISOString();
+      const diffTime = Math.abs(today - dateOfUpdate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      console.log(diffTime + " milliseconds");
+      console.log(diffDays + " days");
+
+      return +(new Date(date).toISOString())
+    }
+
+    const getUTCNow = (date)=>
+    {
+      let now;
+      if(date){
+        now = new Date(date);
+      } else{
+        now = new Date();
+      }
+        let time = now.getTime();
+        let offset = now.getTimezoneOffset();
+        offset = offset * 60000;
+        return time - offset;
+    }
+
+    const isEnabedCorrectionBtn = ref(false);
+    const daysDiffrence = ()=>{
+      const today = getUTCNow()
+      const dateOfUpdate = getUTCNow(props?.data?.updateDateAndTime)
+      const diff = Math.trunc((today - dateOfUpdate)/(1000*60*60*24))
+      isEnabedCorrectionBtn.value = diff;
+    }
+    daysDiffrence()
+
     return {
         showDialog,
         updateCredit,
         openDialog,
         closeDialog,
+        getUTCNow,
+        UTCDate,
         collapsable,
+        formatDate,
         mdiFileChartOutline,
         creditCorrectionMethod,
+        daysDiffrence,
+        isEnabedCorrectionBtn,
         mdiChevronUp,
         mdiChevronDown,
         v$,

@@ -25,13 +25,13 @@
               <Column field="createDate" header="Create Date" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <div>
-                         <span> {{data.createDate}} </span>
+                         <span> {{ formatDate(data.createDate) }} </span>
                  </div>
                 </template>
               </Column>
               <Column field="CreatedTime" header="Time" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data.CreatedTime}} </span>
+                   <span>{{ data.CreatedTime}} </span>
                 </template>
               </Column>
               <Column field="subject" header="Subject" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -64,7 +64,7 @@
             <span v-if="tableType=='accountUsers'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                    <div>
+                    <div class="truncate custome-width">
                          <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
                          <span> {{data.firstName}} </span>
                  </div>
@@ -106,15 +106,74 @@
               </template>
             </Column>
             </span>
+
+        <span v-if="tableType=='distributorsList'">
+              <Column header="SN" style="cursor: pointer;">
+                <template #body="{data}">
+                   <span> {{  String(data.sno).padStart(2, '0') }} </span>
+                </template>
+              </Column>
+              <Column field="name" header="Display Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                   <span> {{data.displayName}} </span>
+                </template>
+              </Column>
+              <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                <template #body="{data}">
+                  <div class="truncate custome-width">
+                      <span>{{data.email}} </span>
+                  </div>
+                </template>
+              </Column>
+               <Column header="No. of Clients" sortField="numberOfClients" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                     <div>
+                      <span>{{ data.numberOfClients }}</span>
+                     </div>
+                  </template>
+              </Column>
+               <Column header="Credit Limit" sortField="transferableCreditLimit" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.transferableCreditLimit }}</span>
+                  </template>
+              </Column>
+              <Column header="Status" sortField="status" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data?.active?"Active":"In-Active" }}</span>
+                  </template>
+              </Column>
+               <Column header="Invoice Currency" sortField="invoiceCurrency" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.invoiceCurrency }}</span>
+                  </template>
+              </Column>
+
+              <Column header="Last Credit Update" sortField="lastCreditUpdate" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data?.lastCreditUpdate && formatDate(data.lastCreditUpdate.split(" ")[0]) }}</span>
+                  </template>
+              </Column>
+              <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body>
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
             <span v-if="tableType=='creditTableFirst'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.time }} </span>
+                   <span>{{ data?.time }} </span>
                 </template>
               </Column>
               <Column field="amount" header="Credit Requested" :sortable="sortTable" style="min-width: 5rem; cursor: pointer">
@@ -144,12 +203,12 @@
              <span v-if="tableType=='creditTableSecond'">
               <Column field="date" header="Date of Update" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.time }} </span>
+                   <span>{{ data?.time }} </span>
                 </template>
               </Column>
               <Column field="requestAmount" header="Credit Requested" :sortable="sortTable" style="min-width: 15rem; cursor: pointer">
@@ -180,7 +239,7 @@
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
-                  <div>
+                  <div v-if="daysDiffrence(data?.dateOfUpdate) <=5 ? true: false">
                     <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
                        <template #item="{item}">
                             <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
@@ -194,7 +253,7 @@
              <span v-if="tableType=='creditTableThird'">
               <Column field="date" header="Date" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                    <span>{{ data?.date }}</span>
+                    <span>{{ formatDate(data.date) }}</span>
                 </template>
               </Column>
               <Column field="time" header="Time" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
@@ -230,7 +289,7 @@
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
-                  <div>
+                  <div v-if="daysDiffrence(data?.dateOfUpdate) <=5 ? true: false">
                     <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
                        <template #item="{item}">
                             <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
@@ -283,12 +342,19 @@
                   </template>
               </Column>
               <Column style="min-width: 10rem; cursor: pointer" bodyStyle="text-align:right">
-              <template #body>
-                  <div class="my-center-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" @click.prevent="showConsole()" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <template #body="{data}">
+                  <div class="my-center-text" @click.stop="toggle($event, data)" aria-haspopup="true" aria-controls="overlay_menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
+                  </div>
+                  <div>
+                    <Menu id="overlay_menu" ref="menu" class="menu-width" :model="actions" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('editItemWasClicked', {eventName: item.label})">{{ item.label }}</p>
+                    </template>
+                    </Menu>
                   </div>
               </template>
             </Column>
@@ -375,16 +441,68 @@
               </Column>
             </span>
 
+            <span v-if="tableType=='deductions'">
+              <Column field="partnerName" header="Partner Name" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.partnerName }}</span>
+                </template>
+              </Column>
+              <Column field="reference" header="Item Type" sortField="reference" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.reference }}</span>
+                </template>
+              </Column>
+              <Column field="time" header="Quantity" sortField="quantity" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data?.quantity }} </span>
+                </template>
+              </Column>
+              <Column field="currency" header="Currency" sortField="currency" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{`${data?.currency} ${ data?.currency && (currency_symbols[data?.currency.toUpperCase()] )}` }}  </span>
+                </template>
+              </Column>
+              <Column field="amount" header="Amount" sortField="amount" :sortable="sortTable" style="min-width:13rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ data.amount }}</span>
+                  </template>
+              </Column>
+              <Column field="date" header="Date" sortField="date" :sortable="sortTable" style="min-width: 13rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span>{{ formatDate(data.date.split("T")[0]) }}</span>
+                  </template>
+              </Column>
+               
+            <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body="{data}">
+                  <div class="my-center-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+                  <!-- <div>
+                    <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
+                    </template>
+                    </Menu>
+                  </div> -->
+              </template>
+            </Column>
+            </span>
+
     </DataTable>
 </template>
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import { useStore } from "vuex";
 import Menu from 'primevue/menu';
 import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import { useCreditHelper } from '@/components/composition/creditHelper';
 
 import NavBarItem from "@/components/NavBarItem";
 import NavBarItemLabel from "@/components/NavBarItemLabel";
@@ -408,7 +526,7 @@ export default {
     LanguageSwitcher,
     Icon,
     },
-    emits:['rowClicked'],
+    emits:['rowClicked','rowData','editItemWasClicked'],
 
     props:{
         first:{
@@ -466,9 +584,10 @@ export default {
     },
     setup(props, {emit}) {
        const store = useStore();
-       const { userTypes, formatDate, tableStatePersistence } = useClientUser();
+       const { daysDiffrence } = useCreditHelper();
+       const { userTypes, formatDate, tableStatePersistence, fresDeskPriorities, fresDeskStatuses } = useClientUser();
 
-       const menu = ref();
+      const menu = ref();
 
       const items = ref([
 				{
@@ -476,9 +595,44 @@ export default {
 				}
 			])
 
+      const actions = ref([
+				{
+					label: 'Edit Client'
+				},
+        {
+					label: 'Delete Client'
+				}
+			])
+
+    const currency_symbols = ref({
+    'USD': '$', // US Dollar
+    'EURO': '€', // Euro
+    'AED': 'د.إ',
+    'CHF': 'SFr',
+    'GBP': '£',
+    'TRY': '₺',
+
+    'CRC': '₡', // Costa Rican Colón
+    'GBP': '£', // British Pound Sterling
+    'ILS': '₪', // Israeli New Sheqel
+    'INR': '₹', // Indian Rupee
+    'JPY': '¥', // Japanese Yen
+    'KRW': '₩', // South Korean Won
+    'NGN': '₦', // Nigerian Naira
+    'PHP': '₱', // Philippine Peso
+    'PLN': 'zł', // Polish Zloty
+    'PYG': '₲', // Paraguayan Guarani
+    'THB': '฿', // Thai Baht
+    'UAH': '₴', // Ukrainian Hryvnia
+    'VND': '₫', // Vietnamese Dong
+});
+
+
        const toggle = (event, data) => {
             emit("rowData", data)
-            menu.value.toggle(event);
+            if(daysDiffrence(data?.dateOfUpdate) <=5){
+              menu.value.toggle(event);
+            }
         };
         const save = () => {
             // toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
@@ -487,44 +641,6 @@ export default {
         const showConsole = ()=>{
 
         }
-
-        const fresDeskStatuses = ref([
-          {
-            text: "Open",
-            value: 2
-          },
-          {
-            text: "Pending",
-            value: 3
-          },
-          {
-            text: "Resolved",
-            value: 4
-          },
-          {
-            text: "Closed",
-            value: 5
-          }
-        ])
-
-        const fresDeskPriorities = ref([
-          {
-            text: "Low",
-            value: 1
-          },
-          {
-            text: "Medium",
-            value: 2
-          },
-          {
-            text: "High",
-            value: 3
-          },
-          {
-            text: "Urgent",
-            value: 4
-          }
-        ])
 
         const dt = ref();
         const exportCSV = () => {
@@ -539,7 +655,10 @@ export default {
             menu,
             dt,
             items,
+            actions,
             exportCSV,
+            currency_symbols,
+            daysDiffrence,
             fresDeskStatuses,
             fresDeskPriorities,
             tableStatePersistence,
@@ -560,15 +679,22 @@ export default {
 .fixedheader .p-datatable-tbody{
   margin-top: 57px;
 }
-
+.extra-body-margin .p-datatable-thead tr{
+  height: 60px !important;
+}
 .fixedheader .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
 }
-
 .sticky-header-footer .p-paginator{
   position: sticky !important;
   inset-block-end: 0 !important;
+}
+
+.menu-width {
+  width: 200px !important;
+  min-width: 0px !important;
+  left: calc(100% - 255px)  !important;
 }
 
 .custome-width{
@@ -631,5 +757,10 @@ export default {
   left: 122px;
   max-height: 100;
   overflow: auto;
+}
+::v-deep(.p-paginator) {
+  .p-paginator-current {
+    margin-left: auto;
+  }
 }
 </style>

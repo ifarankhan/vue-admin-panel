@@ -5,7 +5,7 @@
       <h1 class="mt-6 mb-8 ml-3 text-2xl font-normal leading-tight">Credit Control</h1>
       <div class="flex mb-2 ml-4">
          <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md  mr-10 cursor-pointer font-semibold" :class="[showSection == 1?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 1">Credit History</div>
-         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2">My Credit </div>
+         <div class="inline-block px-10 py-1.5 border-2 border-psytechBlue rounded-md ml-6 cursor-pointer font-semibold" :class="[showSection == 2?'bg-psytechBlue text-white':'text-psytechBlue']" @click="showSection = 2">Credit Transactions </div>
       </div>
 
     <div
@@ -80,6 +80,18 @@
             <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="(showCreditToClientDialog = true,  showSuccessAlert = false)"> Transfer Credit to clients </div>
           </div>
 
+        <div class="relative p-4 mt-10 ml-20 border-2 border-gray-300 rounded-md w-72">
+          <div class="flex">
+            <div>
+              <p class="text-sm font-semibold"> Update Settings </p>
+              <p class="mb-2 text-lg font-bold text-black"> {{ '--' }} </p>
+            </div>
+            <div></div>
+          </div>
+          <!--  -->
+          <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showSettingsDialog = true">View/Update Settings </div>
+        </div>
+
       </div>
       <topUpCreditDialog
       v-if="topUpCreditDialog"
@@ -111,7 +123,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  <span class="-ml-6"> Top Up credits </span>
+                  <span class="-ml-6"> Transferable Credits </span>
                 </button>
               </Tab>
               <Tab as="template" v-slot="{ selected }">
@@ -199,9 +211,7 @@
               />
           </div>
       </TabPanel>
-
-
-
+      
       </TabGroup>
     </div>
     </sticky-header>
@@ -216,12 +226,18 @@
     topHeaderText="Credit Details"
     :data="dialogData"
     @openCreditDialog="(showDialog=true),(showViewDialog = false)"
-    @closeDialog="showViewDialog = false" /> 
+    @closeDialog="showViewDialog = false" />
 
-    <credit-to-clientDialog 
+    <credit-to-clientDialog
     v-if="showCreditToClientDialog"
     @closeDialog="showCreditToClientDialog = false"
     @transferCreditClientData="sendCallCreditToClient($event)" />
+
+    <credit-setting-dialog
+    v-if="showSettingsDialog"
+    @closeDialog="showSettingsDialog = false"
+    />
+
   </div>
 </template>
 
@@ -243,9 +259,11 @@ import creditToClientDialog from "@/components/transferredCreditToClientDialog.v
 
 import CreditTopBar from "@/components/credit/topBar.vue";
 import { useStore } from "vuex";
+import CreditSettingDialog from "@/components/creditSettingDialog";
 export default {
   name: "demoTable",
   components: {
+    CreditSettingDialog,
     DataTable,
     StickyHeader,
     CreditTopBar,
@@ -280,6 +298,7 @@ export default {
     let loading = ref(false)
     let loader = ref(false);
     let tabIndex = ref(2)
+    let showSettingsDialog = ref(false);
     const getData = (url, payload)=>{
       loading.value = true;
       error.value = null
@@ -517,7 +536,7 @@ export default {
             showSuccessAlert.value = true;
           }
         })
-        .catch((error) => { 
+        .catch((error) => {
           console.log("errror", error)
         })
         .finally(()=>{
@@ -548,6 +567,7 @@ export default {
       showSection,
       downloadExportFile,
       getData,
+      showSettingsDialog,
       tabIndex,
       loading,
       loader,

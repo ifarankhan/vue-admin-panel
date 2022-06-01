@@ -25,17 +25,17 @@
           </div>
           <div class="pl-2 ml-6 border-l-4 border-psytechBlueBtHover" v-if="collapsable.accountDetail">
               <div class="flex mt-2 mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Type:</p>
+                  <p class="text-xs font-bold text-black w-52"> {{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Type:</p>
                   <p> {{ data?.clientType }} </p>
               </div>
               <div class="flex mb-2">
-                  <p class="text-xs font-bold text-black w-52">Client Name:</p>
+                  <p class="text-xs font-bold text-black w-52">{{ `${data?.clientType =='User Account'? 'User': 'Client'}` }} Name:</p>
                   <p> {{ data?.clientName?data?.clientName:'--' }}</p>
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Account Admin:</p>
                   <div v-if="data.accountAdmin !='   '" class="flex items-center justify-center mr-1 text-xs text-white rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
-                    {{ data.accountAdmin && data.accountAdmin.split(" ").map(item=> item[0]?.toUpperCase()).join("") }}
+                    {{ data.accountAdmin && data.accountAdmin.split(" ")[0] }}
                     </div>
                     <div v-else class="flex items-center justify-center mr-1 text-xs text-black rounded-full w-7 h-7" style="background-color: rgba(0, 0, 0, 0.4);">
                       --
@@ -91,7 +91,7 @@
               </div>
               <div class="flex mb-2">
                   <p class="text-xs font-bold text-black w-52">Date of Update:</p>
-                  <p> {{ data?.updateDateAndTime.split("T")[0] }} </p>
+                  <p> {{ formatDate(data?.updateDateAndTime.split("T")[0]) }} </p>
               </div>
               <div class="flex">
                   <p class="text-xs font-bold text-black w-52">Time of Update:</p>
@@ -131,6 +131,7 @@
                <div class="flex mb-6">
                   <div class="ml-4">
                    <psytech-button
+                    v-if="daysDiffrence(data?.updateDateAndTime) <=5 ? true: false"
                     label="CORRECT CREDIT"
                     type="outline"
                     :extraClasses="'text-sm font-medium text-psytechBlue px-10  border-psytechBlue'"
@@ -158,13 +159,12 @@ import Dialog from 'primevue/dialog';
 import Loader from "@/components/Loader.vue";
 import {useStore} from "vuex";
 import { mdiFileChartOutline, mdiChevronDown, mdiChevronUp } from "@mdi/js";
-import useVuelidate from "@vuelidate/core";
+import { useClientUser } from "@/components/composition/clientHelper.js";
 import ErrorSpan from "@/components/ErrorSpan";
 
 import Field from "@/components/Field";
 import Control from "@/components/Control";
-
-import {email, helpers, maxLength, minLength, numeric, required} from "@vuelidate/validators";
+import { useCreditHelper } from '@/components/composition/creditHelper';
 
 export default {
     props:{
@@ -185,6 +185,8 @@ export default {
         ErrorSpan
     },
     setup(props, { emit }) {
+      const { formatDate } = useClientUser();
+      const { daysDiffrence } = useCreditHelper();
       const updateCredit = reactive({
           correctCredit:"",
           correctionReason: ""
@@ -209,8 +211,10 @@ export default {
     return {
         showDialog,
         updateCredit,
+        formatDate,
         openDialog,
         closeDialog,
+        daysDiffrence,
         collapsable,
         mdiFileChartOutline,
         mdiChevronUp,

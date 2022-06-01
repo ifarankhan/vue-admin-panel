@@ -80,7 +80,7 @@ const actions = {
             companyId: payload.companyId,
         })
     },
-    async getClientAccount({}){
+    async getClientAccount({state}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         return private_url.get('client-accounts', {
             params: {
@@ -177,6 +177,9 @@ const actions = {
       DATA.distributorId = userData.distributorId;
       return private_url.post('export-account-activity',DATA)
     },
+    async exportPartnerStatement({}, payload){
+      return private_url.post('export-partner-statement',payload)
+    },
     async updateClientDetail({state, commit},payload){
         const DATA = payload;
         return private_url.put('account', payload).then(res=>{
@@ -222,7 +225,17 @@ const actions = {
       payload.distributorid = state.clientDetail.distributorId;
       payload.accountid = state.clientDetail.accountId;
       return private_url.post('add-account-user', payload)
-  }
+  },
+  async updateUserCreditSetting({state},payload){
+    if(payload.isFromEdit){
+      payload.accountid = state.individualClientUserDetail.userDetails.accountID;
+      payload.userid = state.individualClientUserDetail.userDetails.userID;
+      delete payload.isFromEdit;
+    } else{
+      payload.accountid = state.clientDetail.accountId;
+    }
+    return private_url.post('update-user-credits-settings', payload)
+}
 }
 
 export default {

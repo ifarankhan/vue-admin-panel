@@ -143,6 +143,7 @@ import utility from "@/components/composition/utility";
 import Loader from "@/components/Loader.vue";
 import LanguageIcon from "@/components/LanguageIcon.vue";
 import useVuelidate from "@vuelidate/core";
+import router from "../../router/index";
 import { required, email, helpers } from "@vuelidate/validators";
 
 export default {
@@ -171,7 +172,6 @@ export default {
       loader: false,
       rememberMe: false,
     });
-
     const rules = computed(() => {
       return {
         userName: {
@@ -211,9 +211,22 @@ export default {
               credits: info?.user?.credits,
               rememberMe: form.rememberMe,
               freshdeskCompanyID: info?.user?.freshdeskCompanyID,
+              invoiceCurrency: info?.user?.invoiceCurrency,
+              isMasterPanelUser: info?.user?.isMasterPanelUser,
             };
             await localStorage.setItem("userData", JSON.stringify(USER_DATA));
             store.dispatch("auth/localStorageDataAction")
+            const URL = router.currentRoute?.value?.redirectedFrom;
+            if(URL?.name == "ticket-conversation"){
+              router.push({name: "ticket-conversation" ,  params: { id: URL.fullPath.split("/distributor/")[1] } });
+              // router.push({
+              //   name: "ticket-conversation",
+              //   params: {
+              //     id: URL.fullPath.split("/support/")[1].split("/")[0]
+              //   }
+              // })
+              return
+            }
             const { navigateTo } = utility("dashboard");
             navigateTo();
           } else {
@@ -221,6 +234,7 @@ export default {
           }
         })
         .catch((error) => {
+          console.log("error...", error)
           form.error = error?.response?.data?.data?.message ?? error.message;
         })
         .finally(() => {

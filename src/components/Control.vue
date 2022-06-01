@@ -4,7 +4,7 @@
         :id="id"
         placeholder=" "
         v-model="computedValue"
-        class="w-full h-24 border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
+        class="w-full text-xs font-medium border border-gray-200 rounded-md focus:ring-transparent focus:outline-none focus:border-psytechBlueDark focus:shadow-sm"
         :class="extraClasses"
         autocomplete="off"
     ></textarea>
@@ -24,12 +24,22 @@
     >
       {{ option.text ?? option.text }}
     </option>
-  </select> 
+  </select>
   <FileUpload v-else-if="type == 'imageupload'" @select="imageUploaded($event)" :multiple="true" :maxFileSize="2000000">
     <template #empty>
       <p>Drag and drop files to here to upload.</p>
     </template>
   </FileUpload>
+
+  <Calendar v-else-if="type == 'date'" id="icon" v-on:keyup.enter="$emit('enterPressed')"
+            class="text-xs font-medium"
+            :class="inputElClass"
+            @blur="$emit('onFocusLeave')"
+            onfocus="this.removeAttribute('readonly');"
+            v-model="computedValue"
+            :placeholder="placeholder"
+            inputClass="clanderField"
+            dateFormat="mm-dd-yy" />
   <input
     v-else
     :type="type"
@@ -58,6 +68,7 @@
 import { computed } from "vue";
 import ControlIcon from '@/components/ControlIcon'
 import FileUpload from 'primevue/fileupload';
+import Calendar from 'primevue/calendar';
 
 
 export default {
@@ -80,6 +91,13 @@ export default {
     id: {
       type: String,
     },
+    smallTextArea:{
+      type: Boolean,
+      default: false
+    },
+    placeholder:{
+      type: String,
+    },
     modelValue: {
       type: [String, Number, Boolean, Array, Object],
       default: "",
@@ -87,10 +105,18 @@ export default {
   },
   components:{
     ControlIcon,
-    FileUpload
+    FileUpload,
+    Calendar
   },
   setup(props, { emit }) {
-     let extraClasses = props.type === "textarea"? 'h-32':'h-14';
+     let extraClasses;
+     if(!props.smallTextArea && props.type === "textarea"){
+       extraClasses = "h-32";
+     } else if(props.smallTextArea && props.type === "textarea"){
+       extraClasses = "h-20";
+     } else{
+       extraClasses = "h-14";
+     }
     const computedValue = computed({
       get: () => props.modelValue,
       set: (value) => {

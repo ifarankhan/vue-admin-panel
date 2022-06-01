@@ -100,6 +100,7 @@
             <div
               class="flex items-center mr-10 cursor-pointer hover:text-psytechBlueBtHover div-hover sm:text-sm sm:pa-1"
               @click="$router.push({ name: 'client-control-edit-user' })"
+              v-if="!userData.isMasterPanelUser"
             >
               <span class="p-0.5">
                 <svg
@@ -166,6 +167,7 @@
             <div
               class="flex items-center hover:text-psytechBlueBtHover div-hover sm:text-sm"
               @click="showDialog = true"
+              v-if="!userData.isMasterPanelUser"
             >
               <span class="p-0.5">
                 <svg
@@ -428,7 +430,7 @@
             </div>
                 </div>
 
-                
+
         <div
           class="w-8/12 col-span-2 rounded-md bg-psytechLightGray"
           v-if="toggleCredits"
@@ -443,8 +445,8 @@
                 v-model="updateCredit.purchaseId"
                 placeholder=" "
               />
-            </field> 
-            
+            </field>
+
           <div class="mb-2 ml-3">
             <error-span :error="v$.credits"></error-span>
           </div>
@@ -456,11 +458,13 @@
           @buttonWasClicked="updateCreditMethod"
         ></psytech-button>
       </div>
-                
+
                 <div class="font-bold">Allowed to Update Credits:</div>
                 <div>{{creditControl.allowUpdateCredits?"Yes":"No"}}</div>
                 <div class="font-bold">Monthly Update Limit:</div>
                 <div>{{creditControl.updateLimit}}</div>
+                <div class="font-semibold">Purchase Credit from:</div> 
+                <div>{{userDetailsList?.loadCreditsFromDistributor?'Distributor': 'Psytech International' }}</div>
               </div>
             </div>
           </TabPanel>
@@ -478,8 +482,8 @@ import StickyHeader from "@/components/StickyHeader";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import Button from 'primevue/button';
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import { mdiAlertCircle } from "@mdi/js";
 import Loader from "@/components/Loader.vue";
-import {colorsBorders, colorsText} from "@/colors";
 import useVuelidate from "@vuelidate/core";
 import confirmDeleteDialog from '@/components/DeleteDialog.vue';
 import CheckRadioPicker from "@/components/CheckRadioPicker";
@@ -536,7 +540,7 @@ export default {
     const userSolutions = ref();
     const ismasterUser = ref(false);
 
-    const updateCredit = reactive({ 
+    const updateCredit = reactive({
       credits: "",
       purchaseId: "",
     });
@@ -643,7 +647,7 @@ export default {
     }
 
   const updateCreditMethod = ()=>{
-  
+
     if (v$.value.$validate() && v$.value.$error) {
         return true;
       }
@@ -659,8 +663,8 @@ export default {
           .then((res) => {
             if(res?.data?.data?.updatedCredits){
               toggleCredits.value = false;
-                updateCredit.credits = ""; 
-                updateCredit.purchaseId = ""; 
+                updateCredit.credits = "";
+                updateCredit.purchaseId = "";
             }
             loadUserDetail()
           })
@@ -670,8 +674,11 @@ export default {
       });
 
       // console.log("updateCredit", data)
-      
+
       }
+    const userData = computed(()=>{
+      return JSON.parse(localStorage.getItem("userData"))
+    });
 
     return {
       accountDetail,
@@ -688,13 +695,15 @@ export default {
       userTyp,
       selectedTrannings,
       sendNotification,
+      mdiAlertCircle,
       userTests,
       userBatteries,
       userSolutions,
       collapsable,
       creditControl,
       ismasterUser,
-      deleteUserMethod
+      deleteUserMethod,
+      userData
     }
 
   }

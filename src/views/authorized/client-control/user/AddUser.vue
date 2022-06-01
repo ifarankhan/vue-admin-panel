@@ -259,6 +259,20 @@ export default {
       }
     };
 
+    const updateUserCreditSettingMethod = (payload)=>{
+      store
+        .dispatch("clientControl/updateUserCreditSetting", payload)
+        .then((res) => {
+          const RESPONSE_DATA = res.data;
+          if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
+            loader.value = false;
+            const { navigateTo } = utility("client-control-list-detail");
+            navigateTo();
+          } 
+        })
+        .catch((error) => {  }); 
+    }
+
     const addAccountUserMethod =  () => {
       creditControlRef?.value?.creditControlMethod()
       if(!isInvalid.value){
@@ -284,7 +298,8 @@ export default {
         data.trainingdetails = "";
         data.traininglevelother = "";
       }
-
+      console.log("userDetailData",data)
+      // return 
       data.sendNotifications =
         userDetailData.sendNotifications == 1 ? true : false;
       data.credits = +data?.credits;
@@ -295,12 +310,13 @@ export default {
         .then((res) => {
           const RESPONSE_DATA = res.data;
           if (RESPONSE_DATA.status == 200 && !RESPONSE_DATA?.data?.message) {
-            loader.value = false;
             store.commit("clientControl/setClientDetail", {
               incrementAccUser: true,
             });
-            const { navigateTo } = utility("client-control-list-detail");
-            navigateTo();
+            updateUserCreditSettingMethod({
+              userid: RESPONSE_DATA.data.userId,
+              loadCreditsFromDistributor: data.creditRadioBtn == true? false: true 
+            })
           } else {
             throw new Error(RESPONSE_DATA.data.message);
           }

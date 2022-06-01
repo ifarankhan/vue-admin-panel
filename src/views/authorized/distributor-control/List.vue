@@ -2,37 +2,16 @@
 <Loader v-if="loader" :toBeBigger="true" />
   <div class="px-8">
     <sticky-header>
-      <h1 class="mb-8 text-2xl font-normal leading-tight">Client Control</h1>
+      <h1 class="text-2xl font-normal leading-tight ">Distributor Control</h1>
+      <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length??0 }}</p>
       <div class="grid main-grid md:grid-cols-2">
         <!-- left section -->
-        <div class="mb-2">
-          <psytech-button
-            @buttonWasClicked="
-              $router.push({ name: 'client-control-create-client' })
-            "
-            label="Create New Client Account"
-            type="outline"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
-          </psytech-button>
-          <!-- Create New Client Account -->
+        <div>
+         
         </div>
 
         <!-- Right Section -->
-        <div class="flex justify-end xs:flex-col">
+        <div class="flex justify-end mb-2 -mt-10 xs:flex-col">
           <div>
             <div class="relative inline-block dropdown">
               <psytech-button
@@ -64,12 +43,12 @@
               >
                 <li class="flex">
                   <field
-                    label="Name"
-                    labelFor="account"
-                    :applyExtraInputClass="true"
+                    label="Distributor Name"
+                    labelFor="distributorName"
+                    applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="accountName"
+                      v-model="distributorName"
                       type="text"
                       id="name"
                       placeholder=" "
@@ -80,21 +59,24 @@
                     :filterDropdown="filterDropdown"
                     v-model="selectedNameFilter"
                   ></select-option>
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                    <control :options="filterDropdown" type="select" v-model="selectedNameFilter" />
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(accountName = ''), (selectedNameFilter = 'contains'), applyFilter()"
+                      @iconWasClicked="(distributorName = ''), (selectedNameFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Address"
-                    labelFor="address"
-                    :applyExtraInputClass="true"
+                    label="Email"
+                    labelFor="email"
+                    applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="searchedaddress"
+                      v-model="searchedEmail"
                       type="text"
                       id="address"
                       placeholder=" "
@@ -104,23 +86,78 @@
 
                   <select-option
                     :filterDropdown="filterDropdown"
-                    v-model="selectedaddressFilter"
+                    v-model="selectedEmailFilter"
                   ></select-option>
+                  
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedaddress = ''), (selectedaddressFilter = 'contains'), applyFilter()"
+                      @iconWasClicked="(searchedEmail = ''),(selectedEmailFilter='contains'), applyFilter()"
                     />
                   </div>
                 </li>
 
                 <li class="flex">
                   <field
-                    label="Users"
-                    labelFor="users"
-                    :applyExtraInputClass="true"
+                    label="Currency"
+                    labelFor="currency"
+                    applyExtraSelectClass="true"
                   >
                     <control
-                      v-model="searchedUsers"
+                      v-model="searchedCurrency"
+                      type="text"
+                      id="users"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="filterDropdown"
+                    v-model="selectedCurrencyFilter"
+                  ></select-option>
+
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(searchedCurrency = ''), (selectedCurrencyFilter='contains'), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+              <li class="flex">
+                  <field
+                    label="No. of Clients"
+                    labelFor="noOfClients"
+                    applyExtraSelectClass="true"
+                  >
+                    <control
+                      v-model="noOfClients"
+                      type="text"
+                      id="address"
+                      placeholder=" "
+                      @enterPressed="applyFilter()"
+                    />
+                  </field>
+
+                  <select-option
+                    :filterDropdown="numberDropdown"
+                    v-model="selectedNoOfClientsFilter"
+                  ></select-option>
+                  
+                  <div class="flex items-center justify-center mt-1">
+                    <IconSVG
+                      @iconWasClicked="(noOfClients = ''), (selectedNoOfClientsFilter='isEqualTo'), applyFilter()"
+                    />
+                  </div>
+                </li>
+
+                <li class="flex">
+                  <field
+                    label="Credit Limit"
+                    labelFor="creditLimit"
+                    applyExtraSelectClass="true"
+                  >
+                    <control
+                      v-model="searchedCredits"
                       type="text"
                       id="users"
                       placeholder=" "
@@ -130,11 +167,15 @@
 
                   <select-option
                     :filterDropdown="numberDropdown"
-                    v-model="selectedUsersFilter"
+                    v-model="selectedCreditsFilter"
                   ></select-option>
+
+                  <!-- <field label="Filter Type" labelFor="filterType" :applyExtraSelectClass="true">
+                    <control :options="filterDropdown" type="select" v-model="selectedCreditsFilter" />
+                  </field> -->
                   <div class="flex items-center justify-center mt-1">
                     <IconSVG
-                      @iconWasClicked="(searchedUsers = ''), (selectedUsersFilter = 'isEqualTo'), applyFilter()"
+                      @iconWasClicked="(searchedCredits = ''), (selectedCreditsFilter='isEqualTo'), applyFilter()"
                     />
                   </div>
                 </li>
@@ -190,13 +231,14 @@
         </div>
       </div>
     </sticky-header>
-    <div class="fixedheader">
+    <div class="fixedheader extra-body-margin">
       <DataTable
           :customers="customers"
           :paginator="true"
           :rows="50"
           :rowHover="true"
           :loading="loading"
+          tableType="distributorsList"
           :rowsPerPageOptions="[10, 25, 50]"
           @rowClicked="redirectToDetail($event)"
           @rowData="setClientDetail({data: $event})"
@@ -205,19 +247,11 @@
       />
     </div>
 
-  <confirmDeleteDialog
-  v-if="showDialog"
-  @closeDialog="showDialog = false"
-  :name="clientName && clientName"
-  @dialogConfirmed="deleteAccountMethod()" />
-
   </div>
 </template>
 
 <script>
 import { ref, onMounted, reactive } from "vue";
-import InputText from "primevue/inputtext";
-import _ from "lodash";
 import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
@@ -227,17 +261,15 @@ import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from "@/components/SelectOption.vue";
 import Loader from "@/components/Loader.vue";
-import confirmDeleteDialog from '@/components/DeleteDialog.vue';
+import _ from "lodash";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 export default {
   name: "demoTable",
   components: {
-    InputText,
     DataTable,
     SelectOption,
-    confirmDeleteDialog,
     Control,
     IconSVG,
     Loader,
@@ -257,13 +289,15 @@ export default {
     let prevCustomers = ref();
     let prevSearched = ref();
     let searchText = ref("");
-    let accountName = ref("");
-    let searchedaddress = ref("");
-    let searchedUsers = ref("");
-    let selectStatus = ref("");
+    let searchedEmail = ref(""); 
+    let noOfClients = ref("");  
+    let searchedCredits = ref(""); 
+    let searchedCurrency = ref(""); 
     let selectedNameFilter = ref("contains");
-    let selectedaddressFilter = ref("contains");
-    let selectedUsersFilter = ref("isEqualTo");
+    let selectedEmailFilter = ref("contains");
+    let selectedNoOfClientsFilter = ref("isEqualTo");  
+    let selectedCurrencyFilter = ref("contains"); 
+    let selectedCreditsFilter = ref("isEqualTo");
     let prevMainSearchHistry = ref("");
     let showFilters = ref(false);
     const form = reactive({
@@ -271,23 +305,16 @@ export default {
       address: "",
     });
     onMounted(() => {
-     loadAllClients()
+     loadAllDistributors()
     });
 
-    const loadAllClients = ()=>{
+    const loadAllDistributors = ()=>{
        store
-        .dispatch("clientControl/getClientAccount")
+        .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
           let responseArray = res?.data?.data;
+          responseArray = responseArray.map((d, index) => ({ ...d, sno: index + 1 }))
           customers.value = responseArray;
-          customers.value.forEach(
-            (customer) => (
-              (customer.date = new Date(customer.creationDate)),
-              (customer.name = customer.accountName),
-              (customer.address = customer.accountAddress),
-              (customer.users = customer.numberOfUsers)
-            )
-          );
           prevCustomers.value = customers.value;
           loading.value = false;
         })
@@ -308,18 +335,25 @@ export default {
     const selectedCustomers = ref();
     const loading = ref(true);
 
+    const distributorName = ref("");
+    const credits = ref("");
+    
     const clearFilter = () => {
       searchText.value = "";
-      accountName.value = "";
-      searchedaddress.value = "";
-      searchedUsers.value = "";
-
-      selectedUsersFilter.value = "isEqualTo";
-      selectedaddressFilter.value = "contains";
-      selectedNameFilter.value = "contains";
-
+      searchedEmail.value = "";
+      distributorName.value = "";
+      noOfClients.value = "";
+      credits.value = "";
+      searchedCurrency.value = "";
+      searchedCredits.value = "";
       customers.value = prevCustomers.value;
       prevSearched.value = [];
+
+      selectedNoOfClientsFilter.value = "isEqualTo";
+      selectedCreditsFilter.value     = "isEqualTo"; 
+      selectedCurrencyFilter.value    = "contains";  
+      selectedEmailFilter.value       = "contains";  
+      selectedNameFilter.value        = "contains";  
     };
 
     
@@ -331,15 +365,15 @@ export default {
         filteredData = prevCustomers.value;
       }
       // Make sure search value has some valid value, then do filtering
-      if (accountName.value) {
+      if (distributorName.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.name && accountName.value
+            !val.name && distributorName.value
               ? false
-              : accountName.value
+              : distributorName.value
               ? subFilter(
                   val.name.toLowerCase(),
-                  accountName.value.toLowerCase().trim(),
+                  distributorName.value.toLowerCase().trim(),
                   selectedNameFilter.value
                 )
               : true
@@ -347,18 +381,18 @@ export default {
             return true;
           }
         });
-      }
+      } 
       // Make sure search value has some valid value, then do filtering
-      if (searchedaddress.value) {
+      if (searchedEmail.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.address && searchedaddress.value
+            !val.email && searchedEmail.value
               ? false
-              : !!(searchedaddress.value
+              : !!(searchedEmail.value
                   ? subFilter(
-                      val.address.toLowerCase(),
-                      searchedaddress.value.toLowerCase().trim(),
-                      selectedaddressFilter.value
+                      val.email.toLowerCase(),
+                      searchedEmail.value.toLowerCase().trim(),
+                      selectedEmailFilter.value
                     )
                   : true)
           ) {
@@ -368,16 +402,55 @@ export default {
       }
 
       // Make sure search value has some valid value, then do filtering
-      if (searchedUsers.value) {
+      if (noOfClients.value) {
         filteredData = filteredData.filter((val) => {
           if (
-            !val.users && val.users != 0 && searchedUsers.value
+            !val.numberOfClients && noOfClients.value
               ? false
-              : !!(searchedUsers.value
+              : !!(noOfClients.value
                   ? subFilter(
-                      +val.users,
-                      +searchedUsers.value,
-                      selectedUsersFilter.value
+                      val.numberOfClients,
+                      noOfClients.value,
+                      selectedNoOfClientsFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+
+      // Make sure search value has some valid value, then do filtering
+      if (searchedCurrency.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.invoiceCurrency && searchedCurrency.value
+              ? false
+              : !!(searchedCurrency.value
+                  ? subFilter(
+                      val.invoiceCurrency.toLowerCase(),
+                      searchedCurrency.value.toLowerCase().trim(),
+                      selectedCurrencyFilter.value
+                    )
+                  : true)
+          ) {
+            return true;
+          }
+        });
+      }
+
+      // Make sure search value has some valid value, then do filtering
+      if (searchedCredits.value) {
+        filteredData = filteredData.filter((val) => {
+          if (
+            !val.transferableCreditLimit && val.transferableCreditLimit != 0 && searchedCredits.value
+              ? false
+              : !!(searchedCredits.value
+                  ? subFilter(
+                      +val.transferableCreditLimit,
+                      +searchedCredits.value,
+                      selectedCreditsFilter.value
                     )
                   : true)
           ) {
@@ -392,6 +465,7 @@ export default {
     };
 
     const filteredMainMethod = () => {
+      console.log("enterred...")
       // var sortKey = this.sortKey
       let value = searchText.value && searchText.value.toLowerCase();
       // Search  field is blank but dropdown filters have value, JUST go for dropdown filters
@@ -401,14 +475,14 @@ export default {
         return;
       }
       // fileds to be check for filters
-      if (searchedUsers.value || accountName.value || searchedaddress.value) {
-        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+      if (searchedCredits.value || distributorName.value || searchedEmail.value) {
+        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceCurrency string"]
         customers.value = filterMethod(prevSearched.value,searchableFields,value)
 
         // customers.value = filterMethod(prevSearched.value, value);
       } else {
         // default, When no filters is applied
-        const searchableFields = ["accountName string", "accountAddress string", "numberOfUsers number", "creationDate number"]
+        const searchableFields = ["name string", "eamil string", "transferableCreditLimit number", "invoiceCurrency string"]
         customers.value = filterMethod(prevCustomers.value,searchableFields,value)
 
         // customers.value = filterMethod(prevCustomers.value, value);
@@ -422,35 +496,18 @@ export default {
       }
     };
 
-    const redirectToDetail = (e) => {
-      store.commit("clientControl/setClientDetail", e.data);
-      router.push({ name: "client-control-list-detail" });
+    const redirectToDetail = async e => {
+      // const DATA = customers.value[e.index]
+      // console.log("DATA",DATA)
+      await store.commit("masterPannel/setDistributorDetail", e.data);
+      router.push({ name: "distributor-control-list-detail" });
     };
 
     const setClientDetail = async e=>{
-      await store.commit("clientControl/setClientDetail", e.data);
-      await (clientName.value = e.data.accountName)
+      // await store.commit("masterPannel/setDistributorDetail", e.data);
     }
 
     const loader  = ref(false);
-    const deleteAccountMethod = ()=>{
-      loader.value = true;
-       store
-          .dispatch("clientControl/deleteClientAccount")
-          .then((res) => {
-            if(res?.data?.data?.deleted){
-              customers.value = customers.value.filter(item=> item.name != clientName.value)
-            }
-          })
-          .catch((error) => {
-            console.log("error is...", error);
-          }).finally(()=>{
-             showDialog.value = false;
-             loader.value = false;
-          });
-    }
-
-    const clientName = ref("");
     const redirectToEditClient = e=>{
       if(e.eventName == "Edit Client"){
         router.push({name: 'client-control-edit-client'})
@@ -466,29 +523,30 @@ export default {
       selectedCustomers,
       redirectToEditClient,
       closeFilter,
-      loadAllClients,
-      selectStatus,
-      clientName,
+      loadAllDistributors,
       prevMainSearchHistry,
       filteredMainMethod,
-      deleteAccountMethod,
       searchText,
+      searchedCurrency,
       setClientDetail,
       prevSearched,
-      accountName,
+      distributorName,
       pickedDate,
       numberDropdown,
       showFilters,
       showDialog,
       form,
       loader,
-      searchedaddress,
-      searchedUsers,
+      searchedEmail,
+      searchedCredits,
       filterMethod,
+      noOfClients,
       redirectToDetail,
-      selectedUsersFilter,
+      selectedCreditsFilter,
       selectedNameFilter,
-      selectedaddressFilter,
+      selectedEmailFilter,
+      selectedNoOfClientsFilter,
+      selectedCurrencyFilter,
       applyFilter,
       clearFilter,
       dropdownFilters,
@@ -506,11 +564,7 @@ export default {
 img {
   vertical-align: middle;
 }
-::v-deep(.p-paginator) {
-  .p-paginator-current {
-    margin-left: auto;
-  }
-}
+
 .dropdown .dropdown-menu {
   z-index: 1000;
 }

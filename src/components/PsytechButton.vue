@@ -18,6 +18,10 @@ export default {
       type: String,
       default: "primary",
     },
+    smallYPadding:{
+      type: Boolean,
+      default: false
+    },
     smallText:{
       type: Boolean,
       default: false
@@ -37,7 +41,7 @@ export default {
   },
   setup(props) {
     const componentClass = computed(() => {
-      const base = ["py-2", "px-4", "rounded-full", "border"];
+      const base = ["px-4", "rounded-full", "border"];
       if (props.type === "primary") {
         base.push("m-2 bg-psytechBlue hover:bg-psytechBlueBtHover text-white");
       }
@@ -48,9 +52,22 @@ export default {
       }
       if(props.type == "black-small"){
          base.push(
-          "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechBlack text-white"
+          "mt-2 mr-2 border-2 border-gray-300 border-solid bg-psytechBlack text-white"
         );
+        if(!props.smallYPadding){
+          base.push("text-sm")
+        }
       }
+
+    if(props.type == "light-small"){
+         base.push(
+          "mt-2 mr-4 bg-psytechLight text-white"
+        );
+         if(!props.smallYPadding){
+          base.push("text-sm")
+        }
+      }
+
       if (props.type == "dark") {
         base.push(
           "mt-2 mr-2 inline-flex items-center text-sm border-2 border-gray-300 border-solid bg-psytechDark text-white"
@@ -81,6 +98,11 @@ export default {
       }
       if(props.smallText){
         base.push('text-gray-400')
+      } 
+      if(props.smallYPadding){
+        base.push('py-1.5')
+      }else{
+        base.push("py-2")
       }
       if(props.extraClasses){
         base.push(props.extraClasses)
