@@ -7,7 +7,7 @@
             :first="first"
             ref="dt"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            responsiveLayout="scroll" :scrollable="true"
+            :scrollable="true"
             @row-click="paginatorUser,$emit('rowClicked', $event)">
             <template #empty>
                 No {{ defaultText }} found.
