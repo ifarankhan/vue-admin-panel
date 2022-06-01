@@ -9,7 +9,7 @@
       <div class="grid py-4 main-grid md:grid-cols-2">
         <!-- left section -->
         <div>
-          <psytech-button
+          <psytech-button 
             @buttonWasClicked="
               $router.push({ name: 'create-statement' })
             "
