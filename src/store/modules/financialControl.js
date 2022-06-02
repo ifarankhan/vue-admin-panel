@@ -1,18 +1,25 @@
 import { private_url } from "../../axios";
 const namespaced = true;
 const state = {
-    distributorName: ''
+    distributorName: '',
+    deductionObj: null
 }
 
 const getters = {
     getDistributorName: state =>{
         return state.distributorName
+    },
+    getDeductionObj: state =>{
+        return state.deductionObj
     }
   }
 
 const mutations = {
     setDistributorName : (state, payload)=>{
         state.distributorName = payload
+    },
+    setDeductionObj : (state, payload)=>{
+        state.deductionObj = payload
     }
 }
 

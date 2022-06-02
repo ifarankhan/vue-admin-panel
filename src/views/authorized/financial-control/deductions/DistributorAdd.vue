@@ -218,7 +218,6 @@ export default {
       store
         .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
-          console.log("response is....", res)
           let responseArray = res?.data?.data;
           distributors.value = responseArray.map(item=>{
               return {
@@ -377,7 +376,7 @@ export default {
           .then((res) => {
             const RESPONSE = res.data.data
             if(RESPONSE.partnerCreditDeductionAdded){
-              const { navigateTo } = utility('view-deductions'); navigateTo();
+              const { navigateTo } = utility('financial-control-deduction-list'); navigateTo();
             }else {
               showMsg.value = "Error while sending distributor credit correction";
             }

@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useStore } from "vuex";
 import _ from "lodash";
 export function useClientUser() {
@@ -27,7 +27,29 @@ export function useClientUser() {
             day: "2-digit",
         }).split('/').reverse().join('-')
     }
-
+  
+    const currency_symbols = ref({
+      'USD': '$', // US Dollar
+      'EURO': '€', // Euro
+      'AED': 'د.إ',
+      'CHF': 'SFr',
+      'GBP': '£',
+      'TRY': '₺',
+  
+      'CRC': '₡', // Costa Rican Colón
+      'GBP': '£', // British Pound Sterling
+      'ILS': '₪', // Israeli New Sheqel
+      'INR': '₹', // Indian Rupee
+      'JPY': '¥', // Japanese Yen
+      'KRW': '₩', // South Korean Won
+      'NGN': '₦', // Nigerian Naira
+      'PHP': '₱', // Philippine Peso
+      'PLN': 'zł', // Polish Zloty
+      'PYG': '₲', // Paraguayan Guarani
+      'THB': '฿', // Thai Baht
+      'UAH': '₴', // Ukrainian Hryvnia
+      'VND': '₫', // Vietnamese Dong
+  });
   const tableStatePersistence = (event)=>{
       const data = {
         page: event.page,
@@ -195,6 +217,7 @@ export function useClientUser() {
     numberDropdown,
     filterDropdown,
     filterMethod,
+    currency_symbols,
     formatExportDate,
     fresDeskStatuses,
     fresDeskPriorities

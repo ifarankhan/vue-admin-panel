@@ -182,12 +182,21 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'view-deductions',
+        name: 'financial-control-deduction-list',
         meta:{
           userType: 3,
         },
         component: () => import('../views/authorized/financial-control/deductions/listing.vue'),
         requiresAuth: true,
+      },
+      {
+        path: 'detail',
+        name: 'financial-control-deduction-detail',
+        meta:{
+          userType: 3,
+        },
+        requiresAuth: true,
+        component: () => import('../views/authorized/financial-control/deductions/DeductionDetail.vue'),
       },
       {
         path: 'create-deduction',
@@ -227,7 +236,7 @@ const routes = [
           userType: 2,
         },
         component: () => import('../views/authorized/financial-control/statements/StamentAdd.vue'),
-      },
+      }
     ]
   },
   {
