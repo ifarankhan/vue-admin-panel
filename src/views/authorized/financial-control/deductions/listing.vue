@@ -250,7 +250,7 @@
         </div>
       </div>
     </sticky-header>
-   <div class="fixedheader extra-body-margin">
+   <div class="fixedheader extra-body-margin"> 
       <DataTable
           :customers="allDeductions"
           tableType='deductions'
@@ -258,6 +258,7 @@
           :rows="50"
           :rowHover="true"
           :loading="loading"
+          @rowClicked="redirectToDetail($event)"
           :rowsPerPageOptions="[10, 25, 50]"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       />
@@ -275,6 +276,7 @@ import SelectOption from "@/components/SelectOption.vue";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 import IconSVG from "@/components/IconSVG.vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { onMounted, ref, reactive  } from "vue";
 export default {
   name:"add",
@@ -309,12 +311,19 @@ export default {
     let showFilters = ref(false);
 
     const store = useStore();
+    const router = useRouter();
 
     onMounted(() => {
       loading.value = true;
      loadAllDeductions()
     });
   const { numberDropdown, filterDropdown, filterMethod, subFilter } = useClientUser();
+
+
+  const redirectToDetail = (e) => {
+      store.commit("financialControl/setDeductionObj", e.data);
+      router.push({ name: "financial-control-deduction-detail" });
+    };
 
   const loading = ref(false);
   const loadAllDeductions = ()=>{
@@ -491,6 +500,7 @@ export default {
       selectedItemTypeFilter,
       selectedNameFilter,
       loadAllDeductions,
+      redirectToDetail,
       filterDropdown,
       allDeductions,
       filteredMainMethod,

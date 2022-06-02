@@ -75,7 +75,6 @@
                     :customeWidth="true"
                     :allyMarginRight="false"
                     :emitCustomEvent="true"
-                    :loader="false"
                     @itemWasSelected="''"
                     v-model="form.distributorId"
                     :labelText="'Please Select Distributor'"
@@ -120,7 +119,7 @@
               </field>
             </div>
 
-            <div class="overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px calendar"
+            <div class="ml-2 overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px calendar"
             :class="[userData.isMasterPanelUser?'w-1/5': 'w-1/4']">
                 <control type="date" v-model="form.date" name="expenseDate" placeholder="Expense Date" />
                 <error-span :error="v$.date"></error-span>
@@ -128,8 +127,8 @@
           </div>
           
           <!--  -->
-            <div class="overflow-hidden sm:my-1 sm:px-1 md:my-2 md:px-2 lg:my-1 lg:px-1 xl:my-px xl:px-px">
-              <field label="Item Description / Expense details " labelFor="accountAddress">
+            <div class="overflow-hidden">
+              <field label="Item Description / Expense details " labelFor="accountAddress" :applyMargin="false">
                 <control
                     type="textarea"
                     v-model="form.itemDescription"
@@ -211,7 +210,7 @@ export default {
       error: "",
       distributorId: "",
       itemDescription: "",
-      loader:false,
+      loader:true,
     });
 
     const distributors = ref([]);
@@ -219,7 +218,6 @@ export default {
       store
         .dispatch("masterPannel/getAllDirtributorList")
         .then((res) => {
-          console.log("response is....", res)
           let responseArray = res?.data?.data;
           distributors.value = responseArray.map(item=>{
               return {
@@ -227,6 +225,7 @@ export default {
                   text: item.name
               }
           });
+          form.loader = false;
         })
         .catch((error) => {
           console.log("error is...", error);
@@ -377,7 +376,7 @@ export default {
           .then((res) => {
             const RESPONSE = res.data.data
             if(RESPONSE.partnerCreditDeductionAdded){
-              const { navigateTo } = utility('view-deductions'); navigateTo();
+              const { navigateTo } = utility('financial-control-deduction-list'); navigateTo();
             }else {
               showMsg.value = "Error while sending distributor credit correction";
             }

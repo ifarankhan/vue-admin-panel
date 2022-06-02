@@ -7,7 +7,7 @@
             :first="first"
             ref="dt"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            responsiveLayout="scroll" :scrollable="true"
+            :scrollable="true"
             @row-click="paginatorUser,$emit('rowClicked', $event)">
             <template #empty>
                 No {{ defaultText }} found.
@@ -585,7 +585,7 @@ export default {
     setup(props, {emit}) {
        const store = useStore();
        const { daysDiffrence } = useCreditHelper();
-       const { userTypes, formatDate, tableStatePersistence, fresDeskPriorities, fresDeskStatuses } = useClientUser();
+       const { userTypes, formatDate, tableStatePersistence, currency_symbols, fresDeskPriorities, fresDeskStatuses } = useClientUser();
 
       const menu = ref();
 
@@ -604,28 +604,7 @@ export default {
 				}
 			])
 
-    const currency_symbols = ref({
-    'USD': '$', // US Dollar
-    'EURO': '€', // Euro
-    'AED': 'د.إ',
-    'CHF': 'SFr',
-    'GBP': '£',
-    'TRY': '₺',
-
-    'CRC': '₡', // Costa Rican Colón
-    'GBP': '£', // British Pound Sterling
-    'ILS': '₪', // Israeli New Sheqel
-    'INR': '₹', // Indian Rupee
-    'JPY': '¥', // Japanese Yen
-    'KRW': '₩', // South Korean Won
-    'NGN': '₦', // Nigerian Naira
-    'PHP': '₱', // Philippine Peso
-    'PLN': 'zł', // Polish Zloty
-    'PYG': '₲', // Paraguayan Guarani
-    'THB': '฿', // Thai Baht
-    'UAH': '₴', // Ukrainian Hryvnia
-    'VND': '₫', // Vietnamese Dong
-});
+    
 
 
        const toggle = (event, data) => {
