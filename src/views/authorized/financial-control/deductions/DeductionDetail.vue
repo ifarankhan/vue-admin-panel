@@ -27,7 +27,6 @@
         <span class="text-sm font-semibold"> Creation Date:  </span>
         <span class="text-sm"> {{ deductionDetail && formatDate(deductionDetail.date.split("T")[0]) }} </span>
       </div>
-      
     </div>
     <!--  -->
       <div class="w-11/12 p-4 mt-10 ml-12 bg-gray-200">
