@@ -155,7 +155,7 @@
             <psytech-button
                 label="Cancel"
                 type="black-small"
-                @buttonWasClicked="$router.push({name: 'view-deductions'})"
+                @buttonWasClicked="$router.push({name: 'financial-control-deduction-list'})"
             ></psytech-button>
           </div>
           <div>
@@ -366,7 +366,8 @@ export default {
       }
       showSuccessAlert.value = false;
       if( userData.value.isMasterPanelUser ){
-        DATA.partnerId = form.distributorId
+        DATA.partnerId = form.distributorId;
+        store.commit("financialControl/setDistributorName", { distributorName: distributors.value.find(item=> item.value == form.distributorId).text})
       }
       console.log("data is...", DATA)
       form.error = ''
