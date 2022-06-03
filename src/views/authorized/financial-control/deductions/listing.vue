@@ -1,6 +1,10 @@
 <template>
   <div class="px-8">
     <sticky-header>
+      <success-message v-if="$store.getters['financialControl/getDistributorName']?.distributorName? true: false">
+          Deduction sent to
+          <span class="font-semibold">{{ $store.getters['financialControl/getDistributorName']?.distributorName }}</span>
+      </success-message>
       <h1 class="text-2xl font-normal leading-tight ">Deductions</h1>
       <div class="grid py-4 main-grid md:grid-cols-2">
         <!-- left section -->
@@ -274,16 +278,18 @@ import Field from "@/components/Field.vue";
 import Control from "@/components/Control.vue";
 import SelectOption from "@/components/SelectOption.vue";
 import { useClientUser } from "@/components/composition/clientHelper.js";
+import SuccessMessage from '@/components/successMessage.vue';
 import IconSVG from "@/components/IconSVG.vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import { onMounted, ref, reactive  } from "vue";
+import { onMounted, onUnmounted, ref, reactive  } from "vue";
 export default {
   name:"add",
   components: {
     StickyHeader,
     PsytechButton,
     SelectOption,
+    SuccessMessage,
     DataTable,
     Control,
     IconSVG,
@@ -317,6 +323,11 @@ export default {
       loading.value = true;
      loadAllDeductions()
     });
+
+  onUnmounted(()=>{
+        store.commit('financialControl/setDistributorName',null)
+    })
+
   const { numberDropdown, filterDropdown, filterMethod, subFilter } = useClientUser();
 
 
