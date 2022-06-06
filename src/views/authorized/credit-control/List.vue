@@ -80,17 +80,17 @@
             <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="(showCreditToClientDialog = true,  showSuccessAlert = false)"> Transfer Credit to clients </div>
           </div>
 
-        <div class="relative p-4 mt-10 ml-20 border-2 border-gray-300 rounded-md w-72">
-          <div class="flex">
-            <div>
-              <p class="text-sm font-semibold"> Update Settings </p>
-              <p class="mb-2 text-lg font-bold text-black"> {{ '--' }} </p>
-            </div>
-            <div></div>
-          </div>
-          <!--  -->
-          <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showSettingsDialog = true">View/Update Settings </div>
-        </div>
+<!--        <div class="relative p-4 mt-10 ml-20 border-2 border-gray-300 rounded-md w-72">-->
+<!--          <div class="flex">-->
+<!--            <div>-->
+<!--              <p class="text-sm font-semibold"> Update Settings </p>-->
+<!--              <p class="mb-2 text-lg font-bold text-black"> {{ '&#45;&#45;' }} </p>-->
+<!--            </div>-->
+<!--            <div></div>-->
+<!--          </div>-->
+<!--          &lt;!&ndash;  &ndash;&gt;-->
+<!--          <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showSettingsDialog = true">View/Update Settings </div>-->
+<!--        </div>-->
 
       </div>
       <topUpCreditDialog
@@ -134,7 +134,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Transfered to Client
+                  Transferred to Client
                 </button>
               </Tab>
             </TabList>
@@ -211,7 +211,7 @@
               />
           </div>
       </TabPanel>
-      
+
       </TabGroup>
     </div>
     </sticky-header>
