@@ -368,8 +368,9 @@ export default {
       if( userData.value.isMasterPanelUser ){
         DATA.partnerId = form.distributorId;
         store.commit("financialControl/setDistributorName", { distributorName: distributors.value.find(item=> item.value == form.distributorId).text})
+      } else {
+         store.commit("financialControl/setDistributorName", { distributorName: store.getters['auth/getUserDataSavedInLocalStorage'].distributorUserName})
       }
-      console.log("data is...", DATA)
       form.error = ''
       form.loader = true;
       store
