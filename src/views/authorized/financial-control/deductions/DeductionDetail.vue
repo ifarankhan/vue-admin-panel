@@ -29,7 +29,24 @@
       </div>
     </div>
     <!--  -->
-      <div class="w-11/12 p-4 mt-10 ml-12 bg-gray-200">
+    <div class="flex justify-end w-11/12 mt-3 ml-2">
+      <div class="flex justify-end mr-4 cursor-pointer w-28">
+         <svg viewBox="0 0 24 24" width="20" height="20" class="inline-block" color="">
+          <path :d="mdiArrowDown "/>
+        </svg>
+        <span class="text-sm"> Download  </span>
+      </div>
+       
+
+    <div class="flex justify-end cursor-pointer w-28">
+       <svg viewBox="0 0 24 24" width="18" height="18" class="inline-block mr-1" color="">
+          <path :d="mdiPrinterSettings "/>
+        </svg>
+        <span class="text-sm"> Print Invoice  </span>
+      </div>
+    </div>
+    <!--  -->
+      <div class="w-11/12 p-4 mt-6 ml-12 bg-gray-200">
         <p class="text-sm">
         <span class="font-extrabold">Note:</span>
         This invoice will be sent to Psytech International and the cost of item added in this invoice will be deducted from your fianl invoice. Example: Expenses, Over charges, etc. 
@@ -66,6 +83,7 @@
 <script>
 import { computed } from 'vue';
 import { useStore } from "vuex";
+import { mdiArrowDown, mdiPrinterSettings    } from '@mdi/js';
 import store from "../../../../store/index";
 import { useClientUser } from "@/components/composition/clientHelper.js";
 export default {
@@ -85,6 +103,8 @@ beforeRouteEnter(to, from, next) {
     return {
         deductionDetail,
         currency_symbols,
+        mdiPrinterSettings,
+        mdiArrowDown,
         formatDate
      }
     },

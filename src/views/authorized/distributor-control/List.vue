@@ -2,6 +2,10 @@
 <Loader v-if="loader" :toBeBigger="true" />
   <div class="px-8">
     <sticky-header>
+      <success-message v-if="$store.getters['financialControl/getDistributorName']?.distributorName? true: false">
+          Deduction sent to
+          <span class="font-semibold">{{ $store.getters['financialControl/getDistributorName']?.distributorName }}</span>
+      </success-message>
       <h1 class="text-2xl font-normal leading-tight ">Distributor Control</h1>
       <p class="p-1 text-medium text-grey">No. of distributors available: {{ customers?.length??0 }}</p>
       <div class="grid main-grid md:grid-cols-2">
@@ -251,7 +255,7 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, onUnmounted, reactive } from "vue";
 import DataTable from "@/components/Table.vue";
 import Calendar from "primevue/calendar";
 import Field from "@/components/Field.vue";
@@ -260,6 +264,7 @@ import PsytechButton from "@/components/PsytechButton";
 import StickyHeader from "@/components/StickyHeader";
 import IconSVG from "@/components/IconSVG.vue";
 import SelectOption from "@/components/SelectOption.vue";
+import SuccessMessage from '@/components/successMessage.vue';
 import Loader from "@/components/Loader.vue";
 import _ from "lodash";
 import { useClientUser } from "@/components/composition/clientHelper.js";
@@ -274,6 +279,7 @@ export default {
     IconSVG,
     Loader,
     Calendar,
+    SuccessMessage,
     Field,
     PsytechButton,
     StickyHeader,
@@ -307,6 +313,10 @@ export default {
     onMounted(() => {
      loadAllDistributors()
     });
+
+    onUnmounted(()=>{
+        store.commit('financialControl/setDistributorName',null)
+    })
 
     const loadAllDistributors = ()=>{
        store
