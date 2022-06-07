@@ -31,6 +31,13 @@ const actions = {
         }
         return private_url.post('partner-credit-deductions', payload)
     },
+    async statementSendEmail({ },payload){
+        const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
+        if(!USER_DATA.isMasterPanelUser){
+            payload.partnerId = USER_DATA.distributorId;
+        }
+        return private_url.post('send-partner-statement', payload)
+    },
     async getDeductionList({}, payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
         return private_url.get('partner-credit-deductions', {
@@ -39,6 +46,9 @@ const actions = {
             }
         })
       },
+    async getStatementList({}){
+        return private_url.get('/partner-statements')
+      }, 
     async getMasterDeductionList({}, payload){
         const USER_DATA = await JSON.parse(localStorage.getItem('userData'))
         return private_url.get('credit-deductions', {

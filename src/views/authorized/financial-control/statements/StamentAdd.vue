@@ -64,6 +64,7 @@
                     ></Datepicker>
                     <p>
                       <error-span :error="v$.toDate"></error-span>
+                      <error-span :error="v$.toDate.toDateLimit"></error-span>
                   </p>
                 </div>
             </div>
@@ -167,6 +168,9 @@ export default {
         },
         toDate: {
           required: helpers.withMessage("To Date is required", required),
+          toDateLimit: helpers.withMessage("To Date must be greater then from date", function(val){
+            return +statement.fromDate <= +val
+          }),
         },
         distributorId:{
           required: helpers.withMessage(
