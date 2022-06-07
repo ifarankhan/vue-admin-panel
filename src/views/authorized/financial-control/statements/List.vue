@@ -256,13 +256,16 @@
     </sticky-header>
    <div class="fixedheader extra-body-margin">
       <DataTable
-          :customers="allDeductions"
-          tableType='deductions'
+          :customers="allStatements"
+          ref="closeMenuStatement"
+          tableType='statements'
           :paginator="true"
           :rows="50"
           :rowHover="true"
           :loading="loading"
           :rowsPerPageOptions="[10, 25, 50]"
+          @rowData="downloadStatement($event)"
+          @statementActionClicked="statementActionBtnClicked($event)"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       />
     </div>
@@ -280,6 +283,7 @@ import { useClientUser } from "@/components/composition/clientHelper.js";
 import IconSVG from "@/components/IconSVG.vue";
 import Message from 'primevue/message';
 import { useStore } from "vuex";
+import { saveAs } from 'file-saver';
 import SuccessMessage from '@/components/successMessage.vue';
 import { onMounted, onUnmounted, ref, reactive  } from "vue";
 export default {
@@ -296,7 +300,7 @@ export default {
     Field
   } ,
    setup() {
-    const allDeductions = ref([]);
+    const allStatements = ref([]);
     let prevNonSearched = ref();
     let prevSearched = ref();
     let searchText = ref("");
@@ -320,16 +324,16 @@ export default {
 
     onMounted(() => {
       loading.value = true;
-     loadAllDeductions()
+     loadallStatements()
     });
   const { numberDropdown, filterDropdown, filterMethod, subFilter } = useClientUser();
 
   const loading = ref(false);
-  const loadAllDeductions = ()=>{
+  const loadallStatements = ()=>{
     store
-    .dispatch("financialControl/getDeductionList")
+    .dispatch("financialControl/getStatementList")
     .then((res) => {
-      allDeductions.value = res.data.data;
+      allStatements.value = res.data.data;
       prevNonSearched.value = res.data.data
     })
     .catch((error) => {
@@ -351,7 +355,7 @@ export default {
       selectedCurrencyFilter.value = "contains";
       selectedQuantityFilter.value = "isEqualTo";
       selectedAmountFilter.value = "isEqualTo";
-      allDeductions.value = prevNonSearched.value;
+      allStatements.value = prevNonSearched.value;
       prevSearched.value = [];
     };
 
@@ -456,7 +460,7 @@ export default {
       }
 
       // CHECK wheather record is found againts applied filters
-      allDeductions.value = filteredData;
+      allStatements.value = filteredData;
       prevSearched.value = filteredData;
     };
     const filteredMainMethod = () => {
@@ -471,12 +475,12 @@ export default {
       // fileds to be check for filters
       if (partnerName.value || searchItemType.value || searchItemType.value || searchedCurrency.value || quantity.value || searchedAmount.value) {
          const searchableFields = ["partnerName string", "reference string", "currency string","amount number","quantity number", "date number"]
-        allDeductions.value = filterMethod(prevSearched.value,searchableFields,value)
+        allStatements.value = filterMethod(prevSearched.value,searchableFields,value)
       } else {
         // default, When no filters is applied
         const searchableFields = ["partnerName string", "reference string", "currency string", "amount number","quantity number", "date number"]
-        allDeductions.value = filterMethod(prevNonSearched.value,searchableFields,value)
-        prevMainSearchHistry.value = allDeductions.value;
+        allStatements.value = filterMethod(prevNonSearched.value,searchableFields,value)
+        prevMainSearchHistry.value = allStatements.value;
       }
     };
 
@@ -485,6 +489,22 @@ export default {
         showFilters.value = false;
       }
     };
+
+  const downloadFileLink = ref("");
+  const downloadStatement = ({ filename })=>{
+    downloadFileLink.value = filename;
+  } 
+
+  const closeMenuStatement = ref("")
+  const statementActionBtnClicked = async (e)=>{
+    console.log(e)
+    if(e == 'Send Email'){
+
+    } else if( e == 'Download'){
+      await saveAs(downloadFileLink.value)
+      closeMenuStatement.value.toggle(e, ' ')
+    }
+  }
 
     onUnmounted(()=>{
         store.commit('financialControl/setDistributorName',null)
@@ -499,11 +519,15 @@ export default {
       selectedAmountFilter,
       selectedQuantityFilter,
       selectedCurrencyFilter,
+      downloadStatement,
+      downloadFileLink,
+      statementActionBtnClicked,
+      closeMenuStatement,
       selectedItemTypeFilter,
       selectedNameFilter,
-      loadAllDeductions,
+      loadallStatements,
       filterDropdown,
-      allDeductions,
+      allStatements,
       filteredMainMethod,
       closeFilter,
       applyFilter,

@@ -21,7 +21,7 @@
             />
           </svg>
         </div>
-        <div class="w-2/5 ml-3 font-bold truncate text-medium">{{ }} </div>
+        <div class="w-2/5 ml-3 font-bold truncate text-medium">Deduction- {{ deductionDetail && deductionDetail.partnerName }} </div>
       </div>
       <div class="mr-12 place-self-end">
         <span class="text-sm font-semibold"> Creation Date:  </span>
@@ -67,13 +67,13 @@
                 <div class="...">{{ deductionDetail && formatDate(deductionDetail.date.split("T")[0]) }}</div>
               </div>
               <div class="ml-1 font-bold text-medium md:mt-6">
-                Item Desvription / expense Details:
+                Item Description / expense Details:
               </div>
               <div
                 class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
                 style="word-wrap: break-word"
               >
-                {{ deductionDetail?.description }} 
+                {{ deductionDetail?.description ? deductionDetail.description: 'No Description' }} 
               </div>
             </div>
           </div>

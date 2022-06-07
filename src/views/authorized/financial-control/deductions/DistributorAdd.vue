@@ -352,6 +352,7 @@ export default {
         v$.value.itemType.$invalid ||
         v$.value.quantity.$invalid ||
         v$.value.date.$invalid ||
+        v$.value.itemDescription.$invalid ||
         (v$.value.distributorId.$invalid &&  userData.value.isMasterPanelUser)
       ) {
         return true;

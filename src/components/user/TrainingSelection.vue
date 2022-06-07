@@ -45,7 +45,7 @@
             <div class="w-full pl-1">
               <select-option
                 :filterDropdown="trainingProvidersArray"
-                labelText="Name / Email address"
+                labelText="Select Name"
                 :customeWidth="true"
                 v-model="trainingDetail.trainingprovider"
               ></select-option>
@@ -78,7 +78,7 @@
                 <p class="text-sm font-bold">John Doe</p>
                 <p class="text-sm opacity-50"> Personality Assessment Trainer </p>
               </div>
-              
+
               <span class="ml-4 cursor-pointer">
                 <IconSVG
                 :applyClass="true"
@@ -146,7 +146,7 @@ export default {
      const indUserDetail = (store.getters['clientControl/getIndClientUser'])?.userDetails;
 
      const otherCheckbox = ref( indUserDetail?.trainingLevelOther? true:false);
-     
+
      if(indUserDetail && indUserDetail.trainingLevel){
       const result = indUserDetail?.trainingLevel.split(",")
       if(result.length)
@@ -170,7 +170,7 @@ export default {
       trainingdetails: indUserDetail?.trainingNotes??"",
       trainingLevelOther: indUserDetail?.trainingLevelOther??""
     });
-    
+
     watch(
       () => otherCheckbox.value,
       (currentValue, _) => {
@@ -227,7 +227,7 @@ export default {
           console.log("error is...", error);
         });
     };
-   
+
      const rules = computed(() => {
       return {
        traininglevel: {
@@ -244,7 +244,7 @@ export default {
             "Name / Email address is required",
             required
           ),
-        }, 
+        },
         trainingyear: {
           required: helpers.withMessage(
             "Year of training is required",
@@ -296,7 +296,7 @@ export default {
            traininglevelother: trainingDetail.trainingLevelOther
          }
          emit("trainingSelectionDetail",data)
-        } else{ 
+        } else{
           emit("trainingSelectionDetail",trainingDetail)
         }
 
@@ -312,7 +312,7 @@ export default {
         otherCheckbox,
         trainingProvidersArray,
         v$
-     }  
+     }
     },
 }
 </script>
