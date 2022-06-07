@@ -85,16 +85,16 @@
             <span>{{ userName }}</span>
           </div>
           <template #dropdown>
-            <nav-bar-item to="/profile">
-              <nav-bar-item-label :icon="mdiAccount" label="My Profile" />
-            </nav-bar-item>
-            <nav-bar-item>
-              <nav-bar-item-label :icon="mdiCogOutline" label="Settings" />
-            </nav-bar-item>
-            <nav-bar-item>
-              <nav-bar-item-label :icon="mdiEmail" label="Messages" />
-            </nav-bar-item>
-            <nav-bar-menu-divider />
+<!--            <nav-bar-item to="/profile">-->
+<!--              <nav-bar-item-label :icon="mdiAccount" label="My Profile" />-->
+<!--            </nav-bar-item>-->
+<!--            <nav-bar-item>-->
+<!--              <nav-bar-item-label :icon="mdiCogOutline" label="Settings" />-->
+<!--            </nav-bar-item>-->
+<!--            <nav-bar-item>-->
+<!--              <nav-bar-item-label :icon="mdiEmail" label="Messages" />-->
+<!--            </nav-bar-item>-->
+<!--            <nav-bar-menu-divider />-->
             <nav-bar-item @click="logoutHanlder">
               <nav-bar-item-label :icon="mdiLogout" label="Log Out" />
             </nav-bar-item>
