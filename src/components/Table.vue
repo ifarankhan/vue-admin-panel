@@ -492,6 +492,52 @@
             </Column>
             </span>
 
+                  <span v-if="tableType=='statements'">
+              <Column field="partnerName" header="Partner Name" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.partnerName }}</span>
+                </template>
+              </Column>
+              <Column field="partnerName" header="Email" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.partnerName }}</span>
+                </template>
+              </Column>
+              <Column field="email" header="FileName" sortField="filename" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.email && data.email.split(";")[0] }}</span>
+                </template>
+              </Column>
+              <Column field="created" header="Date" sortField="created" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{data?.created.split("T")[0] }} </span>
+                </template>
+              </Column>
+              <Column field="lastModified" header="Last modified" sortField="lastModified" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                   <span>{{ data?.lastModified.split("T")[0] }}  </span>
+                </template>
+              </Column>
+               
+            <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
+              <template #body="{data}">
+                  <div class="my-center-text" @click.stop="toggle($event, data)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <Menu id="overlay_menu" ref="menu" :model="statementItems" :popup="true">
+                       <template #item="{item}">
+                            <p class="p-2 cursor-pointer" @click.prevent="$emit('statementActionClicked', item.label)">{{ item.label }}</p>
+                    </template>
+                    </Menu>
+                  </div>
+              </template>
+            </Column>
+            </span>
+
     </DataTable>
 </template>
 <script>
@@ -595,6 +641,12 @@ export default {
 				}
 			])
 
+      const statementItems = ref([
+				{
+					label: 'Download'
+				}
+			])
+
       const actions = ref([
 				{
 					label: 'Edit Client'
@@ -608,6 +660,7 @@ export default {
 
 
        const toggle = (event, data) => {
+         console.log("event is...", event)
             emit("rowData", data)
             if(daysDiffrence(data?.dateOfUpdate) <=5){
               menu.value.toggle(event);
@@ -616,7 +669,7 @@ export default {
         const save = () => {
             // toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
         };
-
+        
         const showConsole = ()=>{
 
         }
@@ -636,6 +689,7 @@ export default {
             items,
             actions,
             exportCSV,
+            statementItems,
             currency_symbols,
             daysDiffrence,
             fresDeskStatuses,
