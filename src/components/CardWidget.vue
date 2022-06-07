@@ -2,14 +2,14 @@
   <card-component>
     <level v-if="trend" class="mb-3" mobile>
       <trend-pill :trend="trend" :trend-type="trendType" small />
-      <jb-button
-        :icon="mdiCog"
-        icon-w="w-4"
-        icon-h="h-4"
-        :color="darkMode ? 'white' : 'light'"
-        :outline="darkMode"
-        small
-      />
+<!--      <jb-button-->
+<!--        :icon="mdiCog"-->
+<!--        icon-w="w-4"-->
+<!--        icon-h="h-4"-->
+<!--        :color="darkMode ? 'white' : 'light'"-->
+<!--        :outline="darkMode"-->
+<!--        small-->
+<!--      />-->
     </level>
     <level mobile>
       <div>
