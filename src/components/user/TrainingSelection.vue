@@ -201,9 +201,9 @@ export default {
           };
     });
     const endYear = new Date(
-      new Date().setFullYear(new Date().getFullYear() + 20)
+      new Date().setFullYear(new Date().getFullYear() - 30)
     ).getFullYear();
-    yearsArray.value = rangeOfYears(new Date().getFullYear(), endYear);
+    yearsArray.value = rangeOfYears(endYear,new Date().getFullYear());
 
     onMounted(() => {
       loadAllTrainingProviders();
