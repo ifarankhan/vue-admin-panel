@@ -472,7 +472,7 @@
                       <span>{{ formatDate(data.date.split("T")[0]) }}</span>
                   </template>
               </Column>
-               
+
             <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body="{data}">
                   <div class="my-center-text">
@@ -498,27 +498,27 @@
                     <span>{{ data.partnerName }}</span>
                 </template>
               </Column>
-              <Column field="partnerName" header="Email" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
-                <template #body="{data}">
-                    <span>{{ data.partnerName }}</span>
-                </template>
-              </Column>
-              <Column field="email" header="FileName" sortField="filename" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="email" header="Email" sortField="email" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
                     <span>{{ data.email && data.email.split(";")[0] }}</span>
                 </template>
               </Column>
+              <Column field="filename" header="File Name" sortField="fileName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.filename.split("/").pop() }}</span>
+                </template>
+              </Column>
               <Column field="created" header="Date" sortField="created" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.created.split("T")[0] }} </span>
+                   <span>{{formatDate(data?.created.split("T")[0]) }} </span>
                 </template>
               </Column>
               <Column field="lastModified" header="Last modified" sortField="lastModified" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{ data?.lastModified.split("T")[0] }}  </span>
+                   <span>{{ formatDate(data?.lastModified.split("T")[0]) }}  </span>
                 </template>
               </Column>
-               
+
             <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body="{data}">
                   <div class="my-center-text" @click.stop="toggle($event, data)">
@@ -656,7 +656,7 @@ export default {
 				}
 			])
 
-    
+
 
 
        const toggle = (event, data) => {
@@ -669,7 +669,7 @@ export default {
         const save = () => {
             // toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
         };
-        
+
         const showConsole = ()=>{
 
         }

@@ -30,33 +30,33 @@
       >
 
 
-        <nav-bar-menu has-divider :show-icon="false">
-          <nav-bar-item-label
-            :icon="mdiBell"
-            label="Notifications"
-            is-desktop-icon-only
-          />
-          <template #dropdown>
-            <div class="p-5 w-72">
-              <span class="text-black cursor-default text-xm">Notifications:</span>
-              <nav-bar-menu-divider />
-              <nav-bar-item to="/profile">
-                <nav-bar-item-label :icon="mdiHandExtendedOutline" label="New ticket has been created" />
-              </nav-bar-item>
-              <nav-bar-item>
-                <nav-bar-item-label :icon="mdiEmail" label="New comment on your ticket, Ticket id#256" />
-              </nav-bar-item>
-              <nav-bar-item>
-                <nav-bar-item-label :icon="mdiCommentTextOutline" label="New comment has been added" />
-              </nav-bar-item>
-              <nav-bar-menu-divider />
-              <span class="text-xm">
-                Show all notifications
-              </span>
-            </div>
-          </template>
+<!--        <nav-bar-menu has-divider :show-icon="false">-->
+<!--          <nav-bar-item-label-->
+<!--            :icon="mdiBell"-->
+<!--            label="Notifications"-->
+<!--            is-desktop-icon-only-->
+<!--          />-->
+<!--          <template #dropdown>-->
+<!--            <div class="p-5 w-72">-->
+<!--              <span class="text-black cursor-default text-xm">Notifications:</span>-->
+<!--              <nav-bar-menu-divider />-->
+<!--              <nav-bar-item to="/profile">-->
+<!--                <nav-bar-item-label :icon="mdiHandExtendedOutline" label="New ticket has been created" />-->
+<!--              </nav-bar-item>-->
+<!--              <nav-bar-item>-->
+<!--                <nav-bar-item-label :icon="mdiEmail" label="New comment on your ticket, Ticket id#256" />-->
+<!--              </nav-bar-item>-->
+<!--              <nav-bar-item>-->
+<!--                <nav-bar-item-label :icon="mdiCommentTextOutline" label="New comment has been added" />-->
+<!--              </nav-bar-item>-->
+<!--              <nav-bar-menu-divider />-->
+<!--              <span class="text-xm">-->
+<!--                Show all notifications-->
+<!--              </span>-->
+<!--            </div>-->
+<!--          </template>-->
 
-        </nav-bar-menu>
+<!--        </nav-bar-menu>-->
 
         <!-- language switcher -->
         <nav-bar-menu has-divider :hasCustomIcon="true">
