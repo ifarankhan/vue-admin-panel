@@ -313,11 +313,9 @@
         <TabPanel>
           <div class="flex p-4 md:mt-6">
             <div class="w-2/3">
-              <div class="ml-1 font-bold text-medium">Account Details</div>
+              <div class="ml-1 font-bold text-medium">Notes</div>
               <div
-                :class="[
-                  !accountDetail?.accountDescription ? 'line-through' : '',
-                ]"
+
                 class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
                 style="word-wrap: break-word;"
               >
@@ -331,12 +329,12 @@
               <div class="ml-1 font-bold text-medium md:mt-6">
                 Account Address
               </div>
-              <div
+              <address
                 class="w-11/12 p-4 mt-2 mb-4 text-justify bg-gray-200"
                 style="word-wrap: break-word"
               >
                 {{ accountDetail?.accountAddress ?? "" }}
-              </div>
+              </address>
             </div>
             <div class="w-1/3">
               <span>
@@ -843,7 +841,7 @@ export default {
     let prevSearched = ref();
     let selectedNameFilter = ref("contains");
     let selectedUserNameFilter = ref("contains");
-    let selectedFamilyNameFilter = ref("contains"); 
+    let selectedFamilyNameFilter = ref("contains");
     let accountName = ref("");
     let searchUserName = ref("");
     let searchFamilyName = ref("");
@@ -965,9 +963,9 @@ export default {
       searchUserName.value = "";
       searchFamilyName.value = "";
       searchedCredits.value="";
-      
-      selectedNameFilter.value = 'contains'; 
-      selectedUserNameFilter.value = 'contains'; 
+
+      selectedNameFilter.value = 'contains';
+      selectedUserNameFilter.value = 'contains';
       selectedFamilyNameFilter.value = 'contains';
       selectedCreditsFilter.value = 'isEqualTo';
 
