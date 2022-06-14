@@ -108,17 +108,17 @@
             </span>
 
         <span v-if="tableType=='distributorsList'">
-              <Column header="SN" style="cursor: pointer;">
+              <Column header="SN" style="max-width:4rem;cursor: pointer;">
                 <template #body="{data}">
                    <span> {{  String(data.sno).padStart(2, '0') }} </span>
                 </template>
               </Column>
-              <Column field="name" header="Display Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Display Name" :sortable="sortTable" style="min-width: 20%;cursor: pointer">
                 <template #body="{data}">
                    <span> {{data.displayName}} </span>
                 </template>
               </Column>
-              <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
                   <div class="truncate custome-width">
                       <span>{{data.email}} </span>
@@ -301,9 +301,9 @@
             </span>
 
             <span v-if="tableType =='users'">
-              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 30%;cursor: pointer">
                 <template #body="{data}">
-                    <div class="flex space-x-4 truncate custome-width">
+                    <div class="flex space-x-4 truncate">
                          <span>
                              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36.136" viewBox="0 0 36 36.136">
                               <defs>
@@ -326,9 +326,14 @@
                  </div>
                 </template>
             </Column>
-              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 30%; cursor: pointer">
                   <template #body="{data}">
-                      <div  class="truncate custome-width">{{data.address}}</div>
+                      <div  class="truncate">{{data.address}}</div>
+                  </template>
+              </Column>
+              <Column header="Status" sortField="status" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text"> {{data.status? "Active":"In-Active" }}</span>
                   </template>
               </Column>
               <Column header="No. of Users" sortField="users" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
@@ -710,7 +715,7 @@ export default {
     width: calc(100% - 305px)  !important;
 }
 .fixedheader .p-datatable-tbody{
-  margin-top: 57px;
+  margin-top: 7vh;
 }
 .extra-body-margin .p-datatable-thead tr{
   height: 60px !important;

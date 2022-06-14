@@ -112,7 +112,7 @@
       <check-radio-picker
         name="sample-checkbox"
         v-model="form.addAnother"
-        :options="{ another: 'Create Another' }"
+
       />
       <psytech-button label="Create Account" @click="submit"></psytech-button>
       <psytech-button
