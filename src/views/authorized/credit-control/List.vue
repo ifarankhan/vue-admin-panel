@@ -80,18 +80,6 @@
             <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="(showCreditToClientDialog = true,  showSuccessAlert = false)"> Transfer Credit to clients </div>
           </div>
 
-<!--        <div class="relative p-4 mt-10 ml-20 border-2 border-gray-300 rounded-md w-72">-->
-<!--          <div class="flex">-->
-<!--            <div>-->
-<!--              <p class="text-sm font-semibold"> Update Settings </p>-->
-<!--              <p class="mb-2 text-lg font-bold text-black"> {{ '&#45;&#45;' }} </p>-->
-<!--            </div>-->
-<!--            <div></div>-->
-<!--          </div>-->
-<!--          &lt;!&ndash;  &ndash;&gt;-->
-<!--          <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showSettingsDialog = true">View/Update Settings </div>-->
-<!--        </div>-->
-
       </div>
       <topUpCreditDialog
       v-if="topUpCreditDialog"
@@ -143,15 +131,16 @@
       <TabPanel>
         <CreditTopBar
             @datePicked="loadTransferedToMe($event)"
-            @exportCSV="downloadExportFile"
+            @exportCSV="sortDataForExport" 
             :data="tableData.length"
             @valuedChanged="searchedDataTransferedClientToUser($event)" />
         <div>
           <DataTable
               :customers="tableData"
+              :emitSortedData="true"
               :rowHover="true"
               :paginator="true"
-              ref="exportRef"
+              @sortingCriteria="sortTableDataForExport($event)"
               :rowsPerPageOptions="[10, 20, 30]"
               :rows="10"
               :loading="loading"
@@ -179,8 +168,8 @@
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
                 :loading="loading"
-                :image='true'
                 tableType="creditTableFirst"
+                :image='true'
                 @rowClicked="updateDialogData($event)"
                 @correctCreditUpdate="(showDialog = true)"
               />
@@ -255,6 +244,9 @@ import { mdiFileDelimitedOutline } from '@mdi/js';
 import CardWidget from "@/components/CardWidget";
 import Icon from '@/components/Icon'
 import topUpCreditDialog from "@/components/topUpCreditDialog.vue";
+import * as XLSX from 'xlsx/xlsx.mjs';
+// import XLSX from 'xlsx'
+// import * as XLSX from 'https://unpkg.com/xlsx/xlsx.mjs';
 import creditToClientDialog from "@/components/transferredCreditToClientDialog.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
@@ -544,6 +536,37 @@ export default {
         })
   }
 
+  const sortedAndGroupedData = reactive({
+    groupedData: null
+  });
+
+  const sortTableDataForExport = ({ sortField, sortOrder})=>{
+    let sortedArray = _.orderBy(tableData.value,sortField , [sortOrder ==1 ?'asc': 'desc']);
+    let groupedData = _.groupBy(sortedArray, "accountName")
+
+    sortedAndGroupedData.groupedData = groupedData;
+  }
+
+  const sortDataForExport = ()=>{
+    let groupedData;
+    if(sortedAndGroupedData.groupedData){
+      groupedData = sortedAndGroupedData.groupedData
+    } else{
+       let sortedArray = _.orderBy(tableData.value,'accountName' , ['asc']);
+       groupedData = _.groupBy(sortedArray, "accountName")
+    }
+    
+    var wb = XLSX.utils.book_new() // make Workbook of Excel
+    Object.keys(groupedData).forEach(function(key) {
+      
+      XLSX.utils.book_append_sheet(wb,  XLSX.utils.json_to_sheet(groupedData[key]) , key) // sheetAName is name of Worksheet  
+
+    });
+     // export Excel file
+      XLSX.writeFile(wb, 'creadits_update.xlsx') // name of the file is 'book.xlsx'
+
+  }
+
     return {
       loadTransferedToMe,
       tableData,
@@ -551,9 +574,12 @@ export default {
       persistedData,
       updateDialogData,
       topUpCreditMethod,
+      sortDataForExport,
       successMessage,
       clientDetailDialog,
       clientToUsersDetailDialog,
+      sortTableDataForExport,
+      sortedAndGroupedData,
       sendCallCreditToClient,
       searchedDataTransferedToMe,
       searchedDataTransferedToClient,
