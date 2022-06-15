@@ -109,17 +109,17 @@
             </span>
 
         <span v-if="tableType=='distributorsList'">
-              <Column header="SN" style="cursor: pointer;">
+              <Column header="SN" style="max-width:4rem;cursor: pointer;">
                 <template #body="{data}">
                    <span> {{  String(data.sno).padStart(2, '0') }} </span>
                 </template>
               </Column>
-              <Column field="name" header="Display Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Display Name" :sortable="sortTable" style="min-width: 20%;cursor: pointer">
                 <template #body="{data}">
                    <span> {{data.displayName}} </span>
                 </template>
               </Column>
-              <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="eamil" header="Distributor Email" sortField="email" :sortable="sortTable" style="min-width: 15rem;cursor: pointer">
                 <template #body="{data}">
                   <div class="truncate custome-width">
                       <span>{{data.email}} </span>
@@ -302,9 +302,9 @@
             </span>
 
             <span v-if="tableType =='users'">
-              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 30%;cursor: pointer">
                 <template #body="{data}">
-                    <div class="flex space-x-4 truncate custome-width">
+                    <div class="flex space-x-4 truncate">
                          <span>
                              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36.136" viewBox="0 0 36 36.136">
                               <defs>
@@ -327,9 +327,14 @@
                  </div>
                 </template>
             </Column>
-              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 30%; cursor: pointer">
                   <template #body="{data}">
-                      <div  class="truncate custome-width">{{data.address}}</div>
+                      <div  class="truncate">{{data.address}}</div>
+                  </template>
+              </Column>
+              <Column header="Status" sortField="status" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text"> {{data.status? "Active":"In-Active" }}</span>
                   </template>
               </Column>
               <Column header="No. of Users" sortField="users" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
@@ -473,7 +478,7 @@
                       <span>{{ formatDate(data.date.split("T")[0]) }}</span>
                   </template>
               </Column>
-               
+
             <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body="{data}">
                   <div class="my-center-text">
@@ -499,27 +504,27 @@
                     <span>{{ data.partnerName }}</span>
                 </template>
               </Column>
-              <Column field="partnerName" header="Email" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
-                <template #body="{data}">
-                    <span>{{ data.partnerName }}</span>
-                </template>
-              </Column>
-              <Column field="email" header="FileName" sortField="filename" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+              <Column field="email" header="Email" sortField="email" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
                     <span>{{ data.email && data.email.split(";")[0] }}</span>
                 </template>
               </Column>
+              <Column field="filename" header="File Name" sortField="fileName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
+                <template #body="{data}">
+                    <span>{{ data.filename.split("/").pop() }}</span>
+                </template>
+              </Column>
               <Column field="created" header="Date" sortField="created" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{data?.created.split("T")[0] }} </span>
+                   <span>{{formatDate(data?.created.split("T")[0]) }} </span>
                 </template>
               </Column>
               <Column field="lastModified" header="Last modified" sortField="lastModified" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
                 <template #body="{data}">
-                   <span>{{ data?.lastModified.split("T")[0] }}  </span>
+                   <span>{{ formatDate(data?.lastModified.split("T")[0]) }}  </span>
                 </template>
               </Column>
-               
+
             <Column style="min-width: 3rem; cursor: pointer" bodyStyle="text-align:right">
               <template #body="{data}">
                   <div class="my-center-text" @click.stop="toggle($event, data)">
@@ -670,7 +675,7 @@ export default {
         const save = () => {
             // toast.add({severity: 'success', summary: 'Success', detail: 'Data Saved', life: 3000});
         };
-        
+
         const showConsole = ()=>{
 
         }
@@ -718,7 +723,7 @@ export default {
     width: calc(100% - 305px)  !important;
 }
 .fixedheader .p-datatable-tbody{
-  margin-top: 57px;
+  margin-top: 7vh;
 }
 .extra-body-margin .p-datatable-thead tr{
   height: 60px !important;

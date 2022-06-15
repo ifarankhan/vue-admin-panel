@@ -31,7 +31,7 @@
           color="text-red-400"
           :icon="mdiRefresh"
           :number="widgetData?.creditUpdates"
-          label="Total Distributor Credit Updates"
+          label=" Total credit updates"
       />
       <card-widget
           trend="Total"
@@ -45,12 +45,12 @@
           color="text-yellow-500"
           :icon="mdiChartTimelineVariant"
           :number="widgetData?.transferableCredits"
-          label="Total Transferable Credits"
+          label="Number of People Assessed"
       />
 
     </div>
     <div class="grid grid-cols-2 gap-6 mb-6 lg:grid-cols-2">
-      <!-- <table-list title="Low Credit Clients" /> --> 
+      <!-- <table-list title="Low Credit Clients" /> -->
 
        <div>
           <p class="ml-1 text-lg font-bold">Top Five Clients:</p>
@@ -170,11 +170,11 @@ export default {
     }
     const getDashboardData = ()=>{
       loading.value = true;
-      Promise.allSettled([ 
-      store.dispatch("auth/getWidgetTopClients"), 
+      Promise.allSettled([
+      store.dispatch("auth/getWidgetTopClients"),
       store.dispatch("auth/getWidgetListLowCreditClients"),
       store.dispatch("auth/getWidgetMostUsedReports")
-    ]) 
+    ])
     .then(async results =>{
       const [topClientsData, lowCreditClients, mostUsedReports] = results;
 
@@ -186,8 +186,8 @@ export default {
       // lowCreditClients
        if(lowCreditClients.status== "fulfilled"){
          besidesWidgetData.lowCreditClients = await lowCreditClients.value.data.data;
-       } 
-       
+       }
+
       // mostUsedReports
        if(mostUsedReports.status== "fulfilled"){
          besidesWidgetData.mostUsedReports = await mostUsedReports.value.data.data;
@@ -195,8 +195,8 @@ export default {
 
        console.log("besidesWidgetData",besidesWidgetData)
 
-    }).catch(error=>{ 
-      console.log("error", error) 
+    }).catch(error=>{
+      console.log("error", error)
       }).finally(()=>{
         loading.value = false;
       })
