@@ -5,6 +5,7 @@
             :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions"
             :first="first"
+            @sort="sortedData"
             ref="dt"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
             :scrollable="true"
@@ -276,7 +277,7 @@
                     <span>{{ data?.email?data?.email:'--' }}</span>
                 </template>
               </Column>
-              <Column field="accountName" sortField="Client" header="Client" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="accountName" sortField="accountName" header="Client" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
                     <span>{{ data?.accountName?data?.accountName:'--' }}</span>
                 </template>
@@ -622,6 +623,10 @@ export default {
             type: String,
             default: 'record'
         },
+        emitSortedData:{
+          type: Boolean,
+          default: false
+        },
         tableType:{
           type: String,
           default: 'users'
@@ -656,11 +661,7 @@ export default {
 				}
 			])
 
-    
-
-
        const toggle = (event, data) => {
-         console.log("event is...", event)
             emit("rowData", data)
             if(daysDiffrence(data?.dateOfUpdate) <=5){
               menu.value.toggle(event);
@@ -679,11 +680,18 @@ export default {
             dt.value.exportCSV();
         };
 
+        const sortedData = ({ sortField, sortOrder })=>{
+          if(props.emitSortedData) {
+            emit('sortingCriteria', { 'sortField': sortField, 'sortOrder': sortOrder })
+          }
+        }
+
 
         return {
             showConsole,
             toggle,
             save,
+            sortedData,
             menu,
             dt,
             items,
