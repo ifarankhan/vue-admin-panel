@@ -45,6 +45,14 @@ const actions = {
             }
         })
     },
+    async getClientInSights({}){
+        const userData = await JSON.parse(localStorage.getItem("userData"));
+        return private_url.get('widget-client-insights', {
+            params: {
+                distributorId: userData.distributorId
+            }
+        })
+    },
     async getWidgetMostUsedReports({}){
         const userData = await JSON.parse(localStorage.getItem("userData"));
         return private_url.get('widget-list-most-used-reports', {

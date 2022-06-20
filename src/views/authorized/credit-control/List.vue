@@ -246,9 +246,6 @@ import { mdiFileDelimitedOutline } from '@mdi/js';
 import CardWidget from "@/components/CardWidget";
 import Icon from '@/components/Icon'
 import topUpCreditDialog from "@/components/topUpCreditDialog.vue";
-import * as XLSX from 'xlsx/xlsx.mjs';
-// import XLSX from 'xlsx'
-// import * as XLSX from 'https://unpkg.com/xlsx/xlsx.mjs';
 import creditToClientDialog from "@/components/transferredCreditToClientDialog.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";

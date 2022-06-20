@@ -73,7 +73,7 @@
                     selected ? 'border-b-2 border-gray-400' : 'border-0',
                   ]"
                 >
-                  Account Users ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers :'' }})
+                  Account Users ({{ accountDetail && accountDetail.numberOfUsers? accountDetail.numberOfUsers : userArray?.length + masterUser?.length }})
                 </button>
               </Tab>
             </TabList>
@@ -994,6 +994,7 @@ export default {
 
     const fetchListOfUsers = ()=>{
       loading.value = true;
+      console.log('accountDetail',accountDetail.value, accountDetail.value?.accountId)
       store
           .dispatch("clientControl/getAccountUsers",{
             accountId: accountDetail.value?.accountId??''
