@@ -44,7 +44,7 @@
           trend="Total"
           color="text-yellow-500"
           :icon="mdiChartTimelineVariant"
-          :number="widgetData?.transferableCredits"
+          :number="widgetData?.peopleAssessed"
           label="Number of People Assessed"
       />
 
