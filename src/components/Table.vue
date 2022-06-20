@@ -367,35 +367,48 @@
             </span>
 
             <span v-if="tableType =='topClients'">
-              <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
-                  <div>
-                    <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
-                    <span> {{data.firstName}} </span>
+                  <div class="flex space-x-4 truncate">
+                    <span>
+                      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36.136" viewBox="0 0 36 36.136">
+                        <defs>
+                          <linearGradient id="linear-gradient" x1="0.5" x2="0.514" y2="0.628" gradientUnits="objectBoundingBox">
+                            <stop offset="0" stop-color="#103c58"/>
+                            <stop offset="1" stop-color="#455080"/>
+                          </linearGradient>
+                        </defs>
+                        <g id="Group_36418" data-name="Group 36418" transform="translate(-1418.376 -241.376)">
+                          <g id="Group_872" data-name="Group 872" transform="translate(1418 241)" opacity="0.114">
+                            <rect id="Rectangle_3484" data-name="Rectangle 3484" width="36" height="36" rx="5" transform="translate(0.376 0.376)" fill="url(#linear-gradient)"/>
+                            <path id="Path_12665" data-name="Path 12665" d="M230.322,838.457l2.2-2.2a2.7,2.7,0,0,1,4.1,0c2.149,2.195,9.61,9.029,9.61,9.029s0,6.022,0,6.028a2.37,2.37,0,0,1-.857,1.891Z" transform="translate(-209.857 -817.853)" fill="#7a8aaf"/>
+                            <path id="Path_12664" data-name="Path 12664" d="M200.984,838.69l9.634-9.107s2.331-2.5,4.527,0c.949,1.08,16.107,16.029,21.153,20.976a2.9,2.9,0,0,1-1.619.755H203.261a2.722,2.722,0,0,1-2.235-2.362Z" transform="translate(-200.608 -814.802)" fill="#cdd5e0"/>
+                            <ellipse id="Ellipse_595" data-name="Ellipse 595" cx="2.991" cy="2.778" rx="2.991" ry="2.778" transform="translate(23.932 5.556)" fill="#fff"/>
+                          </g>
+                        </g>
+                      </svg>
+                    </span>
+                    <span> {{data.name}} </span>
                  </div>
                 </template>
             </Column>
-              <Column field="familyName" header="Family Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <!-- <Column field="address" header="Address" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                   <template #body="{data}">
-                      <span> {{data.familyName}} </span>
+                      <span> {{data.address}} </span>
                   </template>
               </Column>
-              <Column header="Email" sortField="email" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column field="description" header="Description" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
-                      <span> {{data.email}}</span>
-                  </template>
-              </Column>
-               <!-- <Column header="Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                   <template #body="{data}">
-                      <span>{{ data.dateOfUpdate.split("T")[0] }}</span>
-                  </template>
-              </Column>
-               <Column header="Time" sortField="time" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                   <template #body="{data}">
-                      <span>{{ data.dateOfUpdate.split("T")[1].split("Z")[0] }}</span>
+                      <span> {{data.description}}</span>
                   </template>
               </Column> -->
+              <Column field="credits" header="Balance" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span> {{data.credits}}</span>
+                  </template>
+              </Column>
             </span>
+
              <span v-if="tableType =='lowCreditCLients'">
               <Column field="firstName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
                 <template #body="{data}">
@@ -487,13 +500,6 @@
                               d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                     </svg>
                   </div>
-                  <!-- <div>
-                    <Menu id="overlay_menu" ref="menu" :model="items" :popup="true">
-                       <template #item="{item}">
-                            <p class="p-2 cursor-pointer" @click.prevent="$emit('correctCreditUpdate')">{{ item.label }}</p>
-                    </template>
-                    </Menu>
-                  </div> -->
               </template>
             </Column>
             </span>
