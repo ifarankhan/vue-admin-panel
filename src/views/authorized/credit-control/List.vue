@@ -80,18 +80,6 @@
             <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="(showCreditToClientDialog = true,  showSuccessAlert = false)"> Transfer Credit to clients </div>
           </div>
 
-<!--        <div class="relative p-4 mt-10 ml-20 border-2 border-gray-300 rounded-md w-72">-->
-<!--          <div class="flex">-->
-<!--            <div>-->
-<!--              <p class="text-sm font-semibold"> Update Settings </p>-->
-<!--              <p class="mb-2 text-lg font-bold text-black"> {{ '&#45;&#45;' }} </p>-->
-<!--            </div>-->
-<!--            <div></div>-->
-<!--          </div>-->
-<!--          &lt;!&ndash;  &ndash;&gt;-->
-<!--          <div class="absolute inline-block py-1.5 rounded-full text-white bg-psytechBlue cursor-pointer px-4 ml-3" @click="showSettingsDialog = true">View/Update Settings </div>-->
-<!--        </div>-->
-
       </div>
       <topUpCreditDialog
       v-if="topUpCreditDialog"
@@ -143,15 +131,16 @@
       <TabPanel>
         <CreditTopBar
             @datePicked="loadTransferedToMe($event)"
-            @exportCSV="downloadExportFile"
+            @exportCSV="sortDataForExport" 
             :data="tableData.length"
             @valuedChanged="searchedDataTransferedClientToUser($event)" />
         <div>
           <DataTable
               :customers="tableData"
+              :emitSortedData="true"
               :rowHover="true"
               :paginator="true"
-              ref="exportRef"
+              @sortingCriteria="sortTableDataForExport($event)"
               :rowsPerPageOptions="[10, 20, 30]"
               :rows="10"
               :loading="loading"
@@ -179,8 +168,8 @@
                 :rowsPerPageOptions="[10, 20, 30]"
                 :rows="10"
                 :loading="loading"
-                :image='true'
                 tableType="creditTableFirst"
+                :image='true'
                 @rowClicked="updateDialogData($event)"
                 @correctCreditUpdate="(showDialog = true)"
               />
@@ -247,6 +236,8 @@ import DataTable from "@/components/Table.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import StickyHeader from "@/components/StickyHeader";
 import _ from "lodash";
+import { saveAs } from 'file-saver';
+import ExcelJS from "exceljs";
 import CreditUpdateDialog from "@/components/credit/UpdateCreditDialog.vue";
 import ViewCreditDialog from "@/components/credit/ViewCreditDialog.vue";
 import PsytechButton from "@/components/PsytechButton";
@@ -255,6 +246,9 @@ import { mdiFileDelimitedOutline } from '@mdi/js';
 import CardWidget from "@/components/CardWidget";
 import Icon from '@/components/Icon'
 import topUpCreditDialog from "@/components/topUpCreditDialog.vue";
+import * as XLSX from 'xlsx/xlsx.mjs';
+// import XLSX from 'xlsx'
+// import * as XLSX from 'https://unpkg.com/xlsx/xlsx.mjs';
 import creditToClientDialog from "@/components/transferredCreditToClientDialog.vue";
 
 import CreditTopBar from "@/components/credit/topBar.vue";
@@ -544,6 +538,274 @@ export default {
         })
   }
 
+  const sortedAndGroupedData = reactive({
+    groupedData: null
+  });
+
+  const sortTableDataForExport = ({ sortField, sortOrder})=>{
+    let sortedArray = _.orderBy(tableData.value,sortField , [sortOrder ==1 ?'asc': 'desc']);
+    let groupedData = _.groupBy(sortedArray, "accountName")
+
+    sortedAndGroupedData.groupedData = groupedData;
+  }
+
+  const sortDataForExport = ()=>{
+    let groupedData;
+    if(sortedAndGroupedData.groupedData){
+      groupedData = sortedAndGroupedData.groupedData
+    } else{
+       let sortedArray = _.orderBy(tableData.value,'accountName' , ['asc']);
+       groupedData = _.groupBy(sortedArray, "accountName")
+    }
+    
+    // var wb = XLSX.utils.book_new() // make Workbook of Excel
+    // Object.keys(groupedData).forEach(function(key) {
+      
+    //   XLSX.utils.book_append_sheet(wb,  XLSX.utils.json_to_sheet(groupedData[key]) , key) // sheetAName is name of Worksheet  
+
+    // });
+    //  // export Excel file
+    //  XLSX.utils.sheet_add_aoa(wb, Heading, { origin: 'A1' });
+    //   XLSX.writeFile(wb, 'creadits_update.xlsx') // name of the file is 'book.xlsx'
+
+  let wb = new ExcelJS.Workbook();
+  let workbookName = "Credit Updates Summery.xlsx";
+
+   Object.keys(groupedData).forEach(function(key) {
+    // groupedData[key]
+       let ws = wb.addWorksheet(`${key}`
+      );
+
+    // Columns
+  ws.columns = [
+    { 
+      key: "accountID", 
+      header: "Account ID", 
+      width: 15 ,
+      style: {
+        alignment: { horizontal: "center" },
+      }
+    },
+    {
+      key: "userID",
+      header: "User ID",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" },
+      }
+    },
+    { 
+      key: "email", 
+      header: "Email", 
+      width: 30,
+      style: {
+        alignment: { horizontal: "center" },
+      }
+    },
+    {
+      key: "accountName",
+      header: "Account Name",
+      width: 40,
+      style: {
+        alignment: { horizontal: "center" },
+        font: { color: { argb: "008000" } }
+      }
+    },
+    { 
+      key: "purchaseID", 
+      header: "Purchase ID",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" },
+      } 
+    },
+    {
+      key: "amount",
+      header: "Amount",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" },
+        numFmt: "0.0"
+      }
+    },
+    {
+      key: "dateOfUpdate",
+      header: "Date Of Update",
+      width: 30,
+      style: { 
+        alignment: { horizontal: "center" },
+        numFmt: "mm/dd/yyyy"
+         }
+    },
+    {
+      key: "firstName",
+      header: "First Name",
+      width: 30,
+      style: { alignment: { wrapText: true, horizontal: "center" }, numFmt: '@' },
+    },
+    {
+      key: "familyName",
+      header: "Family Name",
+      width: 30,
+      style: { alignment: { wrapText: true, horizontal: "center" }, numFmt: '@' },
+    },
+     {
+      key: "creditsBefore",
+      header: "Credits Before",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" },
+        numFmt: "0.0"
+      }
+    },
+     {
+      key: "creditLimit",
+      header: "Credit Limit",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" },
+        numFmt: "0.0"
+      }
+    },
+     {
+      key: "userType",
+      header: "User Type",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "sharedCredit",
+      header: "Shared Credit",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "dongleID",
+      header: "Dongle ID",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" },
+        numFmt: "0.0"
+      }
+    },
+    {
+      key: "operator",
+      header: "Operator",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "masterUserId",
+      header: "Master User ID",
+      width: 15,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "masterUserEmail",
+      header: "Master User Email",
+      width: 25,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "masterUserFirstName",
+      header: "Master User First Name",
+      width: 25,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "masterUserLastName",
+      header: "Master User Last Name",
+      width: 25,
+      style: {
+        alignment: { horizontal: "center" }
+      }
+    },
+    {
+      key: "submittedBy",
+      header: "Submitted By",
+      width: 30,
+      style: {
+        alignment: { horizontal: "center" },
+      }
+    },
+    {
+      key: "correctionReason",
+      header: "Correction Reason",
+      width: 30,
+       style: {
+        alignment: { horizontal: "center" },
+      }
+    },
+    {
+      key: "psytechApproved",
+      header: "Psytech Approved",
+      width: 20,
+       style: {
+        alignment: { horizontal: "center" },
+      }
+    },
+    {
+      key: "psytechComment",
+      header: "Psytech Comment",
+      width: 30,
+       style: {
+        alignment: { horizontal: "center" },
+      }
+    }
+    
+  ];
+
+  ws.getRow(1).font = { bold: true };
+  
+  ws.addRows(groupedData[key]);
+ 
+  // Merge cells
+  // ws.mergeCells(`A${groupedData[key].length+2}:F${groupedData[key].length +4}`);
+  // ws.getCell(`A${groupedData[key].length+2}:F${groupedData[key].length +4}`).style = {
+  //   font: {
+  //     size: 20,
+  //     bold: true
+  //   },
+  //   alignment: {
+  //     horizontal: 'right', 
+  //     vertical: 'middle',
+  //     wrapText: true
+  //   }
+  // };
+
+// ws.getCell(`E${groupedData[key].length+2}:F${groupedData[key].length +4}`).value = 'Total Amount = '+ `${ groupedData[key].map(item => item.amount).reduce(function (result, item) {
+//   return result + item;
+// }, 0) }`;
+  
+//   ws.getRow(`E${groupedData[key].length+2}`).outlineLevel = 1;
+//   ws.getRow(`E${groupedData[key].length+3}}`).outlineLevel = 1;
+//   ws.getRow(`E${groupedData[key].length+4}`).outlineLevel = 1;
+  
+});
+
+  wb.xlsx.writeBuffer()
+    .then(function(buffer) {
+      saveAs(
+        new Blob([buffer], { type: "application/octet-stream" }),
+        workbookName
+      );
+  });
+   
+  
+  }
+
     return {
       loadTransferedToMe,
       tableData,
@@ -551,9 +813,12 @@ export default {
       persistedData,
       updateDialogData,
       topUpCreditMethod,
+      sortDataForExport,
       successMessage,
       clientDetailDialog,
       clientToUsersDetailDialog,
+      sortTableDataForExport,
+      sortedAndGroupedData,
       sendCallCreditToClient,
       searchedDataTransferedToMe,
       searchedDataTransferedToClient,
