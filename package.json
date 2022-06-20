@@ -16,6 +16,7 @@
     "@vueup/vue-quill": "^1.0.0-beta.8",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
     "lodash": "^4.17.21",
     "node-sass": "^4.14.1",
