@@ -44,7 +44,7 @@
           trend="Total"
           color="text-yellow-500"
           :icon="mdiChartTimelineVariant"
-          :number="widgetData?.transferableCredits"
+          :number="widgetData?.peopleAssessed"
           label="Number of People Assessed"
       />
 
@@ -93,6 +93,22 @@
                 tableType="mostUsedReports"
                 :image='true'
               />
+    </div>
+    <div class="mb-2">
+      <p class="ml-1 text-lg font-bold">Most Used Assessments:</p>
+      <DataTable
+          :customers="widgetData?.mostUsedTests"
+          :loading="loading"
+          @rowClicked="''"
+          :sortTable="false"
+          :rowHover="true"
+          :first="($store.getters['clientControl/getIsNewUser'])? 0 : userTablePagination && userTablePagination.first"
+          :paginator="true"
+          :rowsPerPageOptions="[10, 20, 30]"
+          :rows="10"
+          tableType="mostUsedAssessments"
+          :image='true'
+      />
     </div>
   </main-section>
 </template>

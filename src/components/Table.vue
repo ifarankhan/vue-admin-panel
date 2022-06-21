@@ -337,6 +337,11 @@
                       <span class="image-text"> {{data.status? "Active":"In-Active" }}</span>
                   </template>
               </Column>
+               <Column header="credits" sortField="credits" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                   <template #body="{data}">
+                      <span class="image-text"> {{data.credits }}</span>
+                  </template>
+              </Column>
               <Column header="No. of Users" sortField="users" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text"> {{data.users}}</span>
@@ -429,36 +434,36 @@
                   </template>
               </Column>
             </span>
-               <span v-if="tableType =='mostUsedReports'">
-              <Column field="reportName" header="First Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
-                <template #body="{data}">
-                  <div>
-                    <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
-                    <span> {{data.firstName}} </span>
-                 </div>
+            <span v-if="tableType =='mostUsedReports'">
+              <Column field="reportName" header="Report Set Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+              <template #body="{data}">
+                <div>
+                  <span v-if="image"> <img class="inline-block w-6 h-6 mr-1 rounded-full ring-2 ring-white" src="../assets/svgs/buddy.svg" alt="" /> </span>
+                  <span> {{data.reportSetName}} </span>
+               </div>
+              </template>
+              </Column>
+              <Column header="Request Count" sortField="requestCount" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                 <template #body="{data}">
+                    <span> {{data.requestCount}}</span>
                 </template>
-            </Column>
-              <Column field="familyName" header="Family Name" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                  <template #body="{data}">
-                      <span> {{data.familyName}} </span>
-                  </template>
-              </Column>
-              <Column header="Email" sortField="email" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                   <template #body="{data}">
-                      <span> {{data.email}}</span>
-                  </template>
-              </Column>
-               <Column header="Report Name" sortField="reportName" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                   <template #body="{data}">
-                      <span> {{data.reportName}}</span>
-                  </template>
-              </Column>
-               <Column header="Request Count" sortField="requestCount" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
-                   <template #body="{data}">
-                      <span> {{data.requestCount}}</span>
-                  </template>
               </Column>
             </span>
+
+                <span v-if="tableType =='mostUsedAssessments'">
+                  <Column field="assessmentName" header="Name" :sortable="sortTable" style="min-width: 10rem;cursor: pointer">
+                    <template #body="{data}">
+                      <div>
+                        <span> {{data.testID}} </span>
+                     </div>
+                    </template>
+                </Column>
+                  <Column field="count" header="Count" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+                      <template #body="{data}">
+                          <span> {{data.count}} </span>
+                      </template>
+                  </Column>
+                </span>
 
             <span v-if="tableType=='deductions'">
               <Column field="partnerName" header="Partner Name" sortField="partnerName" :sortable="sortTable" style="min-width: 3rem;cursor: pointer">
