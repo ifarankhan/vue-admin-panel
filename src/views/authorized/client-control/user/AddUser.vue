@@ -58,6 +58,7 @@
     <div class="flex p-4 md:mt-10" v-show="showStep ==2">
       <Assessments
        ref="assessmentsRef"
+       :userType="userDetail.userType"
        @valid="checkForValidity($event)"
        @assessmentsDetail="setUserDetail($event)" />
     </div>

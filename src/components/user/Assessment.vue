@@ -1,7 +1,7 @@
 <template>
      <div class="w-11/12">
         <!--  -->
-        <div class="pl-4 mb-10">
+        <div class="pl-4 mb-10" v-if="userType && userType !== 1">
           <div class="flex items-center cursor-pointer" @click="collapsable.tests = !collapsable.tests">
             <span
             >
@@ -40,7 +40,7 @@
         </div>
 
         <!--  -->
-        <div class="pl-4 mb-10">
+        <div class="pl-4 mb-10" v-if="userType && userType !== 1">
           <div class="flex items-center cursor-pointer" @click="collapsable.batteries = !collapsable.batteries">
             <span
             >
@@ -138,9 +138,13 @@ export default {
     editUser:{
       type: Boolean,
       default: false
+    },
+    userType:{
+      type: Number
     }
   },
    setup (props, { emit }) {
+    console.log('props.userType....', props.userType)
     const store = useStore();
     const indUserDetail = store.getters['clientControl/getIndClientUser'];
     const collapsable = reactive({
@@ -250,7 +254,12 @@ export default {
     });
     
     const assessmentDetailMethod = ()=>{
-        const tests = testsArray.value
+      let tests;
+      let solution;
+      let batteries;
+
+      if(props.userType){
+        tests = testsArray.value
         .map((item) => {
           if(item.isDefaultTest && item.testID){
             return {
@@ -260,7 +269,9 @@ export default {
           }
         })
         .filter((item) => item);
-      const solution = solutionsArray.value
+
+      // 
+      batteries = battriesArray.value
         .map((item) => {
           if(item.isDefaultBattery && item.batteryID){
             return {
@@ -270,7 +281,10 @@ export default {
           }
         })
         .filter((item) => item);
-      const batteries = battriesArray.value
+
+    } // end if
+      
+      solution = solutionsArray.value
         .map((item) => {
           if(item.isDefaultBattery && item.batteryID){
             return {
@@ -280,11 +294,21 @@ export default {
           }
         })
         .filter((item) => item);
-        const data = {
+
+      let data;
+       if(props.userType !=1){
+         data = {
             tests,
             solution,
             batteries
-        }
+          }
+       } else {
+          data = {
+            tests: [],
+            solution,
+            batteries:[]
+          }
+       }
         emit("assessmentsDetail",data)
     }
 
