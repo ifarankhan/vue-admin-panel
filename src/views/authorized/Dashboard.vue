@@ -49,21 +49,23 @@
       />
 
     </div>
-    <div class="grid grid-cols-2 gap-6 mb-6 lg:grid-cols-2">
-      <!-- <table-list title="Low Credit Clients" /> -->
-
-       <div>
-          <p class="ml-1 text-lg font-bold">Top Five Clients:</p>
+    <div>
+        <!-- class="grid grid-cols-2 gap-6 mb-6 lg:grid-cols-2" -->
+         <div>
+          <p class="ml-1 text-lg font-bold">Client Insights:</p>
              <DataTable
-                :customers="besidesWidgetData.topClients"
+                :customers="besidesWidgetData.clientInSights"
                 :loading="loading"
-                @rowClicked="''"
                 :sortTable="false"
+                :paginator="true"
+                :rows="5"
+                :image="true"
+                :rowsPerPageOptions="[5, 20, 30]"
                 tableType="topClients"
-                :image='true'
+                @rowClicked="redirectToDetail($event)"
               />
        </div>
-       <div>
+       <!-- <div>
          <p class="ml-1 text-lg font-bold">Low Credit Clients:</p>
             <DataTable
                 :customers="besidesWidgetData.lowCreditClients"
@@ -73,10 +75,10 @@
                 tableType="lowCreditCLients"
                 :image='true'
               />
-       </div>
+       </div> -->
 
     </div>
-    <div class="mb-2">
+    <div class="mt-4">
       <p class="ml-1 text-lg font-bold">Most Used Reports:</p>
        <DataTable
                 :customers="besidesWidgetData.mostUsedReports"
@@ -122,6 +124,7 @@ import TitleSubBar from "@/components/TitleSubBar";
 import JbButton from "@/components/JbButton";
 import TableList from "@/components/TableList";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 
 import {
@@ -152,11 +155,12 @@ export default {
   },
   setup() {
     const store = useStore();
+    const router = useRouter();
     const darkMode = computed(() => store.state.darkMode);
     const widgetData = ref();
     const loading = ref(false);
     const besidesWidgetData = reactive({
-      topClients: null,
+      clientInSights: null,
       lowCreditClients: null,
       mostUsedReports: null
     })
@@ -187,16 +191,16 @@ export default {
     const getDashboardData = ()=>{
       loading.value = true;
       Promise.allSettled([
-      store.dispatch("auth/getWidgetTopClients"),
+      store.dispatch("auth/getClientInSights"),
       store.dispatch("auth/getWidgetListLowCreditClients"),
       store.dispatch("auth/getWidgetMostUsedReports")
     ])
     .then(async results =>{
-      const [topClientsData, lowCreditClients, mostUsedReports] = results;
+      const [clientInSights, lowCreditClients, mostUsedReports] = results;
 
-      // topClients
-       if(topClientsData.status== "fulfilled"){
-         besidesWidgetData.topClients = await topClientsData.value.data.data;
+      // clientInSights
+       if(clientInSights.status== "fulfilled"){
+         besidesWidgetData.clientInSights = await clientInSights.value.data.data;
        }
 
       // lowCreditClients
@@ -218,9 +222,29 @@ export default {
       })
     }
 
+  const redirectToDetail = e => {
+      const DATA = { 
+        accountName: e.data.name,
+        accountId: e.data.accountID,
+        accountAddress: e.data.address,
+        accountDescription: e.data.description,
+      }
+      store.commit("clientControl/setClientDetail", DATA);
+      router.push({ name: "client-control-list-detail" });
+    };
+
+  // const setClientDetail = async e=>{
+  //    console.log("2 e is...", e)
+  //   return
+  //     await store.commit("clientControl/setClientDetail", e.data);
+  //     await (clientName.value = e.data.accountName)
+  //   }
+
     return {
       logoutHanlder,
       fetchWidgetsData,
+      redirectToDetail,
+      // setClientDetail,
       darkMode,
       widgetData,
       mdiAccountMultiple,
