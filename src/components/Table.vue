@@ -302,7 +302,7 @@
             </span>
 
             <span v-if="tableType =='users'">
-              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 30%;cursor: pointer">
+              <Column field="name" header="Account Name" :sortable="sortTable" style="min-width: 26%;cursor: pointer">
                 <template #body="{data}">
                     <div class="flex space-x-4 truncate">
                          <span>
@@ -327,7 +327,7 @@
                  </div>
                 </template>
             </Column>
-              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 30%; cursor: pointer">
+              <Column field="address" header="Address" :sortable="sortTable" style="min-width: 26%; cursor: pointer">
                   <template #body="{data}">
                       <div  class="truncate">{{data.address}}</div>
                   </template>
@@ -342,12 +342,12 @@
                       <span class="image-text"> {{data.credits }}</span>
                   </template>
               </Column>
-              <Column header="No. of Users" sortField="users" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column header="No. of Users" sortField="users" :sortable="sortTable" style="min-width: 7rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text"> {{data.users}}</span>
                   </template>
               </Column>
-               <Column header="Creation Date" sortField="date" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+               <Column header="Creation Date" sortField="date" :sortable="sortTable" style="min-width: 7rem; cursor: pointer">
                    <template #body="{data}">
                       <span class="image-text">{{ formatDate(data.date) }}</span>
                   </template>
@@ -734,7 +734,7 @@ export default {
     width: calc(100% - 305px)  !important;
 }
 .fixedheader .p-datatable-tbody{
-  margin-top: 7vh;
+  margin-top: calc(80px - 2vh);
 }
 .extra-body-margin .p-datatable-thead tr{
   height: 60px !important;
