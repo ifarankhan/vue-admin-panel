@@ -162,14 +162,16 @@ export default {
               loading.value = false;
          })
        }
+       console.log('props.providersArray', props.providersArray)
       userArray.value = props.providersArray.map(item=> {
-        return {
+       return {
           text: item.email,
-          value: item.userId
+          value: item.userId,
+          userType: item.userType
         }
       }).sort(function(a, b) {
         return a.text.toLowerCase() === b.text.toLowerCase() ? 0 : a.text.toLowerCase() < b.text.toLowerCase() ? -1 : 1;
-      });
+      }).filter(item=> item.userType == 0 )
       masterArray.value = props.currentMaster.map(item=> {
         return {
           name: item.firstName,
