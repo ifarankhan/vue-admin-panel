@@ -36,9 +36,9 @@
       <card-widget
           trend="Total"
           color="text-green-500"
-          :icon="mdiCurrencyUsd"
-          :number="widgetData?.creditsSold"
-          label="Lifetime Credit Sold"
+          :icon="mdiEmailAlert"
+          :number="widgetData?.invitesSent"
+          label="Invitations Sent"
       />
       <card-widget
           trend="Total"
@@ -138,7 +138,7 @@ import {
   mdiReload,
   mdiGithub,
   mdiChartPie,
-  mdiCurrencyUsd
+  mdiEmailAlert
 } from "@mdi/js";
 
 export default {
@@ -223,7 +223,7 @@ export default {
     }
 
   const redirectToDetail = e => {
-      const DATA = { 
+      const DATA = {
         accountName: e.data.name,
         accountId: e.data.accountID,
         accountAddress: e.data.address,
@@ -251,7 +251,7 @@ export default {
       besidesWidgetData,
       loading,
       mdiAccountLock,
-      mdiCurrencyUsd,
+      mdiEmailAlert,
       mdiCartOutline,
       mdiChartTimelineVariant,
       mdiFinance,

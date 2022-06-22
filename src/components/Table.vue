@@ -332,9 +332,9 @@
                       <div  class="truncate">{{data.address}}</div>
                   </template>
               </Column>
-              <Column header="Status" sortField="status" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
+              <Column header="Status" sortField="active" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
                    <template #body="{data}">
-                      <span class="image-text"> {{data.status? "Active":"In-Active" }}</span>
+                      <span class="image-text"> {{data.active? "Active":"In-active" }}</span>
                   </template>
               </Column>
                <Column header="credits" sortField="credits" :sortable="sortTable" style="min-width: 10rem; cursor: pointer">
