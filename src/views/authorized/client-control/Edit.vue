@@ -19,11 +19,11 @@
                  form.companyName
                 }}
               </div>
-         <field label="Client Detail" labelFor="accountDetails">
+         <field label="Client Detail *" labelFor="accountDetails">
            <control type="textarea" v-model="form.accountDetails" placeholder="Account Details"/>
            <error-span :error="v$.accountDetails"></error-span>
          </field>
-         <field label="Client Address" labelFor="accountAddress">
+         <field label="Client Address *" labelFor="accountAddress">
            <control type="textarea" v-model="form.accountAddress" placeholder="Account Address"/>
            <error-span :error="v$.accountAddress"></error-span>
          </field>
@@ -89,14 +89,14 @@ export default {
     const accountDetail = computed(()=>{
       return store.getters['clientControl/getClientDetail']
     })
-    
-    const form = reactive({ 
+
+    const form = reactive({
       companyName: accountDetail.value?.accountName??'',
       accountDetails: accountDetail.value?.accountDescription??'',
       accountAddress: accountDetail.value?.accountAddress??'',
       loader: false
     })
-    
+
     const rules = computed(() => {
       return {
         accountDetails: {
